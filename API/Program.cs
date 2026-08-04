@@ -1,6 +1,6 @@
-
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace API
 {
@@ -12,8 +12,10 @@ namespace API
 
             // Add services to the container.
 
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
             builder.Services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                options => options.UseSqlServer(connectionString)
                 );
 
             builder.Services.AddControllers();
