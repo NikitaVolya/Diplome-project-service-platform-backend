@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,11 @@ namespace Domain.Models
         public int OrderId { get; set; }
         public Order Order { get; set; } = null!;
 
-        public int AuthorId { get; set; }
-        public string AuthorName { get; set; } = string.Empty;
+        public string AuthorId { get; set; } = string.Empty;
+        public ApplicationUser Author { get; set; } = null!;
 
-        public int TargetUserId { get; set; }
+        public string TargetUserId { get; set; } = string.Empty;
+        public ApplicationUser TargetUser { get; set; } = null!;
 
         public int Rating { get; set; }
         public string Comment { get; set; } = string.Empty;

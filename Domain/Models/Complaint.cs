@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,11 @@ namespace Domain.Models
     public class Complaint
     {
         public int Id { get; set; }
-        public int SenderId { get; set; }
-        public string SenderName { get; set; }
-        
-        public int TargetId { get; set; }
-        public string TargetName { get; set; }
+        public string SenderId { get; set; } = string.Empty;
+        public ApplicationUser Sender { get; set; } = null!;
+
+        public string? TargetUserId { get; set; }
+        public ApplicationUser? TargetUser { get; set; }
 
         public string Reason { get; set; }
         public string Description { get; set; }

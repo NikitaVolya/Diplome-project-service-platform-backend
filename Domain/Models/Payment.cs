@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,9 @@ namespace Domain.Models
         public int OrderId { get; set; }
         public Order Order { get; set; } = null!;
 
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public ApplicationUser User { get; set; } = null!;
+
         public decimal Amount { get; set; }
         public string Currency { get; set; } = "UAH";
 

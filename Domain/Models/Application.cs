@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
 namespace Domain.Models
 {
@@ -12,8 +13,8 @@ namespace Domain.Models
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
-        public int? ExecutorId { get; set; }
-        public string? ExecutorName { get; set; }
+        public string? ExecutorId { get; set; }
+        public ApplicationUser? Executor { get; set; }
 
         public decimal ProposedPrice { get; set; }
         public string? Comment { get; set; }

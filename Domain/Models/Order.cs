@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,11 +22,11 @@ namespace Domain.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
+        public string CustomerId { get; set; } = string.Empty;
+        public ApplicationUser Customer { get; set; } = null!;
 
-        public int? ExecutorId { get; set; }
-        public string? ExecutorName { get; set; }
+        public string? ExecutorId { get; set; }
+        public ApplicationUser? Executor { get; set; }
 
         public ICollection<Application> Applications { get; set; } = new List<Application>();
     }
