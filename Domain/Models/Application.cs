@@ -20,7 +20,13 @@ namespace Domain.Models
         public string? Comment { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public string Status { get; set; }
+        public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;
+    }
 
+    public enum ApplicationStatus
+    {
+        Pending,
+        Accepted,
+        Rejected
     }
 }

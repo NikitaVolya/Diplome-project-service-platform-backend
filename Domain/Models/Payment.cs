@@ -22,7 +22,7 @@ namespace Domain.Models
 
         public PaymentProvider Provider { get; set; }
         public string ExternalTransactionId { get; set; } = string.Empty;
-        public string Status { get; set; }
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? PaidAt { get; set; }
@@ -32,5 +32,13 @@ namespace Domain.Models
         Stripe,
         LiqPay,
         WayForPay
+    }
+
+    public enum PaymentStatus
+    {
+        Pending,
+        Completed,
+        Failed,
+        Refunded
     }
 }

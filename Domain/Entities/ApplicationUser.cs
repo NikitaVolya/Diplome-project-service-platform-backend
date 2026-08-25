@@ -24,5 +24,7 @@ namespace Domain.Entities
         public ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+        public ICollection<OrderMessage> SentMessages { get; set; } = new List<OrderMessage>();
     }
 }

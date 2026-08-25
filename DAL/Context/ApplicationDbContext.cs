@@ -14,6 +14,7 @@ namespace DAL.Context
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderMessage> OrderMessages { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Statistic> Statistics { get; set; }
@@ -54,6 +55,9 @@ namespace DAL.Context
 
                 entity.Property(o => o.Price)
                       .HasPrecision(18, 2);
+
+                entity.Property(o => o.Status)
+                      .HasConversion<string>();
             });
 
             builder.Entity<Application>(entity =>
@@ -70,6 +74,9 @@ namespace DAL.Context
 
                 entity.Property(a => a.ProposedPrice)
                       .HasPrecision(18, 2);
+
+                entity.Property(a => a.Status)
+                      .HasConversion<string>();
             });
 
             builder.Entity<Complaint>(entity =>
@@ -83,6 +90,9 @@ namespace DAL.Context
                       .WithMany(u => u.ReceivedComplaints)
                       .HasForeignKey(c => c.TargetUserId)
                       .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(c => c.Status)
+                      .HasConversion<string>();
             });
 
             builder.Entity<Favorite>(entity =>
@@ -125,6 +135,12 @@ namespace DAL.Context
 
                 entity.Property(p => p.Amount)
                       .HasPrecision(18, 2);
+
+                entity.Property(p => p.Provider)
+                      .HasConversion<string>();
+
+                entity.Property(p => p.Status)
+                      .HasConversion<string>();
             });
 
             builder.Entity<Review>(entity =>
@@ -151,7 +167,26 @@ namespace DAL.Context
                       .HasPrecision(18, 2);
             });
 
+            builder.Entity<OrderMessage>(entity =>
+            {
+                entity.HasOne(m => m.Order)
+                    .WithMany(o => o.OrderMessages)
+                    .HasForeignKey(m => m.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(m => m.Sender)
+                    .WithMany(u => u.SentMessages)
+                    .HasForeignKey(m => m.SenderId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(m => m.Text)
+                    .IsRequired()
+                    .HasMaxLength(1000);
+            });
+
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
+
+
     }
 }

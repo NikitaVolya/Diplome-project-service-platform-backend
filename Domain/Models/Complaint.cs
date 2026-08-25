@@ -20,6 +20,13 @@ namespace Domain.Models
         public string Description { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string Status { get; set; }
+        public ComplaintStatus Status { get; set; } = ComplaintStatus.Pending;
+    }
+
+    public enum ComplaintStatus
+    {
+        Pending,
+        Resolved,
+        Rejected
     }
 }
