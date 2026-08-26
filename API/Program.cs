@@ -1,4 +1,5 @@
 using API.Services;
+using BLL.Options;
 using BLL.Services;
 using BLL.Services.Interfaces;
 using DAL.Context;
@@ -91,6 +92,11 @@ namespace API
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddApplicationServices();
+
+            builder.Services.Configure<EmailOptions>(
+                builder.Configuration.GetSection("Email"));
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
 
             var app = builder.Build();
