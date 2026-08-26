@@ -7,6 +7,7 @@ namespace BLL.Services.Interfaces
     {
         Task<ApplicationUser?> GetByIdAsync(string id);
         Task<ApplicationUser?> GetByEmailAsync(string email);
+        Task<ApplicationUser?> GetByUserNameAsync(string username);
         Task<IEnumerable<ApplicationUser>> GetAllAsync();
         Task<ApplicationUser> UpdateAsync(
             string id,

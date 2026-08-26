@@ -114,7 +114,7 @@ namespace API
 
             /* ADD SERVICES */
             builder.Services.AddScoped<IEmailService, EmailService>();
-
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
             var app = builder.Build();
