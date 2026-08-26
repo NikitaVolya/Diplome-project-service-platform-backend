@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using API.Validators.Authentication;
 
 
 namespace API
@@ -19,8 +21,8 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
 
+            /* CONNECT DATABASE */
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<ApplicationDbContext>(
@@ -28,9 +30,9 @@ namespace API
                 );
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
+            /* ADD AUTHENTICATION */
             builder.Services
                 .AddAuthentication(options =>
                 {
@@ -58,8 +60,10 @@ namespace API
                                     builder.Configuration["Jwt:Key"]!))
                     };
                 });
+
             builder.Services.AddAuthorization();
 
+            /* ADD SWAGER */
             builder.Services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("Bearer",
@@ -90,13 +94,27 @@ namespace API
                     });
             });
 
+            /* ADD AUTOMAPPER FOR DTO */
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            /* ADD FLUENT VALIDATORS */
+            builder.Services.AddFluentValidationAutoValidation();   
+            builder.Services.AddValidatorsFromAssemblyContaining<ForgotPasswordRequestValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
+
             builder.Services.AddApplicationServices();
 
+            /* ADD OPTIONS */
             builder.Services.Configure<EmailOptions>(
                 builder.Configuration.GetSection("Email"));
 
+            /* ADD REPOSITORIES */
+
+            /* ADD SERVICES */
             builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
             var app = builder.Build();

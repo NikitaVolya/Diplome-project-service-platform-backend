@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] DTO.Authentication.ForgotPasswordRequest request)
+        public async Task<IActionResult> ForgotPassword([FromBody] DTO.Authentication.ForgotPasswordRequestDto request)
         {
             await _authenticationService.ForgotPasswordAsync(request.Email);
 
@@ -50,7 +50,7 @@ namespace API.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] DTO.Authentication.ResetPasswordRequest request)
+        public async Task<IActionResult> ResetPassword([FromBody] DTO.Authentication.ResetPasswordRequestDto request)
         {
             await _authenticationService.ResetPasswordAsync(
                 request.Email,

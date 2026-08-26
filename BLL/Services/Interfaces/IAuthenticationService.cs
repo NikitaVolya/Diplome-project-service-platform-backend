@@ -18,7 +18,9 @@ namespace BLL.Services.Interfaces
             string email,
             string password);
 
-        Task ForgotPasswordAsync(string email);
+        Task ForgotPasswordAsync(
+            string email, 
+            string site_link = "https://localhost:3000/reset-password");
 
         Task ResetPasswordAsync(
             string email,
