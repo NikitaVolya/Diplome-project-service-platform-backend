@@ -15,13 +15,13 @@ namespace DAL.Seed
     }
 
     /// <summary>
-    /// Brings a fresh database to a usable state: roles, a staff account to sign in with and,
-    /// optionally, a body of demo data so that the dashboard is not a wall of zeros during a demo.
-    /// Every step is idempotent, so it is safe to run on every start-up.
+    /// Доводить свіжу базу до робочого стану: ролі, службовий акаунт для входу та, за бажанням,
+    /// масив демо-даних, щоб під час показу дашборд не був суцільними нулями.
+    /// Кожен крок ідемпотентний, тому запускати його на кожному старті безпечно.
     /// </summary>
     public class DatabaseSeeder : IDatabaseSeeder
     {
-        /// <summary>Fixed seed: two runs on two machines produce the same demo data.</summary>
+        /// <summary>Фіксоване зерно генератора: два запуски на двох машинах дають однакові демо-дані.</summary>
         private const int RandomSeed = 20260828;
 
         private static readonly string[] CategoryTree =
@@ -157,7 +157,7 @@ namespace DAL.Seed
                 return;
             }
 
-            // Demo staff so that role-based access can actually be demonstrated.
+            // Демонстраційний персонал, щоб розмежування прав за ролями можна було реально показати.
             await EnsureUserAsync("moderator@servicehub.local", "Moderator#2026", "Maria", "Moderator", AppRoles.Moderator);
             await EnsureUserAsync("support@servicehub.local", "Support#2026", "Sam", "Support", AppRoles.Support);
         }
@@ -207,7 +207,7 @@ namespace DAL.Seed
         }
 
         // -----------------------------------------------------------------
-        // Demo data
+        // Демонстраційні дані
         // -----------------------------------------------------------------
 
         private async Task SeedDemoDataAsync(CancellationToken cancellationToken)
@@ -315,7 +315,7 @@ namespace DAL.Seed
 
                     await _userManager.AddToRoleAsync(user, isExecutor ? AppRoles.Executor : AppRoles.Customer);
 
-                    // A couple of blocked accounts make the moderation screens meaningful.
+                    // Кілька заблокованих акаунтів роблять екрани модерації змістовними.
                     if (i % 17 == 0)
                     {
                         user.LockoutEnabled = true;
@@ -355,7 +355,7 @@ namespace DAL.Seed
                 var customer = customers[random.Next(customers.Count)];
                 var createdAt = DateTime.UtcNow.AddDays(-random.Next(0, historyDays)).AddHours(-random.Next(0, 24));
 
-                // Weighted so the pipeline looks realistic: most orders end up completed.
+                // Ваги підібрані так, щоб воронка виглядала правдоподібно: більшість замовлень зрештою виконані.
                 var roll = random.Next(100);
                 var status = roll switch
                 {
@@ -395,7 +395,7 @@ namespace DAL.Seed
 
             foreach (var order in orders)
             {
-                // Applications from executors who did not get the job.
+                // Відгуки виконавців, які не отримали це замовлення.
                 var applicationCount = random.Next(0, 5);
                 for (var a = 0; a < applicationCount; a++)
                 {
@@ -450,7 +450,7 @@ namespace DAL.Seed
                         PaidAt = paidAt
                     });
 
-                    // Most completed orders get a review from the customer.
+                    // На більшість виконаних замовлень замовник залишає відгук.
                     if (random.Next(100) < 70 && order.ExecutorId != null)
                     {
                         var reviewedAt = paidAt.AddHours(random.Next(1, 72));
@@ -500,7 +500,7 @@ namespace DAL.Seed
                     });
                 }
 
-                // A chat thread on roughly half of the orders that have an executor.
+                // Листування приблизно на половині замовлень, у яких є виконавець.
                 if (order.ExecutorId != null && random.Next(100) < 55)
                 {
                     var messageCount = random.Next(2, 9);
@@ -591,8 +591,8 @@ namespace DAL.Seed
         }
 
         /// <summary>
-        /// Fills the Statistics table from the generated orders and payments, so the mobile API's
-        /// statistics endpoints return the same numbers the panel shows.
+        /// Заповнює таблицю Statistics зі згенерованих замовлень і платежів, щоб точки статистики
+        /// мобільного API віддавали ті самі числа, які показує панель.
         /// </summary>
         private async Task SeedStatisticsAsync(CancellationToken cancellationToken)
         {

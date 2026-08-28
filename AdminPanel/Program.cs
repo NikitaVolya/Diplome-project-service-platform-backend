@@ -28,8 +28,8 @@ namespace AdminPanel
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
 
-            // Renders "27.08.2026" style dates and "1 234,56" money consistently for every admin,
-            // regardless of the browser locale they happen to be using.
+            // HttpContextAccessor потрібен сервісам, яким треба знати поточного користувача
+            // та його IP-адресу — наприклад, для запису в журнал дій.
             builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
@@ -66,8 +66,9 @@ namespace AdminPanel
         }
 
         /// <summary>
-        /// Applies pending migrations and runs the seeder. Both steps are optional and controlled from
-        /// configuration so that a production deployment can migrate through its own pipeline instead.
+        /// Застосовує міграції, яких бракує, і запускає заповнення бази початковими даними.
+        /// Обидва кроки необов'язкові й керуються конфігурацією, щоб на проді міграції
+        /// можна було виконувати власним конвеєром розгортання.
         /// </summary>
         private static async Task PrepareDatabaseAsync(WebApplication app)
         {
@@ -89,8 +90,8 @@ namespace AdminPanel
             }
             catch (Exception ex)
             {
-                // A database that is not reachable yet must not crash the host: the panel starts and
-                // shows the error on the first request instead of failing silently at boot.
+                // Недоступна база не повинна валити застосунок: панель стартує й покаже помилку
+                // на першому ж запиті, замість того щоб мовчки впасти під час запуску.
                 logger.LogError(ex, "Database preparation failed");
             }
         }

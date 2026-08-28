@@ -12,8 +12,8 @@ namespace AdminPanel.Extensions
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Cookie-based Identity for the back office. The mobile API authenticates with JWT in its own
-        /// host; the two schemes never meet, which keeps browser sessions out of the public API.
+        /// Identity на cookie для адмінки. Мобільний API автентифікується через JWT у власному хості;
+        /// дві схеми ніде не перетинаються, тому сесії браузера не потрапляють у публічний API.
         /// </summary>
         public static IServiceCollection AddAdminIdentity(this IServiceCollection services)
         {
@@ -64,7 +64,7 @@ namespace AdminPanel.Extensions
                 options.AddPolicy(AppRoles.ModerationPolicy, policy =>
                     policy.RequireRole(AppRoles.Admin, AppRoles.Moderator));
 
-                // Nothing in the panel is anonymous unless it opts out explicitly.
+                // Жодна сторінка панелі не є анонімною, якщо явно не вказано протилежне.
                 options.FallbackPolicy = options.GetPolicy(AppRoles.StaffPolicy);
             });
 
@@ -86,7 +86,7 @@ namespace AdminPanel.Extensions
 
             services.AddMemoryCache();
 
-            // Stateless: one instance is enough for the whole application.
+            // Сервіс без стану: одного екземпляра вистачає на весь застосунок.
             services.AddSingleton<IExcelExportService, ExcelExportService>();
 
             return services;

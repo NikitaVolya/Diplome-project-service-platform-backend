@@ -1,9 +1,9 @@
-/* Shared behaviour for every admin page: sidebar toggle, confirmations, and the Chart.js defaults
-   used by the dashboard and statistics screens. */
+/* Спільна поведінка всіх сторінок адмінки: згортання бічного меню, підтвердження дій
+   і налаштування Chart.js за замовчуванням для дашборда та статистики. */
 (function () {
     'use strict';
 
-    // ---------------------------------------------------------------- sidebar
+    // ------------------------------------------------------------- бічне меню
 
     function initSidebar() {
         var toggle = document.querySelector('[data-sidebar-toggle]');
@@ -35,10 +35,10 @@
         });
     }
 
-    // ----------------------------------------------------------- confirmation
+    // ---------------------------------------------------------- підтвердження
 
-    /* Any form carrying data-confirm asks before it posts. Keeps destructive actions
-       out of reach of an accidental click without a modal per button. */
+    /* Будь-яка форма з атрибутом data-confirm перепитує перед відправленням. Так небезпечні дії
+   захищені від випадкового кліку без окремого модального вікна на кожну кнопку. */
     function initConfirmations() {
         document.addEventListener('submit', function (event) {
             var form = event.target;
@@ -51,10 +51,10 @@
         });
     }
 
-    // -------------------------------------------------------- filter helpers
+    // ---------------------------------------------------- помічники фільтрів
 
     function initFilters() {
-        // Selects and date inputs inside a filter bar submit immediately.
+        // Списки й поля дат усередині панелі фільтрів відправляють форму одразу.
         document.querySelectorAll('.filter-bar [data-auto-submit]').forEach(function (control) {
             control.addEventListener('change', function () {
                 var form = control.closest('form');
@@ -69,7 +69,7 @@
         });
     }
 
-    // ---------------------------------------------------------------- charts
+    // --------------------------------------------------------------- графіки
 
     var palette = ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6', '#f43f5e'];
 
@@ -103,8 +103,8 @@
         };
     }
 
-    /* Chart data comes from the server as { labels: [], series: [{ label, data, color }] }.
-       These helpers turn that shape into Chart.js datasets so views stay declarative. */
+    /* Дані графіків приходять із сервера у вигляді { labels: [], series: [{ label, data, color }] }.
+   Ці функції перетворюють їх на набори даних Chart.js, щоб представлення лишалися декларативними. */
     window.AdminCharts = {
         palette: palette,
 

@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 namespace AdminPanel.Models
 {
     /// <summary>
-    /// Everything the pager partial needs, including the current query string so that paging never
-    /// silently drops the filters the administrator applied.
+    /// Усе, що потрібно частковому представленню пагінації, разом із поточним рядком запиту, —
+    /// щоб перехід між сторінками не втрачав застосовані адміністратором фільтри.
     /// </summary>
     public class PagerModel
     {
@@ -16,7 +16,7 @@ namespace AdminPanel.Models
         public int LastItemIndex { get; init; }
         public string ItemNoun { get; init; } = "row";
 
-        /// <summary>Query string parameters to carry over, without "page".</summary>
+        /// <summary>Параметри рядка запиту, які треба перенести на інші сторінки, окрім «page».</summary>
         public IReadOnlyDictionary<string, string?> Query { get; init; } =
             new Dictionary<string, string?>();
 
@@ -38,7 +38,7 @@ namespace AdminPanel.Models
             };
         }
 
-        /// <summary>Page numbers to render: a window around the current page, plus the two ends.</summary>
+        /// <summary>Номери сторінок для відображення: вікно навколо поточної сторінки плюс перша й остання.</summary>
         public IEnumerable<int> WindowedPages(int window = 2)
         {
             if (TotalPages <= 0)

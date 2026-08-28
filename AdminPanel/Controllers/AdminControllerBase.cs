@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdminPanel.Controllers
 {
     /// <summary>
-    /// Shared plumbing for every admin screen: who is acting, how results are reported back to the
-    /// user, and how files leave the application.
+    /// Спільна основа для всіх екранів адмінки: хто виконує дію, як результат показується
+    /// користувачеві та як файли віддаються у браузер.
     /// </summary>
     public abstract class AdminControllerBase : Controller
     {
@@ -22,7 +22,7 @@ namespace AdminPanel.Controllers
 
         protected string? ClientIp => HttpContext.Connection.RemoteIpAddress?.ToString();
 
-        /// <summary>Shows the outcome of an action on the next page as a dismissible alert.</summary>
+        /// <summary>Показує результат дії на наступній сторінці у вигляді сповіщення, яке можна закрити.</summary>
         protected void Flash(AdminOperationResult result)
         {
             TempData[result.Succeeded ? "Success" : "Error"] = result.Message;
@@ -32,7 +32,7 @@ namespace AdminPanel.Controllers
 
         protected void FlashError(string message) => TempData["Error"] = message;
 
-        /// <summary>Writes an audit entry describing the outcome of an admin action.</summary>
+        /// <summary>Записує в журнал дій результат адміністративної операції.</summary>
         protected Task AuditAsync(
             IAuditLogService audit,
             AuditAction action,
@@ -65,14 +65,14 @@ namespace AdminPanel.Controllers
                 CurrentUserId, CurrentUserName, ClientIp, severity);
         }
 
-        /// <summary>Sends a workbook to the browser under a timestamped file name.</summary>
+        /// <summary>Віддає книгу Excel у браузер під іменем файлу з датою та часом.</summary>
         protected FileContentResult Xlsx(byte[] content, string baseName)
         {
             var fileName = $"{baseName}-{DateTime.UtcNow:yyyyMMdd-HHmm}.xlsx";
             return File(content, XlsxContentType, fileName);
         }
 
-        /// <summary>Serialises a chart payload for the inline &lt;script&gt; blocks in the views.</summary>
+        /// <summary>Перетворює дані графіка на JSON для вбудованих блоків &lt;script&gt; у представленнях.</summary>
         protected static string ToJson(object value) =>
             JsonSerializer.Serialize(value, JsonOptions);
 

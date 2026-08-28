@@ -167,7 +167,7 @@
 
             connection.on('ReceiveMessage', function (message) {
                 if (message.orderId !== orderId) { return; }
-                // Messages this admin sent are echoed back by the hub, so compare on the server id.
+                // Хаб повертає й власні повідомлення цього адміністратора, тому порівнюємо за ідентифікатором із сервера.
                 appendMessage(message, message.senderId === '@Model.CurrentUserId');
             });
 

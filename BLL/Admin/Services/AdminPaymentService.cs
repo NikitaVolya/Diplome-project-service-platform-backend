@@ -42,8 +42,8 @@ namespace BLL.Admin.Services
             PaymentFilter filter,
             CancellationToken cancellationToken = default)
         {
-            // Totals must describe the filtered set, ignoring only the status facet so that the
-            // four cards can be compared against each other.
+            // Підсумки мають описувати відфільтрований набір, ігноруючи лише сам фільтр статусу, —
+            // тоді чотири картки можна порівнювати між собою.
             var statusAgnostic = new PaymentFilter
             {
                 Search = filter.Search,

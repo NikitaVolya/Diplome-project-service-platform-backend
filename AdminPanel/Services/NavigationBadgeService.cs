@@ -9,9 +9,9 @@ namespace AdminPanel.Services
     }
 
     /// <summary>
-    /// Supplies the counters shown next to the sidebar links. The layout renders on every request,
-    /// so the numbers are cached briefly — a badge that is up to half a minute stale is a fair trade
-    /// for not running five aggregate queries per page view.
+    /// Дає лічильники, які видно біля пунктів бічного меню. Шаблон малюється на кожному запиті,
+    /// тому числа ненадовго кешуються: значок, застарілий максимум на пів хвилини, — прийнятна ціна
+    /// за те, щоб не робити п'ять агрегатних запитів на кожне відкриття сторінки.
     /// </summary>
     public class NavigationBadgeService : INavigationBadgeService
     {
@@ -47,7 +47,7 @@ namespace AdminPanel.Services
             }
             catch (Exception ex)
             {
-                // The navigation must render even when the database is unavailable.
+                // Меню має малюватися навіть тоді, коли база недоступна.
                 _logger.LogWarning(ex, "Could not load navigation badges");
                 return new ModerationQueue();
             }
