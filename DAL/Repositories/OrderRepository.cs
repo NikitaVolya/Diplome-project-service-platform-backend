@@ -46,6 +46,9 @@ namespace DAL.Repositories
             int? categoryId,
             OrderStatus? status,
             string? searchTerm,
+            double? latitude = null,
+            double? longitude = null,
+            double? radiusKm = null,
             int pageIndex = 1,
             int pageSize = 10)
         {
@@ -68,7 +71,22 @@ namespace DAL.Repositories
             {
                 var term = searchTerm.Trim().ToLower();
                 query = query.Where(o => o.Title.ToLower().Contains(term)
-                                      || o.Description.ToLower().Contains(term));
+                                      || o.Description.ToLower().Contains(term)
+                                      || (o.Address != null && o.Address.ToLower().Contains(term)));
+            }
+
+            if (latitude.HasValue && longitude.HasValue && radiusKm.HasValue)
+            {
+                var lat = latitude.Value;
+                var lng = longitude.Value;
+                var r = radiusKm.Value;
+
+                var latRange = r / 111.0;
+                var lngRange = r / (111.0 * Math.Cos(lat * Math.PI / 180.0));
+
+                query = query.Where(o =>
+                    o.Latitude >= lat - latRange && o.Latitude <= lat + latRange &&
+                    o.Longitude >= lng - lngRange && o.Longitude <= lng + lngRange);
             }
 
             var totalCount = await query.CountAsync();

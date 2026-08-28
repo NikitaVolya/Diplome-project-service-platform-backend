@@ -36,6 +36,7 @@ namespace API.Services
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IOrderMessageService, OrderMessageService>();
+            services.AddHttpClient<IGoogleMapsService, GoogleMapsService>();
 
             return services;
         }

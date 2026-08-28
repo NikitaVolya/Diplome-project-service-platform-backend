@@ -12,6 +12,9 @@ namespace BLL.Services.Interfaces
             int? categoryId,
             OrderStatus? status,
             string? searchTerm,
+            double? latitude = null,
+            double? longitude = null,
+            double? radiusKm = null,
             int pageIndex = 1,
             int pageSize = 10);
 

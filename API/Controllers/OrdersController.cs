@@ -53,10 +53,21 @@ namespace API.Controllers
             [FromQuery] int? categoryId,
             [FromQuery] OrderStatus? status,
             [FromQuery] string? searchTerm,
+            [FromQuery] double? latitude,
+            [FromQuery] double? longitude,
+            [FromQuery] double? radiusKm,
             [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10)
         {
-            var (items, totalCount) = await _orderService.GetFilteredOrdersAsync(categoryId, status, searchTerm, pageIndex, pageSize);
+            var (items, totalCount) = await _orderService.GetFilteredOrdersAsync(
+                categoryId,
+                status,
+                searchTerm,
+                latitude,
+                longitude,
+                radiusKm,
+                pageIndex,
+                pageSize);
 
             var itemsDto = _mapper.Map<IEnumerable<OrderResponseDto>>(items);
 
