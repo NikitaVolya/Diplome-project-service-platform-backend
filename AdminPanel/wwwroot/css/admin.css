@@ -1,5 +1,5 @@
-/* ServiceHub admin panel — layout, components and utilities.
-   Built on top of Bootstrap 5; only what Bootstrap does not provide lives here. */
+/* Адмінпанель ServiceHub — макет, компоненти та допоміжні класи.
+   Побудовано поверх Bootstrap 5; тут лише те, чого Bootstrap не дає. */
 
 :root {
     --sidebar-width: 260px;
@@ -42,7 +42,7 @@ body {
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
-/* ------------------------------------------------------------------ shell */
+/* ----------------------------------------------------------------- каркас */
 
 .admin-shell { min-height: 100vh; }
 
@@ -160,7 +160,7 @@ a:hover { text-decoration: none; }
     }
 }
 
-/* ------------------------------------------------------------------ cards */
+/* ----------------------------------------------------------------- картки */
 
 .card {
     border: 1px solid var(--line);
@@ -181,7 +181,7 @@ a:hover { text-decoration: none; }
 
 .card-body { padding: 1.125rem; }
 
-/* ------------------------------------------------------------------- kpis */
+/* -------------------------------------------------------------- показники */
 
 .kpi {
     background: var(--surface);
@@ -224,7 +224,7 @@ a:hover { text-decoration: none; }
 .trend--down { color: var(--danger); }
 .trend--flat { color: var(--ink-muted); }
 
-/* ----------------------------------------------------------------- tables */
+/* ---------------------------------------------------------------- таблиці */
 
 .table-card { overflow: hidden; }
 .table-card .table { margin-bottom: 0; }
@@ -258,7 +258,7 @@ a:hover { text-decoration: none; }
     white-space: nowrap;
 }
 
-/* ----------------------------------------------------------------- badges */
+/* ----------------------------------------------------------------- значки */
 
 .badge-soft {
     display: inline-flex;
@@ -278,7 +278,7 @@ a:hover { text-decoration: none; }
 .badge-soft--brand { background: var(--brand-soft); color: var(--brand); }
 .badge-soft--muted { background: #f1f5f9; color: #475569; }
 
-/* ---------------------------------------------------------------- avatars */
+/* ---------------------------------------------------------------- аватари */
 
 .avatar {
     width: 34px; height: 34px;
@@ -297,7 +297,7 @@ a:hover { text-decoration: none; }
 .avatar--lg { width: 64px; height: 64px; font-size: 1.3rem; }
 .avatar--sm { width: 28px; height: 28px; font-size: .7rem; }
 
-/* ---------------------------------------------------------------- filters */
+/* ---------------------------------------------------------------- фільтри */
 
 .filter-bar {
     background: var(--surface);
@@ -311,13 +311,13 @@ a:hover { text-decoration: none; }
 .filter-bar label { font-size: .74rem; font-weight: 600; color: var(--ink-muted); margin-bottom: .2rem; }
 .filter-bar .form-control, .filter-bar .form-select { font-size: .87rem; }
 
-/* ----------------------------------------------------------------- charts */
+/* ---------------------------------------------------------------- графіки */
 
 .chart-box { position: relative; height: 300px; }
 .chart-box--sm { height: 240px; }
 .chart-box--xs { height: 200px; }
 
-/* ------------------------------------------------------------------- chat */
+/* -------------------------------------------------------------------- чат */
 
 .chat-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; align-items: start; }
 
@@ -361,12 +361,12 @@ a:hover { text-decoration: none; }
     .chat-list { max-height: 260px; }
 }
 
-/* ------------------------------------------------------------ empty state */
+/* ---------------------------------------------------------- порожній стан */
 
 .empty-state { padding: 3rem 1rem; text-align: center; color: var(--ink-muted); }
 .empty-state i { font-size: 2.5rem; opacity: .4; display: block; margin-bottom: .75rem; }
 
-/* ------------------------------------------------------------------ login */
+/* ------------------------------------------------------------------- вхід */
 
 .login-page {
     min-height: 100vh;
@@ -388,7 +388,7 @@ a:hover { text-decoration: none; }
 .login-card__brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; font-size: 1.15rem; }
 .login-card__brand i { color: var(--brand); font-size: 1.5rem; }
 
-/* ------------------------------------------------------------- utilities */
+/* --------------------------------------------------------------- утиліти */
 
 .stars { color: #f59e0b; letter-spacing: .05em; white-space: nowrap; }
 .stars .is-empty { color: #cbd5e1; }

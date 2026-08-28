@@ -1,7 +1,7 @@
 namespace BLL.Admin.Models
 {
     /// <summary>
-    /// Everything the dashboard shows above the charts. One instance is built per page load.
+    /// Усе, що дашборд показує над графіками. Один екземпляр створюється на кожне відкриття сторінки.
     /// </summary>
     public class DashboardSummary
     {
@@ -29,10 +29,10 @@ namespace BLL.Admin.Models
 
         public int ActiveCategories { get; set; }
 
-        /// <summary>Percentage change of this month's order count against the previous month.</summary>
+        /// <summary>Зміна кількості замовлень цього місяця у відсотках порівняно з попереднім.</summary>
         public double OrdersMonthOverMonth { get; set; }
 
-        /// <summary>Percentage change of this month's revenue against the previous month.</summary>
+        /// <summary>Зміна доходу цього місяця у відсотках порівняно з попереднім.</summary>
         public double RevenueMonthOverMonth { get; set; }
 
         public double CompletionRate =>
@@ -63,8 +63,8 @@ namespace BLL.Admin.Models
     }
 
     /// <summary>
-    /// Provider-agnostic chart payload. Serialised straight to JSON and fed to Chart.js,
-    /// which keeps chart shaping in one place instead of spread across views.
+    /// Дані графіка, не прив'язані до конкретної бібліотеки. Серіалізуються в JSON і передаються
+    /// у Chart.js, завдяки чому підготовка даних зібрана в одному місці, а не розкидана по представленнях.
     /// </summary>
     public class ChartData
     {
@@ -81,7 +81,7 @@ namespace BLL.Admin.Models
 
         public List<decimal> Data { get; set; } = new();
 
-        /// <summary>Optional explicit colour; when null the view falls back to its palette.</summary>
+        /// <summary>Необов'язковий явний колір; якщо null — представлення бере колір зі своєї палітри.</summary>
         public string? Color { get; set; }
     }
 }

@@ -169,8 +169,8 @@ namespace BLL.Admin.Services
                     "This order has completed payments and cannot be deleted. Cancel it instead.");
             }
 
-            // Reviews and payments point at the order without cascade on the principal side,
-            // so remove them explicitly before deleting the order itself.
+            // Відгуки та платежі посилаються на замовлення без каскадного видалення з боку батьківської таблиці,
+            // тому видаляємо їх явно перед видаленням самого замовлення.
             var reviews = await _db.Reviews.Where(r => r.OrderId == id).ToListAsync(cancellationToken);
             _db.Reviews.RemoveRange(reviews);
 

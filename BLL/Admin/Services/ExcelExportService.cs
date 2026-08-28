@@ -6,12 +6,12 @@ using BLL.Admin.Interfaces;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Writes a single-sheet .xlsx straight to a byte array.
+    /// Формує .xlsx з одним аркушем одразу в масив байтів.
     /// <para>
-    /// A workbook is a zip of XML parts, so building it by hand keeps the solution free of an Excel
-    /// dependency (ClosedXML/EPPlus) that the rest of the team would also have to restore. Strings are
-    /// written inline instead of through a shared-string table, which costs a few bytes and removes a
-    /// whole class of index bugs.
+    /// Книга Excel — це zip-архів із XML-частин, тому збирання її вручну звільняє рішення від
+    /// залежності на Excel-бібліотеку (ClosedXML/EPPlus), яку довелося б відновлювати всій команді.
+    /// Рядки пишуться вбудовано, а не через спільну таблицю рядків: це коштує кількох зайвих байтів,
+    /// зате знімає цілий клас помилок з індексами.
     /// </para>
     /// </summary>
     public class ExcelExportService : IExcelExportService
@@ -19,7 +19,7 @@ namespace BLL.Admin.Services
         private const string SpreadsheetNs = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         private const string RelationshipsNs = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 
-        // Indexes into cellXfs below.
+        // Індекси стилів у cellXfs нижче.
         private const int StyleDefault = 0;
         private const int StyleHeader = 1;
         private const int StyleDate = 2;
@@ -49,7 +49,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Parts
+        // Частини книги
         // -----------------------------------------------------------------
 
         private static string ContentTypes() =>
@@ -135,7 +135,7 @@ namespace BLL.Admin.Services
             sb.Append($"<worksheet xmlns=\"{SpreadsheetNs}\">");
             sb.Append($"<dimension ref=\"A1:{lastColumn}{rowCount}\"/>");
 
-            // Freeze the header row so long exports stay readable.
+            // Закріплюємо рядок заголовків, щоб довгі вивантаження лишалися читабельними.
             sb.Append("<sheetViews><sheetView workbookViewId=\"0\">");
             sb.Append("<pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/>");
             sb.Append("</sheetView></sheetViews>");
@@ -185,7 +185,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Cells
+        // Комірки
         // -----------------------------------------------------------------
 
         private static void AppendCell(StringBuilder sb, string reference, object? value, int defaultStyle)
@@ -232,7 +232,7 @@ namespace BLL.Admin.Services
             }
         }
 
-        /// <summary>Excel column name for a 1-based index: 1 → A, 27 → AA.</summary>
+        /// <summary>Назва стовпця Excel за номером від 1: 1 → A, 27 → AA.</summary>
         private static string ColumnName(int index)
         {
             var name = string.Empty;
@@ -248,8 +248,8 @@ namespace BLL.Admin.Services
         }
 
         /// <summary>
-        /// Rough column width from the header and the first rows — enough to avoid ###### on dates
-        /// without scanning a 10 000-row export.
+        /// Приблизна ширина стовпця за заголовком і першими рядками — достатньо, щоб дати не
+        /// перетворилися на ######, і не доводилося переглядати всі 10 000 рядків вивантаження.
         /// </summary>
         private static double EstimateWidth(int columnIndex, IReadOnlyList<string> headers, IList<IReadOnlyList<object?>> rows)
         {
@@ -308,7 +308,7 @@ namespace BLL.Admin.Services
                     case '"': sb.Append("&quot;"); break;
                     case '\'': sb.Append("&apos;"); break;
                     default:
-                        // Control characters are illegal in XML 1.0 and would corrupt the workbook.
+                        // Керуючі символи заборонені в XML 1.0 і зіпсували б книгу Excel.
                         if (ch is '\t' or '\n' or '\r' || ch >= 0x20)
                         {
                             sb.Append(ch);

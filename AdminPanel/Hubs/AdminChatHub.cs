@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.SignalR;
 namespace AdminPanel.Hubs
 {
     /// <summary>
-    /// Live support chat. Each order dialog is a SignalR group named "order-{id}", so a message is
-    /// delivered only to the administrators currently looking at that conversation, while a short
-    /// notice goes to every signed-in staff member through the shared "staff" group.
+    /// Живий чат підтримки. Діалог кожного замовлення — це група SignalR з іменем «order-{id}»,
+    /// тому повідомлення отримують лише адміністратори, які зараз відкрили цю розмову, а коротке
+    /// сповіщення йде всьому персоналу через спільну групу «staff».
     /// </summary>
     [Authorize(Policy = AppRoles.StaffPolicy)]
     public class AdminChatHub : Hub
@@ -54,8 +54,8 @@ namespace AdminPanel.Hubs
         }
 
         /// <summary>
-        /// Persists the message first and broadcasts what was actually stored, so every client shows
-        /// the same id and timestamp as the database.
+        /// Спочатку зберігає повідомлення, а розсилає вже те, що реально записано, —
+        /// щоб у всіх клієнтів були той самий ідентифікатор і час, що й у базі.
         /// </summary>
         public async Task SendMessage(int orderId, string text)
         {
@@ -99,7 +99,7 @@ namespace AdminPanel.Hubs
             }
         }
 
-        /// <summary>Typing indicator; deliberately not persisted.</summary>
+        /// <summary>Індикатор набору тексту; свідомо не зберігається в базі.</summary>
         public Task Typing(int orderId)
         {
             return Clients.OthersInGroup(GroupOf(orderId))

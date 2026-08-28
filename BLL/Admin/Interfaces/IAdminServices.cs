@@ -3,30 +3,30 @@ using Domain.Models;
 
 namespace BLL.Admin.Interfaces
 {
-    /// <summary>Aggregated numbers and chart series for the dashboard and statistics screens.</summary>
+    /// <summary>Зведені числа та ряди даних для графіків дашборда й екрана статистики.</summary>
     public interface IAdminDashboardService
     {
         Task<DashboardSummary> GetSummaryAsync(CancellationToken cancellationToken = default);
 
-        /// <summary>Orders created vs. completed, one point per day.</summary>
+        /// <summary>Створені та виконані замовлення, одна точка на день.</summary>
         Task<ChartData> GetOrdersChartAsync(int days = 30, CancellationToken cancellationToken = default);
 
-        /// <summary>Completed payment volume, one point per month.</summary>
+        /// <summary>Обсяг успішних платежів, одна точка на місяць.</summary>
         Task<ChartData> GetRevenueChartAsync(int months = 12, CancellationToken cancellationToken = default);
 
-        /// <summary>Registrations, one point per day.</summary>
+        /// <summary>Реєстрації, одна точка на день.</summary>
         Task<ChartData> GetUsersChartAsync(int days = 30, CancellationToken cancellationToken = default);
 
-        /// <summary>Order counts grouped by status, for the doughnut chart.</summary>
+        /// <summary>Кількість замовлень у розрізі статусів — для кільцевої діаграми.</summary>
         Task<ChartData> GetOrderStatusChartAsync(CancellationToken cancellationToken = default);
 
-        /// <summary>Order counts for the busiest categories.</summary>
+        /// <summary>Кількість замовлень у найактивніших категоріях.</summary>
         Task<ChartData> GetCategoryChartAsync(int top = 8, CancellationToken cancellationToken = default);
 
-        /// <summary>Review counts grouped by star rating (1..5).</summary>
+        /// <summary>Кількість відгуків у розрізі оцінок (1..5).</summary>
         Task<ChartData> GetRatingChartAsync(CancellationToken cancellationToken = default);
 
-        /// <summary>Daily rows for the statistics table, computed on the fly from orders and payments.</summary>
+        /// <summary>Щоденні рядки для таблиці статистики, обчислені на льоту із замовлень і платежів.</summary>
         Task<IReadOnlyList<Statistic>> GetDailyBreakdownAsync(
             DateTime from,
             DateTime to,
@@ -41,12 +41,12 @@ namespace BLL.Admin.Interfaces
 
         Task<IReadOnlyList<AdminUserListItem>> GetUsersForExportAsync(UserFilter filter, CancellationToken cancellationToken = default);
 
-        /// <summary>Locks the account out until <paramref name="until"/>; null blocks it indefinitely.</summary>
+        /// <summary>Блокує акаунт до <paramref name="until"/>; null — блокування без терміну.</summary>
         Task<AdminOperationResult> BlockAsync(string id, DateTimeOffset? until, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> UnblockAsync(string id, CancellationToken cancellationToken = default);
 
-        /// <summary>Soft delete: the row stays for referential integrity, the account stops working.</summary>
+        /// <summary>М'яке видалення: рядок лишається заради цілісності зв'язків, але акаунт перестає працювати.</summary>
         Task<AdminOperationResult> SoftDeleteAsync(string id, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> RestoreAsync(string id, CancellationToken cancellationToken = default);
@@ -71,12 +71,12 @@ namespace BLL.Admin.Interfaces
 
     public interface IAdminCategoryService
     {
-        /// <summary>Categories ordered as a tree: each root immediately followed by its children.</summary>
+        /// <summary>Категорії у вигляді дерева: після кожної кореневої одразу йдуть її підкатегорії.</summary>
         Task<IReadOnlyList<AdminCategoryListItem>> GetTreeAsync(CategoryFilter filter, CancellationToken cancellationToken = default);
 
         Task<AdminCategoryEditModel?> GetForEditAsync(int id, CancellationToken cancellationToken = default);
 
-        /// <summary>Root categories that may serve as a parent, excluding <paramref name="excludeId"/> and its children.</summary>
+        /// <summary>Кореневі категорії, які можуть бути батьківськими, окрім <paramref name="excludeId"/> та її дітей.</summary>
         Task<IReadOnlyList<AdminCategoryListItem>> GetParentOptionsAsync(int? excludeId = null, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> CreateAsync(AdminCategoryEditModel model, CancellationToken cancellationToken = default);
@@ -88,7 +88,7 @@ namespace BLL.Admin.Interfaces
         Task<AdminOperationResult> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 
-    /// <summary>Complaints and reviews: the two things an admin actually moderates.</summary>
+    /// <summary>Скарги та відгуки — саме те, що насправді модерує адміністратор.</summary>
     public interface IAdminModerationService
     {
         Task<PagedResult<AdminComplaintListItem>> GetComplaintsAsync(ComplaintFilter filter, CancellationToken cancellationToken = default);
@@ -105,7 +105,7 @@ namespace BLL.Admin.Interfaces
 
         Task<AdminOperationResult> DeleteReviewAsync(int id, CancellationToken cancellationToken = default);
 
-        /// <summary>Counters for the moderation queue badges.</summary>
+        /// <summary>Лічильники для значків черги модерації.</summary>
         Task<ModerationQueue> GetQueueAsync(CancellationToken cancellationToken = default);
     }
 
@@ -142,7 +142,7 @@ namespace BLL.Admin.Interfaces
         Task<IReadOnlyList<string>> GetEntityNamesAsync(CancellationToken cancellationToken = default);
     }
 
-    /// <summary>Read access to order dialogs plus the ability to post as support.</summary>
+    /// <summary>Читання діалогів замовлень і можливість писати від імені підтримки.</summary>
     public interface IAdminChatService
     {
         Task<IReadOnlyList<AdminDialogListItem>> GetDialogsAsync(string? search, CancellationToken cancellationToken = default);
@@ -154,7 +154,7 @@ namespace BLL.Admin.Interfaces
         Task MarkReadAsync(int orderId, string readerId, CancellationToken cancellationToken = default);
     }
 
-    /// <summary>Builds .xlsx workbooks without a third-party library, so the panel has no extra dependency.</summary>
+    /// <summary>Формує книги .xlsx без сторонньої бібліотеки, тому панель не тягне зайвої залежності.</summary>
     public interface IExcelExportService
     {
         byte[] Build(string sheetName, IReadOnlyList<string> headers, IEnumerable<IReadOnlyList<object?>> rows);
@@ -181,8 +181,8 @@ namespace BLL.Admin.Interfaces
     }
 
     /// <summary>
-    /// Result of a state-changing admin action. Controllers turn this straight into a flash message,
-    /// which keeps "did it work and what do I tell the user" in one place.
+    /// Результат адміністративної дії, що змінює стан. Контролери перетворюють його одразу на
+    /// сповіщення, тож відповідь на питання «спрацювало чи ні і що сказати користувачеві» — в одному місці.
     /// </summary>
     public class AdminOperationResult
     {

@@ -3,7 +3,7 @@ using Domain.Models;
 namespace BLL.Admin.Models
 {
     // ---------------------------------------------------------------------
-    // Users
+    // Користувачі
     // ---------------------------------------------------------------------
 
     public class AdminUserListItem
@@ -44,7 +44,7 @@ namespace BLL.Admin.Models
     }
 
     // ---------------------------------------------------------------------
-    // Orders
+    // Замовлення
     // ---------------------------------------------------------------------
 
     public class AdminOrderListItem
@@ -86,7 +86,7 @@ namespace BLL.Admin.Models
     }
 
     // ---------------------------------------------------------------------
-    // Categories
+    // Категорії
     // ---------------------------------------------------------------------
 
     public class AdminCategoryListItem
@@ -101,7 +101,7 @@ namespace BLL.Admin.Models
         public int SubCategoriesCount { get; set; }
         public int OrdersCount { get; set; }
 
-        /// <summary>0 for a root category, 1 for a child; used only to indent the tree view.</summary>
+        /// <summary>0 для кореневої категорії, 1 для підкатегорії; потрібно лише для відступу в дереві.</summary>
         public int Depth { get; set; }
     }
 
@@ -116,7 +116,7 @@ namespace BLL.Admin.Models
     }
 
     // ---------------------------------------------------------------------
-    // Reviews / complaints / payments
+    // Відгуки / скарги / платежі
     // ---------------------------------------------------------------------
 
     public class AdminReviewListItem
@@ -145,7 +145,7 @@ namespace BLL.Admin.Models
         public ComplaintStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        /// <summary>How many complaints in total have been filed against the same user.</summary>
+        /// <summary>Скільки всього скарг подано на цього самого користувача.</summary>
         public int TargetComplaintCount { get; set; }
     }
 
@@ -166,7 +166,7 @@ namespace BLL.Admin.Models
     }
 
     // ---------------------------------------------------------------------
-    // Audit log
+    // Журнал дій
     // ---------------------------------------------------------------------
 
     public class AdminAuditLogListItem
@@ -184,7 +184,7 @@ namespace BLL.Admin.Models
     }
 
     // ---------------------------------------------------------------------
-    // Chat
+    // Чат
     // ---------------------------------------------------------------------
 
     public class AdminDialogListItem

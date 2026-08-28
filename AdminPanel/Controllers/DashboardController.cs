@@ -35,7 +35,7 @@ namespace AdminPanel.Controllers
         }
 
         /// <summary>
-        /// Chart data on its own, so the range selector can refresh the graphs without a full reload.
+        /// Окремо тільки дані графіків, щоб перемикач періоду оновлював їх без перезавантаження сторінки.
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> ChartData(string chart, int days = 30, CancellationToken cancellationToken = default)

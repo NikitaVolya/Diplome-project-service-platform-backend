@@ -5,7 +5,7 @@ using Domain.Models;
 
 namespace AdminPanel.Models
 {
-    /// <summary>Carries a page of rows plus the filter that produced it, so views can re-render the form.</summary>
+    /// <summary>Несе сторінку рядків разом із фільтром, який її дав, щоб представлення могло перемалювати форму.</summary>
     public class ListViewModel<TItem, TFilter> where TFilter : FilterBase
     {
         public PagedResult<TItem> Result { get; set; } = PagedResult<TItem>.Empty();
