@@ -1,0 +1,92 @@
+@model CategoryFormViewModel
+@{
+    ViewData["Title"] = Model.IsNew ? "New category" : $"Edit “{Model.Category.Name}”";
+    var action = Model.IsNew ? "Create" : "Edit";
+}
+
+<div class="mb-3">
+    <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
+        <i class="bi bi-arrow-left"></i> Back to categories
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-diagram-3"></i> @(Model.IsNew ? "Create category" : "Category settings")
+            </div>
+            <div class="card-body">
+                <form asp-action="@action" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Category.Id" name="Id" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 px-3 small"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="Name">Name</label>
+                        <input id="Name" name="Name" class="form-control" value="@Model.Category.Name"
+                               maxlength="100" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="Description">Description</label>
+                        <textarea id="Description" name="Description" class="form-control" rows="3"
+                                  maxlength="500">@Model.Category.Description</textarea>
+                        <div class="form-text">Shown in the mobile app under the category name.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="ParentCategoryId">Parent category</label>
+                        <select id="ParentCategoryId" name="ParentCategoryId" class="form-select">
+                            <option value="">— top level —</option>
+                            @foreach (var parent in Model.ParentOptions)
+                            {
+                                <option value="@parent.Id" selected="@(Model.Category.ParentCategoryId == parent.Id)">
+                                    @parent.Name
+                                </option>
+                            }
+                        </select>
+                        <div class="form-text">Only two levels are supported: a top-level category and its children.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="IconUrl">Icon URL</label>
+                        <input id="IconUrl" name="IconUrl" class="form-control" value="@Model.Category.IconUrl"
+                               placeholder="https://cdn.servicehub.app/icons/plumbing.svg" />
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="IsActive" name="IsActive" value="true"
+                               checked="@Model.Category.IsActive" />
+                        <input type="hidden" name="IsActive" value="false" />
+                        <label class="form-check-label" for="IsActive">Visible in the app</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> @(Model.IsNew ? "Create" : "Save changes")
+                        </button>
+                        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-info-circle"></i> Notes</div>
+            <div class="card-body cell-muted">
+                <p>
+                    Hiding a category removes it from the mobile app without touching existing orders.
+                    Hiding a top-level category hides its children as well.
+                </p>
+                <p class="mb-0">
+                    A category that is referenced by at least one order cannot be deleted — hide it instead,
+                    so historical orders keep a valid category.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

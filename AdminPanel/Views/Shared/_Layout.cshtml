@@ -1,0 +1,186 @@
+@using AdminPanel.Services
+@inject INavigationBadgeService Badges
+@{
+    var queue = await Badges.GetAsync();
+    var controller = (ViewContext.RouteData.Values["controller"] as string) ?? string.Empty;
+
+    string NavClass(params string[] controllers) =>
+        controllers.Contains(controller, StringComparer.OrdinalIgnoreCase)
+            ? "sidebar__link is-active"
+            : "sidebar__link";
+
+    var isAdmin = User.IsInRole(AppRoles.Admin);
+    var canModerate = isAdmin || User.IsInRole(AppRoles.Moderator);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] — ServiceHub Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body>
+<div class="admin-shell">
+
+    <aside class="sidebar">
+        <a class="sidebar__brand" asp-controller="Dashboard" asp-action="Index">
+            <i class="bi bi-hexagon-fill"></i>
+            <span>
+                ServiceHub
+                <small>Admin panel</small>
+            </span>
+        </a>
+
+        <nav class="sidebar__nav">
+            <div class="sidebar__section">Overview</div>
+
+            <a class="@NavClass("Dashboard")" asp-controller="Dashboard" asp-action="Index">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a class="@NavClass("Statistics")" asp-controller="Statistics" asp-action="Index">
+                <i class="bi bi-graph-up-arrow"></i> Statistics
+            </a>
+
+            <div class="sidebar__section">Operations</div>
+
+            <a class="@NavClass("Orders")" asp-controller="Orders" asp-action="Index">
+                <i class="bi bi-clipboard-check"></i> Orders
+            </a>
+            @if (canModerate)
+            {
+                <a class="@NavClass("Users")" asp-controller="Users" asp-action="Index">
+                    <i class="bi bi-people"></i> Users
+                </a>
+                <a class="@NavClass("Categories")" asp-controller="Categories" asp-action="Index">
+                    <i class="bi bi-diagram-3"></i> Categories
+                </a>
+            }
+            @if (isAdmin)
+            {
+                <a class="@NavClass("Payments")" asp-controller="Payments" asp-action="Index">
+                    <i class="bi bi-credit-card"></i> Payments
+                </a>
+            }
+
+            @if (canModerate)
+            {
+                <div class="sidebar__section">Moderation</div>
+
+                <a class="@NavClass("Moderation")" asp-controller="Moderation" asp-action="Index">
+                    <i class="bi bi-shield-check"></i> Queue
+                    @if (queue.Total > 0)
+                    {
+                        <span class="sidebar__badge">@queue.Total</span>
+                    }
+                </a>
+                <a class="@NavClass("Complaints")" asp-controller="Complaints" asp-action="Index">
+                    <i class="bi bi-exclamation-octagon"></i> Complaints
+                    @if (queue.PendingComplaints > 0)
+                    {
+                        <span class="sidebar__badge">@queue.PendingComplaints</span>
+                    }
+                </a>
+                <a class="@NavClass("Reviews")" asp-controller="Reviews" asp-action="Index">
+                    <i class="bi bi-star"></i> Reviews
+                </a>
+            }
+
+            <div class="sidebar__section">Support</div>
+
+            <a class="@NavClass("Chat")" asp-controller="Chat" asp-action="Index">
+                <i class="bi bi-chat-dots"></i> Chat
+            </a>
+
+            @if (isAdmin)
+            {
+                <div class="sidebar__section">System</div>
+
+                <a class="@NavClass("Roles")" asp-controller="Roles" asp-action="Index">
+                    <i class="bi bi-person-badge"></i> Roles
+                </a>
+                <a class="@NavClass("Logs")" asp-controller="Logs" asp-action="Index">
+                    <i class="bi bi-journal-text"></i> Activity log
+                </a>
+            }
+        </nav>
+
+        <div class="sidebar__footer">
+            ServiceHub &middot; .NET @Environment.Version.ToString(2)
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="btn btn-light btn-sm d-lg-none" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="flex-grow-1">
+                <h1 class="topbar__title">@ViewData["Title"]</h1>
+                @if (ViewData["Subtitle"] is string subtitle && !string.IsNullOrEmpty(subtitle))
+                {
+                    <p class="topbar__subtitle">@subtitle</p>
+                }
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-light btn-sm dropdown-toggle d-flex align-items-center gap-2"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="avatar avatar--sm">@GetInitials(User.Identity?.Name)</span>
+                    <span class="d-none d-sm-inline">@User.Identity?.Name</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="dropdown-header">
+                        @foreach (var role in AppRoles.StaffRoles.Where(r => User.IsInRole(r)))
+                        {
+                            <span class="badge-soft badge-soft--brand me-1">@role</span>
+                        }
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-1">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                <i class="bi bi-box-arrow-right"></i> Sign out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="content">
+            <partial name="_Alerts" />
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/chartjs/chart.umd.js"></script>
+<script src="~/js/admin.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+@functions {
+    static string GetInitials(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return "?";
+        }
+
+        var letters = name
+            .Split(new[] { ' ', '.', '@' }, StringSplitOptions.RemoveEmptyEntries)
+            .Where(part => char.IsLetter(part[0]))
+            .Take(2)
+            .Select(part => char.ToUpperInvariant(part[0]));
+
+        var initials = string.Concat(letters);
+        return initials.Length == 0 ? "?" : initials;
+    }
+}

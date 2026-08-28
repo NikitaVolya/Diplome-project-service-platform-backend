@@ -1,0 +1,180 @@
+@model PaymentsViewModel
+@{
+    ViewData["Title"] = "Payments";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} payment(s) match the current filter";
+    var f = Model.Filter;
+    var t = Model.Totals;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<div class="row g-3 mb-3">
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--ok"><i class="bi bi-check-circle"></i></div>
+            <div>
+                <div class="kpi__label">Completed</div>
+                <div class="kpi__value">@t.Completed.ToString("N0")<span class="fs-6 text-muted"> ₴</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--warn"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <div class="kpi__label">Pending</div>
+                <div class="kpi__value">@t.Pending.ToString("N0")<span class="fs-6 text-muted"> ₴</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--danger"><i class="bi bi-x-circle"></i></div>
+            <div>
+                <div class="kpi__label">Failed</div>
+                <div class="kpi__value">@t.Failed.ToString("N0")<span class="fs-6 text-muted"> ₴</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--info"><i class="bi bi-arrow-counterclockwise"></i></div>
+            <div>
+                <div class="kpi__label">Refunded</div>
+                <div class="kpi__value">@t.Refunded.ToString("N0")<span class="fs-6 text-muted"> ₴</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-4">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search"
+                       placeholder="Transaction id, order or payer" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="status">Status</label>
+            <select id="status" class="form-select form-select-sm" name="status" data-auto-submit>
+                <option value="">All statuses</option>
+                @foreach (PaymentStatus status in Enum.GetValues<PaymentStatus>())
+                {
+                    <option value="@status" selected="@(f.Status == status)">@status</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="provider">Provider</label>
+            <select id="provider" class="form-select form-select-sm" name="provider" data-auto-submit>
+                <option value="">All providers</option>
+                @foreach (PaymentProvider provider in Enum.GetValues<PaymentProvider>())
+                {
+                    <option value="@provider" selected="@(f.Provider == provider)">@provider</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="from">From</label>
+            <input id="from" type="date" class="form-control form-control-sm" name="from"
+                   value="@(f.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="to">To</label>
+            <input id="to" type="date" class="form-control form-control-sm" name="to"
+                   value="@(f.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+
+        <a class="btn btn-sm btn-outline-success ms-auto" asp-action="Export"
+           asp-route-search="@f.Search" asp-route-status="@f.Status" asp-route-provider="@f.Provider"
+           asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Order</th>
+                <th>Payer</th>
+                <th>Provider</th>
+                <th>Status</th>
+                <th class="text-end">Amount</th>
+                <th class="text-end">Paid</th>
+                <th class="text-end"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Result.Items.Any())
+            {
+                <tr>
+                    <td colspan="8" class="empty-state">
+                        <i class="bi bi-credit-card"></i>
+                        No payments match the current filter
+                    </td>
+                </tr>
+            }
+
+            @foreach (var payment in Model.Result.Items)
+            {
+                <tr>
+                    <td class="cell-muted">@payment.Id</td>
+                    <td>
+                        <a class="cell-strong" asp-controller="Orders" asp-action="Details" asp-route-id="@payment.OrderId">
+                            @payment.OrderTitle
+                        </a>
+                        <div class="cell-muted small">@payment.ExternalTransactionId</div>
+                    </td>
+                    <td>
+                        <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@payment.UserId">
+                            @payment.UserName
+                        </a>
+                    </td>
+                    <td class="cell-muted">@payment.Provider</td>
+                    <td><span class="@Display.PaymentStatusClass(payment.Status)">@payment.Status</span></td>
+                    <td class="text-end cell-strong cell-nowrap">@payment.Amount.ToString("N2") @payment.Currency</td>
+                    <td class="text-end cell-muted cell-nowrap">
+                        @(payment.PaidAt?.ToString("dd MMM yyyy") ?? "—")
+                    </td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@payment.Id">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            @if (payment.Status == PaymentStatus.Completed)
+                            {
+                                <form asp-action="Refund" method="post" class="d-inline"
+                                      data-confirm="Mark payment #@payment.Id as refunded?">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@payment.Id" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-warning" title="Mark as refunded">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <partial name="_Pager" model='PagerModel.From(Model.Result, Context.Request, "payment(s)")' />
+</div>

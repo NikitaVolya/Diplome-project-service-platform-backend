@@ -1,0 +1,134 @@
+@model ListViewModel<AdminReviewListItem, ReviewFilter>
+@{
+    ViewData["Title"] = "Reviews";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} review(s) match the current filter";
+    var f = Model.Filter;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-4">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search"
+                       placeholder="Comment, order or participant" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="minRating">Rating from</label>
+            <select id="minRating" class="form-select form-select-sm" name="minRating" data-auto-submit>
+                <option value="">any</option>
+                @for (var i = 1; i <= 5; i++)
+                {
+                    <option value="@i" selected="@(f.MinRating == i)">@i ★</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="maxRating">to</label>
+            <select id="maxRating" class="form-select form-select-sm" name="maxRating" data-auto-submit>
+                <option value="">any</option>
+                @for (var i = 1; i <= 5; i++)
+                {
+                    <option value="@i" selected="@(f.MaxRating == i)">@i ★</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="from">From</label>
+            <input id="from" type="date" class="form-control form-control-sm" name="from"
+                   value="@(f.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="to">To</label>
+            <input id="to" type="date" class="form-control form-control-sm" name="to"
+                   value="@(f.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+        <a class="btn btn-sm btn-outline-warning" asp-action="Index" asp-route-maxRating="2">
+            <i class="bi bi-star"></i> Only 1–2 ★
+        </a>
+
+        <a class="btn btn-sm btn-outline-success ms-auto" asp-action="Export"
+           asp-route-search="@f.Search" asp-route-minRating="@f.MinRating" asp-route-maxRating="@f.MaxRating"
+           asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Author</th>
+                <th>About</th>
+                <th>Order</th>
+                <th class="text-end">Date</th>
+                <th class="text-end"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Result.Items.Any())
+            {
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        <i class="bi bi-star"></i>
+                        No reviews match the current filter
+                    </td>
+                </tr>
+            }
+
+            @foreach (var review in Model.Result.Items)
+            {
+                <tr>
+                    <td class="cell-nowrap">@Display.Stars(review.Rating)</td>
+                    <td class="cell-clip">@review.Comment</td>
+                    <td>
+                        <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@review.AuthorId">
+                            @review.AuthorName
+                        </a>
+                    </td>
+                    <td>
+                        <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@review.TargetUserId">
+                            @review.TargetUserName
+                        </a>
+                    </td>
+                    <td>
+                        <a class="small" asp-controller="Orders" asp-action="Details" asp-route-id="@review.OrderId">
+                            #@review.OrderId
+                        </a>
+                    </td>
+                    <td class="text-end cell-muted cell-nowrap">@review.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td class="text-end">
+                        <form asp-action="Delete" method="post" class="d-inline"
+                              data-confirm="Remove this review permanently?">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@review.Id" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button class="btn btn-sm btn-outline-danger" title="Delete review">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <partial name="_Pager" model='PagerModel.From(Model.Result, Context.Request, "review(s)")' />
+</div>

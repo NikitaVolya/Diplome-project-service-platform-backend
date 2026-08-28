@@ -1,0 +1,242 @@
+@model DashboardViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Subtitle"] = $"Platform overview · {DateTime.UtcNow:dd MMM yyyy HH:mm} UTC";
+
+    var s = Model.Summary;
+    var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div class="btn-group btn-group-sm" role="group" aria-label="Chart range">
+        @foreach (var days in new[] { 7, 14, 30, 90 })
+        {
+            <a class="btn @(Model.ChartDays == days ? "btn-primary" : "btn-outline-secondary")"
+               asp-action="Index" asp-route-days="@days">@days days</a>
+        }
+    </div>
+
+    <div class="page-actions">
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="Statistics" asp-action="Index">
+            <i class="bi bi-graph-up-arrow"></i> Full statistics
+        </a>
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="Statistics" asp-action="Export">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--brand"><i class="bi bi-people"></i></div>
+            <div>
+                <div class="kpi__label">Users</div>
+                <div class="kpi__value">@s.TotalUsers.ToString("N0")</div>
+                <div class="kpi__meta">
+                    +@s.NewUsersToday today · +@s.NewUsersThisMonth this month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--info"><i class="bi bi-clipboard-check"></i></div>
+            <div>
+                <div class="kpi__label">Orders</div>
+                <div class="kpi__value">@s.TotalOrders.ToString("N0")</div>
+                <div class="kpi__meta">
+                    <span class="@Display.TrendClass(s.OrdersMonthOverMonth)">
+                        <i class="bi @Display.TrendIcon(s.OrdersMonthOverMonth)"></i>
+                        @s.OrdersMonthOverMonth.ToString("0.#")%
+                    </span>
+                    vs last month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--ok"><i class="bi bi-cash-stack"></i></div>
+            <div>
+                <div class="kpi__label">Revenue</div>
+                <div class="kpi__value">@s.TotalRevenue.ToString("N0")<span class="fs-6 text-muted"> ₴</span></div>
+                <div class="kpi__meta">
+                    <span class="@Display.TrendClass(s.RevenueMonthOverMonth)">
+                        <i class="bi @Display.TrendIcon(s.RevenueMonthOverMonth)"></i>
+                        @s.RevenueMonthOverMonth.ToString("0.#")%
+                    </span>
+                    · @s.RevenueThisMonth.ToString("N0") ₴ this month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon @(s.PendingComplaints > 0 ? "kpi__icon--danger" : "kpi__icon--ok")">
+                <i class="bi bi-shield-exclamation"></i>
+            </div>
+            <div>
+                <div class="kpi__label">Open complaints</div>
+                <div class="kpi__value">@s.PendingComplaints</div>
+                <div class="kpi__meta">
+                    @s.TotalComplaints total · @Model.Queue.Total item(s) in queue
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-xl-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-activity"></i> Orders over the last @Model.ChartDays days
+            </div>
+            <div class="card-body">
+                <div class="chart-box"><canvas id="ordersChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-pie-chart"></i> Order statuses</div>
+            <div class="card-body">
+                <div class="chart-box"><canvas id="statusChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-xl-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-currency-exchange"></i> Monthly revenue</div>
+            <div class="card-body">
+                <div class="chart-box chart-box--sm"><canvas id="revenueChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-person-plus"></i> New registrations</div>
+            <div class="card-body">
+                <div class="chart-box chart-box--sm"><canvas id="usersChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-7">
+        <div class="card table-card h-100">
+            <div class="card-header">
+                <i class="bi bi-clock-history"></i> Latest orders
+                <a class="ms-auto btn btn-sm btn-outline-secondary" asp-controller="Orders" asp-action="Index">
+                    All orders
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Created</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (!s.RecentOrders.Any())
+                    {
+                        <tr><td colspan="5" class="empty-state"><i class="bi bi-inbox"></i>No orders yet</td></tr>
+                    }
+                    @foreach (var order in s.RecentOrders)
+                    {
+                        <tr>
+                            <td>
+                                <a class="cell-strong" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id">
+                                    @order.Title
+                                </a>
+                                <div class="cell-muted">@order.CategoryName</div>
+                            </td>
+                            <td class="cell-muted">@order.CustomerName</td>
+                            <td>
+                                <span class="@Display.OrderStatusClass(order.Status)">
+                                    <i class="bi @Display.OrderStatusIcon(order.Status)"></i>
+                                    @Display.OrderStatusLabel(order.Status)
+                                </span>
+                            </td>
+                            <td class="text-end cell-strong cell-nowrap">@order.Price.ToString("N0") ₴</td>
+                            <td class="text-end cell-muted cell-nowrap">@Display.Relative(order.CreatedAt)</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-5">
+        <div class="card mb-3">
+            <div class="card-header"><i class="bi bi-trophy"></i> Top executors</div>
+            <div class="card-body pt-2">
+                @if (!s.TopExecutors.Any())
+                {
+                    <div class="empty-state py-4"><i class="bi bi-person-x"></i>No completed orders yet</div>
+                }
+                @foreach (var executor in s.TopExecutors)
+                {
+                    <div class="d-flex align-items-center gap-2 py-2 border-bottom">
+                        <span class="avatar">@Display.Initials(executor.Name)</span>
+                        <div class="flex-grow-1">
+                            <a class="cell-strong" asp-controller="Users" asp-action="Details" asp-route-id="@executor.UserId">
+                                @executor.Name
+                            </a>
+                            <div class="cell-muted">
+                                @executor.CompletedOrders order(s)
+                                @if (executor.AverageRating > 0)
+                                {
+                                    <text>· @executor.AverageRating.ToString("0.0") ★</text>
+                                }
+                            </div>
+                        </div>
+                        <span class="cell-strong cell-nowrap">@executor.Earned.ToString("N0") ₴</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><i class="bi bi-bar-chart"></i> Busiest categories</div>
+            <div class="card-body">
+                <div class="chart-box chart-box--xs"><canvas id="categoryChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var orders = @Html.Raw(JsonSerializer.Serialize(Model.OrdersChart, jsonOptions));
+            var revenue = @Html.Raw(JsonSerializer.Serialize(Model.RevenueChart, jsonOptions));
+            var users = @Html.Raw(JsonSerializer.Serialize(Model.UsersChart, jsonOptions));
+            var status = @Html.Raw(JsonSerializer.Serialize(Model.StatusChart, jsonOptions));
+            var categories = @Html.Raw(JsonSerializer.Serialize(Model.CategoryChart, jsonOptions));
+
+            AdminCharts.line('ordersChart', orders, { maxTicks: 12 });
+            AdminCharts.doughnut('statusChart', status);
+            AdminCharts.bar('revenueChart', { labels: revenue.labels, series: [revenue.series[0]] }, { maxTicks: 12 });
+            AdminCharts.line('usersChart', users, { maxTicks: 10 });
+            AdminCharts.bar('categoryChart', categories, { horizontal: true, colorPerBar: true, maxBarThickness: 18 });
+        })();
+    </script>
+}

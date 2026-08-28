@@ -1,0 +1,161 @@
+@model OrdersViewModel
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} order(s) match the current filter";
+    var f = Model.Filter;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-3">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search"
+                       placeholder="Title, address, customer" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="status">Status</label>
+            <select id="status" class="form-select form-select-sm" name="status" data-auto-submit>
+                <option value="">All statuses</option>
+                @foreach (OrderStatus status in Enum.GetValues<OrderStatus>())
+                {
+                    <option value="@status" selected="@(f.Status == status)">@Display.OrderStatusLabel(status)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="categoryId">Category</label>
+            <select id="categoryId" class="form-select form-select-sm" name="categoryId" data-auto-submit>
+                <option value="">All categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id" selected="@(f.CategoryId == category.Id)">
+                        @(category.Depth > 0 ? "— " + category.Name : category.Name)
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="minPrice">Price from</label>
+            <input id="minPrice" type="number" step="1" class="form-control form-control-sm"
+                   name="minPrice" value="@f.MinPrice" />
+        </div>
+
+        <div class="col-6 col-lg-1">
+            <label for="maxPrice">to</label>
+            <input id="maxPrice" type="number" step="1" class="form-control form-control-sm"
+                   name="maxPrice" value="@f.MaxPrice" />
+        </div>
+
+        <div class="col-6 col-lg-1">
+            <label for="from">From</label>
+            <input id="from" type="date" class="form-control form-control-sm" name="from"
+                   value="@(f.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="col-6 col-lg-1">
+            <label for="to">To</label>
+            <input id="to" type="date" class="form-control form-control-sm" name="to"
+                   value="@(f.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+
+        <a class="btn btn-sm btn-outline-success ms-auto"
+           asp-action="Export"
+           asp-route-search="@f.Search" asp-route-status="@f.Status" asp-route-categoryId="@f.CategoryId"
+           asp-route-minPrice="@f.MinPrice" asp-route-maxPrice="@f.MaxPrice"
+           asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Order</th>
+                <th>Customer / executor</th>
+                <th>Status</th>
+                <th class="text-end">Price</th>
+                <th class="text-center">Bids</th>
+                <th class="text-end">Created</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Result.Items.Any())
+            {
+                <tr>
+                    <td colspan="8" class="empty-state">
+                        <i class="bi bi-clipboard-x"></i>
+                        No orders match the current filter
+                    </td>
+                </tr>
+            }
+
+            @foreach (var order in Model.Result.Items)
+            {
+                <tr>
+                    <td class="cell-muted">@order.Id</td>
+                    <td>
+                        <a class="cell-strong" asp-action="Details" asp-route-id="@order.Id">@order.Title</a>
+                        <div class="cell-muted">
+                            <i class="bi bi-tag"></i> @order.CategoryName
+                            @if (!string.IsNullOrEmpty(order.Address))
+                            {
+                                <text> · <i class="bi bi-geo-alt"></i> @order.Address</text>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@order.CustomerId">
+                            @order.CustomerName
+                        </a>
+                        <div class="cell-muted">
+                            @if (order.ExecutorId != null)
+                            {
+                                <a asp-controller="Users" asp-action="Details" asp-route-id="@order.ExecutorId">
+                                    @order.ExecutorName
+                                </a>
+                            }
+                            else
+                            {
+                                <text>no executor</text>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <span class="@Display.OrderStatusClass(order.Status)">
+                            <i class="bi @Display.OrderStatusIcon(order.Status)"></i>
+                            @Display.OrderStatusLabel(order.Status)
+                        </span>
+                    </td>
+                    <td class="text-end cell-strong cell-nowrap">@order.Price.ToString("N0") ₴</td>
+                    <td class="text-center cell-muted">@order.ApplicationsCount</td>
+                    <td class="text-end cell-muted cell-nowrap">@order.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@order.Id">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <partial name="_Pager" model='PagerModel.From(Model.Result, Context.Request, "order(s)")' />
+</div>

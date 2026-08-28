@@ -1,0 +1,121 @@
+@model CategoriesViewModel
+@{
+    ViewData["Title"] = "Categories";
+    ViewData["Subtitle"] = $"{Model.Items.Count} category(-ies)";
+    var f = Model.Filter;
+}
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-5">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search" placeholder="Category name" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <label for="isActive">Visibility</label>
+            <select id="isActive" class="form-select form-select-sm" name="isActive" data-auto-submit>
+                <option value="">All</option>
+                <option value="true" selected="@(f.IsActive == true)">Visible</option>
+                <option value="false" selected="@(f.IsActive == false)">Hidden</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+
+        <a class="btn btn-sm btn-outline-success ms-auto" asp-action="Export"
+           asp-route-search="@f.Search" asp-route-isActive="@f.IsActive">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export
+        </a>
+        <a class="btn btn-sm btn-primary" asp-action="Create">
+            <i class="bi bi-plus-lg"></i> New category
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th class="text-center">Sub-categories</th>
+                <th class="text-center">Orders</th>
+                <th>Visibility</th>
+                <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Items.Any())
+            {
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <i class="bi bi-diagram-3"></i>
+                        No categories yet — create the first one
+                    </td>
+                </tr>
+            }
+
+            @foreach (var category in Model.Items)
+            {
+                <tr class="@(category.IsActive ? string.Empty : "opacity-75")">
+                    <td>
+                        <span style="padding-left:@(category.Depth * 22)px">
+                            @if (category.Depth > 0)
+                            {
+                                <i class="bi bi-arrow-return-right cell-muted"></i>
+                            }
+                            <span class="cell-strong">@category.Name</span>
+                        </span>
+                    </td>
+                    <td class="cell-muted cell-clip">@category.Description</td>
+                    <td class="text-center cell-muted">@(category.Depth == 0 ? category.SubCategoriesCount.ToString() : "—")</td>
+                    <td class="text-center cell-muted">@category.OrdersCount</td>
+                    <td>
+                        @if (category.IsActive)
+                        {
+                            <span class="badge-soft badge-soft--ok"><i class="bi bi-eye"></i> Visible</span>
+                        }
+                        else
+                        {
+                            <span class="badge-soft badge-soft--muted"><i class="bi bi-eye-slash"></i> Hidden</span>
+                        }
+                    </td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@category.Id" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form asp-action="ToggleActive" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@category.Id" />
+                                <button class="btn btn-outline-secondary" title="@(category.IsActive ? "Hide" : "Show")">
+                                    <i class="bi @(category.IsActive ? "bi-eye-slash" : "bi-eye")"></i>
+                                </button>
+                            </form>
+
+                            @if (User.IsInRole(AppRoles.Admin))
+                            {
+                                <form asp-action="Delete" method="post" class="d-inline"
+                                      data-confirm="Delete category &quot;@category.Name&quot;?">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@category.Id" />
+                                    <button class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

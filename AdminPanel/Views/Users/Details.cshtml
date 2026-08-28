@@ -1,0 +1,276 @@
+@model UserDetailsViewModel
+@{
+    var u = Model.User;
+    ViewData["Title"] = u.DisplayName;
+    ViewData["Subtitle"] = u.Email;
+}
+
+<div class="mb-3">
+    <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
+        <i class="bi bi-arrow-left"></i> Back to users
+    </a>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-4">
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <span class="avatar avatar--lg mb-2">
+                    @if (!string.IsNullOrEmpty(u.AvatarUrl))
+                    {
+                        <img src="@u.AvatarUrl" alt="" />
+                    }
+                    else
+                    {
+                        @Display.Initials(u.DisplayName)
+                    }
+                </span>
+                <h2 class="h5 mb-1">@u.DisplayName</h2>
+                <div class="cell-muted mb-2">@u.Email</div>
+
+                <div class="mb-3">
+                    @if (u.IsDeleted)
+                    {
+                        <span class="badge-soft badge-soft--muted"><i class="bi bi-trash"></i> Deleted</span>
+                    }
+                    else if (u.IsBlocked)
+                    {
+                        <span class="badge-soft badge-soft--danger"><i class="bi bi-slash-circle"></i> Blocked</span>
+                    }
+                    else
+                    {
+                        <span class="badge-soft badge-soft--ok"><i class="bi bi-check-circle"></i> Active</span>
+                    }
+
+                    @foreach (var role in u.Roles)
+                    {
+                        <span class="@Display.RoleClass(role) ms-1">@role</span>
+                    }
+                </div>
+
+                <div class="d-grid gap-2">
+                    @if (u.IsBlocked)
+                    {
+                        <form asp-action="Unblock" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@u.Id" />
+                            <button class="btn btn-sm btn-outline-success w-100">
+                                <i class="bi bi-unlock"></i> Unblock account
+                            </button>
+                        </form>
+                    }
+                    else if (!u.IsDeleted)
+                    {
+                        <form asp-action="Block" method="post" data-confirm="Block this account?">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@u.Id" />
+                            <div class="input-group input-group-sm">
+                                <select name="days" class="form-select">
+                                    <option value="1">1 day</option>
+                                    <option value="7">7 days</option>
+                                    <option value="30" selected>30 days</option>
+                                    <option value="0">Permanently</option>
+                                </select>
+                                <button class="btn btn-outline-warning">
+                                    <i class="bi bi-slash-circle"></i> Block
+                                </button>
+                            </div>
+                        </form>
+                    }
+
+                    @if (User.IsInRole(AppRoles.Admin))
+                    {
+                        if (u.IsDeleted)
+                        {
+                            <form asp-action="Restore" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button class="btn btn-sm btn-outline-primary w-100">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Restore account
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="Delete" method="post"
+                                  data-confirm="Delete this account? Orders and reviews are kept.">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button class="btn btn-sm btn-outline-danger w-100">
+                                    <i class="bi bi-trash"></i> Delete account
+                                </button>
+                            </form>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header"><i class="bi bi-info-circle"></i> Profile</div>
+            <div class="card-body">
+                <dl class="mb-0">
+                    <div class="stat-line"><dt>Phone</dt><dd>@(u.PhoneNumber ?? "—")</dd></div>
+                    <div class="stat-line"><dt>Email confirmed</dt><dd>@(u.EmailConfirmed ? "Yes" : "No")</dd></div>
+                    <div class="stat-line"><dt>Registered</dt><dd>@u.CreatedAt.ToString("dd MMM yyyy")</dd></div>
+                    <div class="stat-line"><dt>Updated</dt><dd>@(u.UpdatedAt?.ToString("dd MMM yyyy") ?? "—")</dd></div>
+                    <div class="stat-line"><dt>User id</dt><dd class="small text-truncate" style="max-width:170px">@u.Id</dd></div>
+                </dl>
+            </div>
+        </div>
+
+        @if (Model.CanManageRoles)
+        {
+            <div class="card">
+                <div class="card-header"><i class="bi bi-person-badge"></i> Roles</div>
+                <div class="card-body">
+                    <form asp-action="SetRoles" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@u.Id" />
+
+                        @foreach (var role in Model.AllRoles)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="roles" value="@role"
+                                       id="role-@role" checked="@u.Roles.Contains(role)" />
+                                <label class="form-check-label" for="role-@role">@role</label>
+                            </div>
+                        }
+
+                        <button class="btn btn-sm btn-primary mt-3 w-100">
+                            <i class="bi bi-save"></i> Save roles
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-12 col-xl-8">
+        <div class="row g-3 mb-3">
+            <div class="col-6 col-lg-3">
+                <div class="kpi">
+                    <div class="kpi__label">Ordered</div>
+                    <div class="kpi__value">@u.OrdersAsCustomer</div>
+                    <div class="kpi__meta">@u.TotalSpent.ToString("N0") ₴ spent</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="kpi">
+                    <div class="kpi__label">Executed</div>
+                    <div class="kpi__value">@u.OrdersAsExecutor</div>
+                    <div class="kpi__meta">@u.TotalEarned.ToString("N0") ₴ earned</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="kpi">
+                    <div class="kpi__label">Rating</div>
+                    <div class="kpi__value">@(u.AverageRating?.ToString("0.0") ?? "—")</div>
+                    <div class="kpi__meta">@u.ReviewsReceived review(s)</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="kpi">
+                    <div class="kpi__label">Complaints</div>
+                    <div class="kpi__value @(u.ComplaintsAgainst > 0 ? "text-danger" : string.Empty)">
+                        @u.ComplaintsAgainst
+                    </div>
+                    <div class="kpi__meta">filed against this user</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card table-card mb-3">
+            <div class="card-header"><i class="bi bi-clipboard-check"></i> Recent orders</div>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Created</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (!u.RecentOrders.Any())
+                    {
+                        <tr><td colspan="5" class="empty-state"><i class="bi bi-inbox"></i>No orders</td></tr>
+                    }
+                    @foreach (var order in u.RecentOrders)
+                    {
+                        <tr>
+                            <td>
+                                <a class="cell-strong" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id">
+                                    @order.Title
+                                </a>
+                                <div class="cell-muted">@order.CategoryName</div>
+                            </td>
+                            <td class="cell-muted">@(order.CustomerId == u.Id ? "Customer" : "Executor")</td>
+                            <td>
+                                <span class="@Display.OrderStatusClass(order.Status)">
+                                    @Display.OrderStatusLabel(order.Status)
+                                </span>
+                            </td>
+                            <td class="text-end cell-nowrap">@order.Price.ToString("N0") ₴</td>
+                            <td class="text-end cell-muted cell-nowrap">@order.CreatedAt.ToString("dd MMM yyyy")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-12 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header"><i class="bi bi-star"></i> Latest reviews received</div>
+                    <div class="card-body pt-2">
+                        @if (!u.RecentReviews.Any())
+                        {
+                            <div class="empty-state py-4"><i class="bi bi-star"></i>No reviews yet</div>
+                        }
+                        @foreach (var review in u.RecentReviews)
+                        {
+                            <div class="py-2 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    @Display.Stars(review.Rating)
+                                    <span class="cell-muted">@Display.Relative(review.CreatedAt)</span>
+                                </div>
+                                <div class="small mt-1">@review.Comment</div>
+                                <div class="cell-muted">by @review.AuthorName</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header"><i class="bi bi-exclamation-octagon"></i> Complaints against</div>
+                    <div class="card-body pt-2">
+                        @if (!u.RecentComplaints.Any())
+                        {
+                            <div class="empty-state py-4"><i class="bi bi-emoji-smile"></i>No complaints</div>
+                        }
+                        @foreach (var complaint in u.RecentComplaints)
+                        {
+                            <div class="py-2 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a class="cell-strong" asp-controller="Complaints" asp-action="Details" asp-route-id="@complaint.Id">
+                                        @complaint.Reason
+                                    </a>
+                                    <span class="@Display.ComplaintStatusClass(complaint.Status)">@complaint.Status</span>
+                                </div>
+                                <div class="cell-muted">
+                                    from @complaint.SenderName · @Display.Relative(complaint.CreatedAt)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

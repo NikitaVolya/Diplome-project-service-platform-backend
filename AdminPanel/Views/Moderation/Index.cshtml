@@ -1,0 +1,193 @@
+@model ModerationViewModel
+@{
+    ViewData["Title"] = "Moderation queue";
+    ViewData["Subtitle"] = Model.Queue.Total == 0
+        ? "Nothing is waiting for a decision"
+        : $"{Model.Queue.Total} item(s) waiting for a decision";
+    var q = Model.Queue;
+    var returnUrl = Context.Request.Path;
+}
+
+<div class="row g-3 mb-3">
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon @(q.PendingComplaints > 0 ? "kpi__icon--danger" : "kpi__icon--ok")">
+                <i class="bi bi-exclamation-octagon"></i>
+            </div>
+            <div>
+                <div class="kpi__label">Open complaints</div>
+                <div class="kpi__value">@q.PendingComplaints</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--warn"><i class="bi bi-star"></i></div>
+            <div>
+                <div class="kpi__label">Low-rated reviews</div>
+                <div class="kpi__value">@q.LowRatedReviews</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--info"><i class="bi bi-hourglass"></i></div>
+            <div>
+                <div class="kpi__label">Stale orders</div>
+                <div class="kpi__value">@q.StaleOrders</div>
+                <div class="kpi__meta">open for over 30 days</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="kpi d-flex gap-3">
+            <div class="kpi__icon kpi__icon--warn"><i class="bi bi-cash-coin"></i></div>
+            <div>
+                <div class="kpi__label">Completed, unpaid</div>
+                <div class="kpi__value">@q.UnpaidCompletedOrders</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-7">
+        <div class="card table-card h-100">
+            <div class="card-header">
+                <i class="bi bi-exclamation-octagon"></i> Oldest open complaints
+                <a class="ms-auto btn btn-sm btn-outline-secondary"
+                   asp-controller="Complaints" asp-action="Index" asp-route-status="@ComplaintStatus.Pending">
+                    All complaints
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Reason</th>
+                        <th>Against</th>
+                        <th class="text-end">Waiting</th>
+                        <th class="text-end">Decision</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (!Model.PendingComplaints.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <i class="bi bi-emoji-smile"></i>
+                                No open complaints — the queue is clear
+                            </td>
+                        </tr>
+                    }
+
+                    @foreach (var complaint in Model.PendingComplaints)
+                    {
+                        <tr>
+                            <td>
+                                <a class="cell-strong" asp-controller="Complaints" asp-action="Details" asp-route-id="@complaint.Id">
+                                    @complaint.Reason
+                                </a>
+                                <div class="cell-muted cell-clip">@complaint.Description</div>
+                            </td>
+                            <td>
+                                @if (complaint.TargetUserId != null)
+                                {
+                                    <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@complaint.TargetUserId">
+                                        @complaint.TargetUserName
+                                    </a>
+                                    @if (complaint.TargetComplaintCount > 1)
+                                    {
+                                        <span class="badge-soft badge-soft--danger ms-1">@complaint.TargetComplaintCount</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="cell-muted">—</span>
+                                }
+                            </td>
+                            <td class="text-end cell-muted cell-nowrap">@Display.Relative(complaint.CreatedAt)</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <form asp-controller="Complaints" asp-action="SetStatus" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@complaint.Id" />
+                                        <input type="hidden" name="status" value="@ComplaintStatus.Resolved" />
+                                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                        <button class="btn btn-outline-success" title="Resolve"><i class="bi bi-check2"></i></button>
+                                    </form>
+                                    <form asp-controller="Complaints" asp-action="SetStatus" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@complaint.Id" />
+                                        <input type="hidden" name="status" value="@ComplaintStatus.Rejected" />
+                                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                        <button class="btn btn-outline-secondary" title="Reject"><i class="bi bi-x"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-5">
+        <div class="card table-card h-100">
+            <div class="card-header">
+                <i class="bi bi-star"></i> Reviews rated 1–2 ★
+                <a class="ms-auto btn btn-sm btn-outline-secondary"
+                   asp-controller="Reviews" asp-action="Index" asp-route-maxRating="2">
+                    All reviews
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th class="text-end"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (!Model.LowRatedReviews.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="empty-state">
+                                <i class="bi bi-hand-thumbs-up"></i>
+                                No low-rated reviews
+                            </td>
+                        </tr>
+                    }
+
+                    @foreach (var review in Model.LowRatedReviews)
+                    {
+                        <tr>
+                            <td class="cell-nowrap">@Display.Stars(review.Rating)</td>
+                            <td>
+                                <div class="cell-clip">@review.Comment</div>
+                                <div class="cell-muted">
+                                    @review.AuthorName → @review.TargetUserName
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <form asp-controller="Reviews" asp-action="Delete" method="post" class="d-inline"
+                                      data-confirm="Remove this review permanently?">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@review.Id" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete review">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

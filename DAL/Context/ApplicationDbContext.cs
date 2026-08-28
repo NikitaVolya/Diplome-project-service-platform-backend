@@ -9,6 +9,7 @@ namespace DAL.Context
     {
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
@@ -182,6 +183,42 @@ namespace DAL.Context
                 entity.Property(m => m.Text)
                     .IsRequired()
                     .HasMaxLength(1000);
+            });
+
+            builder.Entity<AuditLog>(entity =>
+            {
+                entity.HasOne(a => a.User)
+                      .WithMany()
+                      .HasForeignKey(a => a.UserId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.Property(a => a.UserName)
+                      .IsRequired()
+                      .HasMaxLength(256);
+
+                entity.Property(a => a.EntityName)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(a => a.EntityId)
+                      .HasMaxLength(450);
+
+                entity.Property(a => a.Description)
+                      .HasMaxLength(1000);
+
+                entity.Property(a => a.IpAddress)
+                      .HasMaxLength(64);
+
+                entity.Property(a => a.Action)
+                      .HasConversion<string>()
+                      .HasMaxLength(32);
+
+                entity.Property(a => a.Severity)
+                      .HasConversion<string>()
+                      .HasMaxLength(32);
+
+                entity.HasIndex(a => a.CreatedAt);
+                entity.HasIndex(a => a.EntityName);
             });
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

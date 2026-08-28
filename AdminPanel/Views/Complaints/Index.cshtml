@@ -1,0 +1,153 @@
+@model ListViewModel<AdminComplaintListItem, ComplaintFilter>
+@{
+    ViewData["Title"] = "Complaints";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} complaint(s) match the current filter";
+    var f = Model.Filter;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-4">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search"
+                       placeholder="Reason, description or participant" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="status">Status</label>
+            <select id="status" class="form-select form-select-sm" name="status" data-auto-submit>
+                <option value="">All statuses</option>
+                @foreach (ComplaintStatus status in Enum.GetValues<ComplaintStatus>())
+                {
+                    <option value="@status" selected="@(f.Status == status)">@status</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="from">From</label>
+            <input id="from" type="date" class="form-control form-control-sm" name="from"
+                   value="@(f.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="to">To</label>
+            <input id="to" type="date" class="form-control form-control-sm" name="to"
+                   value="@(f.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+
+        <a class="btn btn-sm btn-outline-success ms-auto" asp-action="Export"
+           asp-route-search="@f.Search" asp-route-status="@f.Status"
+           asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Reason</th>
+                <th>From</th>
+                <th>Against</th>
+                <th>Status</th>
+                <th class="text-end">Filed</th>
+                <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Result.Items.Any())
+            {
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        <i class="bi bi-emoji-smile"></i>
+                        No complaints match the current filter
+                    </td>
+                </tr>
+            }
+
+            @foreach (var complaint in Model.Result.Items)
+            {
+                <tr>
+                    <td class="cell-muted">@complaint.Id</td>
+                    <td>
+                        <a class="cell-strong" asp-action="Details" asp-route-id="@complaint.Id">@complaint.Reason</a>
+                        <div class="cell-muted cell-clip">@complaint.Description</div>
+                    </td>
+                    <td>
+                        <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@complaint.SenderId">
+                            @complaint.SenderName
+                        </a>
+                    </td>
+                    <td>
+                        @if (complaint.TargetUserId != null)
+                        {
+                            <a class="small" asp-controller="Users" asp-action="Details" asp-route-id="@complaint.TargetUserId">
+                                @complaint.TargetUserName
+                            </a>
+                            @if (complaint.TargetComplaintCount > 1)
+                            {
+                                <span class="badge-soft badge-soft--danger ms-1"
+                                      title="Total complaints against this user">
+                                    @complaint.TargetComplaintCount
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="cell-muted">—</span>
+                        }
+                    </td>
+                    <td><span class="@Display.ComplaintStatusClass(complaint.Status)">@complaint.Status</span></td>
+                    <td class="text-end cell-muted cell-nowrap">@complaint.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td class="text-end">
+                        @if (complaint.Status == ComplaintStatus.Pending)
+                        {
+                            <div class="btn-group btn-group-sm">
+                                <form asp-action="SetStatus" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@complaint.Id" />
+                                    <input type="hidden" name="status" value="@ComplaintStatus.Resolved" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-success" title="Mark as resolved">
+                                        <i class="bi bi-check2"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="SetStatus" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@complaint.Id" />
+                                    <input type="hidden" name="status" value="@ComplaintStatus.Rejected" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-secondary" title="Reject">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@complaint.Id">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <partial name="_Pager" model='PagerModel.From(Model.Result, Context.Request, "complaint(s)")' />
+</div>

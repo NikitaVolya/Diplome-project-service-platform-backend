@@ -1,0 +1,63 @@
+@model PagerModel
+@{
+    var basePath = Context.Request.Path.ToString();
+
+    // «page» — зарезервоване слово для парсера Razor, тому змінна циклу названа інакше,
+    // а кожне посилання будується через цей допоміжний метод, а не виразом у розмітці.
+    string Href(int target)
+    {
+        var parts = Model.Query
+            .Where(pair => !string.IsNullOrEmpty(pair.Value))
+            .Select(pair => $"{Uri.EscapeDataString(pair.Key)}={Uri.EscapeDataString(pair.Value!)}")
+            .ToList();
+
+        parts.Add($"page={target}");
+        return $"{basePath}?{string.Join("&", parts)}";
+    }
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 px-3 py-2 border-top">
+    <span class="cell-muted">
+        @if (Model.TotalCount == 0)
+        {
+            <text>No @Model.ItemNoun found</text>
+        }
+        else
+        {
+            <text>Showing @Model.FirstItemIndex–@Model.LastItemIndex of @Model.TotalCount @Model.ItemNoun</text>
+        }
+    </span>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Pagination">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item @(Model.Page <= 1 ? "disabled" : string.Empty)">
+                    <a class="page-link" href="@Href(Model.Page - 1)" aria-label="Previous">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+
+                @foreach (var number in Model.WindowedPages())
+                {
+                    if (number == -1)
+                    {
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item @(number == Model.Page ? "active" : string.Empty)">
+                            <a class="page-link" href="@Href(number)">@number</a>
+                        </li>
+                    }
+                }
+
+                <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : string.Empty)">
+                    <a class="page-link" href="@Href(Model.Page + 1)" aria-label="Next">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

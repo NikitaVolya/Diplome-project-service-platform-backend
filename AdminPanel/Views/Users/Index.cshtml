@@ -1,0 +1,186 @@
+@model UsersViewModel
+@{
+    ViewData["Title"] = "Users";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} account(s) match the current filter";
+    var f = Model.Filter;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<form method="get" class="filter-bar">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-4">
+            <label for="search">Search</label>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="search" class="form-control" name="search" value="@f.Search"
+                       placeholder="Name, email or phone" />
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="role">Role</label>
+            <select id="role" class="form-select form-select-sm" name="role" data-auto-submit>
+                <option value="">All roles</option>
+                @foreach (var role in Model.Roles)
+                {
+                    <option value="@role" selected="@(f.Role == role)">@role</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="state">Status</label>
+            <select id="state" class="form-select form-select-sm" name="state" data-auto-submit>
+                @foreach (UserState state in Enum.GetValues<UserState>())
+                {
+                    <option value="@state" selected="@(f.State == state)">@state</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="from">Registered from</label>
+            <input id="from" type="date" class="form-control form-control-sm" name="from"
+                   value="@(f.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="col-6 col-lg-2">
+            <label for="to">to</label>
+            <input id="to" type="date" class="form-control form-control-sm" name="to"
+                   value="@(f.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Apply</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-reset-filters>Reset</button>
+
+        <a class="btn btn-sm btn-outline-success ms-auto"
+           asp-action="Export"
+           asp-route-search="@f.Search" asp-route-role="@f.Role" asp-route-state="@f.State"
+           asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
+            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+        </a>
+    </div>
+</form>
+
+<div class="card table-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Roles</th>
+                <th>Status</th>
+                <th class="text-center">Orders</th>
+                <th>Registered</th>
+                <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Result.Items.Any())
+            {
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <i class="bi bi-person-x"></i>
+                        No users match the current filter
+                    </td>
+                </tr>
+            }
+
+            @foreach (var user in Model.Result.Items)
+            {
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="avatar">
+                                @if (!string.IsNullOrEmpty(user.AvatarUrl))
+                                {
+                                    <img src="@user.AvatarUrl" alt="" />
+                                }
+                                else
+                                {
+                                    @Display.Initials(user.DisplayName)
+                                }
+                            </span>
+                            <div>
+                                <a class="cell-strong" asp-action="Details" asp-route-id="@user.Id">@user.DisplayName</a>
+                                <div class="cell-muted">
+                                    @user.Email
+                                    @if (!user.EmailConfirmed)
+                                    {
+                                        <i class="bi bi-exclamation-circle text-warning" title="Email not confirmed"></i>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @if (!user.Roles.Any())
+                        {
+                            <span class="cell-muted">—</span>
+                        }
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="@Display.RoleClass(role) me-1">@role</span>
+                        }
+                    </td>
+                    <td>
+                        @if (user.IsDeleted)
+                        {
+                            <span class="badge-soft badge-soft--muted"><i class="bi bi-trash"></i> Deleted</span>
+                        }
+                        else if (user.IsBlocked)
+                        {
+                            <span class="badge-soft badge-soft--danger" title="Until @user.LockoutEnd?.UtcDateTime.ToString("yyyy-MM-dd HH:mm") UTC">
+                                <i class="bi bi-slash-circle"></i> Blocked
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge-soft badge-soft--ok"><i class="bi bi-check-circle"></i> Active</span>
+                        }
+                    </td>
+                    <td class="text-center cell-muted cell-nowrap"
+                        title="@user.OrdersAsCustomer placed as customer, @user.OrdersAsExecutor performed as executor">
+                        @user.OrdersAsCustomer <i class="bi bi-arrow-down-up small"></i> @user.OrdersAsExecutor
+                    </td>
+                    <td class="cell-muted cell-nowrap">@user.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@user.Id">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            @if (user.IsBlocked)
+                            {
+                                <form asp-action="Unblock" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-success" title="Unblock"><i class="bi bi-unlock"></i></button>
+                                </form>
+                            }
+                            else if (!user.IsDeleted)
+                            {
+                                <form asp-action="Block" method="post" class="d-inline"
+                                      data-confirm="Block @user.DisplayName for 30 days?">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <input type="hidden" name="days" value="30" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-warning" title="Block for 30 days">
+                                        <i class="bi bi-slash-circle"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <partial name="_Pager" model='PagerModel.From(Model.Result, Context.Request, "user(s)")' />
+</div>
