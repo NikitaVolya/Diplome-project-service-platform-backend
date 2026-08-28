@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Models
 {
     /// <summary>
-    /// Одна сторінка більшого набору результатів разом з усім, що потрібно для малювання пагінації.
+    /// One page of a larger result set, together with everything a pager needs to render itself.
     /// </summary>
     public class PagedResult<T>
     {
@@ -21,7 +21,7 @@ namespace BLL.Admin.Models
 
         public bool HasNext => Page < TotalPages;
 
-        /// <summary>Номер першого рядка на цій сторінці (від 1) — для підпису «показано 21–40 зі 137».</summary>
+        /// <summary>1-based index of the first row on this page, for "showing 21-40 of 137" captions.</summary>
         public int FirstItemIndex => TotalCount == 0 ? 0 : ((Page - 1) * PageSize) + 1;
 
         public int LastItemIndex => Math.Min(Page * PageSize, TotalCount);
@@ -33,8 +33,8 @@ namespace BLL.Admin.Models
     public static class PagedResultExtensions
     {
         /// <summary>
-        /// Спочатку рахує загальну кількість, потім вибирає одну сторінку. Номер сторінки обмежується,
-        /// щоб застаріле посилання «?page=99» не показало порожній екран.
+        /// Counts the query, then materialises a single page of it. Page numbers are clamped so that
+        /// a stale "?page=99" link cannot produce an empty screen.
         /// </summary>
         public static async Task<PagedResult<T>> ToPagedResultAsync<T>(
             this IQueryable<T> query,

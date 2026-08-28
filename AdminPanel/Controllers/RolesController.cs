@@ -62,7 +62,7 @@ namespace AdminPanel.Controllers
                 IsStaffRole = AppRoles.StaffRoles.Contains(r.Name, StringComparer.OrdinalIgnoreCase)
             }).ToList();
 
-            // Усі, хто має доступ до панелі, — щоб права можна було переглянути одним поглядом.
+            // Everyone who can reach the panel, so access can be reviewed at a glance.
             var staff = new List<AdminUserListItem>();
             foreach (var role in AppRoles.StaffRoles)
             {

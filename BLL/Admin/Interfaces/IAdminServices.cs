@@ -3,22 +3,30 @@ using Domain.Models;
 
 namespace BLL.Admin.Interfaces
 {
+    /// <summary>Aggregated numbers and chart series for the dashboard and statistics screens.</summary>
     public interface IAdminDashboardService
     {
         Task<DashboardSummary> GetSummaryAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>Orders created vs. completed, one point per day.</summary>
         Task<ChartData> GetOrdersChartAsync(int days = 30, CancellationToken cancellationToken = default);
 
+        /// <summary>Completed payment volume, one point per month.</summary>
         Task<ChartData> GetRevenueChartAsync(int months = 12, CancellationToken cancellationToken = default);
 
+        /// <summary>Registrations, one point per day.</summary>
         Task<ChartData> GetUsersChartAsync(int days = 30, CancellationToken cancellationToken = default);
 
+        /// <summary>Order counts grouped by status, for the doughnut chart.</summary>
         Task<ChartData> GetOrderStatusChartAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>Order counts for the busiest categories.</summary>
         Task<ChartData> GetCategoryChartAsync(int top = 8, CancellationToken cancellationToken = default);
 
+        /// <summary>Review counts grouped by star rating (1..5).</summary>
         Task<ChartData> GetRatingChartAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>Daily rows for the statistics table, computed on the fly from orders and payments.</summary>
         Task<IReadOnlyList<Statistic>> GetDailyBreakdownAsync(
             DateTime from,
             DateTime to,
@@ -33,10 +41,12 @@ namespace BLL.Admin.Interfaces
 
         Task<IReadOnlyList<AdminUserListItem>> GetUsersForExportAsync(UserFilter filter, CancellationToken cancellationToken = default);
 
+        /// <summary>Locks the account out until <paramref name="until"/>; null blocks it indefinitely.</summary>
         Task<AdminOperationResult> BlockAsync(string id, DateTimeOffset? until, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> UnblockAsync(string id, CancellationToken cancellationToken = default);
 
+        /// <summary>Soft delete: the row stays for referential integrity, the account stops working.</summary>
         Task<AdminOperationResult> SoftDeleteAsync(string id, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> RestoreAsync(string id, CancellationToken cancellationToken = default);
@@ -61,10 +71,12 @@ namespace BLL.Admin.Interfaces
 
     public interface IAdminCategoryService
     {
+        /// <summary>Categories ordered as a tree: each root immediately followed by its children.</summary>
         Task<IReadOnlyList<AdminCategoryListItem>> GetTreeAsync(CategoryFilter filter, CancellationToken cancellationToken = default);
 
         Task<AdminCategoryEditModel?> GetForEditAsync(int id, CancellationToken cancellationToken = default);
 
+        /// <summary>Root categories that may serve as a parent, excluding <paramref name="excludeId"/> and its children.</summary>
         Task<IReadOnlyList<AdminCategoryListItem>> GetParentOptionsAsync(int? excludeId = null, CancellationToken cancellationToken = default);
 
         Task<AdminOperationResult> CreateAsync(AdminCategoryEditModel model, CancellationToken cancellationToken = default);
@@ -76,6 +88,7 @@ namespace BLL.Admin.Interfaces
         Task<AdminOperationResult> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 
+    /// <summary>Complaints and reviews: the two things an admin actually moderates.</summary>
     public interface IAdminModerationService
     {
         Task<PagedResult<AdminComplaintListItem>> GetComplaintsAsync(ComplaintFilter filter, CancellationToken cancellationToken = default);
@@ -92,6 +105,7 @@ namespace BLL.Admin.Interfaces
 
         Task<AdminOperationResult> DeleteReviewAsync(int id, CancellationToken cancellationToken = default);
 
+        /// <summary>Counters for the moderation queue badges.</summary>
         Task<ModerationQueue> GetQueueAsync(CancellationToken cancellationToken = default);
     }
 
@@ -128,6 +142,7 @@ namespace BLL.Admin.Interfaces
         Task<IReadOnlyList<string>> GetEntityNamesAsync(CancellationToken cancellationToken = default);
     }
 
+    /// <summary>Read access to order dialogs plus the ability to post as support.</summary>
     public interface IAdminChatService
     {
         Task<IReadOnlyList<AdminDialogListItem>> GetDialogsAsync(string? search, CancellationToken cancellationToken = default);
@@ -139,6 +154,7 @@ namespace BLL.Admin.Interfaces
         Task MarkReadAsync(int orderId, string readerId, CancellationToken cancellationToken = default);
     }
 
+    /// <summary>Builds .xlsx workbooks without a third-party library, so the panel has no extra dependency.</summary>
     public interface IExcelExportService
     {
         byte[] Build(string sheetName, IReadOnlyList<string> headers, IEnumerable<IReadOnlyList<object?>> rows);
@@ -164,6 +180,10 @@ namespace BLL.Admin.Interfaces
         public int Count { get; set; }
     }
 
+    /// <summary>
+    /// Result of a state-changing admin action. Controllers turn this straight into a flash message,
+    /// which keeps "did it work and what do I tell the user" in one place.
+    /// </summary>
     public class AdminOperationResult
     {
         public bool Succeeded { get; init; }

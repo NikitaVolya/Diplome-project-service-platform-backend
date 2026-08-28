@@ -1,18 +1,18 @@
 namespace DAL.Seed
 {
     /// <summary>
-    /// Прив'язується до секції «Seed» у appsettings.json.
+    /// Bound from the "Seed" section of appsettings.json.
     /// </summary>
     public class SeedOptions
     {
         public const string SectionName = "Seed";
 
-        /// <summary>Створювати ролі та вбудований акаунт адміністратора під час запуску.</summary>
+        /// <summary>Create roles and the built-in administrator account on start-up.</summary>
         public bool Enabled { get; set; } = true;
 
         /// <summary>
-        /// Заповнити порожню базу демонстраційними користувачами, замовленнями, платежами та відгуками,
-        /// щоб дашборду й графікам було що показати. Ігнорується, якщо в базі вже є замовлення.
+        /// Fill an empty database with demo users, orders, payments and reviews so the dashboard and
+        /// charts have something to show. Ignored when the database already contains orders.
         /// </summary>
         public bool DemoData { get; set; }
 
@@ -28,7 +28,7 @@ namespace DAL.Seed
 
         public int DemoOrders { get; set; } = 160;
 
-        /// <summary>На скільки днів назад розкидані демо-дані; це ж і період, який охоплюють графіки дашборда.</summary>
+        /// <summary>How far back demo data is spread; also the span the dashboard charts cover.</summary>
         public int DemoHistoryDays { get; set; } = 120;
     }
 }

@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    // Вхід для персоналу. Звичайні користувачі платформи лежать у тому самому сховищі Identity,
-    // тому правильного пароля замало — акаунт повинен ще мати службову роль.
+    /// <summary>
+    /// Sign-in for staff. Ordinary platform users exist in the same Identity store, so a successful
+    /// password check is not enough — the account must also carry a staff role.
+    /// </summary>
     [AllowAnonymous]
     public class AccountController : AdminControllerBase
     {
@@ -52,7 +54,7 @@ namespace AdminPanel.Controllers
 
             if (user == null || user.IsDeleted)
             {
-                // Повідомлення однакове в обох випадках: не можна підказувати, що саме введено неправильно.
+                // Same message either way: never reveal which half of the pair was wrong.
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
                 await LogFailureAsync(model.Email, "Unknown or deleted account");
                 return View(model);

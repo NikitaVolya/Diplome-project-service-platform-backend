@@ -3,8 +3,8 @@ using Domain.Models;
 namespace BLL.Admin.Models
 {
     /// <summary>
-    /// Поля, спільні для всіх списків адмінки. Прив'язуються прямо з рядка запиту,
-    /// тому кожна властивість має нормально працювати й тоді, коли значення немає.
+    /// Fields shared by every admin list screen. Bound straight from the query string,
+    /// so every property must tolerate being absent.
     /// </summary>
     public abstract class FilterBase
     {
@@ -18,7 +18,7 @@ namespace BLL.Admin.Models
             set => _pageSize = value is > 0 and <= 200 ? value : 20;
         }
 
-        /// <summary>Довільний текстовий пошук; що саме вважається збігом, визначає кожен список окремо.</summary>
+        /// <summary>Free-text query; the meaning of "matches" is defined per list.</summary>
         public string? Search { get; set; }
 
         public DateTime? From { get; set; }
@@ -29,7 +29,7 @@ namespace BLL.Admin.Models
 
         public bool SortDesc { get; set; } = true;
 
-        /// <summary>Включна верхня межа: «до 2026-08-28» має охоплювати весь той день.</summary>
+        /// <summary>Inclusive upper bound: "to 2026-08-28" must include everything that day.</summary>
         public DateTime? ToInclusive => To?.Date.AddDays(1);
 
         public bool HasSearch => !string.IsNullOrWhiteSpace(Search);
@@ -39,7 +39,7 @@ namespace BLL.Admin.Models
 
     public class UserFilter : FilterBase
     {
-        /// <summary>Назва ролі Identity для фільтрації, наприклад «Executor».</summary>
+        /// <summary>Identity role name to filter by, e.g. "Executor".</summary>
         public string? Role { get; set; }
 
         public UserState State { get; set; } = UserState.Any;

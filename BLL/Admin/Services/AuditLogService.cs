@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Журнал дій, у який можна лише дописувати. Запис у журнал ніколи не має ламати дію, що його
-    /// спричинила, тому помилки свідомо ковтаються: краще втратити рядок журналу, ніж рішення модератора.
+    /// Append-only activity log. Writing must never break the action that triggered it, so failures
+    /// are swallowed on purpose — a lost log line is preferable to a failed moderation decision.
     /// </summary>
     public class AuditLogService : IAuditLogService
     {
@@ -34,7 +34,7 @@ namespace BLL.Admin.Services
         {
             try
             {
-                // Зовнішній ключ необов'язковий: застарілий ідентифікатор (видалений адміністратор) не має заважати запису.
+                // The FK is optional; a stale id (deleted admin) must not block the write.
                 var actorExists = userId != null &&
                                   await _db.Users.AnyAsync(u => u.Id == userId, cancellationToken);
 
@@ -56,7 +56,7 @@ namespace BLL.Admin.Services
             }
             catch (Exception)
             {
-                // Від'єднуємо невдалий запис, щоб він не зіпсував наступний SaveChanges викликаючого коду.
+                // Detach the failed entry so the caller's own SaveChanges is not poisoned by it.
                 foreach (var tracked in _db.ChangeTracker.Entries<AuditLog>().ToList())
                 {
                     tracked.State = EntityState.Detached;

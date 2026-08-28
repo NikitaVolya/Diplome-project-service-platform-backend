@@ -1,30 +1,30 @@
 namespace Domain.Common
 {
     /// <summary>
-    /// Назви ролей, які використовуються по всій платформі. Винесені в константи, щоб атрибути
-    /// [Authorize] в адмінці та код заповнення бази ніколи не розійшлися через одну описку.
+    /// Role names used across the platform. Kept as constants so that the admin panel's
+    /// [Authorize] attributes and the seeder can never drift apart through a typo.
     /// </summary>
     public static class AppRoles
     {
-        /// <summary>Повний доступ, зокрема керування ролями та незворотні дії.</summary>
+        /// <summary>Full access, including role management and destructive actions.</summary>
         public const string Admin = "Admin";
 
-        /// <summary>Працює зі скаргами, відгуками та користувачами, але не з ролями й платежами.</summary>
+        /// <summary>Handles complaints, reviews and users, but not roles or payments.</summary>
         public const string Moderator = "Moderator";
 
-        /// <summary>Доступ лише для перегляду плюс чат підтримки.</summary>
+        /// <summary>Read-only access plus the support chat.</summary>
         public const string Support = "Support";
 
-        /// <summary>Звичайний користувач платформи, який створює замовлення.</summary>
+        /// <summary>Ordinary platform user who places orders.</summary>
         public const string Customer = "Customer";
 
-        /// <summary>Звичайний користувач платформи, який виконує замовлення.</summary>
+        /// <summary>Ordinary platform user who performs orders.</summary>
         public const string Executor = "Executor";
 
-        /// <summary>Усі ролі, які створює код початкового заповнення бази.</summary>
+        /// <summary>Every role the seeder creates.</summary>
         public static readonly string[] All = { Admin, Moderator, Support, Customer, Executor };
 
-        /// <summary>Ролі, яким узагалі дозволено входити у вебпанель адміністрування.</summary>
+        /// <summary>Roles that are allowed to sign in to the web admin panel at all.</summary>
         public static readonly string[] StaffRoles = { Admin, Moderator, Support };
 
         public const string StaffPolicy = "StaffOnly";

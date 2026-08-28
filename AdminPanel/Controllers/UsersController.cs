@@ -114,7 +114,7 @@ namespace AdminPanel.Controllers
         {
             var requested = roles ?? Array.Empty<string>();
 
-            // Захист від ситуації, коли адміністратор сам забирає в себе доступ до панелі.
+            // Guard against an administrator locking themselves out of the panel.
             if (string.Equals(id, CurrentUserId, StringComparison.Ordinal) &&
                 !requested.Contains(AppRoles.Admin, StringComparer.OrdinalIgnoreCase))
             {

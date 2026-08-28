@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Бік підтримки в чаті замовлення. Адміністратор бачить усі діалоги (на відміну від мобільного
-    /// клієнта, де доступні лише замовник і виконавець) і може підключитися до будь-якого з них.
+    /// Support side of the order chat. An administrator sees every dialog (unlike the mobile client,
+    /// which is limited to the customer and the executor of the order) and can join any of them.
     /// </summary>
     public class AdminChatService : IAdminChatService
     {

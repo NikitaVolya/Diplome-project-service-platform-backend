@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    // Журнал дій лише для перегляду. Видалення записів свідомо не передбачено:
-    // журнал, який адміністратор може стерти, вже не є журналом аудиту.
+    /// <summary>
+    /// Read-only view over the audit trail. There is deliberately no delete action: a log an
+    /// administrator can erase is not an audit log.
+    /// </summary>
     [Authorize(Policy = AppRoles.AdminOnlyPolicy)]
     public class LogsController : AdminControllerBase
     {

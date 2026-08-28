@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Агрегація по робочих таблицях лише для читання. Усе рахується на вимогу, а не береться
-    /// з таблиці Statistics, тому дашборд показує правильні числа навіть тоді, коли нічне
-    /// завдання підрахунку статистики ще не відпрацювало.
+    /// Read-only aggregation over the operational tables. Everything is computed on demand rather
+    /// than read from the Statistics table, so the dashboard is correct even when the nightly
+    /// statistics job has not run yet.
     /// </summary>
     public class AdminDashboardService : IAdminDashboardService
     {
@@ -391,7 +391,7 @@ namespace BLL.Admin.Services
             return result.OrderByDescending(s => s.Date).ToList();
         }
 
-        /// <summary>Підписи графіків читають люди, тому «InProgress» перетворюється на «In progress».</summary>
+        /// <summary>Chart legends are read by people, so "InProgress" becomes "In progress".</summary>
         private static string FriendlyStatus(OrderStatus status) => status switch
         {
             OrderStatus.InProgress => "In progress",
@@ -400,7 +400,7 @@ namespace BLL.Admin.Services
 
         private static async Task<decimal> SumOrZeroAsync(IQueryable<Payment> query, CancellationToken cancellationToken)
         {
-            // Сума по порожній вибірці в SQL дорівнює null, тому спочатку проєктуємо в decimal?.
+            // Sum over an empty set returns null in SQL, so project to decimal? first.
             return await query.SumAsync(p => (decimal?)p.Amount, cancellationToken) ?? 0m;
         }
 

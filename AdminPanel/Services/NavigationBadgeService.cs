@@ -8,9 +8,11 @@ namespace AdminPanel.Services
         Task<ModerationQueue> GetAsync();
     }
 
-    // Дає лічильники, які видно біля пунктів бічного меню. Шаблон малюється на кожному запиті,
-    // тому числа ненадовго кешуються: значок, застарілий максимум на пів хвилини, — прийнятна ціна
-    // за те, щоб не робити п'ять агрегатних запитів на кожне відкриття сторінки.
+    /// <summary>
+    /// Supplies the counters shown next to the sidebar links. The layout renders on every request,
+    /// so the numbers are cached briefly — a badge that is up to half a minute stale is a fair trade
+    /// for not running five aggregate queries per page view.
+    /// </summary>
     public class NavigationBadgeService : INavigationBadgeService
     {
         private static readonly TimeSpan CacheFor = TimeSpan.FromSeconds(30);
@@ -45,7 +47,7 @@ namespace AdminPanel.Services
             }
             catch (Exception ex)
             {
-                // Меню має малюватися навіть тоді, коли база недоступна.
+                // The navigation must render even when the database is unavailable.
                 _logger.LogWarning(ex, "Could not load navigation badges");
                 return new ModerationQueue();
             }

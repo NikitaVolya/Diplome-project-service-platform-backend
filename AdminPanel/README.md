@@ -1,203 +1,142 @@
-# ServiceHub — вебпанель адміністрування
+# ServiceHub — Web Admin Panel
 
-Адмінпанель на ASP.NET Core 8 MVC (обсяг робіт Software Developer 4). Вона використовує вже
-наявні шари `Domain` / `DAL` / `BLL` і працює **окремим застосунком** від REST API для мобільного
-клієнта, тому їх можна розгортати й оновлювати незалежно одне від одного.
-
----
-
-## Звідки беруться дані
-
-**Короткa відповідь: усі дані — з тієї самої бази `KabanchikDB`, з якою працює мобільний API.**
-Панель не має власного сховища, не тримає копій і нічого не вигадує: вона читає ті самі таблиці,
-які наповнює застосунок.
-
-Шлях даних завжди однаковий:
-
-```
-База даних KabanchikDB (SQL Server)
-        ↓
-ApplicationDbContext            DAL/Context/ApplicationDbContext.cs
-        ↓
-сервіси адмінки                 BLL/Admin/Services/*.cs      ← тут усі запити
-        ↓
-контролер                       AdminPanel/Controllers/*.cs
-        ↓
-представлення (сторінка)        AdminPanel/Views/*.cshtml
-```
-
-### Яка сторінка які таблиці читає
-
-| Сторінка панелі | Таблиці в базі | Сервіс, що робить запит |
-|---|---|---|
-| Дашборд, Статистика | `Orders`, `Payments`, `AspNetUsers`, `Reviews`, `Complaints`, `Categories` | `AdminDashboardService` |
-| Користувачі | `AspNetUsers`, `AspNetUserRoles`, `AspNetRoles`, `Orders`, `Reviews`, `Payments`, `Complaints` | `AdminUserService` |
-| Замовлення | `Orders`, `Categories`, `Applications`, `Payments`, `Reviews`, `OrderMessages` | `AdminOrderService` |
-| Категорії | `Categories`, `Orders` | `AdminCategoryService` |
-| Скарги, Відгуки, Черга модерації | `Complaints`, `Reviews`, `Orders`, `Payments`, `AspNetUsers` | `AdminModerationService` |
-| Платежі | `Payments`, `Orders`, `AspNetUsers` | `AdminPaymentService` |
-| Чат | `OrderMessages`, `Orders`, `AspNetUsers` | `AdminChatService` |
-| Журнал дій | `AuditLogs` | `AuditLogService` |
-
-### Що саме я додав до бази
-
-Одну нову таблицю — **`AuditLogs`** (журнал дій адміністраторів). Її створює міграція
-`DAL/Migrations/20260828092911_AddAuditLog.cs`, а сутність описана в `Domain/Models/AuditLog.cs`.
-Решта таблиць — ті, що вже були в проєкті; я їх лише читаю та оновлюю, схему не змінював.
-
-### Числа на дашборді рахуються на льоту
-
-Дашборд **не** читає готові підсумки з таблиці `Statistics`. Кожне число — це окремий запит
-до `Orders`, `Payments` чи `AspNetUsers` у момент відкриття сторінки (`AdminDashboardService`).
-Так зроблено навмисно: панель показує правильні цифри навіть тоді, коли фонове завдання
-підрахунку статистики ще не відпрацювало.
-
-### Звідки беруться дані для показу (демо)
-
-У порожній базі показувати нічого, тому є `DAL/Seed/DatabaseSeeder.cs`. Під час запуску він:
-
-1. створює ролі `Admin`, `Moderator`, `Support`, `Customer`, `Executor`;
-2. створює акаунт адміністратора з секції `Seed` у `appsettings.json`;
-3. якщо ввімкнено `Seed:DemoData` **і в базі немає жодного замовлення** — генерує демо-дані:
-   категорії, ~40 користувачів, 160 замовлень, відгуки виконавців, платежі, відгуки, скарги
-   та листування.
-
-Генератор має фіксоване зерно (`RandomSeed = 20260828`), тому на будь-якій машині вийдуть
-однакові дані. **Якщо в базі вже є замовлення — сидер не чіпає нічого**, крім ролей і акаунта
-адміністратора. Демо-дані ввімкнені лише у файлі `appsettings.Development.json`.
-
-### Де ще щось зберігається
-
-- **Сесія адміністратора** — у cookie браузера `ServiceHub.Admin` (8 годин).
-- **Лічильники біля пунктів меню** — у пам'яті застосунку, 30 секунд
-  (`AdminPanel/Services/NavigationBadgeService.cs`).
-- **Файли Excel** — ніде не зберігаються: формуються в пам'яті й одразу віддаються в браузер.
-- Ніяких інших сховищ, кешів чи зовнішніх сервісів панель не використовує.
+ASP.NET Core 8 MVC back office for the ServiceHub platform (Software Developer 4 scope).
+It reuses the existing `Domain` / `DAL` / `BLL` layers and runs as a **separate host** from the
+mobile REST API, so the two can be deployed, scaled and secured independently.
 
 ---
 
-## Що реалізовано
+## What is implemented
 
-| Вимога із завдання | Де шукати |
+| Requirement | Where |
 |---|---|
 | Dashboard | `Controllers/DashboardController.cs`, `Views/Dashboard/Index.cshtml` |
-| Statistics | `Controllers/StatisticsController.cs` — період, розбивка по днях, вивантаження |
-| Users | список, фільтри, профіль, блокування, м'яке видалення, призначення ролей |
-| Orders | список, фільтри, картка замовлення, зміна статусу, видалення |
-| Complaints | список, картка, вирішити / відхилити, дії щодо порушника |
-| Categories | дерево у два рівні, створення / редагування, приховування, видалення |
-| Reviews | список, фільтр за оцінкою, видалення |
-| Payments | список, підсумки за статусами, картка, позначка про повернення |
-| Moderation | єдина черга всього, що чекає на рішення |
-| SignalR Chat | `Hubs/AdminChatHub.cs`, `Views/Chat/Index.cshtml` |
-| Admin UI | Bootstrap 5, власний `wwwroot/css/admin.css`, адаптивне бічне меню |
-| Charts | Chart.js, обгортка `wwwroot/js/admin.js` (`AdminCharts.line/bar/doughnut`) |
-| Role Management | `Controllers/RolesController.cs` + ролі в картці користувача |
-| Logs Viewer | `Controllers/LogsController.cs` над таблицею `AuditLogs` |
-| Export Excel | `BLL/Admin/Services/ExcelExportService.cs` — кожен список вивантажується у `.xlsx` |
-| Responsive Layout | меню згортається на екранах вужче 992 px, таблиці прокручуються |
+| Statistics | `Controllers/StatisticsController.cs` — date range, daily breakdown, export |
+| Users | list, filters, profile, block / unblock, soft delete, role assignment |
+| Orders | list, filters, details, status change, delete (guarded by payments) |
+| Complaints | list, details, resolve / reject, act on the reported user |
+| Categories | two-level tree, create / edit, hide, delete (guarded by usage) |
+| Reviews | list, rating filters, removal |
+| Payments | list, totals by status, details, mark as refunded |
+| Moderation | one queue with everything waiting for a decision |
+| SignalR chat | `Hubs/AdminChatHub.cs`, `Views/Chat/Index.cshtml` |
+| Admin UI | Bootstrap 5, custom `wwwroot/css/admin.css`, responsive sidebar |
+| Charts | Chart.js, wrapped by `wwwroot/js/admin.js` (`AdminCharts.line/bar/doughnut`) |
+| Role management | `Controllers/RolesController.cs` + per-user roles on the profile page |
+| Logs viewer | `Controllers/LogsController.cs` over the `AuditLogs` table |
+| Export to Excel | `BLL/Admin/Services/ExcelExportService.cs` — every list exports `.xlsx` |
+| Responsive layout | sidebar collapses below 992 px, all tables scroll horizontally |
 
 ---
 
-## Структура проєкту
+## Architecture
 
 ```
-Domain            сутності, переліки, константи ролей (AppRoles)
-  DAL             ApplicationDbContext, репозиторії, міграції, DatabaseSeeder
-    BLL           наявні сервіси + BLL/Admin/* (запити адмінки, журнал, Excel)
-      API         REST API для мобільного застосунку   (JWT)
-      AdminPanel  цей проєкт — вебпанель               (cookie)
+Domain            entities, enums, AppRoles constants
+  DAL             ApplicationDbContext, repositories, migrations, DatabaseSeeder
+    BLL           existing services + BLL/Admin/* (admin queries, audit, Excel)
+      API         REST API for the mobile app          (JWT)
+      AdminPanel  this project — MVC back office       (cookies)
 ```
 
-Контролери навмисно тонкі: прийняти фільтр, викликати один сервіс, віддати одне представлення.
-Уся робота з базою — у `BLL/Admin/*`.
+The panel talks to the database through `BLL/Admin/*` services, which are the only place where
+admin queries live. Controllers stay thin: bind the filter, call one service, render one view.
 
-**Чому окремий проєкт.** Мобільний API автентифікується токенами, панелі потрібні cookie,
-захист від CSRF і Razor. Змішування двох схем в одному застосунку ускладнює налаштування безпеки
-й прив'язує релізи команди одне до одного.
+**Why a separate project.** The mobile API authenticates with bearer tokens; the panel needs
+cookies, anti-forgery and Razor. Mixing both schemes in one host makes the security configuration
+harder to reason about and couples the team's release cycles.
 
 ---
 
-## Як запустити
+## Running it
 
-1. **Рядок підключення** — `appsettings.json`, ключ `ConnectionStrings:DefaultConnection`.
-   За замовчуванням це SQL Server LocalDB і база `KabanchikDB`, та сама, що в API.
+1. **Connection string** — `appsettings.json` → `ConnectionStrings:DefaultConnection`.
+   The default points at SQL Server LocalDB and the `KabanchikDB` database used by the API.
 
-2. **Запустити** проєкт `AdminPanel` (F5 у Visual Studio або `dotnet run --project AdminPanel`).
+2. **Run** the `AdminPanel` project (F5 in Visual Studio, or `dotnet run --project AdminPanel`).
 
-   Під час старту панель сама:
-   - застосує міграції, яких бракує (`Database:AutoMigrate`, за замовчуванням `true`);
-   - створить ролі;
-   - створить акаунт адміністратора з секції `Seed`.
+   On start-up the panel:
+   - applies pending EF Core migrations (`Database:AutoMigrate`, default `true`);
+   - creates the roles `Admin`, `Moderator`, `Support`, `Customer`, `Executor`;
+   - creates the administrator account from the `Seed` section.
 
-3. **Увійти**:
+3. **Sign in** with the seeded account:
 
    ```
    admin@servicehub.local / Admin#2026
    ```
 
-   Перед реальним розгортанням обов'язково змініть `Seed:AdminPassword`.
+   Change `Seed:AdminPassword` before any real deployment.
 
-Для показу ролей сидер створює ще два акаунти:
-`moderator@servicehub.local / Moderator#2026` і `support@servicehub.local / Support#2026`.
+### Demo data
+
+`appsettings.Development.json` sets `Seed:DemoData: true`. On an **empty** database (no orders)
+this generates categories, ~40 users, 160 orders with applications, payments, reviews, complaints
+and chat threads, so the dashboard and charts are not empty during a demo. It also creates
+`moderator@servicehub.local / Moderator#2026` and `support@servicehub.local / Support#2026`
+so role-based access can be demonstrated. The seeder never touches a database that already
+contains orders.
 
 ---
 
-## Ролі та права
+## Roles and permissions
 
-| Розділ | Admin | Moderator | Support |
+| Section | Admin | Moderator | Support |
 |---|:--:|:--:|:--:|
-| Дашборд, Статистика, Замовлення, Чат | ✅ | ✅ | ✅ |
-| Користувачі, Категорії, Скарги, Відгуки, Черга | ✅ | ✅ | — |
-| Платежі, Ролі, Журнал дій | ✅ | — | — |
-| Видалення замовлення / користувача, призначення ролей | ✅ | — | — |
+| Dashboard, Statistics, Orders, Chat | ✅ | ✅ | ✅ |
+| Users, Categories, Complaints, Reviews, Moderation | ✅ | ✅ | — |
+| Payments, Roles, Activity log | ✅ | — | — |
+| Delete order / user, assign roles | ✅ | — | — |
 
-Права описані політиками в `Extensions/ServiceCollectionExtensions.cs`
-(`StaffOnly`, `Moderation`, `AdminOnly`). Політика за замовчуванням робить кожну сторінку
-доступною лише персоналу, поки вона явно не вкаже інше, — тож новий контролер неможливо
-випадково залишити відкритим для всіх.
+Enforced by policies in `Extensions/ServiceCollectionExtensions.cs`
+(`StaffOnly`, `Moderation`, `AdminOnly`). A fallback policy makes every page staff-only unless it
+explicitly opts out, so a new controller cannot accidentally be published anonymously.
 
-Акаунт без службової ролі не пустить у панель навіть із правильним паролем: звичайні користувачі
-платформи лежать у тому самому сховищі Identity.
-
----
-
-## Кілька рішень, які варто розуміти
-
-**Блокування зроблено через механізм Identity** (`LockoutEnd`), а не через власний прапорець, —
-тому заблокований користувач не зможе увійти й через мобільний API. Видалення користувача м'яке:
-замовлення, відгуки та платежі зберігають коректні зв'язки.
-
-**Excel формується без сторонньої бібліотеки.** `ExcelExportService` пише XML-частини книги в
-zip засобами `System.IO.Compression`. ClosedXML чи EPPlus змусили б усю команду відновлювати
-новий пакет заради однієї функції.
-
-**Журнал дій лише доповнюється.** Кожна дія, що змінює стан, пише рядок у `AuditLogs` через
-`AdminControllerBase.AuditAsync`. Кнопки видалення в переглядачі журналу немає навмисно.
-Помилка запису в журнал свідомо ігнорується: втратити рядок журналу краще, ніж зірвати рішення
-модератора.
-
-**Дані графіків готуються на сервері.** `BLL/Admin/Models/ChartData` (підписи + ряди) серіалізується
-в JSON і передається в `AdminCharts`, тому в представленнях немає обробки даних, а той самий
-формат віддає `/Dashboard/ChartData` для перемикача періоду.
+An account without a staff role is rejected at sign-in even if the password is correct — ordinary
+platform users live in the same Identity store.
 
 ---
 
-## Як додати міграцію
+## Notable implementation details
 
-У проєкті є фабрика контексту для етапу розробки
-(`DAL/Context/ApplicationDbContextFactory.cs`), тому міграції можна створювати так:
+**Blocking uses Identity lockout** (`LockoutEnd`) rather than a custom flag, so a blocked user is
+also rejected by the mobile API's sign-in path. Deleting a user is a soft delete: orders, reviews
+and payments keep valid foreign keys.
+
+**Excel export has no third-party dependency.** `ExcelExportService` writes the OpenXML parts of a
+workbook into a zip with `System.IO.Compression`. Strings are written inline instead of through a
+shared-string table. Adding ClosedXML or EPPlus would have forced a new NuGet package on the whole
+team for one feature.
+
+**The activity log is append-only.** Every state-changing action writes an `AuditLog` row through
+`AdminControllerBase.AuditAsync`. There is deliberately no delete action in the log viewer.
+A failed write is swallowed: losing a log line must never fail the moderation decision that
+triggered it.
+
+**Charts are shaped on the server.** `BLL/Admin/Models/ChartData` (labels + series) is serialised
+to JSON and handed to `AdminCharts`, so views contain no data massaging and the same payload feeds
+`/Dashboard/ChartData` for the range selector.
+
+**Sidebar badges are cached for 30 seconds** (`Services/NavigationBadgeService.cs`) because the
+layout renders on every request and the counters need five aggregate queries.
+
+---
+
+## Adding a migration
+
+A design-time factory (`DAL/Context/ApplicationDbContextFactory.cs`) is included, so migrations can
+be added from the DAL folder without starting a host:
 
 ```bash
 dotnet ef migrations add MyMigration --project DAL --startup-project AdminPanel
 ```
 
-Рядок підключення для цієї команди можна перевизначити змінною середовища `SERVICEHUB_CONNECTION`.
+Override the design-time connection string with the `SERVICEHUB_CONNECTION` environment variable.
 
 ---
 
-## Файли фронтенду
+## Front-end assets
 
-Bootstrap 5.3.3, Bootstrap Icons 1.11.3, Chart.js 4.4.3 і JavaScript-клієнт SignalR 8.0.7 лежать
-у `wwwroot/lib/`. Нічого не підвантажується з CDN, тому панель працює — і показується на захисті —
-без інтернету.
+Bootstrap 5.3.3, Bootstrap Icons 1.11.3, Chart.js 4.4.3 and the SignalR JavaScript client 8.0.7 are
+vendored into `wwwroot/lib/`. Nothing is loaded from a CDN, so the panel works — and demos —
+without an internet connection.

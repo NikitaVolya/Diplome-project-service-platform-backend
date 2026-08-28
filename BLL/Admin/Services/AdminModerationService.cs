@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Скарги та відгуки — контент, з яким працює адміністратор. Скарги зберігають історію
-    /// (змінюється лише статус), відгуки видаляються повністю, бо в моделі немає прапорця «прихований».
+    /// Complaints and reviews — the content an administrator acts on. Complaints keep their history
+    /// (status changes only), reviews are removed outright since there is no "hidden" flag in the model.
     /// </summary>
     public class AdminModerationService : IAdminModerationService
     {
-        /// <summary>Замовлення без руху довше за цей термін потрапляє в чергу модерації.</summary>
+        /// <summary>An order with no movement for this long is surfaced in the moderation queue.</summary>
         private const int StaleOrderDays = 30;
 
         private readonly ApplicationDbContext _db;
@@ -23,7 +23,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Скарги
+        // Complaints
         // -----------------------------------------------------------------
 
         public async Task<PagedResult<AdminComplaintListItem>> GetComplaintsAsync(
@@ -99,7 +99,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Відгуки
+        // Reviews
         // -----------------------------------------------------------------
 
         public async Task<PagedResult<AdminReviewListItem>> GetReviewsAsync(
@@ -134,7 +134,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Черга
+        // Queue
         // -----------------------------------------------------------------
 
         public async Task<ModerationQueue> GetQueueAsync(CancellationToken cancellationToken = default)
@@ -221,8 +221,8 @@ namespace BLL.Admin.Services
         }
 
         /// <summary>
-        /// Додає «скільки всього скарг зібрав цей користувач» — саме це число насправді визначає,
-        /// блокувати його чи ні.
+        /// Adds "how many complaints has this user collected in total", which is the number that
+        /// actually drives the decision to block someone.
         /// </summary>
         private async Task AttachComplaintCountsAsync(
             IReadOnlyList<AdminComplaintListItem> items,

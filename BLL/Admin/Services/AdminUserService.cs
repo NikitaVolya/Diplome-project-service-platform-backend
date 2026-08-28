@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Адміністрування користувачів. Блокування зроблено через поля блокування Identity, а не через
-    /// власний прапорець, тому заблокований користувач не зайде й через мобільний API.
+    /// User administration. Blocking is implemented with the Identity lockout fields rather than a
+    /// custom flag, so a blocked user is rejected by the mobile API's sign-in path as well.
     /// </summary>
     public class AdminUserService : IAdminUserService
     {
-        /// <summary>Прийнятий в Identity спосіб позначити «заблоковано назавжди».</summary>
+        /// <summary>Identity's convention for "locked out forever".</summary>
         private static readonly DateTimeOffset PermanentLockout = new(new DateTime(9999, 12, 31, 0, 0, 0, DateTimeKind.Utc));
 
         private readonly ApplicationDbContext _db;
@@ -303,7 +303,7 @@ namespace BLL.Admin.Services
         }
 
         // -----------------------------------------------------------------
-        // Внутрішня кухня
+        // Internals
         // -----------------------------------------------------------------
 
         private IQueryable<ApplicationUser> BuildQuery(UserFilter filter)
@@ -384,8 +384,8 @@ namespace BLL.Admin.Services
         }
 
         /// <summary>
-        /// Ролі для поточної сторінки завантажуються одним запитом, а не окремо для кожного рядка,
-        /// тому список користувачів завжди коштує два звернення до бази, скільки б рядків не було.
+        /// Roles are loaded for the current page in a single query instead of per row,
+        /// which keeps the users list at two round-trips regardless of page size.
         /// </summary>
         private async Task AttachRolesAsync(IReadOnlyList<AdminUserListItem> items, CancellationToken cancellationToken)
         {

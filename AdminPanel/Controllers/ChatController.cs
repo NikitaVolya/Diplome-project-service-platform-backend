@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    // Малює робочу область чату. Сам обмін повідомленнями йде через
-    // <see cref="Hubs.AdminChatHub"/>; цей контролер лише віддає початковий стан
-    // і JSON для перемикання діалогів.
+    /// <summary>
+    /// Renders the chat workspace. The live traffic itself goes through <see cref="Hubs.AdminChatHub"/>;
+    /// this controller only provides the initial state and a JSON endpoint for switching dialogs.
+    /// </summary>
     public class ChatController : AdminControllerBase
     {
         private readonly IAdminChatService _chat;

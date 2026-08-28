@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    // Екран «що вимагає уваги просто зараз»: усе, що чекає на рішення, зібрано в одному місці,
-    // щоб модератор не обходив чотири різні списки в пошуках роботи.
+    /// <summary>
+    /// The "what needs my attention right now" screen: everything queued for a decision in one place,
+    /// so a moderator does not have to walk through four separate lists to find open work.
+    /// </summary>
     [Authorize(Policy = AppRoles.ModerationPolicy)]
     public class ModerationController : AdminControllerBase
     {

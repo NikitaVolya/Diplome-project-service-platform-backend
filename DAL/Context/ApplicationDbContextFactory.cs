@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DAL.Context
 {
-    // Фабрика для етапу розробки, щоб «dotnet ef migrations add ...» можна було виконувати з папки DAL,
-    // не піднімаючи ані API, ані хост адмінпанелі.
-    // Рядок підключення можна перевизначити змінною середовища SERVICEHUB_CONNECTION.
+    /// <summary>
+    /// Design-time factory so that "dotnet ef migrations add ..." can be run from the DAL folder
+    /// without spinning up the API or the admin panel host.
+    /// Override the connection string with the SERVICEHUB_CONNECTION environment variable.
+    /// </summary>
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
         private const string DefaultConnection =

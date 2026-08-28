@@ -3,8 +3,8 @@ using Domain.Entities;
 namespace Domain.Models
 {
     /// <summary>
-    /// Незмінний запис про адміністративну дію, виконану через вебпанель.
-    /// Пишеться самою панеллю; через інтерфейс не редагується і не видаляється.
+    /// Immutable record of an administrative action performed through the web admin panel.
+    /// Written by the panel itself; never edited or deleted through the UI.
     /// </summary>
     public class AuditLog
     {
@@ -12,19 +12,19 @@ namespace Domain.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        /// <summary>Ідентифікатор Identity адміністратора, який виконав дію (null для системних дій).</summary>
+        /// <summary>Identity id of the administrator who performed the action (null for system actions).</summary>
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
 
-        /// <summary>Денормалізований логін виконавця — зберігається, щоб журнал пережив видалення користувача.</summary>
+        /// <summary>Denormalised login of the actor, kept so the log survives user deletion.</summary>
         public string UserName { get; set; } = string.Empty;
 
         public AuditAction Action { get; set; }
 
-        /// <summary>Назва сутності, якої стосується дія, наприклад «Order», «User», «Category».</summary>
+        /// <summary>Name of the affected entity, e.g. "Order", "User", "Category".</summary>
         public string EntityName { get; set; } = string.Empty;
 
-        /// <summary>Первинний ключ сутності у вигляді тексту, бо в різних сутностей ключі різного типу.</summary>
+        /// <summary>Primary key of the affected entity, stored as text because keys differ per entity.</summary>
         public string? EntityId { get; set; }
 
         public string? Description { get; set; }

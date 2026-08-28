@@ -67,7 +67,7 @@ namespace AdminPanel.Controllers
             return Xlsx(file, "servicehub-statistics");
         }
 
-        // За замовчуванням — останні 30 днів; діапазон ніколи не буває перевернутим.
+        /// <summary>Defaults to the last 30 days and never lets the range run backwards.</summary>
         private static (DateTime From, DateTime To) Normalise(DateTime? from, DateTime? to)
         {
             var end = (to ?? DateTime.UtcNow).Date;
@@ -78,7 +78,7 @@ namespace AdminPanel.Controllers
                 (start, end) = (end, start);
             }
 
-            // Рік щоденних рядків — це вже довга таблиця; усе більше варто дивитися у вивантаженні, а не на екрані.
+            // A year of daily rows is already a long table; anything more is an export, not a screen.
             if ((end - start).TotalDays > 366)
             {
                 start = end.AddDays(-366);

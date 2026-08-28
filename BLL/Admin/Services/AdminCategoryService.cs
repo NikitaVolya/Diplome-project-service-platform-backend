@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BLL.Admin.Services
 {
     /// <summary>
-    /// Каталог категорій. Модель дозволяє будь-яку вкладеність, але панель свідомо показує лише
-    /// два рівні (коренева + підкатегорія), бо саме так їх малює мобільний застосунок.
+    /// Category catalogue. The model allows arbitrary nesting, but the panel deliberately exposes
+    /// only two levels (root + child) because that is what the mobile app renders.
     /// </summary>
     public class AdminCategoryService : IAdminCategoryService
     {
@@ -75,7 +75,7 @@ namespace BLL.Admin.Services
             int? excludeId = null,
             CancellationToken cancellationToken = default)
         {
-            // Батьківськими можуть бути лише кореневі категорії — це заразом виключає цикли без рекурсивної перевірки.
+            // Only roots may be parents, which also rules out cycles without a recursive check.
             var query = _db.Categories
                 .AsNoTracking()
                 .Where(c => c.ParentCategoryId == null);
@@ -169,7 +169,7 @@ namespace BLL.Admin.Services
 
             category.IsActive = !category.IsActive;
 
-            // Приховування батьківської категорії ховає і дочірні, інакше вони лишилися б видимими в застосунку.
+            // Hiding a parent hides its children too, otherwise orphaned children stay visible in the app.
             if (!category.IsActive)
             {
                 var children = await _db.Categories
@@ -258,7 +258,7 @@ namespace BLL.Admin.Services
             return null;
         }
 
-        /// <summary>Сортує кореневі категорії за абеткою і ставить кожну дочірню одразу після її батьківської.</summary>
+        /// <summary>Orders roots alphabetically and places each child right after its parent.</summary>
         private static List<AdminCategoryListItem> Arrange(List<AdminCategoryListItem> flat)
         {
             var result = new List<AdminCategoryListItem>(flat.Count);
@@ -280,7 +280,7 @@ namespace BLL.Admin.Services
                 }
             }
 
-            // Підкатегорії, чия батьківська відсіялася фільтром, усе одно мають десь з'явитися.
+            // Children whose parent was filtered out still need to appear somewhere.
             foreach (var orphan in flat.Except(result).OrderBy(c => c.Name))
             {
                 orphan.Depth = 0;

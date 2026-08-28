@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Html;
 
 namespace AdminPanel.Models
 {
-    // Суто відображувальні відповідності для представлень: який колір та іконка належать якому статусу.
-    // Завдяки цьому один і той самий статус виглядає однаково на всіх екранах.
+    /// <summary>
+    /// Presentation-only mappings shared by the views: which colour and icon belongs to which
+    /// status. Keeping them here means a status renders the same on every screen.
+    /// </summary>
     public static class Display
     {
         public static string OrderStatusClass(OrderStatus status) => status switch
@@ -89,7 +91,7 @@ namespace AdminPanel.Models
             _ => "badge-soft badge-soft--muted"
         };
 
-        // Малює оцінку від 1 до 5 у вигляді заповнених і порожніх зірок.
+        /// <summary>Renders a 1..5 rating as filled and empty stars.</summary>
         public static IHtmlContent Stars(int rating)
         {
             var filled = Math.Clamp(rating, 0, 5);
@@ -101,7 +103,7 @@ namespace AdminPanel.Models
             return new HtmlString(html);
         }
 
-        // Текст на кшталт «3 хв тому» для свіжих подій; після тижня — звичайна дата.
+        /// <summary>"3 minutes ago" style text for recent activity, absolute date beyond a week.</summary>
         public static string Relative(DateTime utc)
         {
             var delta = DateTime.UtcNow - utc;
@@ -131,7 +133,7 @@ namespace AdminPanel.Models
             _ => "bi-dash"
         };
 
-        // Ініціали для кружечків-аватарів. 
+        /// <summary>Initials for the avatar circles.</summary>
         public static string Initials(string? name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -150,8 +152,10 @@ namespace AdminPanel.Models
         }
     }
 
-    // Назви ролей рядковими константами: конструкція switch вимагає саме констант.
-    // Дублює <see cref="Domain.Common.AppRoles"/>.
+    /// <summary>
+    /// Literal role names for switch patterns, which require constants.
+    /// Mirrors <see cref="Domain.Common.AppRoles"/>.
+    /// </summary>
     internal static class AppRolesNames
     {
         public const string Admin = "Admin";
