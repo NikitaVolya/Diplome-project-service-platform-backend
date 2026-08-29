@@ -1,7 +1,6 @@
 ﻿using API.DTO.Authentication;
 using AutoMapper;
 using BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 

@@ -53,17 +53,58 @@ namespace API
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+                        ValidateAudience = true,
                         ValidAudience = builder.Configuration["Jwt:Audience"],
 
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(
-                                    builder.Configuration["Jwt:Key"]!))
+                        ValidateLifetime = true,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(
+                                builder.Configuration["Jwt:Key"]!
+                            )
+                        ),
+
+                        ClockSkew = TimeSpan.Zero
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            Console.WriteLine(
+                                $"JWT received: {context.Token != null}"
+                            );
+
+                            return Task.CompletedTask;
+                        },
+
+                        OnTokenValidated = context =>
+                        {
+                            Console.WriteLine("JWT VALIDATED");
+                            Console.WriteLine($"User: {context.Principal?.Identity?.Name}");
+
+                            return Task.CompletedTask;
+                        },
+
+                        OnAuthenticationFailed = context =>
+                        {
+                            Console.WriteLine("JWT AUTHENTICATION FAILED");
+                            Console.WriteLine(context.Exception);
+
+                            return Task.CompletedTask;
+                        },
+
+                        OnChallenge = context =>
+                        {
+                            Console.WriteLine("JWT CHALLENGE");
+                            Console.WriteLine($"Error: {context.Error}");
+                            Console.WriteLine($"Description: {context.ErrorDescription}");
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
@@ -110,7 +151,6 @@ namespace API
             builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
 
-            builder.Services.AddApplicationServices();
 
             /* ADD OPTIONS */
             builder.Services.Configure<EmailOptions>(
@@ -129,13 +169,17 @@ namespace API
             /* ADD REPOSITORIES */
 
             /* ADD SERVICES */
-            builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddApplicationServices();
+
 
             builder.Services
-                .AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            .AddIdentityCore<ApplicationUser>(options =>
+             {
+                 options.User.RequireUniqueEmail = true;
+             })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
 
 
@@ -149,14 +193,14 @@ namespace API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.Use(async (ctx, next) =>
             {
                 Console.WriteLine($"{ctx.Request.Method} {ctx.Request.Path}");
                 await next();
             });
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

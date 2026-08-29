@@ -20,9 +20,11 @@ namespace API.Services
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IAdminService, AdminService>();
 
             return services;
         }
