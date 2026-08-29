@@ -11,13 +11,19 @@ using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using API.Validators.Authentication;
+using DAL.Configurations;
+using System.Threading.Tasks;
+using DAL.Seed;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities;
+using Microsoft.Extensions.Options;
 
 
 namespace API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -110,11 +116,27 @@ namespace API
             builder.Services.Configure<EmailOptions>(
                 builder.Configuration.GetSection("Email"));
 
+            builder.Services.AddOptions<AdminSeedOptions>()
+                .Bind(builder.Configuration.GetSection(AdminSeedOptions.SectionName))
+                .Validate(
+                    options => !string.IsNullOrWhiteSpace(options.Email),
+                    "AdminSeed:Email must be provided in configuration.")
+                .Validate(
+                    options => !string.IsNullOrWhiteSpace(options.Password),
+                    "AdminSeed:Password must be provided in configuration.")
+                .ValidateOnStart();
+
             /* ADD REPOSITORIES */
 
             /* ADD SERVICES */
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
 
 
             var app = builder.Build();
@@ -137,6 +159,20 @@ namespace API
             });
 
             app.MapControllers();
+
+
+            /* ADD SEADS */
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var adminOptions = services.GetRequiredService<IOptions<AdminSeedOptions>>();
+
+                await roleManager.SeedRolesAsync();
+                await userManager.SeedSuperAdminAsync(adminOptions);
+            }
 
             app.Run();
         }
