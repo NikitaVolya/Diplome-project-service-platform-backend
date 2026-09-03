@@ -29,6 +29,10 @@ namespace BLL.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<ApplicationUser?> GetByUserNameAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
 
         public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {

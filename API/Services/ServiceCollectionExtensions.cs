@@ -22,21 +22,32 @@ namespace API.Services
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IUserService, UserService>();
+
+
             services.AddScoped<IJwtService, JwtService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAdminService, AdminService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IEmailService, EmailService>();
+
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IComplaintService, ComplaintService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IReviewService, ReviewService>();
+
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IApplicationService, ApplicationService>();
-            services.AddScoped<IOrderMessageService, OrderMessageService>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddHttpClient<IGoogleMapsService, GoogleMapsService>();
+            services.AddScoped<IOrderMessageService, OrderMessageService>();
 
             return services;
         }

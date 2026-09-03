@@ -12,13 +12,16 @@ namespace API.Controllers
     public class UserController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public UserController(
             IAuthenticationService authenticationService,
+            IUserService userService,
             IMapper mapper)
         {
             _authenticationService = authenticationService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -32,6 +35,12 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto request)
         {
+            if (await _userService.GetByEmailAsync(request.Email) != null)
+                return BadRequest("Email is already in use.");
+
+            if (await _userService.GetByUserNameAsync(request.Username) != null)
+                return BadRequest("Username is already in use.");
+
             var user =
                 await _authenticationService.RegisterAsync(
                     request.Email,
