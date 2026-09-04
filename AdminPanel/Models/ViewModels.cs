@@ -126,6 +126,16 @@ namespace AdminPanel.Models
         public string? ReturnUrl { get; set; }
     }
 
+    /// <summary>Дані публічної головної сторінки порталу.</summary>
+    public class LandingViewModel
+    {
+        public IReadOnlyList<BLL.Public.PublicCategoryItem> Categories { get; set; } =
+            Array.Empty<BLL.Public.PublicCategoryItem>();
+
+        public IReadOnlyList<BLL.Public.PublicServiceItem> Services { get; set; } =
+            Array.Empty<BLL.Public.PublicServiceItem>();
+    }
+
     public class ErrorViewModel
     {
         public int StatusCode { get; set; } = 500;

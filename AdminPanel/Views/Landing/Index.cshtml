@@ -1,0 +1,218 @@
+@model LandingViewModel
+@{
+    ViewData["Title"] = "Вибір — пошук виконавців та замовлення послуг";
+    Layout = "_LandingLayout";
+}
+
+<section class="v-hero-wrap" id="search">
+    <div class="v-container">
+        <div class="v-hero">
+            <div>
+                <h1>Замовляй чи заробляй - вибір за тобою!</h1>
+                <p class="v-hero__lead">
+                    Знаходьте перевірених фахівців для своїх завдань або знаходьте
+                    замовлення, щоб реалізувати свої навички та заробляти.
+                </p>
+
+                <form class="v-search" method="get" action="#services">
+                    <label class="v-search__field">
+                        <input type="text" name="q" placeholder="Яку послугу/замовлення ви шукаєте?" />
+                    </label>
+                    <label class="v-search__field">
+                        <i class="bi bi-geo-alt"></i>
+                        <input type="text" name="city" placeholder="Місце розташування" />
+                    </label>
+                    <button type="submit" class="v-btn v-btn--primary">Знайти</button>
+                </form>
+
+                <div class="v-chips">
+                    <span class="v-chips__label">Популярне:</span>
+                    @foreach (var chip in new[] { "Дизайн", "Розробка", "Клінінг", "Блог", "Переклади" })
+                    {
+                        <a class="v-chip" href="#categories">@chip</a>
+                    }
+                </div>
+            </div>
+
+            <div class="v-hero__media">
+                <img src="~/img/landing/hero.jpg" alt="Команда за роботою в офісі" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v-section v-section--tight" id="categories">
+    <div class="v-container">
+        <div class="v-section__head">
+            <h2 class="v-section__title">Популярні категорії:</h2>
+            <a class="v-link" href="#services">Усі категорії <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="v-cats">
+            @foreach (var category in Model.Categories)
+            {
+                <a class="v-cat" href="#services">
+                    <span class="v-cat__icon"><i class="bi @category.Icon"></i></span>
+                    <span class="v-cat__name">@category.Name</span>
+                </a>
+            }
+            <a class="v-cat" href="#services">
+                <span class="v-cat__icon"><i class="bi bi-three-dots"></i></span>
+                <span class="v-cat__name">Більше</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="v-section">
+    <div class="v-container">
+        <h2 class="v-h2 v-center">Одна платформа - дві можливості.</h2>
+
+        <div class="v-duo" style="margin-top:26px">
+            <div class="v-duo__card">
+                <h3>Потрібна послуга?</h3>
+                <div class="v-duo__body">
+                    <span class="v-duo__icon"><i class="bi bi-person-raised-hand"></i></span>
+                    <span class="v-duo__text">
+                        Знайдіть спеціаліста для ремонту, прибирання, дизайну, навчання та інших завдань.
+                    </span>
+                    <a class="v-btn v-btn--soft" href="#services">Знайти виконавця</a>
+                </div>
+            </div>
+
+            <div class="v-duo__card">
+                <h3>Хочете заробляти?</h3>
+                <div class="v-duo__body">
+                    <span class="v-duo__icon"><i class="bi bi-briefcase"></i></span>
+                    <span class="v-duo__text">
+                        Створіть профіль, показуйте свої навички та знаходьте замовлення поруч із вами.
+                    </span>
+                    <a class="v-btn v-btn--soft" href="#services">Знайти замовлення</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v-section" id="how">
+    <div class="v-container">
+        <h2 class="v-h2 v-center">Як це працює?</h2>
+        <p class="v-sub v-center">Знайти потрібну людину — простіше, ніж здається</p>
+
+        <div class="v-steps__line">
+            @for (var i = 1; i <= 4; i++)
+            {
+                <span class="v-steps__num">@i</span>
+            }
+        </div>
+
+        <div class="v-steps">
+            <div class="v-step">
+                <i class="bi bi-pencil-square"></i>
+                <h4>Створіть запит</h4>
+                <p>Опишіть, що вам потрібно. Вкажіть деталі та бюджет.</p>
+            </div>
+            <div class="v-step">
+                <i class="bi bi-search-heart"></i>
+                <h4>Оберіть виконавця</h4>
+                <p>Порівняйте профілі, рейтинг, відгуки та ціну.</p>
+            </div>
+            <div class="v-step">
+                <i class="bi bi-chat-left-dots"></i>
+                <h4>Домовтеся про виконання</h4>
+                <p>Підтвердьте замовлення та деталі.</p>
+            </div>
+            <div class="v-step">
+                <i class="bi bi-hand-thumbs-up"></i>
+                <h4>Отримайте результат</h4>
+                <p>Прийміть роботу та залиште відгук.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v-why" id="why">
+    <div class="v-container">
+        <h2 class="v-h2 v-center">Чому обирають Service Hub?</h2>
+        <p class="v-sub v-center">
+            Ми допомагаємо швидше знаходити потрібних людей — без зайвих дзвінків,
+            сумнівів і нескінченних пошуків.
+        </p>
+
+        <div class="v-why__grid">
+            <div class="v-why__item">
+                <i class="bi bi-patch-check"></i>
+                <h4>Перевірені виконавці</h4>
+                <p>Профілі, рейтинги та відгуки допомагають зробити впевнений вибір.</p>
+            </div>
+            <div class="v-why__item">
+                <i class="bi bi-lightning-charge"></i>
+                <h4>Швидкий пошук</h4>
+                <p>Знаходьте потрібного спеціаліста за категорією, ціною та локацією.</p>
+            </div>
+            <div class="v-why__item">
+                <i class="bi bi-shield-lock"></i>
+                <h4>Безпечна взаємодія</h4>
+                <p>Усі деталі замовлення та домовленості зручно зберігати на платформі.</p>
+            </div>
+            <div class="v-why__item">
+                <i class="bi bi-wallet2"></i>
+                <h4>Чесні умови</h4>
+                <p>Заздалегідь бачите вартість послуги та умови виконання.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v-section" id="services">
+    <div class="v-container">
+        <div class="v-section__head">
+            <h2 class="v-section__title">Популярне поруч із вами:</h2>
+            <a class="v-link" href="#categories">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="v-services">
+            @foreach (var service in Model.Services)
+            {
+                <a class="v-service" href="#categories">
+                    <div class="v-service__img">
+                        <img src="@service.Image" alt="@service.Name" loading="lazy" />
+                    </div>
+                    <div class="v-service__body">
+                        <div class="v-service__name">@service.Name</div>
+                        <div class="v-service__meta">
+                            @if (service.ReviewsCount > 0)
+                            {
+                                <div>
+                                    <span class="star">★</span>
+                                    @service.Rating.ToString("0.0") (@service.ReviewsCount відгуків)
+                                </div>
+                            }
+                            else
+                            {
+                                <div><span class="star">★</span> нові виконавці</div>
+                            }
+                            <div>від @service.FromPrice.ToString("N0")грн.</div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="v-cta">
+    <div class="v-container v-cta__inner">
+        <div class="v-cta__img">
+            <img src="~/img/landing/cta.jpg" alt="Ідеї та рішення" loading="lazy" />
+        </div>
+        <div class="v-center">
+            <h2>Є завдання? Знайдемо рішення.</h2>
+            <p>Покажіть, що вмієте ви і знайдіть своє наступне завдання.</p>
+            <div class="v-cta__buttons" style="justify-content:center">
+                <a class="v-btn v-btn--soft" href="#services">Знайти виконавця</a>
+                <a class="v-btn v-btn--soft" href="#services">Знайти замовлення</a>
+            </div>
+        </div>
+    </div>
+</section>
