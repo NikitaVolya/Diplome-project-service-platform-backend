@@ -1,6 +1,7 @@
 using AdminPanel.Services;
 using BLL.Admin.Interfaces;
 using BLL.Admin.Services;
+using BLL.Public;
 using DAL.Context;
 using DAL.Seed;
 using Domain.Common;
@@ -83,6 +84,9 @@ namespace AdminPanel.Extensions
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             services.AddScoped<INavigationBadgeService, NavigationBadgeService>();
+
+            // Дані для публічної головної сторінки порталу.
+            services.AddScoped<IPublicCatalogService, PublicCatalogService>();
 
             services.AddMemoryCache();
 

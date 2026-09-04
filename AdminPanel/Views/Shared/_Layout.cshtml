@@ -141,6 +141,12 @@
                     </li>
                     <li><hr class="dropdown-divider" /></li>
                     <li>
+                        <a class="dropdown-item" asp-controller="Landing" asp-action="Index">
+                            <i class="bi bi-globe2"></i> Перейти на сайт
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-1">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger w-100">

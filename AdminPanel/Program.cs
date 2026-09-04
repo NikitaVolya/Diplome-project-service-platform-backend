@@ -54,9 +54,12 @@ namespace AdminPanel
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Коренем сайту є публічна головна сторінка, а адмінпанель живе за своїми адресами
+            // (/Dashboard, /Users, …). Якщо зробити типовим контролером Dashboard, посилання на
+            // нього генерувалися б як "/" і вели б назад на головну.
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+                pattern: "{controller=Landing}/{action=Index}/{id?}");
 
             app.MapHub<AdminChatHub>("/hubs/admin-chat");
 
