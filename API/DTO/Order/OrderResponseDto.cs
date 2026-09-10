@@ -13,6 +13,8 @@ namespace API.DTO.Order
         public string Address { get; set; } = string.Empty;
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public double? DistanceKm { get; set; }
+        public double? DurationMinutes { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public int CategoryId { get; set; }

@@ -1,5 +1,6 @@
 ﻿using API.DTO.Order;
 using AutoMapper;
+using BLL.Services;
 using BLL.Services.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,13 @@ namespace API.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
+        private readonly IGoogleMapsService _googleMapsService;
 
         public OrdersController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
             _mapper = mapper;
+            _googleMapsService = new GoogleMapsService(new HttpClient(), new ConfigurationBuilder().AddJsonFile("appsettings.json").Build(), null);
         }
 
         private string GetCurrentUserId()
@@ -35,7 +38,10 @@ namespace API.Controllers
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetOrderById(int id)
+        public async Task<IActionResult> GetOrderById(
+            int id,
+            [FromQuery] double? currentLat = null,
+            [FromQuery] double? currentLng = null)
         {
             var order = await _orderService.GetWithDetailsByIdAsync(id);
             if (order == null)
@@ -44,6 +50,22 @@ namespace API.Controllers
             }
 
             var responseDto = _mapper.Map<OrderResponseDto>(order);
+
+            if (currentLat.HasValue && currentLng.HasValue)
+            {
+                var routeDetails = await _googleMapsService.GetRouteDetailsAsync(
+                    currentLat.Value,
+                    currentLng.Value,
+                    order.Latitude,
+                    order.Longitude);
+
+                if (routeDetails.HasValue)
+                {
+                    responseDto.DistanceKm = routeDetails.Value.DistanceKm;
+                    responseDto.DurationMinutes = routeDetails.Value.DurationMinutes;
+                }
+            }
+
             return Ok(responseDto);
         }
 
