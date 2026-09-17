@@ -52,17 +52,12 @@
             @foreach (var category in Model.Categories)
             {
                 <a class="v-cat" href="#services">
-                    <span class="v-cat__icon">
-                        <img src="@category.Icon" alt="" aria-hidden="true" />
-                    </span>
+                    <span class="v-cat__icon"><i class="bi @category.Icon"></i></span>
                     <span class="v-cat__name">@category.Name</span>
                 </a>
             }
-            @* Остання плитка веде до повного каталогу, тому в макеті вона без кольорового квадрата. *@
-            <a class="v-cat v-cat--more" href="#services">
-                <span class="v-cat__icon">
-                    <img src="~/img/icons/cat-more.svg" alt="" aria-hidden="true" />
-                </span>
+            <a class="v-cat" href="#services">
+                <span class="v-cat__icon"><i class="bi bi-three-dots"></i></span>
                 <span class="v-cat__name">Більше</span>
             </a>
         </div>
@@ -71,13 +66,13 @@
 
 <section class="v-section">
     <div class="v-container">
-        <h2 class="v-h2 v-display v-center">Одна платформа - дві можливості.</h2>
+        <h2 class="v-h2 v-center">Одна платформа - дві можливості.</h2>
 
-        <div class="v-duo">
+        <div class="v-duo" style="margin-top:26px">
             <div class="v-duo__card">
                 <h3>Потрібна послуга?</h3>
                 <div class="v-duo__body">
-                    <span class="v-duo__icon"><img src="~/img/icons/duo-need.svg" alt="" aria-hidden="true" /></span>
+                    <span class="v-duo__icon"><i class="bi bi-person-raised-hand"></i></span>
                     <span class="v-duo__text">
                         Знайдіть спеціаліста для ремонту, прибирання, дизайну, навчання та інших завдань.
                     </span>
@@ -88,7 +83,7 @@
             <div class="v-duo__card">
                 <h3>Хочете заробляти?</h3>
                 <div class="v-duo__body">
-                    <span class="v-duo__icon"><img src="~/img/icons/duo-earn.svg" alt="" aria-hidden="true" /></span>
+                    <span class="v-duo__icon"><i class="bi bi-briefcase"></i></span>
                     <span class="v-duo__text">
                         Створіть профіль, показуйте свої навички та знаходьте замовлення поруч із вами.
                     </span>
@@ -113,22 +108,22 @@
 
         <div class="v-steps">
             <div class="v-step">
-                <img class="v-step__icon" src="~/img/icons/step-request.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-pencil-square"></i>
                 <h4>Створіть запит</h4>
                 <p>Опишіть, що вам потрібно. Вкажіть деталі та бюджет.</p>
             </div>
             <div class="v-step">
-                <img class="v-step__icon" src="~/img/icons/step-choose.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-search-heart"></i>
                 <h4>Оберіть виконавця</h4>
                 <p>Порівняйте профілі, рейтинг, відгуки та ціну.</p>
             </div>
             <div class="v-step">
-                <img class="v-step__icon" src="~/img/icons/step-agree.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-chat-left-dots"></i>
                 <h4>Домовтеся про виконання</h4>
                 <p>Підтвердьте замовлення та деталі.</p>
             </div>
             <div class="v-step">
-                <img class="v-step__icon" src="~/img/icons/step-result.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-hand-thumbs-up"></i>
                 <h4>Отримайте результат</h4>
                 <p>Прийміть роботу та залиште відгук.</p>
             </div>
@@ -138,7 +133,7 @@
 
 <section class="v-why" id="why">
     <div class="v-container">
-        <h2 class="v-h2 v-center">Чому обирають <span class="v-accent">Вибір</span>?</h2>
+        <h2 class="v-h2 v-center">Чому обирають Service Hub?</h2>
         <p class="v-sub v-center">
             Ми допомагаємо швидше знаходити потрібних людей — без зайвих дзвінків,
             сумнівів і нескінченних пошуків.
@@ -146,22 +141,22 @@
 
         <div class="v-why__grid">
             <div class="v-why__item">
-                <img class="v-why__icon" src="~/img/icons/why-verified.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-patch-check"></i>
                 <h4>Перевірені виконавці</h4>
                 <p>Профілі, рейтинги та відгуки допомагають зробити впевнений вибір.</p>
             </div>
             <div class="v-why__item">
-                <img class="v-why__icon" src="~/img/icons/why-fast.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-lightning-charge"></i>
                 <h4>Швидкий пошук</h4>
                 <p>Знаходьте потрібного спеціаліста за категорією, ціною та локацією.</p>
             </div>
             <div class="v-why__item">
-                <img class="v-why__icon" src="~/img/icons/why-secure.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-shield-lock"></i>
                 <h4>Безпечна взаємодія</h4>
                 <p>Усі деталі замовлення та домовленості зручно зберігати на платформі.</p>
             </div>
             <div class="v-why__item">
-                <img class="v-why__icon" src="~/img/icons/why-fair.svg" alt="" aria-hidden="true" />
+                <i class="bi bi-wallet2"></i>
                 <h4>Чесні умови</h4>
                 <p>Заздалегідь бачите вартість послуги та умови виконання.</p>
             </div>

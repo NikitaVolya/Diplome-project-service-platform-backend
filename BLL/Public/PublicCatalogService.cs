@@ -38,43 +38,20 @@ namespace BLL.Public
             new() { Name = "Електрик", FromPrice = 600, Rating = 4.9, ReviewsCount = 27, Image = "/img/landing/service-4.jpg" }
         };
 
-        /// <summary>
-        /// Відповідність «слово в назві категорії» → намальована дизайнерами іконка.
-        /// Файли лежать у AdminPanel/wwwroot/img/icons/ (SVG, тому не розмиваються на будь-якому екрані).
-        /// Порядок рядків важливий: перемагає перший збіг, тому вужчі слова стоять вище за ширші.
-        /// </summary>
+        /// <summary>Відповідність «слово в назві категорії» → іконка Bootstrap Icons.</summary>
         private static readonly (string Keyword, string Icon)[] IconRules =
         {
-            // Спершу вужчі теми, інакше «Ремонт техніки» піймалося б на слові «ремонт»,
-            // а «Доставка» — на транспорті.
-            ("техні", "cat-appliance"), ("побутов", "cat-appliance"), ("appliance", "cat-appliance"),
-            ("вантаж", "cat-moving"), ("переїзд", "cat-moving"), ("перевез", "cat-moving"),
-            ("moving", "cat-moving"), ("cargo", "cat-moving"), ("truck", "cat-moving"),
-            ("достав", "cat-delivery"), ("кур", "cat-delivery"),
-            ("delivery", "cat-delivery"), ("courier", "cat-delivery"),
-            ("поді", "cat-events"), ("свят", "cat-events"), ("захід", "cat-events"), ("event", "cat-events"),
-            ("юрид", "cat-legal"), ("фінанс", "cat-legal"), ("бухгалт", "cat-legal"),
-            ("legal", "cat-legal"), ("financ", "cat-legal"), ("account", "cat-legal"), ("law", "cat-legal"),
-
-            ("ремонт", "cat-home"), ("дім", "cat-home"), ("буді", "cat-home"),
-            ("home", "cat-home"), ("repair", "cat-home"), ("hous", "cat-home"),
-            ("прибир", "cat-cleaning"), ("клінінг", "cat-cleaning"), ("clean", "cat-cleaning"),
-            ("дизайн", "cat-design"), ("творч", "cat-design"), ("design", "cat-design"), ("art", "cat-design"),
-            ("авто", "cat-auto"), ("транспорт", "cat-auto"),
-            ("auto", "cat-auto"), ("car", "cat-auto"), ("transport", "cat-auto"),
-            ("розробк", "cat-it"), ("технолог", "cat-it"), ("комп", "cat-it"),
-            ("it", "cat-it"), ("comput", "cat-it"), ("develop", "cat-it"), ("software", "cat-it"),
-            ("освіт", "cat-education"), ("репетит", "cat-education"), ("навчан", "cat-education"),
-            ("переклад", "cat-education"), ("tutor", "cat-education"), ("lesson", "cat-education"),
-            ("teach", "cat-education"), ("translat", "cat-education"),
-            ("краса", "cat-beauty"), ("beauty", "cat-beauty"), ("hair", "cat-beauty"),
-            ("здоров", "cat-health"), ("спорт", "cat-health"), ("медиц", "cat-health"),
-            ("health", "cat-health"), ("sport", "cat-health"), ("fitness", "cat-health"), ("medic", "cat-health"),
-            ("діти", "cat-kids"), ("дитяч", "cat-kids"), ("няня", "cat-kids"),
-            ("kid", "cat-kids"), ("child", "cat-kids"), ("babysit", "cat-kids"), ("nann", "cat-kids"),
-            ("тварин", "cat-pets"), ("pet", "cat-pets"), ("animal", "cat-pets"),
-            ("фото", "cat-photo"), ("відео", "cat-photo"), ("photo", "cat-photo"), ("video", "cat-photo"),
-            ("догляд", "cat-beauty"), ("care", "cat-beauty")
+            ("ремонт", "bi-house-gear"), ("дім", "bi-house-gear"), ("home", "bi-house-gear"),
+            ("прибир", "bi-stars"), ("clean", "bi-stars"),
+            ("дизайн", "bi-palette"), ("творч", "bi-palette"), ("design", "bi-palette"),
+            ("авто", "bi-car-front"), ("транспорт", "bi-truck"), ("delivery", "bi-truck"), ("достав", "bi-truck"),
+            ("it", "bi-cpu"), ("технолог", "bi-cpu"), ("комп", "bi-pc-display"), ("computer", "bi-pc-display"),
+            ("освіт", "bi-mortarboard"), ("репетит", "bi-mortarboard"), ("tutor", "bi-mortarboard"),
+            ("краса", "bi-scissors"), ("догляд", "bi-heart"), ("beauty", "bi-scissors"),
+            ("здоров", "bi-heart-pulse"), ("спорт", "bi-bicycle"),
+            ("діти", "bi-balloon"), ("тварин", "bi-heart"),
+            ("фото", "bi-camera"), ("відео", "bi-camera-reels"),
+            ("поді", "bi-calendar-event"), ("event", "bi-calendar-event")
         };
 
         private readonly ApplicationDbContext _db;
@@ -96,16 +73,24 @@ namespace BLL.Public
 
             try
             {
-                // Порядок плиток — той самий, що в макеті: у порядку створення категорій.
-                // Раніше вони сортувалися за кількістю замовлень, і ряд щоразу виглядав інакше.
-                categories = await _db.Categories
+                // Кількість замовлень за кореневою категорією: замовлення зазвичай прив'язані
+                // до підкатегорії, тому піднімаємо їх до батьківської.
+                var counts = await _db.Orders
+                    .AsNoTracking()
+                    .GroupBy(o => o.Category.ParentCategoryId ?? o.CategoryId)
+                    .Select(g => new { RootId = g.Key, Count = g.Count() })
+                    .ToListAsync(cancellationToken);
+
+                var roots = await _db.Categories
                     .AsNoTracking()
                     .Where(c => c.IsActive && c.ParentCategoryId == null)
-                    .OrderBy(c => c.Id)
                     .Select(c => new PublicCategoryItem { Id = c.Id, Name = c.Name })
                     .ToListAsync(cancellationToken);
 
-                categories = categories
+                // Сортування робимо в пам'яті: категорій десятки, а запит лишається простим.
+                categories = roots
+                    .OrderByDescending(c => counts.FirstOrDefault(x => x.RootId == c.Id)?.Count ?? 0)
+                    .ThenBy(c => c.Name)
                     .Take(take)
                     .ToList();
             }
@@ -218,30 +203,19 @@ namespace BLL.Public
             public int Count { get; set; }
         }
 
-        /// <summary>
-        /// Підбирає файл іконки за назвою категорії. Назви категорій задає адміністратор,
-        /// тому шукаємо не точний збіг, а частину слова; якщо нічого не підійшло —
-        /// показуємо нейтральні три крапки, як у макеті на плитці «Більше».
-        /// </summary>
         private static string PickIcon(string name)
         {
-            // Слово має саме починатися з ключа, а не просто містити його: інакше коротке «it»
-            // спрацювало б у слові «fitness», а «car» — у «career».
-            var words = name.ToLowerInvariant()
-                .Split(new[] { ' ', '\t', '-', '/', '&', ',', '.', '(', ')', '«', '»', '\'', '"' },
-                       StringSplitOptions.RemoveEmptyEntries);
+            var lower = name.ToLowerInvariant();
 
             foreach (var (keyword, icon) in IconRules)
             {
-                if (words.Any(word => word.StartsWith(keyword, StringComparison.Ordinal)))
+                if (lower.Contains(keyword))
                 {
-                    return IconPath(icon);
+                    return icon;
                 }
             }
 
-            return IconPath("cat-more");
+            return "bi-grid-1x2";
         }
-
-        private static string IconPath(string icon) => $"/img/icons/{icon}.svg";
     }
 }

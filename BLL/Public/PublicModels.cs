@@ -9,8 +9,8 @@ namespace BLL.Public
 
         public string Name { get; set; } = string.Empty;
 
-        /// <summary>Шлях до SVG-іконки у wwwroot; підбирається за назвою категорії.</summary>
-        public string Icon { get; set; } = "/img/icons/cat-more.svg";
+        /// <summary>Клас іконки Bootstrap Icons; підбирається за назвою категорії.</summary>
+        public string Icon { get; set; } = "bi-grid";
     }
 
     /// <summary>

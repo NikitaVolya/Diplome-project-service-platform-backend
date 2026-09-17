@@ -6,9 +6,13 @@
 
 <div class="login-card">
     <div class="login-card__brand mb-1">
-        <img src="~/img/logo.png" alt="Вибір" />
+        <svg viewBox="0 0 32 32" fill="none" width="28" height="28" aria-hidden="true">
+            <path d="M3 7 L13 25 L29 4" stroke="#624ECC" stroke-width="5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        вибір
     </div>
-    <p class="cell-muted mb-4">Адмін-панель «Вибір». Тільки для службових акаунтів.</p>
+    <p class="cell-muted mb-4">Адмін-панель Service Hub. Тільки для службових акаунтів.</p>
 
     <form asp-action="Login" method="post" novalidate>
         <input type="hidden" asp-for="ReturnUrl" />
