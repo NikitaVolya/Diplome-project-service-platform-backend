@@ -1,46 +1,30 @@
+/* Публічна головна сторінка порталу «Вибір».
+   Кольори взяті піпеткою з макета у Figma. */
 
 :root {
-    
-    --v-purple: #7B61FF;       
-    --v-purple-dark: #6247E0;
-    --v-purple-light: #9E8BFF;  
+    --v-purple: #624ECC;
+    --v-purple-dark: #4B3AA8;
+    --v-purple-light: #9E8BFF;
     --v-lilac: #CDC3FE;
     --v-lilac-soft: #EDE9FF;
-    --v-lilac-tile: #F7F6FE;    
+    --v-lilac-tile: #F7F6FE;
     --v-mint: #E3FDFF;
     --v-mint-deep: #C9FBFF;
     --v-cyan: #99F9FF;
     --v-ink: #1F2937;
-    --v-ink-soft: #1F2937;      
-    --v-ink-2: #1A1926;
+    --v-ink-soft: #4B5563;
     --v-bar: #3E3180;
-    --v-head: #F4F2FF;
-    --v-field: #F9F9F9;
-    --v-star: #FFD901;
-
-    --v-inset-hero: clamp(16px, 3.65vw, 70px);
-    --v-inset-footer: clamp(12px, 3.85vw, 74px);
+    --v-head: #F8F7FF;
 
     --v-radius: 28px;
-    --v-radius-lg: 210px;
+    --v-radius-lg: 48px;
     --v-shadow: 0 10px 30px rgba(62, 49, 128, .08);
 }
 
-.landing,
-.landing *,
-.landing *::before,
-.landing *::after { box-sizing: border-box; }
-
 .landing {
-    /* Типове поле body у 8px зсувало всі суцільні смуги (шапку, «Чому обирають»,
-       підвал) усередину й лишало білі щілини по краях. У макеті вони на всю ширину. */
-    margin: 0;
     background: #fff;
     color: var(--v-ink);
-    /* Onest — основний шрифт макета. Резерв на випадок, якщо файл не завантажився. */
-    font-family: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.25;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     overflow-x: hidden;
 }
 
@@ -49,64 +33,54 @@
 .landing img { max-width: 100%; }
 
 .landing h1, .landing h2, .landing h3 {
-    letter-spacing: 0;
-    font-weight: 600;
-    line-height: 1;
-}
-
-.landing h4, .v-duo__card h3 { line-height: 1.5; }
-
-.v-display {
-    font-family: 'Unbounded', 'Onest', sans-serif;
-    font-size: 32px;
-    font-weight: 500;
+    letter-spacing: -.02em;
+    font-weight: 800;
 }
 
 .v-container {
-    width: min(1540px, 100% - 48px);
+    width: min(1180px, 100% - 48px);
     margin-inline: auto;
 }
 
-/* шапка */
+/* ------------------------------------------------------------------ шапка */
 
 .v-header {
     background: var(--v-head);
     position: sticky;
     top: 0;
     z-index: 30;
-    padding: 15px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(98, 78, 204, .08);
 }
 
 .v-header__row {
     display: flex;
     align-items: center;
-    /* Ширини елементів у макеті задані вручну, тому вільне місце просто
-       розподіляємо між ними — крайні лишаються на межах колонки 190…1730. */
-    justify-content: space-between;
-    gap: 12px;
+    gap: 14px;
 }
-
-/* У макеті логотип у шапці відсунутий від колонки на 5px, у підвалі — ні. */
-.v-header .v-logo { margin-left: 5px; }
 
 .v-logo {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--v-purple);
     flex: 0 0 auto;
 }
 
-.v-logo img { height: 50px; width: auto; display: block; }
+.v-logo svg { width: 26px; height: 26px; }
+.v-logo span { letter-spacing: -.03em; }
 
 .v-pill {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     border: 0;
-    border-radius: 15px;
-    min-height: 40px;
-    padding: 4px 24px;
-    font-size: 16px;
-    font-weight: 500;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .86rem;
+    font-weight: 600;
     color: #fff;
     background: var(--v-purple);
     white-space: nowrap;
@@ -115,20 +89,17 @@
 
 .v-pill:hover { filter: brightness(1.08); color: #fff; }
 .v-pill--light { background: var(--v-purple-light); }
-.v-pill i { font-size: 20px; }
-
-/* «Каталог послуг» у макеті ширший за вміст — іконка відсунута від краю. */
-.v-pill:not(.v-pill--light) { padding-left: 44px; gap: 22px; }
 
 .v-nav {
     display: flex;
-    gap: 48px;
+    gap: 22px;
+    margin-left: auto;
     align-items: center;
 }
 
 .v-nav a {
     color: var(--v-ink);
-    font-size: 16px;
+    font-size: .88rem;
     font-weight: 500;
     opacity: .85;
 }
@@ -139,20 +110,18 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border-radius: 15px;
-    min-height: 40px;
-    padding: 4px 24px;
-    font-size: 16px;
-    font-weight: 500;
-    justify-content: center;
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: .86rem;
+    font-weight: 600;
     border: 1px solid transparent;
     white-space: nowrap;
     transition: filter .15s ease, background .15s ease;
 }
 
 .v-btn--ghost {
-    background: var(--v-field);
-    border-color: var(--v-purple-light);
+    background: #fff;
+    border-color: #E1E0EA;
     color: var(--v-ink);
 }
 
@@ -163,11 +132,6 @@
 
 .v-btn--soft { background: var(--v-purple-light); color: #fff; }
 .v-btn--soft:hover { filter: brightness(1.06); color: #fff; }
-
-/* У макеті всі невеликі кнопки та чипи однакової ширини — 110px. */
-.v-header .v-btn,
-.v-search .v-btn,
-.v-chip { min-width: 110px; padding-inline: 14px; }
 
 .v-burger {
     display: none;
@@ -180,68 +144,55 @@
     color: var(--v-ink);
 }
 
-/* герой-блок */
+/* -------------------------------------------------------------- герой-блок */
 
-.v-hero-wrap { position: relative; padding: 2px 0 0; }
+.v-hero-wrap { position: relative; padding: 26px 0 10px; }
 
+/* Бузкове коло, що визирає з-за лівого краю, — як у макеті. */
 .v-hero-wrap::before {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    width: calc(120px + var(--v-inset-hero));
-    height: 384px;
-    transform: translateX(-120px);
-    border-radius: 0 999px 999px 0;
-    background: #9E8BFF;
-    opacity: .46;
+    left: -190px;
+    top: 30px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--v-lilac);
+    opacity: .75;
     z-index: 0;
-}
-
-.v-hero-wrap > .v-container {
-    width: 100%;
-    margin-inline: 0;
 }
 
 .v-hero {
     position: relative;
     z-index: 1;
     background: var(--v-mint);
-    border-radius: var(--v-radius-lg) 0 0 var(--v-radius-lg);
-    margin-left: var(--v-inset-hero);
-    /* Блок зсунутий ліворуч на --v-inset-hero, тож щоб його вміст стояв на тій самій
-       колонці 190…1730, що й решта сторінки, поле зліва на пів відступу менше,
-       а справа — на стільки ж більше за звичайний жолоб сторінки. */
-    padding: 24px max(24px, calc((100% - 1540px) / 2))
-             24px max(24px, calc((100% - 1540px) / 2 - var(--v-inset-hero)));
+    border-radius: var(--v-radius-lg);
+    padding: 30px 34px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 630px;
-    gap: 18px;
-    align-items: start;
-    min-height: 365px;
+    grid-template-columns: 1.12fr 1fr;
+    gap: 28px;
+    align-items: center;
 }
 
 .v-hero h1 {
-    font-family: 'Unbounded', 'Onest', sans-serif;
-    font-size: 32px;
-    font-weight: 500;
-    margin: 22px 0 27px;
+    font-size: clamp(1.5rem, 2.4vw, 2.05rem);
+    margin: 0 0 12px;
     text-align: center;
 }
 
 .v-hero__lead {
     text-align: center;
     color: var(--v-ink-soft);
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 auto 42px;
-    max-width: 700px;
-    line-height: 1.25;
+    font-size: .95rem;
+    margin: 0 auto 22px;
+    max-width: 460px;
+    line-height: 1.55;
 }
 
+/* На широкому екрані обидва поля і кнопка стоять в один рядок, як у макеті. */
 .v-search {
     display: flex;
-    gap: 16px;
+    gap: 10px;
     flex-wrap: nowrap;
     align-items: center;
 }
@@ -253,13 +204,11 @@
     min-width: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    background: var(--v-field);
-    border: 1px solid var(--v-purple-light);
-    border-radius: 15px;
-    min-height: 48px;
-    padding: 12px 20px;
+    background: #fff;
+    border: 1px solid #E7ECEE;
+    border-radius: 999px;
+    padding: 10px 16px;
 }
 
 .v-search__field i { color: #9CA3AF; }
@@ -268,32 +217,29 @@
     border: 0;
     outline: 0;
     width: 100%;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: .88rem;
     background: transparent;
     color: var(--v-ink);
-    /* У макеті підказка стоїть посередині поля, а не притиснута ліворуч. */
-    text-align: center;
 }
 
-.v-search__field input::placeholder { color: #A9A9AB; font-weight: 500; }
+.v-search__field input::placeholder { color: #9CA3AF; }
 
 .v-chips {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 48px;
+    margin-top: 20px;
 }
 
-.v-chips__label { font-size: 20px; color: var(--v-ink); font-weight: 600; }
+.v-chips__label { font-size: .85rem; color: var(--v-ink); font-weight: 500; }
 
 .v-chip {
-    background: var(--v-field);
-    border: 1px solid var(--v-purple-light);
-    border-radius: 15px;
-    padding: 8px 14px;
-    font-size: 16px;
+    background: #fff;
+    border: 1px solid #E7ECEE;
+    border-radius: 12px;
+    padding: 6px 13px;
+    font-size: .82rem;
     color: var(--v-ink);
     font-weight: 500;
     white-space: nowrap;
@@ -301,47 +247,33 @@
 
 .v-chip:hover { border-color: var(--v-purple-light); color: var(--v-purple); }
 
-.v-btn--primary, .v-btn--ghost { min-height: 48px; }
-.v-chip { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; }
-
 .v-hero__media {
-    border-radius: 24px;
+    border-radius: 22px;
     overflow: hidden;
     box-shadow: var(--v-shadow);
-    aspect-ratio: 630 / 317;
-    max-width: 100%;
-    justify-self: end;
-    width: 630px;
+    aspect-ratio: 633 / 344;
 }
 
 .v-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* секції взагалі */
+/* ----------------------------------------------------------- секції взагалі */
 
-/* Відступи взяті з макета (кадр 1920): вони задають позиції всіх смуг по вертикалі
-   — «Чому обирають» на 1480, картки послуг на 2037, смуга заклику на 2402. */
-.v-section { padding: 62px 0 40px; }
-.v-section--tight { padding: 65px 0 30px; }
-#categories + .v-section { padding-bottom: 51px; }
-#how { padding: 40px 0 102px; }
-#services { padding: 88px 0 80px; }
+.v-section { padding: 46px 0; }
+.v-section--tight { padding: 34px 0; }
 
 .v-section__head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 18px;
 }
 
-.v-section__title { font-size: 20px; font-weight: 600; margin: 0; }
-#services .v-section__title { font-size: 24px; }
-#services .v-section__head { margin-bottom: 36px; }
+.v-section__title { font-size: 1.05rem; font-weight: 700; margin: 0; }
 
 .v-link {
     color: var(--v-ink);
-    font-size: 16px;
-    font-weight: 500;
+    font-size: .88rem;
     font-weight: 500;
     display: inline-flex;
     align-items: center;
@@ -353,34 +285,19 @@
 .v-center { text-align: center; }
 
 .v-h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 15px;
+    font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+    margin: 0 0 8px;
 }
-
-/* «Одна платформа — дві можливості» в макеті набрано великим шрифтом заголовків,
-   тому окреме правило: .v-display стоїть вище й програвало б .v-h2. */
-.v-h2.v-display {
-    font-family: 'Unbounded', 'Onest', sans-serif;
-    font-size: 32px;
-    font-weight: 500;
-}
-
-#how .v-h2 { margin-bottom: 22px; }
-
-.v-accent { color: var(--v-purple); }
 
 .v-sub {
     color: var(--v-ink-soft);
-    font-size: 16px;
+    font-size: .92rem;
     max-width: 560px;
-    margin: 0 auto 23px;
-    line-height: 1.25;
+    margin: 0 auto 28px;
+    line-height: 1.6;
 }
 
-.v-why .v-sub { margin-bottom: 34px; }
-
-/* категорії */
+/* ------------------------------------------------------------- категорії */
 
 .v-cats {
     display: grid;
@@ -391,129 +308,111 @@
 .v-cat {
     grid-column: span 1;
     background: var(--v-lilac-tile);
-    border: 1px solid var(--v-purple-light);
-    border-radius: 15px;
-    padding: 23px 8px 9px;
+    border: 1px solid var(--v-lilac);
+    border-radius: 18px;
+    padding: 14px 8px 12px;
     text-align: center;
     color: var(--v-ink);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    gap: 7px;
-    min-height: 124px;
+    justify-content: center;
+    gap: 9px;
+    min-height: 96px;
     transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .v-cat:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+    box-shadow: var(--v-shadow);
     color: var(--v-ink);
 }
 
 .v-cat__icon {
     width: 40px;
     height: 40px;
-    border-radius: 5px;
-    background: rgba(158, 139, 255, .48);
+    border-radius: 12px;
+    background: var(--v-lilac);
+    color: var(--v-purple-dark);
     display: grid;
     place-items: center;
+    font-size: 1.15rem;
 }
 
-/* Іконки — SVG від дизайнерів (wwwroot/img/icons), тому не розмиваються на будь-якому екрані. */
-.v-cat__icon img { width: 32px; height: 32px; display: block; }
+.v-cat__name { font-size: .74rem; line-height: 1.25; font-weight: 500; }
 
-.v-cat--more .v-cat__icon { background: transparent; }
+/* ------------------------------------------------------ дві можливості */
 
-.v-cat__name { font-size: 16px; line-height: 1.25; font-weight: 400; }
-
-/* дві можливості */
-
-/* Пара карток у макеті вужча за решту сторінки: 630 + 20 + 630 = 1280. */
 .v-duo {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    max-width: 1280px;
-    margin: 20px auto 0;
+    gap: 22px;
 }
 
 .v-duo__card {
     background: var(--v-mint);
-    border-radius: 15px;
-    padding: 12px 32px 10px 36px;
-    min-height: 126px;
+    border-radius: var(--v-radius);
+    padding: 20px 24px;
 }
 
-/* Заголовок картки стоїть над текстовою колонкою, а не над усією карткою,
-   тому зсунутий праворуч рівно на ширину іконки з проміжком. */
-.v-duo__card h3 {
-    font-size: 20px;
-    font-weight: 600;
-    text-align: left;
-    margin: 0 0 8px 75px;
-}
+.v-duo__card h3 { font-size: 1rem; text-align: center; margin: 0 0 14px; }
 
 .v-duo__body {
-    display: grid;
-    grid-template-columns: 48px 1fr auto;
-    align-items: start;
-    gap: 27px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.v-duo__body .v-btn { align-self: end; }
-
 .v-duo__icon {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     flex: 0 0 auto;
     display: grid;
     place-items: center;
+    font-size: 1.6rem;
+    color: var(--v-ink);
 }
 
-.v-duo__icon img { width: 48px; height: 48px; display: block; }
+.v-duo__text { font-size: .84rem; color: var(--v-ink-soft); line-height: 1.5; flex: 1 1 auto; }
 
-.v-duo__text { font-size: 16px; color: var(--v-ink-soft); line-height: 1.25; }
+/* ---------------------------------------------------------- як це працює */
 
-
-.v-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step;
-    max-width: 1040px; margin-inline: auto; }
+.v-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: step; }
 
 .v-steps__line {
     position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin-bottom: 33px;
-    max-width: 1040px;
-    margin-inline: auto;
+    margin-bottom: 26px;
 }
 
 .v-steps__line::before {
     content: "";
     position: absolute;
-    top: calc(50% - 1px);
+    top: 50%;
     left: 12.5%;
     right: 12.5%;
-    height: 2px;
-    background-image: repeating-linear-gradient(to right, rgba(0, 0, 0, .55) 0 4px, transparent 4px 8px);
+    border-top: 2px dashed #C9CBD6;
 }
 
 .v-steps__num {
     position: relative;
     justify-self: center;
-    width: 56px;
-    height: 56px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: var(--v-cyan);
     display: grid;
     place-items: center;
-    font-weight: 400;
-    font-size: 16px;
-    color: #111;
+    font-weight: 600;
+    font-size: .9rem;
+    color: var(--v-ink);
 }
 
-.v-step { text-align: center; position: relative; padding: 0 12px; }
+.v-step { text-align: center; position: relative; }
 
+/* На вузькому екрані пунктирна лінія з номерами не має сенсу,
+   тому номер переїжджає всередину самого кроку. */
 .v-step::before {
     counter-increment: step;
     content: counter(step);
@@ -527,48 +426,38 @@
     font-size: .82rem;
     line-height: 28px;
 }
-.v-step__icon { width: 49px; height: 49px; display: block; margin: 0 auto; }
-.v-step h4 { font-size: 16px; font-weight: 500; margin: 19px 0 18px; }
-.v-step p { font-size: 16px; color: var(--v-ink-soft); line-height: 1.25; margin: 0; }
+.v-step i { font-size: 1.6rem; color: var(--v-ink); }
+.v-step h4 { font-size: .88rem; font-weight: 700; margin: 12px 0 8px; }
+.v-step p { font-size: .8rem; color: var(--v-ink-soft); line-height: 1.5; margin: 0; }
 
+/* --------------------------------------------------------- чому обирають */
 
 .v-why {
     background: var(--v-lilac-soft);
     border-radius: 0 var(--v-radius-lg) var(--v-radius-lg) 0;
-    padding: 32px 0 24px;
-    margin-right: 0;
+    padding: 44px 0;
+    margin-right: clamp(0px, 4vw, 60px);
 }
 
-/* Чотири колонки в макеті стоять на тій самій сітці, що й кроки: 1040 по центру. */
 .v-why__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
-    max-width: 1040px;
-    margin-inline: auto;
 }
 
-.v-why__item { padding: 11px 22px 43px; text-align: center; }
+.v-why__item { padding: 0 22px; }
+.v-why__item + .v-why__item { border-left: 1px solid #D6D0F5; }
+.v-why__item i { font-size: 1.7rem; color: var(--v-ink); }
+.v-why__item h4 { font-size: .92rem; font-weight: 700; margin: 14px 0 8px; }
+.v-why__item p { font-size: .8rem; color: var(--v-ink-soft); line-height: 1.5; margin: 0; }
 
-.v-why__item + .v-why__item {
-    border-left: 0;
-    background-image: url("../img/icons/divider.svg");
-    background-repeat: no-repeat;
-    background-position: left center;
-    background-size: 3px 100%;
-}
-.v-why__icon { width: 48px; height: 48px; display: block; margin: 0 auto; }
-.v-why__item h4 { font-size: 20px; font-weight: 600; margin: 37px 0 10px; }
-.v-why__item p { font-size: 16px; color: var(--v-ink-soft); line-height: 1.25; margin: 0; }
+/* ------------------------------------------------------------- послуги */
 
-
-.v-services { display: grid; grid-template-columns: repeat(4, 1fr); gap: 23px; }
+.v-services { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
 .v-service {
     background: var(--v-mint);
-    /* У макеті картка обведена тонкою бірюзовою лінією. */
-    border: 1px solid #00F0FF;
-    border-radius: 15px;
+    border-radius: 18px;
     overflow: hidden;
     color: var(--v-ink);
     display: flex;
@@ -578,133 +467,84 @@
 
 .v-service:hover { transform: translateY(-4px); box-shadow: var(--v-shadow); color: var(--v-ink); }
 
-.v-service__img { aspect-ratio: 368 / 144; overflow: hidden; }
+.v-service__img { aspect-ratio: 369 / 143; overflow: hidden; }
 .v-service__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.v-service__body { padding: 18px 16px 48px; text-align: center; }
-.v-service__name { font-weight: 600; font-size: 20px; margin-bottom: 8px; }
-.v-service__meta { font-size: 16px; color: var(--v-ink-soft); line-height: 1.25; }
-.v-service__meta .star { color: var(--v-star); font-size: 20px; line-height: 1; }
+.v-service__body { padding: 14px 16px 18px; text-align: center; }
+.v-service__name { font-weight: 700; font-size: .92rem; margin-bottom: 8px; }
+.v-service__meta { font-size: .8rem; color: var(--v-ink-soft); line-height: 1.5; }
+.v-service__meta .star { color: #F5B301; }
 
+/* ----------------------------------------------------------------- CTA */
 
 .v-cta {
     background: #EAE6FF;
-    padding: 0;
-    min-height: 200px;
-    display: grid;
-    align-items: center;
+    padding: 26px 0;
 }
 
 .v-cta__inner {
     display: grid;
-    grid-template-columns: 595fr 512fr;
-    gap: 27px;
+    grid-template-columns: 1fr 1fr;
+    gap: 34px;
     align-items: center;
-    max-width: 1134px;
-    margin-inline: auto;
 }
 
-.v-cta__img { border-radius: 15px; overflow: hidden; aspect-ratio: 595 / 199; }
-.v-cta__img img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; display: block; }
-.v-cta h2 { font-size: 32px; font-weight: 600; margin: 0 0 24px; }
-.v-cta p { font-size: 16px; color: var(--v-ink-soft); margin: 0 0 30px; }
-.v-cta__buttons { display: flex; gap: 35px; flex-wrap: wrap; }
+.v-cta__img { border-radius: 16px; overflow: hidden; aspect-ratio: 595 / 253; }
+.v-cta__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.v-cta h2 { font-size: clamp(1.2rem, 2vw, 1.6rem); margin: 0 0 10px; }
+.v-cta p { font-size: .88rem; color: var(--v-ink-soft); margin: 0 0 18px; }
+.v-cta__buttons { display: flex; gap: 14px; flex-wrap: wrap; }
 
+/* -------------------------------------------------------------- підвал */
 
-.v-footer-wrap { padding-top: 80px; position: relative; }
-
-.v-footer-wrap::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 80px;
-    width: calc(116px + var(--v-inset-footer));
-    height: 384px;
-    transform: translateX(-120px);
-    border-radius: 0 999px 999px 0;
-    background: #9E8BFF;
-    opacity: .46;
-    z-index: 0;
-}
+.v-footer-wrap { padding-top: 40px; }
 
 .v-footer {
-    background: var(--v-mint-deep);
-    border-radius: var(--v-radius-lg) 0 0 var(--v-radius-lg);
-    margin-left: var(--v-inset-footer);
-    padding: 51px 0 40px;
-    min-height: 384px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Розмитий логотип у макеті — окреме зображення 1034x479, що виступає за верхній
-   і нижній край підвалу; видно рівно ту частину, яку не обрізав overflow. */
-.v-footer__mark {
-    position: absolute;
-    left: 51.57%;
-    top: -9px;
-    width: 56%;
-    height: auto;
-    transform: translateX(-50%);
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
+    background: linear-gradient(180deg, var(--v-mint-deep) 0%, var(--v-mint) 100%);
+    border-radius: var(--v-radius-lg) var(--v-radius-lg) 0 0;
+    padding: 40px 0 34px;
 }
 
 .v-footer__grid {
     display: grid;
-    /* Колонки в макеті різної ширини й розставлені вручну — беремо їх пропорції. */
-    grid-template-columns: 345fr 225fr 277fr 304fr 203fr 185fr;
-    gap: 0;
-    position: relative;
-    z-index: 1;
-}
-
-/* Підвал зсунутий праворуч на --v-inset-footer, тому його вміст вирівнюємо
-   не по центру підвалу, а по тій самій колонці 190…1730, що й уся сторінка. */
-.v-footer > .v-container {
-    width: min(1540px, calc(100% - 48px));
-    margin-inline: 0;
-    margin-left: max(24px, calc((100% - 1540px) / 2 - var(--v-inset-footer) / 2));
+    grid-template-columns: 1.4fr repeat(5, 1fr);
+    gap: 26px;
 }
 
 .v-footer__about p {
-    font-family: 'Inter', 'Onest', sans-serif;
-    font-size: 16px;
+    font-size: .78rem;
     color: var(--v-ink-soft);
-    line-height: 1.25;
-    margin: 21px 0 44px;
-    max-width: 240px;
+    line-height: 1.6;
+    margin: 14px 0 16px;
+    max-width: 230px;
 }
 
-.v-social { display: flex; gap: 16px; }
+.v-social { display: flex; gap: 9px; }
 
 .v-social a {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: var(--v-purple);
     color: #fff;
     display: grid;
     place-items: center;
-    font-size: 12px;
+    font-size: .78rem;
 }
 
 .v-social a:hover { background: var(--v-purple-dark); color: #fff; }
 
-
 .v-footer h5 {
-    font-family: 'Inter', 'Onest', sans-serif;
-    font-size: 20px;
-    font-weight: 500;
-    margin: 0 0 18px;
+    font-size: .88rem;
+    font-weight: 700;
+    margin: 0 0 14px;
 }
 
 .v-footer ul { list-style: none; padding: 0; margin: 0; }
-.v-footer li { margin-bottom: 12px; }
+.v-footer li { margin-bottom: 8px; }
 
 .v-footer li a, .v-footer li span {
-    font-size: 16px;
+    font-size: .78rem;
     color: var(--v-ink-soft);
 }
 
@@ -721,8 +561,8 @@
 .v-bottom {
     background: var(--v-bar);
     color: #D8D4F0;
-    padding: 20px 0;
-    font-size: 12px;
+    padding: 12px 0;
+    font-size: .76rem;
 }
 
 .v-bottom__row {
@@ -731,19 +571,12 @@
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
-    min-height: 16px;
 }
 
 .v-bottom a { color: #D8D4F0; }
 .v-bottom a:hover { color: #fff; }
 
-
-/* Між 1100 і 1440 шапка ще показує все меню, але вміст уже не влазить у колонку. */
-@media (max-width: 1440px) {
-    .v-nav { gap: 24px; }
-    .v-pill { padding-inline: 16px; gap: 10px; }
-    .v-pill:not(.v-pill--light) { padding-left: 16px; gap: 10px; }
-}
+/* --------------------------------------------------------------- адаптив */
 
 @media (max-width: 1100px) {
     .v-nav { display: none; }
@@ -755,51 +588,26 @@
     .v-container { width: min(1180px, 100% - 32px); }
     .v-search { flex-wrap: wrap; }
     .v-search__field { flex: 1 1 190px; }
-    .v-hero {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 26px 22px;
-        margin-left: 0;
-        border-radius: var(--v-radius);
-    }
-    .v-hero-wrap > .v-container { width: min(1180px, 100% - 32px); margin-inline: auto; }
-    .v-footer { margin-left: 0; border-radius: var(--v-radius) var(--v-radius) 0 0; }
-    .v-hero-wrap::before, .v-footer-wrap::before { display: none; }
+    .v-hero { grid-template-columns: 1fr; padding: 26px 22px; }
     .v-hero__media { order: -1; }
     .v-duo, .v-cta__inner { grid-template-columns: 1fr; }
-    .v-duo__card h3 { margin-left: 0; text-align: center; }
-    .v-duo__body { grid-template-columns: 48px 1fr; row-gap: 16px; }
-    .v-duo__body .v-btn { grid-column: 1 / -1; align-self: center; justify-self: center; }
     .v-services { grid-template-columns: 1fr 1fr; }
     .v-why__grid { grid-template-columns: 1fr 1fr; gap: 26px 0; }
-    .v-why__item:nth-child(3) { border-left: 0; background-image: none; }
+    .v-why__item:nth-child(3) { border-left: 0; }
     .v-why { border-radius: 0; margin-right: 0; }
     .v-header__row .v-pill { display: none; }
     .v-burger { display: inline-flex; }
 }
 
-@media (max-width: 900px) {
-    .v-hero h1 { font-size: 26px; }
-    .v-display { font-size: 24px; }
-    .v-hero__lead { font-size: 17px; font-weight: 500; }
-    .v-h2 { font-size: 21px; }
-    .v-cta h2 { font-size: 24px; }
-    .v-chips__label { font-size: 16px; }
-    .v-service__name, .v-why__item h4, .v-duo__card h3 { font-size: 18px; }
-    #services .v-section__title, .v-section__title { font-size: 19px; }
-    .v-footer h5 { font-size: 18px; }
-}
-
 @media (max-width: 640px) {
     .v-cats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .v-services { grid-template-columns: 1fr; }
-    .v-duo__body { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; }
-    .v-duo__icon { justify-self: center; }
+    .v-duo__body { flex-direction: column; text-align: center; gap: 12px; }
     .v-steps { grid-template-columns: 1fr 1fr; }
     .v-steps__line { display: none; }
     .v-step::before { display: block; }
     .v-why__grid { grid-template-columns: 1fr; }
-    .v-why__item + .v-why__item { border-left: 0; background-image: none; }
+    .v-why__item + .v-why__item { border-left: 0; }
     .v-footer__grid { grid-template-columns: 1fr 1fr; }
-    .v-footer__mark { display: none; }
     .v-header__row .v-btn--ghost { display: none; }
 }
