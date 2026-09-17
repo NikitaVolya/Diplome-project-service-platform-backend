@@ -2,8 +2,6 @@
 @{
     var basePath = Context.Request.Path.ToString();
 
-    // «page» — зарезервоване слово для парсера Razor, тому змінна циклу названа інакше,
-    // а кожне посилання будується через цей допоміжний метод, а не виразом у розмітці.
     string Href(int target)
     {
         var parts = Model.Query
