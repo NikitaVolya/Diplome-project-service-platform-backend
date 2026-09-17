@@ -26,14 +26,17 @@ namespace DAL.Seed
 
         private static readonly string[] CategoryTree =
         {
-            "Home repair|Plumbing,Electrical,Painting,Furniture assembly",
-            "Cleaning|Apartment cleaning,Office cleaning,Window cleaning,After renovation",
-            "Delivery|Courier,Freight,Grocery delivery",
-            "Computer help|PC repair,Software setup,Network setup",
-            "Tutoring|Mathematics,English,Programming",
-            "Beauty|Haircut,Manicure,Make-up",
-            "Auto services|Tyre fitting,Car wash,Diagnostics",
-            "Events|Photography,Catering,Hosting"
+            "Дім і ремонт|Сантехнік,Електрик,Малярні роботи,Збірка меблів",
+            "Прибирання|Прибирання квартири,Прибирання офісу,Миття вікон,Після ремонту",
+            "Дизайн та творчість|Дизайн логотипу,Вебдизайн,Ілюстрація,Поліграфія",
+            "Авто і транспорт|Шиномонтаж,Мийка авто,Діагностика,Вантажні перевезення",
+            "IT та технології|Ремонт комп'ютерів,Налаштування ПЗ,Мережі,Розробка сайтів",
+            "Освіта та репетиторство|Математика,Англійська мова,Програмування,Переклади",
+            "Краса та догляд|Стрижка,Манікюр,Макіяж,Косметологія",
+            "Здоров'я та спорт|Масаж,Персональний тренер,Йога,Дієтолог",
+            "Діти та догляд|Няня,Аніматор,Підготовка до школи,Догляд за літніми",
+            "Тварини|Вигул собак,Грумінг,Ветеринар,Передержка",
+            "Фото та відео|Фотозйомка,Відеозйомка,Обробка фото,Аерозйомка"
         };
 
         private static readonly string[] FirstNames =
@@ -250,7 +253,7 @@ namespace DAL.Seed
                 var parent = new Category
                 {
                     Name = parts[0],
-                    Description = $"{parts[0]} services",
+                    Description = $"Послуги напряму «{parts[0]}»",
                     IsActive = true
                 };
 
@@ -262,7 +265,7 @@ namespace DAL.Seed
                     var child = new Category
                     {
                         Name = childName.Trim(),
-                        Description = $"{childName.Trim()} — part of {parent.Name}",
+                        Description = $"{childName.Trim()} — напрям «{parent.Name}»",
                         ParentCategoryId = parent.Id,
                         IsActive = true
                     };
