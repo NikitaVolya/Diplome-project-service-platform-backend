@@ -54,9 +54,6 @@ namespace AdminPanel
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Коренем сайту є публічна головна сторінка, а адмінпанель живе за своїми адресами
-            // (/Dashboard, /Users, …). Якщо зробити типовим контролером Dashboard, посилання на
-            // нього генерувалися б як "/" і вели б назад на головну.
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Landing}/{action=Index}/{id?}");
@@ -68,11 +65,6 @@ namespace AdminPanel
             await app.RunAsync();
         }
 
-        /// <summary>
-        /// Застосовує міграції, яких бракує, і запускає заповнення бази початковими даними.
-        /// Обидва кроки необов'язкові й керуються конфігурацією, щоб на проді міграції
-        /// можна було виконувати власним конвеєром розгортання.
-        /// </summary>
         private static async Task PrepareDatabaseAsync(WebApplication app)
         {
             using var scope = app.Services.CreateScope();
@@ -81,9 +73,17 @@ namespace AdminPanel
 
             try
             {
+                var db = services.GetRequiredService<ApplicationDbContext>();
+
+                if (app.Environment.IsDevelopment()
+                    && app.Configuration.GetValue("Database:RecreateOnStart", false))
+                {
+                    logger.LogWarning("Database:RecreateOnStart is on - dropping the database");
+                    await db.Database.EnsureDeletedAsync();
+                }
+
                 if (app.Configuration.GetValue("Database:AutoMigrate", true))
                 {
-                    var db = services.GetRequiredService<ApplicationDbContext>();
                     await db.Database.MigrateAsync();
                     logger.LogInformation("Database is up to date");
                 }
@@ -93,8 +93,6 @@ namespace AdminPanel
             }
             catch (Exception ex)
             {
-                // Недоступна база не повинна валити застосунок: панель стартує й покаже помилку
-                // на першому ж запиті, замість того щоб мовчки впасти під час запуску.
                 logger.LogError(ex, "Database preparation failed");
             }
         }
