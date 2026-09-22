@@ -67,7 +67,7 @@ namespace AdminPanel.Controllers
             return Xlsx(file, "servicehub-statistics");
         }
 
-        /// <summary>За замовчуванням — останні 30 днів; діапазон ніколи не буває перевернутим.</summary>
+        // За замовчуванням — останні 30 днів; діапазон ніколи не буває перевернутим.
         private static (DateTime From, DateTime To) Normalise(DateTime? from, DateTime? to)
         {
             var end = (to ?? DateTime.UtcNow).Date;

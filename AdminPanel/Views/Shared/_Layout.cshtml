@@ -29,11 +29,11 @@
     <aside class="sidebar">
         <a class="sidebar__brand" asp-controller="Dashboard" asp-action="Index">
             <img src="~/img/logo.png" alt="Вибір" />
-            <span><small>Admin panel</small></span>
+            <span><small>Адмін-панель</small></span>
         </a>
 
         <nav class="sidebar__nav">
-            <div class="sidebar__section">Overview</div>
+            <div class="sidebar__section">Огляд</div>
 
             <a class="@NavClass("Dashboard")" asp-controller="Dashboard" asp-action="Index">
                 <i class="bi bi-grid-1x2"></i> Dashboard
@@ -42,7 +42,7 @@
                 <i class="bi bi-graph-up-arrow"></i> Statistics
             </a>
 
-            <div class="sidebar__section">Operations</div>
+            <div class="sidebar__section">Операції</div>
 
             <a class="@NavClass("Orders")" asp-controller="Orders" asp-action="Index">
                 <i class="bi bi-clipboard-check"></i> Orders
@@ -86,7 +86,7 @@
                 </a>
             }
 
-            <div class="sidebar__section">Support</div>
+            <div class="sidebar__section">Підтримка</div>
 
             <a class="@NavClass("Chat")" asp-controller="Chat" asp-action="Index">
                 <i class="bi bi-chat-dots"></i> Chat
@@ -94,13 +94,13 @@
 
             @if (isAdmin)
             {
-                <div class="sidebar__section">System</div>
+                <div class="sidebar__section">Система</div>
 
                 <a class="@NavClass("Roles")" asp-controller="Roles" asp-action="Index">
                     <i class="bi bi-person-badge"></i> Roles
                 </a>
                 <a class="@NavClass("Logs")" asp-controller="Logs" asp-action="Index">
-                    <i class="bi bi-journal-text"></i> Activity log
+                    <i class="bi bi-journal-text"></i> Журнал дій
                 </a>
             }
         </nav>
@@ -112,7 +112,7 @@
 
     <div class="main">
         <header class="topbar">
-            <button class="btn btn-light btn-sm d-lg-none" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+            <button class="btn btn-light btn-sm d-lg-none" type="button" data-sidebar-toggle aria-label="Перемкнути навігацію">
                 <i class="bi bi-list"></i>
             </button>
 
@@ -148,7 +148,7 @@
                         <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-1">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                <i class="bi bi-box-arrow-right"></i> Sign out
+                                <i class="bi bi-box-arrow-right"></i> Вийти
                             </button>
                         </form>
                     </li>

@@ -1,6 +1,6 @@
 @model CategoryFormViewModel
 @{
-    ViewData["Title"] = Model.IsNew ? "New category" : $"Edit “{Model.Category.Name}”";
+    ViewData["Title"] = Model.IsNew ? "New category" : $"Редагування «{Model.Category.Name}»";
     var action = Model.IsNew ? "Create" : "Edit";
 }
 
@@ -33,7 +33,7 @@
                         <label class="form-label" for="Description">Description</label>
                         <textarea id="Description" name="Description" class="form-control" rows="3"
                                   maxlength="500">@Model.Category.Description</textarea>
-                        <div class="form-text">Shown in the mobile app under the category name.</div>
+                        <div class="form-text">Відображається в мобільному застосунку під назвою категорії.</div>
                     </div>
 
                     <div class="mb-3">
@@ -47,11 +47,11 @@
                                 </option>
                             }
                         </select>
-                        <div class="form-text">Only two levels are supported: a top-level category and its children.</div>
+                        <div class="form-text">Підтримується лише два рівні: основна категорія та її підкатегорії.</div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="IconUrl">Icon URL</label>
+                        <label class="form-label" for="IconUrl">URL іконки</label>
                         <input id="IconUrl" name="IconUrl" class="form-control" value="@Model.Category.IconUrl"
                                placeholder="https://cdn.servicehub.app/icons/plumbing.svg" />
                     </div>

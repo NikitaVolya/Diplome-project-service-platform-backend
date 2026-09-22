@@ -6,13 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Admin.Services
 {
-    /// <summary>
-    /// Скарги та відгуки — контент, з яким працює адміністратор. Скарги зберігають історію
-    /// (змінюється лише статус), відгуки видаляються повністю, бо в моделі немає прапорця «прихований».
-    /// </summary>
+    // Скарги та відгуки — контент, з яким працює адміністратор. Скарги зберігають історію
+    // (змінюється лише статус), відгуки видаляються повністю, бо в моделі немає прапорця «прихований».
     public class AdminModerationService : IAdminModerationService
     {
-        /// <summary>Замовлення без руху довше за цей термін потрапляє в чергу модерації.</summary>
+        //Замовлення без руху довше за цей термін потрапляє в чергу модерації.
         private const int StaleOrderDays = 30;
 
         private readonly ApplicationDbContext _db;
@@ -220,10 +218,8 @@ namespace BLL.Admin.Services
             });
         }
 
-        /// <summary>
-        /// Додає «скільки всього скарг зібрав цей користувач» — саме це число насправді визначає,
-        /// блокувати його чи ні.
-        /// </summary>
+        // Додає «скільки всього скарг зібрав цей користувач» — саме це число насправді визначає,
+        // блокувати його чи ні.
         private async Task AttachComplaintCountsAsync(
             IReadOnlyList<AdminComplaintListItem> items,
             CancellationToken cancellationToken)

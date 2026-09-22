@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    /// <summary>
     /// Фінансові дані доступні лише адміністраторам: модератори працюють із контентом, а не з грошима.
-    /// </summary>
     [Authorize(Policy = AppRoles.AdminOnlyPolicy)]
     public class PaymentsController : AdminControllerBase
     {

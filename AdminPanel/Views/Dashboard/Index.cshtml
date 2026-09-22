@@ -13,7 +13,7 @@
         @foreach (var days in new[] { 7, 14, 30, 90 })
         {
             <a class="btn @(Model.ChartDays == days ? "btn-primary" : "btn-outline-secondary")"
-               asp-action="Index" asp-route-days="@days">@days days</a>
+               asp-action="Index" asp-route-days="@days">@days днів</a>
         }
     </div>
 
@@ -35,7 +35,7 @@
                 <div class="kpi__label">Users</div>
                 <div class="kpi__value">@s.TotalUsers.ToString("N0")</div>
                 <div class="kpi__meta">
-                    +@s.NewUsersToday today · +@s.NewUsersThisMonth this month
+                    +@s.NewUsersToday сьогодні · +@s.NewUsersThisMonth цього місяця
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
                         <i class="bi @Display.TrendIcon(s.RevenueMonthOverMonth)"></i>
                         @s.RevenueMonthOverMonth.ToString("0.#")%
                     </span>
-                    · @s.RevenueThisMonth.ToString("N0") ₴ this month
+                    · @s.RevenueThisMonth.ToString("N0") ₴ цього місяця
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
                 <div class="kpi__label">Open complaints</div>
                 <div class="kpi__value">@s.PendingComplaints</div>
                 <div class="kpi__meta">
-                    @s.TotalComplaints total · @Model.Queue.Total item(s) in queue
+                    @s.TotalComplaints усього · @Model.Queue.Total у черзі
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
     <div class="col-12 col-xl-8">
         <div class="card h-100">
             <div class="card-header">
-                <i class="bi bi-activity"></i> Orders over the last @Model.ChartDays days
+                <i class="bi bi-activity"></i> Замовлення за останні @Model.ChartDays днів
             </div>
             <div class="card-body">
                 <div class="chart-box"><canvas id="ordersChart"></canvas></div>
@@ -156,7 +156,7 @@
                     <tbody>
                     @if (!s.RecentOrders.Any())
                     {
-                        <tr><td colspan="5" class="empty-state"><i class="bi bi-inbox"></i>No orders yet</td></tr>
+                        <tr><td colspan="5" class="empty-state"><i class="bi bi-inbox"></i>Замовлень ще немає</td></tr>
                     }
                     @foreach (var order in s.RecentOrders)
                     {
@@ -190,7 +190,7 @@
             <div class="card-body pt-2">
                 @if (!s.TopExecutors.Any())
                 {
-                    <div class="empty-state py-4"><i class="bi bi-person-x"></i>No completed orders yet</div>
+                    <div class="empty-state py-4"><i class="bi bi-person-x"></i>Виконаних замовлень ще немає</div>
                 }
                 @foreach (var executor in s.TopExecutors)
                 {

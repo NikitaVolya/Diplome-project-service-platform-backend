@@ -6,7 +6,7 @@
 
 <div class="mb-3">
     <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
-        <i class="bi bi-arrow-left"></i> Back to payments
+        <i class="bi bi-arrow-left"></i> До списку платежів
     </a>
 </div>
 
@@ -56,10 +56,10 @@
                 @if (Model.Status == PaymentStatus.Completed)
                 {
                     <p class="cell-muted">
-                        Marking a payment as refunded only records the decision in ServiceHub. The money
-                        itself has to be returned through @Model.Provider.
+                        Позначення платежу як поверненого лише фіксує рішення в ServiceHub. Кошти
+                        потрібно повернути через @Model.Provider.
                     </p>
-                    <form asp-action="Refund" method="post" data-confirm="Mark this payment as refunded?">
+                    <form asp-action="Refund" method="post" data-confirm="Позначити платіж як повернений?">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
                         <button class="btn btn-outline-warning w-100">
@@ -70,7 +70,7 @@
                 else
                 {
                     <p class="cell-muted mb-0">
-                        No actions are available for a payment in the @Model.Status state.
+                        Для платежу у стані @Model.Status немає доступних дій.
                     </p>
                 }
             </div>

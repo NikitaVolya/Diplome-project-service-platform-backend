@@ -34,9 +34,7 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Окремо тільки дані графіків, щоб перемикач періоду оновлював їх без перезавантаження сторінки.
-        /// </summary>
+        // Окремо тільки дані графіків, щоб перемикач періоду оновлював їх без перезавантаження сторінки.
         [HttpGet]
         public async Task<IActionResult> ChartData(string chart, int days = 30, CancellationToken cancellationToken = default)
         {

@@ -6,10 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    /// <summary>
-    /// Спільна основа для всіх екранів адмінки: хто виконує дію, як результат показується
-    /// користувачеві та як файли віддаються у браузер.
-    /// </summary>
     public abstract class AdminControllerBase : Controller
     {
         protected const string XlsxContentType =
@@ -22,7 +18,6 @@ namespace AdminPanel.Controllers
 
         protected string? ClientIp => HttpContext.Connection.RemoteIpAddress?.ToString();
 
-        /// <summary>Показує результат дії на наступній сторінці у вигляді сповіщення, яке можна закрити.</summary>
         protected void Flash(AdminOperationResult result)
         {
             TempData[result.Succeeded ? "Success" : "Error"] = result.Message;
@@ -32,7 +27,6 @@ namespace AdminPanel.Controllers
 
         protected void FlashError(string message) => TempData["Error"] = message;
 
-        /// <summary>Записує в журнал дій результат адміністративної операції.</summary>
         protected Task AuditAsync(
             IAuditLogService audit,
             AuditAction action,
@@ -65,14 +59,12 @@ namespace AdminPanel.Controllers
                 CurrentUserId, CurrentUserName, ClientIp, severity);
         }
 
-        /// <summary>Віддає книгу Excel у браузер під іменем файлу з датою та часом.</summary>
         protected FileContentResult Xlsx(byte[] content, string baseName)
         {
             var fileName = $"{baseName}-{DateTime.UtcNow:yyyyMMdd-HHmm}.xlsx";
             return File(content, XlsxContentType, fileName);
         }
 
-        /// <summary>Перетворює дані графіка на JSON для вбудованих блоків &lt;script&gt; у представленнях.</summary>
         protected static string ToJson(object value) =>
             JsonSerializer.Serialize(value, JsonOptions);
 

@@ -6,11 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Admin.Services
 {
-    /// <summary>
-    /// Агрегація по робочих таблицях лише для читання. Усе рахується на вимогу, а не береться
-    /// з таблиці Statistics, тому дашборд показує правильні числа навіть тоді, коли нічне
-    /// завдання підрахунку статистики ще не відпрацювало.
-    /// </summary>
+    // Агрегація по робочих таблицях лише для читання. Усе рахується на вимогу, а не береться
+    // з таблиці Statistics, тому дашборд показує правильні числа навіть тоді, коли нічне
+    // завдання підрахунку статистики ще не відпрацювало.
     public class AdminDashboardService : IAdminDashboardService
     {
         private readonly ApplicationDbContext _db;

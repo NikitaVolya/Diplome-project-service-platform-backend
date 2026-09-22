@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Admin.Services
 {
-    /// <summary>
-    /// Каталог категорій. Модель дозволяє будь-яку вкладеність, але панель свідомо показує лише
-    /// два рівні (коренева + підкатегорія), бо саме так їх малює мобільний застосунок.
-    /// </summary>
+    // Каталог категорій. Модель дозволяє будь-яку вкладеність, але панель свідомо показує лише два рівні (коренева + підкатегорія), бо саме так їх малює мобільний застосунок.
     public class AdminCategoryService : IAdminCategoryService
     {
         private readonly ApplicationDbContext _db;

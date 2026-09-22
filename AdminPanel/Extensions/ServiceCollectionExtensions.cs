@@ -87,6 +87,7 @@ namespace AdminPanel.Extensions
 
             // Дані для публічної головної сторінки порталу.
             services.AddScoped<IPublicCatalogService, PublicCatalogService>();
+            services.AddScoped<ServiceDirectory>();
 
             services.AddMemoryCache();
 

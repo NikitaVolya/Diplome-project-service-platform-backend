@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&amp;family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500&amp;display=swap" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="landing">
 
@@ -28,18 +29,20 @@
             <img src="~/img/logo.png" alt="Вибір" />
         </a>
 
-        <a class="v-pill" href="#categories"><i class="bi bi-grid-3x3-gap-fill"></i> Каталог послуг</a>
-        <a class="v-pill v-pill--light" href="#search"><i class="bi bi-search"></i> Пошуковий сервіс</a>
+        <a class="v-pill" asp-controller="Catalog" asp-action="Index"><i class="bi bi-grid-3x3-gap-fill"></i> Каталог послуг</a>
+        <a class="v-pill v-pill--light" asp-controller="Landing" asp-action="Index" asp-fragment="search"><i class="bi bi-search"></i> Пошуковий сервіс</a>
 
-        <nav class="v-nav">
-            <a href="#how">Допомога</a>
-            <a href="#why">Блог</a>
-            <a href="#services">Конкурси</a>
-            <a href="#services">Вакансії</a>
+        <nav class="v-nav" id="public-navigation" aria-label="Головне меню">
+            <a class="v-nav__catalog" asp-controller="Catalog" asp-action="Index">Каталог послуг</a>
+            <a class="v-nav__catalog" asp-controller="Account" asp-action="Login">Увійти</a>
+            <a asp-controller="Landing" asp-action="Index" asp-fragment="how">Допомога</a>
+            <a asp-controller="Landing" asp-action="Index" asp-fragment="why">Блог</a>
+            <a asp-controller="Landing" asp-action="Index" asp-fragment="services">Конкурси</a>
+            <a asp-controller="Landing" asp-action="Index" asp-fragment="services">Вакансії</a>
             <a href="#footer">Профіль</a>
         </nav>
 
-        <button class="v-burger" type="button" aria-label="Меню"><i class="bi bi-list"></i></button>
+        <button class="v-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="public-navigation"><i class="bi bi-list" aria-hidden="true"></i></button>
 
         @if (isStaff)
         {
@@ -50,7 +53,7 @@
         else
         {
             <a class="v-btn v-btn--ghost" asp-controller="Account" asp-action="Login">Увійти</a>
-            <a class="v-btn v-btn--primary" asp-controller="Account" asp-action="Login">Реєстрація</a>
+            <button class="v-btn v-btn--primary" type="button" data-catalog-info>Реєстрація</button>
         }
     </div>
 </header>
@@ -82,18 +85,18 @@
             <div>
                 <h5>Платформа</h5>
                 <ul>
-                    <li><a href="#why">Безпека</a></li>
-                    <li><a href="#services">Відгуки</a></li>
+                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="why">Безпека</a></li>
+                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="services">Відгуки</a></li>
                     <li><a href="#">Блог</a></li>
                     <li><a href="#">Новини</a></li>
-                    <li><a href="#how">FAQ</a></li>
+                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="how">FAQ</a></li>
                 </ul>
             </div>
 
             <div>
                 <h5>Для клієнтів</h5>
                 <ul>
-                    <li><a href="#how">Як замовити послугу</a></li>
+                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="how">Як замовити послугу</a></li>
                     <li><a href="#">Оплата та гарантії</a></li>
                     <li><a href="#">Повернення коштів</a></li>
                     <li><a href="#">Правила платформи</a></li>
@@ -113,7 +116,7 @@
             <div>
                 <h5>Компанія</h5>
                 <ul>
-                    <li><a href="#why">Про нас</a></li>
+                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="why">Про нас</a></li>
                     <li><a href="#footer">Контакти</a></li>
                     <li><a href="#">Кар'єра</a></li>
                     <li><a href="#">Партнери</a></li>
@@ -130,7 +133,7 @@
                 <ul>
                     <li><span>Підтримка 24/7</span></li>
                     <li><a href="mailto:support@vybir.ua">support@vybir.ua</a></li>
-                    <li><a href="tel:+380951234567">+38095 123 45 67</a></li>
+                    <li><a href="tel:+380951234567">+380 95 123 45 67</a></li>
                 </ul>
             </div>
         </div>
@@ -147,6 +150,8 @@
     </div>
 </div>
 
+<partial name="_PublicInfoDialog" />
+<script src="~/js/public.js" asp-append-version="true" defer></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

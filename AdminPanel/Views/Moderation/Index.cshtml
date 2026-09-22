@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Moderation queue";
     ViewData["Subtitle"] = Model.Queue.Total == 0
-        ? "Nothing is waiting for a decision"
+        ? "Немає елементів, що очікують рішення"
         : $"{Model.Queue.Total} item(s) waiting for a decision";
     var q = Model.Queue;
     var returnUrl = Context.Request.Path;

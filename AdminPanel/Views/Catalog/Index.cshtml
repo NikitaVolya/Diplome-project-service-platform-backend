@@ -1,0 +1,134 @@
+@model CatalogViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Каталог послуг — Вибір";
+    var roots = Model.Categories.Where(c => c.ParentId == null).ToList();
+    var selected = Model.Selected;
+    var parent = Model.Categories.FirstOrDefault(c => c.Id == selected?.ParentId);
+    var rootId = Model.IsGlobalSearch ? null : parent?.Id ?? selected?.Id;
+    var items = Model.ShowAll ? Model.Items : Model.Items.Take(15).ToList();
+}
+@section Styles { <link rel="stylesheet" href="~/css/catalog.css" asp-append-version="true" /> }
+<main class="catalog">
+    <div class="v-container">
+        <nav class="catalog-breadcrumb" aria-label="Навігаційний шлях">
+            <a asp-controller="Landing" asp-action="Index">Головна</a><span aria-hidden="true">›</span>
+            <a asp-action="Index" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City">Каталог послуг</a>
+            @if (parent != null && !Model.IsGlobalSearch) { <span aria-hidden="true">›</span><a asp-action="Index" asp-route-categoryId="@parent.Id" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City">@parent.Name</a> }
+        </nav>
+        <h1>Каталог послуг</h1>
+        <p class="catalog-intro">Знайдіть потрібну послугу серед тисяч перевірених виконавців.</p>
+        @if (Model.IsDemo) { <p class="catalog-notice" role="status">Перегляд макета: демонстраційні дані. <a asp-action="Index">Перейти до каталогу послуг</a></p> }
+        @if (Model.Unavailable)
+        {
+            <div class="catalog-empty" role="status"><h2>Каталог тимчасово недоступний</h2><p>Не вдалося завантажити послуги. Спробуйте ще раз пізніше.</p><a class="v-btn v-btn--soft" asp-action="Index">Спробувати ще раз</a></div>
+        }
+        else if (selected == null)
+        {
+            <div class="catalog-empty"><h2>Каталог наповнюється</h2><p>Активні категорії послуг з’являться тут незабаром.</p></div>
+        }
+        else
+        {
+            <div class="catalog-columns">
+                <nav class="catalog-nav" aria-label="Категорії послуг">
+                    @for (var i = 0; i < roots.Count; i++)
+                    {
+                        var category = roots[i];
+                        <a class="@(category.Id == rootId ? "is-active" : "")" asp-action="Index" asp-route-categoryId="@category.Id" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City" aria-current="@(category.Id == rootId ? "page" : null)">
+                            @if (category.Icon.Length > 0)
+                            {
+                                <img class="catalog-nav-icon catalog-nav-icon--svg" src="@category.Icon" width="24" height="24" alt="" aria-hidden="true" />
+                            }
+                            else if (category.Artwork > 0) { <span class="catalog-nav-icon nav-icon-@category.Artwork" aria-hidden="true"></span> }
+                            <span>@category.Name</span><span class="catalog-chevron" aria-hidden="true">›</span>
+                        </a>
+                    }
+                </nav>
+                <section class="catalog-panel" aria-labelledby="category-title">
+                    <div class="catalog-panel-head">
+                        <h2 id="category-title">@(Model.IsGlobalSearch ? "Результати пошуку" : selected.Name)</h2>
+                        @if (Model.IsGlobalSearch) { <span class="catalog-count">@PublicText.Categories(Model.Items.Count)</span> }
+                        else { <a class="catalog-count" href="#executors">@PublicText.Executors(selected.Executors)</a> }
+                    </div>
+                    <p class="catalog-description">@(Model.IsGlobalSearch ? $"Категорії за запитом «{Model.Query}»" : selected.Description)</p>
+                    @if (Model.City.Length > 0)
+                    {
+                        <p class="catalog-location">Місце пошуку: <strong>@Model.City</strong>.
+                            @(Model.IsDemo ? "У деморежимі місце не враховується." : "Показано виконавців із завершеними замовленнями за цією адресою або місцем.")
+                        </p>
+                    }
+                    <details class="catalog-search" open="@(Model.Query.Length > 0 || Model.City.Length > 0)">
+                        <summary>@(Model.IsGlobalSearch ? "Пошук у каталозі" : "Пошук у категорії")</summary>
+                        <form method="get" asp-action="Index">
+                            <input type="hidden" name="categoryId" value="@(Model.IsGlobalSearch ? (int?)null : selected.Id)" /><input type="hidden" name="demo" value="@Model.IsDemo.ToString().ToLowerInvariant()" />
+                            <label class="catalog-sr" for="catalog-query">Назва послуги</label><input id="catalog-query" name="q" value="@Model.Query" maxlength="100" placeholder="Яка послуга вам потрібна?" type="search" />
+                            <label class="catalog-sr" for="catalog-city">Місто або район</label>
+                            <input id="catalog-city" name="city" value="@Model.City" maxlength="100" placeholder="Місто або район" type="text" />
+                            <button class="v-btn v-btn--soft" type="submit">Знайти</button>
+                            @if (Model.Query.Length > 0 || Model.City.Length > 0) { <a asp-action="Index" asp-route-categoryId="@(Model.IsGlobalSearch ? (int?)null : selected.Id)" asp-route-demo="@Model.IsDemo">Скинути</a> }
+                        </form>
+                    </details>
+                    <div class="catalog-grid">
+                        @foreach (var item in items)
+                        {
+                            <a class="catalog-card" asp-action="Index" asp-route-categoryId="@item.Id" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City">
+                                @if (item.ParentId.HasValue && item.Artwork > 0) { <span class="catalog-photo photo-@item.Artwork"><img src="~/img/catalog/categories-reference.png" alt="" loading="lazy" /></span> }
+                                else if (item.Icon.Length > 0) { <span class="catalog-category-name"><img src="@item.Icon" width="48" height="48" alt="" aria-hidden="true" /></span> }
+                                else { <span class="catalog-category-name" aria-hidden="true">@(string.IsNullOrEmpty(item.Name) ? "" : item.Name[..1])</span> }
+                                <h3>@item.Name</h3><span class="catalog-card-count">@PublicText.Executors(item.Executors)</span><span class="catalog-card-arrow" aria-hidden="true">›</span>
+                            </a>
+                        }
+                    </div>
+                    @if (Model.Items.Count == 0)
+                    {
+                        <div class="catalog-empty">
+                            <p>@(Model.Query.Length > 0 ? "За вашим запитом нічого не знайдено." : "У цій категорії немає підкатегорій.")</p>
+                            @if (!Model.IsGlobalSearch) { <a class="v-btn v-btn--soft" href="#executors">Переглянути виконавців</a> }
+                            else { <a class="v-btn v-btn--soft" asp-action="Index" asp-route-demo="@Model.IsDemo">Усі категорії</a> }
+                        </div>
+                    }
+                    @if (Model.Items.Count > 15)
+                    {
+                        <a class="catalog-expand" asp-action="Index" asp-route-categoryId="@(Model.IsGlobalSearch ? (int?)null : selected.Id)" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City" asp-route-q="@Model.Query" asp-route-all="@(!Model.ShowAll)">@(Model.ShowAll ? "Показати менше" : (Model.IsGlobalSearch ? "Показати всі результати" : "Показати всі підкатегорії")) <span aria-hidden="true">⌄</span></a>
+                    }
+                    else if (Model.Items.Count > 0) { <p class="catalog-expand">@(Model.IsGlobalSearch ? "Знайдені категорії" : "Усі підкатегорії") · @Model.Items.Count</p> }
+                </section>
+                <aside class="catalog-aside">
+                    <section class="catalog-help"><h2>Як знайти послугу?</h2><ol><li>Оберіть категорію та підкатегорію.</li><li>Уточніть деталі вашого завдання.</li><li>Порівняйте виконавців та оберіть найкращого.</li><li>Домовтеся про умови та отримайте результат.</li></ol><a class="v-btn v-btn--soft" asp-controller="Landing" asp-action="Index" asp-fragment="how">Дізнатися більше</a></section>
+                    <section class="catalog-help"><h2>Працюєте виконавцем?</h2><p>Знайдіть замовлення та розвивайте свій бізнес разом із нами.</p><button class="v-btn v-btn--soft" type="button" data-catalog-info>Стати виконавцем</button></section>
+                </aside>
+            </div>
+            @if (Model.Services.Count > 0)
+            {
+                <section class="catalog-section" id="services"><div class="v-section__head"><h2 class="v-section__title">Популярне поруч із вами:</h2><a href="#category-title">Переглянути всі послуги →</a></div>
+                    <div class="v-services">
+                        @foreach (var service in Model.Services)
+                        {
+                            <a class="v-service" asp-action="Index" asp-route-categoryId="@service.CategoryId" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City"><div class="v-service__img"><img src="@service.Image" alt="@service.Name" loading="lazy" /></div><div class="v-service__body"><div class="v-service__name">@service.Name</div><div class="v-service__meta"><div>@if (service.ReviewsCount > 0) { <span class="star">★</span> @PublicText.Rating(service.Rating) <span>(@PublicText.Reviews(service.ReviewsCount))</span> } else { <span>Ще немає відгуків</span> }</div><div>@PublicText.Price(service.FromPrice)</div></div></div></a>
+                        }
+                    </div>
+                </section>
+            }
+            @if (!Model.IsGlobalSearch)
+            {
+            <section class="catalog-section" id="executors"><div class="v-section__head"><h2 class="v-section__title">Популярні виконавці:</h2>@if (Model.Executors.Count > 4) { <button class="catalog-text-button" type="button" id="show-executors" aria-expanded="false">Переглянути всіх →</button> }</div>
+                @if (Model.Executors.Count == 0) { <p class="catalog-empty">У цій категорії ще немає виконавців із завершеними замовленнями.</p> }
+                <div class="catalog-executors">
+                    @for (var i = 0; i < Model.Executors.Count; i++)
+                    {
+                        var person = Model.Executors[i];
+                        <article class="catalog-executor" hidden="@(i >= 4)">
+                            @if (person.Artwork > 0) { <span class="catalog-portrait"><img src="~/img/executors/executor-@(person.Artwork).jpg" alt="Фото виконавця @person.Name" loading="lazy" /></span> }
+                            else { <span class="catalog-avatar" aria-hidden="true">@(person.Name[..1])</span> }
+                            <div><h3>@person.Name</h3><p>@if (person.Reviews > 0) { <span class="star">★</span> @PublicText.Rating(person.Rating) <span>(@PublicText.Reviews(person.Reviews))</span> } else { <span>Ще немає відгуків</span> }<br />Виконано завдань: @person.Completed<br />@PublicText.Price(person.FromPrice)</p></div>
+                        </article>
+                    }
+                </div>
+            </section>
+            }
+        }
+    </div>
+    <section class="v-cta"><div class="v-container v-cta__inner"><div class="v-cta__img"><img src="~/img/landing/cta.jpg" alt="Ідеї та рішення" loading="lazy" /></div><div><h2>Є завдання? Знайдемо рішення.</h2><p>Покажіть, що ви вмієте, і знайдіть своє наступне завдання.</p><div class="v-cta__buttons"><a class="v-btn v-btn--soft" asp-action="Index" asp-route-demo="@Model.IsDemo">Знайти виконавця</a><button class="v-btn v-btn--soft" type="button" data-catalog-info>Знайти замовлення</button></div></div></div></section>
+
+</main>
+@section Scripts { <script src="~/js/catalog.js" asp-append-version="true" defer></script> }

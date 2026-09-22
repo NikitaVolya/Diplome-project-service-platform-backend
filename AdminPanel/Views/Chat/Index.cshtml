@@ -22,7 +22,7 @@
         <div class="chat-list" id="dialogList">
             @if (!Model.Dialogs.Any())
             {
-                <div class="empty-state"><i class="bi bi-chat-left"></i>No conversations yet</div>
+                <div class="empty-state"><i class="bi bi-chat-left"></i>Розмов ще немає</div>
             }
 
             @foreach (var dialog in Model.Dialogs)
@@ -60,7 +60,7 @@
             <div class="card-body">
                 <div class="empty-state">
                     <i class="bi bi-chat-dots"></i>
-                    Select a conversation on the left to read it and reply as support
+                    Оберіть розмову ліворуч, щоб прочитати повідомлення та відповісти
                 </div>
             </div>
         }

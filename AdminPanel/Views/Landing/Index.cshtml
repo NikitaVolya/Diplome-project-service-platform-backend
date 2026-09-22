@@ -8,19 +8,21 @@
     <div class="v-container">
         <div class="v-hero">
             <div>
-                <h1>Замовляй чи заробляй - вибір за тобою!</h1>
+                <h1>Замовляй чи заробляй — вибір за тобою!</h1>
                 <p class="v-hero__lead">
                     Знаходьте перевірених фахівців для своїх завдань або знаходьте
                     замовлення, щоб реалізувати свої навички та заробляти.
                 </p>
 
-                <form class="v-search" method="get" action="#services">
+                <form class="v-search" method="get" asp-controller="Catalog" asp-action="Index" role="search">
                     <label class="v-search__field">
-                        <input type="text" name="q" placeholder="Яку послугу/замовлення ви шукаєте?" />
+                        <span class="v-sr-only">Послуга або категорія</span>
+                        <input type="search" name="q" maxlength="100" placeholder="Яка послуга потрібна?" />
                     </label>
                     <label class="v-search__field">
                         <i class="bi bi-geo-alt"></i>
-                        <input type="text" name="city" placeholder="Місце розташування" />
+                        <span class="v-sr-only">Місто або район</span>
+                        <input type="text" name="city" maxlength="100" placeholder="Місто або район" />
                     </label>
                     <button type="submit" class="v-btn v-btn--primary">Знайти</button>
                 </form>
@@ -29,7 +31,7 @@
                     <span class="v-chips__label">Популярне:</span>
                     @foreach (var chip in new[] { "Дизайн", "Розробка", "Клінінг", "Блог", "Переклади" })
                     {
-                        <a class="v-chip" href="#categories">@chip</a>
+                        <a class="v-chip" asp-controller="Catalog" asp-action="Index" asp-route-q="@(chip == "Клінінг" ? "Прибирання" : chip)">@chip</a>
                     }
                 </div>
             </div>
@@ -45,21 +47,21 @@
     <div class="v-container">
         <div class="v-section__head">
             <h2 class="v-section__title">Популярні категорії:</h2>
-            <a class="v-link" href="#services">Усі категорії <i class="bi bi-arrow-right"></i></a>
+            <a class="v-link" asp-controller="Catalog" asp-action="Index">Усі категорії <i class="bi bi-arrow-right"></i></a>
         </div>
 
         <div class="v-cats">
             @foreach (var category in Model.Categories)
             {
-                <a class="v-cat" href="#services">
+                <a class="v-cat" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@(category.Id > 0 ? category.Id : (int?)null)" asp-route-q="@(category.Id > 0 ? null : category.Name)">
                     <span class="v-cat__icon">
-                        <img src="@category.Icon" alt="" aria-hidden="true" />
+                        <img src="@category.Icon" width="32" height="32" alt="" aria-hidden="true" />
                     </span>
                     <span class="v-cat__name">@category.Name</span>
                 </a>
             }
             @* Остання плитка веде до повного каталогу, тому в макеті вона без кольорового квадрата. *@
-            <a class="v-cat v-cat--more" href="#services">
+            <a class="v-cat v-cat--more" asp-controller="Catalog" asp-action="Index">
                 <span class="v-cat__icon">
                     <img src="~/img/icons/cat-more.svg" alt="" aria-hidden="true" />
                 </span>
@@ -71,7 +73,7 @@
 
 <section class="v-section">
     <div class="v-container">
-        <h2 class="v-h2 v-display v-center">Одна платформа - дві можливості.</h2>
+        <h2 class="v-h2 v-display v-center">Одна платформа — дві можливості.</h2>
 
         <div class="v-duo">
             <div class="v-duo__card">
@@ -81,7 +83,7 @@
                     <span class="v-duo__text">
                         Знайдіть спеціаліста для ремонту, прибирання, дизайну, навчання та інших завдань.
                     </span>
-                    <a class="v-btn v-btn--soft" href="#services">Знайти виконавця</a>
+                    <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">Знайти виконавця</a>
                 </div>
             </div>
 
@@ -92,7 +94,7 @@
                     <span class="v-duo__text">
                         Створіть профіль, показуйте свої навички та знаходьте замовлення поруч із вами.
                     </span>
-                    <a class="v-btn v-btn--soft" href="#services">Знайти замовлення</a>
+                    <button class="v-btn v-btn--soft" type="button" data-catalog-info>Знайти замовлення</button>
                 </div>
             </div>
         </div>
@@ -173,13 +175,13 @@
     <div class="v-container">
         <div class="v-section__head">
             <h2 class="v-section__title">Популярне поруч із вами:</h2>
-            <a class="v-link" href="#categories">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+            <a class="v-link" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
         </div>
 
         <div class="v-services">
             @foreach (var service in Model.Services)
             {
-                <a class="v-service" href="#categories">
+                <a class="v-service" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@(service.CategoryId > 0 ? service.CategoryId : (int?)null)">
                     <div class="v-service__img">
                         <img src="@service.Image" alt="@service.Name" loading="lazy" />
                     </div>
@@ -190,14 +192,14 @@
                             {
                                 <div>
                                     <span class="star">★</span>
-                                    @service.Rating.ToString("0.0") (@service.ReviewsCount відгуків)
+                                    @PublicText.Rating(service.Rating) (@PublicText.Reviews(service.ReviewsCount))
                                 </div>
                             }
                             else
                             {
-                                <div><span class="star">★</span> нові виконавці</div>
+                                <div>Ще немає відгуків</div>
                             }
-                            <div>від @service.FromPrice.ToString("N0")грн.</div>
+                            <div>@PublicText.Price(service.FromPrice)</div>
                         </div>
                     </div>
                 </a>
@@ -213,10 +215,10 @@
         </div>
         <div class="v-center">
             <h2>Є завдання? Знайдемо рішення.</h2>
-            <p>Покажіть, що вмієте ви і знайдіть своє наступне завдання.</p>
+            <p>Покажіть, що ви вмієте, і знайдіть своє наступне завдання.</p>
             <div class="v-cta__buttons" style="justify-content:center">
-                <a class="v-btn v-btn--soft" href="#services">Знайти виконавця</a>
-                <a class="v-btn v-btn--soft" href="#services">Знайти замовлення</a>
+                <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">Знайти виконавця</a>
+                <button class="v-btn v-btn--soft" type="button" data-catalog-info>Знайти замовлення</button>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@
 
 <div class="mb-3">
     <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
-        <i class="bi bi-arrow-left"></i> Back to users
+        <i class="bi bi-arrow-left"></i> До списку користувачів
     </a>
 </div>
 
@@ -93,7 +93,7 @@
                         else
                         {
                             <form asp-action="Delete" method="post"
-                                  data-confirm="Delete this account? Orders and reviews are kept.">
+                                  data-confirm="Delete this account? Замовлення та відгуки буде збережено.">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@u.Id" />
                                 <button class="btn btn-sm btn-outline-danger w-100">
@@ -175,7 +175,7 @@
                     <div class="kpi__value @(u.ComplaintsAgainst > 0 ? "text-danger" : string.Empty)">
                         @u.ComplaintsAgainst
                     </div>
-                    <div class="kpi__meta">filed against this user</div>
+                    <div class="kpi__meta">подано на цього користувача</div>
                 </div>
             </div>
         </div>
@@ -239,7 +239,7 @@
                                     <span class="cell-muted">@Display.Relative(review.CreatedAt)</span>
                                 </div>
                                 <div class="small mt-1">@review.Comment</div>
-                                <div class="cell-muted">by @review.AuthorName</div>
+                                <div class="cell-muted">автор: @review.AuthorName</div>
                             </div>
                         }
                     </div>
@@ -264,7 +264,7 @@
                                     <span class="@Display.ComplaintStatusClass(complaint.Status)">@complaint.Status</span>
                                 </div>
                                 <div class="cell-muted">
-                                    from @complaint.SenderName · @Display.Relative(complaint.CreatedAt)
+                                    від @complaint.SenderName · @Display.Relative(complaint.CreatedAt)
                                 </div>
                             </div>
                         }

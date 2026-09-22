@@ -18,11 +18,11 @@
     <span class="cell-muted">
         @if (Model.TotalCount == 0)
         {
-            <text>No @Model.ItemNoun found</text>
+            <text>Нічого не знайдено: @Model.ItemNoun</text>
         }
         else
         {
-            <text>Showing @Model.FirstItemIndex–@Model.LastItemIndex of @Model.TotalCount @Model.ItemNoun</text>
+            <text>Показано @Model.FirstItemIndex–@Model.LastItemIndex із @Model.TotalCount (@Model.ItemNoun)</text>
         }
     </span>
 

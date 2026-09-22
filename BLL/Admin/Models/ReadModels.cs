@@ -101,7 +101,7 @@ namespace BLL.Admin.Models
         public int SubCategoriesCount { get; set; }
         public int OrdersCount { get; set; }
 
-        /// <summary>0 для кореневої категорії, 1 для підкатегорії; потрібно лише для відступу в дереві.</summary>
+        // 0 для кореневої категорії, 1 для підкатегорії; потрібно лише для відступу в дереві. 
         public int Depth { get; set; }
     }
 
@@ -145,7 +145,7 @@ namespace BLL.Admin.Models
         public ComplaintStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        /// <summary>Скільки всього скарг подано на цього самого користувача.</summary>
+        // Скільки всього скарг подано на цього самого користувача. 
         public int TargetComplaintCount { get; set; }
     }
 

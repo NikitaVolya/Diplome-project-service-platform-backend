@@ -29,7 +29,10 @@ namespace AdminPanel.Models
 
         public static string OrderStatusLabel(OrderStatus status) => status switch
         {
-            OrderStatus.InProgress => "In progress",
+            OrderStatus.Pending => "Очікує",
+            OrderStatus.InProgress => "У роботі",
+            OrderStatus.Completed => "Виконано",
+            OrderStatus.Cancelled => "Скасовано",
             _ => status.ToString()
         };
 
@@ -108,12 +111,12 @@ namespace AdminPanel.Models
         {
             var delta = DateTime.UtcNow - utc;
 
-            if (delta.TotalSeconds < 60) return "just now";
-            if (delta.TotalMinutes < 60) return $"{(int)delta.TotalMinutes} min ago";
-            if (delta.TotalHours < 24) return $"{(int)delta.TotalHours} h ago";
-            if (delta.TotalDays < 7) return $"{(int)delta.TotalDays} d ago";
+            if (delta.TotalSeconds < 60) return "щойно";
+            if (delta.TotalMinutes < 60) return $"{(int)delta.TotalMinutes} хв тому";
+            if (delta.TotalHours < 24) return $"{(int)delta.TotalHours} год тому";
+            if (delta.TotalDays < 7) return $"{(int)delta.TotalDays} дн тому";
 
-            return utc.ToString("dd MMM yyyy");
+            return utc.ToString("dd.MM.yyyy");
         }
 
         public static string Money(decimal amount, string currency = "UAH") =>

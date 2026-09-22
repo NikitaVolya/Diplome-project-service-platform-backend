@@ -8,13 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Admin.Services
 {
-    /// <summary>
-    /// Адміністрування користувачів. Блокування зроблено через поля блокування Identity, а не через
-    /// власний прапорець, тому заблокований користувач не зайде й через мобільний API.
-    /// </summary>
+    // Адміністрування користувачів. Блокування зроблено через поля блокування Identity, а не через
+    // власний прапорець, тому заблокований користувач не зайде й через мобільний API.
     public class AdminUserService : IAdminUserService
     {
-        /// <summary>Прийнятий в Identity спосіб позначити «заблоковано назавжди».</summary>
+        // Прийнятий в Identity спосіб позначити «заблоковано назавжди».
         private static readonly DateTimeOffset PermanentLockout = new(new DateTime(9999, 12, 31, 0, 0, 0, DateTimeKind.Utc));
 
         private readonly ApplicationDbContext _db;
@@ -383,10 +381,8 @@ namespace BLL.Admin.Services
             });
         }
 
-        /// <summary>
-        /// Ролі для поточної сторінки завантажуються одним запитом, а не окремо для кожного рядка,
-        /// тому список користувачів завжди коштує два звернення до бази, скільки б рядків не було.
-        /// </summary>
+        // Ролі для поточної сторінки завантажуються одним запитом, а не окремо для кожного рядка,
+        // тому список користувачів завжди коштує два звернення до бази, скільки б рядків не було.
         private async Task AttachRolesAsync(IReadOnlyList<AdminUserListItem> items, CancellationToken cancellationToken)
         {
             if (items.Count == 0)

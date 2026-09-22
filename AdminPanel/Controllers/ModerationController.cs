@@ -8,10 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    /// <summary>
     /// Екран «що вимагає уваги просто зараз»: усе, що чекає на рішення, зібрано в одному місці,
     /// щоб модератор не обходив чотири різні списки в пошуках роботи.
-    /// </summary>
     [Authorize(Policy = AppRoles.ModerationPolicy)]
     public class ModerationController : AdminControllerBase
     {
@@ -31,7 +29,7 @@ namespace AdminPanel.Controllers
                 {
                     Status = ComplaintStatus.Pending,
                     PageSize = QueuePageSize,
-                    SortDesc = false // oldest first: the longest-waiting complaint is the most urgent
+                    SortDesc = false 
                 },
                 cancellationToken);
 

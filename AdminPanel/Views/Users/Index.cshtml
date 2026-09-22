@@ -1,7 +1,7 @@
 @model UsersViewModel
 @{
     ViewData["Title"] = "Users";
-    ViewData["Subtitle"] = $"{Model.Result.TotalCount} account(s) match the current filter";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} облікових записів відповідає поточному фільтру";
     var f = Model.Filter;
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
@@ -9,7 +9,7 @@
 <form method="get" class="filter-bar">
     <div class="row g-2 align-items-end">
         <div class="col-12 col-lg-4">
-            <label for="search">Search</label>
+            <label for="search">Пошук</label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
                 <input id="search" class="form-control" name="search" value="@f.Search"
@@ -18,7 +18,7 @@
         </div>
 
         <div class="col-6 col-lg-2">
-            <label for="role">Role</label>
+            <label for="role">Роль</label>
             <select id="role" class="form-select form-select-sm" name="role" data-auto-submit>
                 <option value="">All roles</option>
                 @foreach (var role in Model.Roles)
@@ -29,7 +29,7 @@
         </div>
 
         <div class="col-6 col-lg-2">
-            <label for="state">Status</label>
+            <label for="state">Статус</label>
             <select id="state" class="form-select form-select-sm" name="state" data-auto-submit>
                 @foreach (UserState state in Enum.GetValues<UserState>())
                 {
@@ -59,7 +59,7 @@
            asp-action="Export"
            asp-route-search="@f.Search" asp-route-role="@f.Role" asp-route-state="@f.State"
            asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
-            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+            <i class="bi bi-file-earmark-spreadsheet"></i> Експортувати в Excel
         </a>
     </div>
 </form>
@@ -83,7 +83,7 @@
                 <tr>
                     <td colspan="6" class="empty-state">
                         <i class="bi bi-person-x"></i>
-                        No users match the current filter
+                        Користувачів за поточним фільтром не знайдено
                     </td>
                 </tr>
             }
@@ -169,7 +169,7 @@
                                     <input type="hidden" name="id" value="@user.Id" />
                                     <input type="hidden" name="days" value="30" />
                                     <input type="hidden" name="returnUrl" value="@returnUrl" />
-                                    <button class="btn btn-outline-warning" title="Block for 30 days">
+                                    <button class="btn btn-outline-warning" title="Заблокувати на 30 днів">
                                         <i class="bi bi-slash-circle"></i>
                                     </button>
                                 </form>

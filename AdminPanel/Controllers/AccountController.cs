@@ -9,10 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers
 {
-    /// <summary>
-    /// Вхід для персоналу. Звичайні користувачі платформи лежать у тому самому сховищі Identity,
-    /// тому правильного пароля замало — акаунт повинен ще мати службову роль.
-    /// </summary>
     [AllowAnonymous]
     public class AccountController : AdminControllerBase
     {

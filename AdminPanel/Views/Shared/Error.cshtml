@@ -13,10 +13,10 @@
             <p class="cell-muted">@Model.Message</p>
             @if (!string.IsNullOrEmpty(Model.RequestId))
             {
-                <p class="cell-muted small">Request id: <code>@Model.RequestId</code></p>
+                <p class="cell-muted small">Ідентифікатор запиту: <code>@Model.RequestId</code></p>
             }
             <a class="btn btn-primary mt-2" asp-controller="Dashboard" asp-action="Index">
-                <i class="bi bi-grid-1x2"></i> Back to dashboard
+                <i class="bi bi-grid-1x2"></i> До дашборду
             </a>
         </div>
     </div>

@@ -1,8 +1,6 @@
 namespace BLL.Admin.Models
 {
-    /// <summary>
-    /// Усе, що дашборд показує над графіками. Один екземпляр створюється на кожне відкриття сторінки.
-    /// </summary>
+    // Усе, що дашборд показує над графіками. Один екземпляр створюється на кожне відкриття сторінки.
     public class DashboardSummary
     {
         public int TotalUsers { get; set; }
@@ -29,10 +27,10 @@ namespace BLL.Admin.Models
 
         public int ActiveCategories { get; set; }
 
-        /// <summary>Зміна кількості замовлень цього місяця у відсотках порівняно з попереднім.</summary>
+        // Зміна кількості замовлень цього місяця у відсотках порівняно з попереднім. 
         public double OrdersMonthOverMonth { get; set; }
 
-        /// <summary>Зміна доходу цього місяця у відсотках порівняно з попереднім.</summary>
+        // Зміна доходу цього місяця у відсотках порівняно з попереднім. 
         public double RevenueMonthOverMonth { get; set; }
 
         public double CompletionRate =>
@@ -62,10 +60,8 @@ namespace BLL.Admin.Models
         public double AverageRating { get; set; }
     }
 
-    /// <summary>
-    /// Дані графіка, не прив'язані до конкретної бібліотеки. Серіалізуються в JSON і передаються
-    /// у Chart.js, завдяки чому підготовка даних зібрана в одному місці, а не розкидана по представленнях.
-    /// </summary>
+    // Дані графіка, не прив'язані до конкретної бібліотеки. Серіалізуються в JSON і передаються
+    // у Chart.js, завдяки чому підготовка даних зібрана в одному місці, а не розкидана по представленнях.
     public class ChartData
     {
         public List<string> Labels { get; set; } = new();
@@ -81,7 +77,7 @@ namespace BLL.Admin.Models
 
         public List<decimal> Data { get; set; } = new();
 
-        /// <summary>Необов'язковий явний колір; якщо null — представлення бере колір зі своєї палітри.</summary>
+        // Необов'язковий явний колір; якщо null — представлення бере колір зі своєї палітри. 
         public string? Color { get; set; }
     }
 }

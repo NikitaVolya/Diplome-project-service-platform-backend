@@ -1,7 +1,7 @@
 @model ListViewModel<AdminComplaintListItem, ComplaintFilter>
 @{
     ViewData["Title"] = "Complaints";
-    ViewData["Subtitle"] = $"{Model.Result.TotalCount} complaint(s) match the current filter";
+    ViewData["Subtitle"] = $"{Model.Result.TotalCount} скарг відповідає поточному фільтру";
     var f = Model.Filter;
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
@@ -9,7 +9,7 @@
 <form method="get" class="filter-bar">
     <div class="row g-2 align-items-end">
         <div class="col-12 col-lg-4">
-            <label for="search">Search</label>
+            <label for="search">Пошук</label>
             <div class="input-group input-group-sm">
                 <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
                 <input id="search" class="form-control" name="search" value="@f.Search"
@@ -18,7 +18,7 @@
         </div>
 
         <div class="col-6 col-lg-2">
-            <label for="status">Status</label>
+            <label for="status">Статус</label>
             <select id="status" class="form-select form-select-sm" name="status" data-auto-submit>
                 <option value="">All statuses</option>
                 @foreach (ComplaintStatus status in Enum.GetValues<ComplaintStatus>())
@@ -29,13 +29,13 @@
         </div>
 
         <div class="col-6 col-lg-2">
-            <label for="from">From</label>
+            <label for="from">Від</label>
             <input id="from" type="date" class="form-control form-control-sm" name="from"
                    value="@(f.From?.ToString("yyyy-MM-dd"))" />
         </div>
 
         <div class="col-6 col-lg-2">
-            <label for="to">To</label>
+            <label for="to">До</label>
             <input id="to" type="date" class="form-control form-control-sm" name="to"
                    value="@(f.To?.ToString("yyyy-MM-dd"))" />
         </div>
@@ -48,7 +48,7 @@
         <a class="btn btn-sm btn-outline-success ms-auto" asp-action="Export"
            asp-route-search="@f.Search" asp-route-status="@f.Status"
            asp-route-from="@(f.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(f.To?.ToString("yyyy-MM-dd"))">
-            <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+            <i class="bi bi-file-earmark-spreadsheet"></i> Експортувати в Excel
         </a>
     </div>
 </form>
@@ -73,7 +73,7 @@
                 <tr>
                     <td colspan="7" class="empty-state">
                         <i class="bi bi-emoji-smile"></i>
-                        No complaints match the current filter
+                        Скарг за поточним фільтром не знайдено
                     </td>
                 </tr>
             }
@@ -100,7 +100,7 @@
                             @if (complaint.TargetComplaintCount > 1)
                             {
                                 <span class="badge-soft badge-soft--danger ms-1"
-                                      title="Total complaints against this user">
+                                      title="Усього скарг на цього користувача">
                                     @complaint.TargetComplaintCount
                                 </span>
                             }
