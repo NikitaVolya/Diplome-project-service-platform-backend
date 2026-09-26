@@ -13,6 +13,10 @@
 .catalog-panel { padding:28px 20px 18px; border-radius:15px; background:var(--v-mint); min-width:0; }
 .catalog-panel-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; }
 .catalog-panel-head h2 { font-size:32px; margin:0; }
+.catalog-panel-title { display:flex; align-items:center; gap:14px; min-width:0; }
+.catalog-panel-icon { flex:0 0 44px; width:44px; height:44px; display:grid; place-items:center;
+    border-radius:10px; background:var(--catalog-tile); }
+.catalog-panel-icon img { width:28px; height:28px; object-fit:contain; }
 .catalog-count { flex-shrink:0; background:var(--v-purple-light); color:#fff!important; padding:11px 18px; border-radius:15px; font-size:14px; }
 .catalog-description { margin:15px 0 22px; }
 .catalog-search { margin-bottom:18px; font-size:14px; }
@@ -23,7 +27,11 @@
 .catalog-card { position:relative; display:flex; flex-direction:column; min-width:0; padding:14px 14px 16px; border-radius:14px; background:var(--catalog-tile); text-align:center; transition:box-shadow .15s,transform .15s; }
 .catalog-card:hover { transform:translateY(-3px); box-shadow:0 5px 14px #6247e025; }
 .catalog-photo { display:block; width:100%; aspect-ratio:152.55/148.5; overflow:hidden; position:relative; border-radius:13.5px; }
-.catalog-photo img { position:absolute; max-width:none; width:632%; height:542.76%; }
+.catalog-photo img { display:block; width:100%; height:100%; object-fit:cover; }
+/* Місце під знімок, якого ще немає: той самий розмір, іконка напряму по центру. */
+.catalog-photo--empty { display:grid; place-items:center; background:var(--v-lilac-soft);
+    border:1px dashed var(--v-purple-light); color:var(--v-purple-dark); font-size:34px; }
+.catalog-photo--empty img { width:48px; height:48px; object-fit:contain; opacity:.55; }
 .catalog-card h3 { font-size:16px; line-height:1.35; font-weight:500; margin:12px 0 10px; min-height:44px; overflow-wrap:anywhere; text-wrap:balance; }
 .catalog-card-count { display:block; margin-top:auto; font-size:12px; line-height:1.4; padding-right:20px; }
 .catalog-card-arrow { position:absolute; bottom:14px; right:10px; background:#b3b2fb; width:22px; height:22px; border-radius:4px; font-size:25px; line-height:20px; }
@@ -50,6 +58,7 @@
 .catalog-avatar { width:64px; height:64px; display:grid; place-items:center; border-radius:50%; background:var(--catalog-tile); font-size:28px; flex-shrink:0; }
 .catalog-notice { padding:10px 14px; border-radius:10px; background:var(--v-lilac-soft); font-size:13px; margin:-26px 0 26px; }
 .catalog-notice a { text-decoration:underline; }
+.catalog-scope { font-size:15px; color:var(--v-ink-soft); margin:-10px 0 20px; }
 .catalog-empty { padding:36px 16px; text-align:center; }
 .catalog-empty h2 { font-size:24px; }
 .catalog-text-button { border:0; padding:0; background:none; color:inherit; font:inherit; cursor:pointer; }
@@ -83,21 +92,6 @@
 .nav-icon-15 { background-position:-17px -687px; }
 .nav-icon-16 { background-position:-17px -735px; }
 .catalog-nav-icon { background-size:249px 776px; }
-.photo-1 img { left:-9.17732%; top:-9.42761%; }
-.photo-2 img { left:-137.65978%; top:-9.42761%; }
-.photo-3 img { left:-266.14225%; top:-9.42761%; }
-.photo-4 img { left:-394.62471%; top:-9.42761%; }
-.photo-5 img { left:-523.10718%; top:-9.42761%; }
-.photo-6 img { left:-9.17732%; top:-182.49158%; }
-.photo-7 img { left:-137.65978%; top:-182.49158%; }
-.photo-8 img { left:-266.14225%; top:-182.49158%; }
-.photo-9 img { left:-394.62471%; top:-182.49158%; }
-.photo-10 img { left:-523.10718%; top:-182.49158%; }
-.photo-11 img { left:-9.17732%; top:-355.55556%; }
-.photo-12 img { left:-137.65978%; top:-355.55556%; }
-.photo-13 img { left:-266.14225%; top:-355.55556%; }
-.photo-14 img { left:-394.62471%; top:-355.55556%; }
-.photo-15 img { left:-523.10718%; top:-355.55556%; }
 
 /* Використовуємо окремі SVG там, де вони вже є у проєкті. */
 .catalog-nav-icon--svg { height: 24px; display: block; object-fit: contain; background: none; }

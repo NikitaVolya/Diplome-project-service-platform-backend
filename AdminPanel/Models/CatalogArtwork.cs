@@ -1,11 +1,13 @@
 using BLL.Public;
+using DAL.Seed;
 
 namespace AdminPanel.Models;
 
 public static class CatalogArtwork
 {
-    // Скільки фотографій виконавців лежить у wwwroot/img/executors.
-    private const int Portraits = 4;
+    // Скільки світлин лежить у wwwroot/img/executors/men та .../women.
+    private const int MenPortraits = 6;
+    private const int WomenPortraits = 6;
 
     /// <summary>
     /// Порядок напрямів у бічному меню — той, що в макеті. За Id його не відтворити:
@@ -13,18 +15,17 @@ public static class CatalogArtwork
     /// </summary>
     public static List<DirectoryCategory> InDesignOrder(List<DirectoryCategory> categories)
     {
-        var design = CatalogDemo.Create().Categories
+        var parents = categories
             .Where(c => c.ParentId == null)
-            .Select((c, i) => (c.Name, Index: i))
-            .ToDictionary(x => Normalize(x.Name), x => x.Index, StringComparer.OrdinalIgnoreCase);
+            .ToDictionary(c => c.Id, c => c.Name);
 
         return categories
-            .OrderBy(c => c.ParentId == null
-                ? design.GetValueOrDefault(Normalize(c.Name), int.MaxValue)
+            .OrderBy(c => c.ParentId == null ? CatalogTree.RootOrder(c.Name) : int.MaxValue)
+            // Плитки всередині напряму — теж у порядку макета. Ті, яких у дереві немає,
+            // стають після них, у порядку створення.
+            .ThenBy(c => c.ParentId.HasValue && parents.TryGetValue(c.ParentId.Value, out var parent)
+                ? CatalogTree.ChildOrder(parent, c.Name)
                 : int.MaxValue)
-            // Підкатегорії — у порядку макета: Artwork це номер плитки на ньому.
-            // Ті, яких у макеті немає, лишаються після них у порядку створення.
-            .ThenBy(c => c.Artwork == 0 ? int.MaxValue : c.Artwork)
             .ThenBy(c => c.Id)
             .ToList();
     }
@@ -34,11 +35,17 @@ public static class CatalogArtwork
 
     // Справжнім виконавцям світлини роздаємо по колу: у базі фотографій немає,
     // а порожні кружечки з літерою замість карток виглядають як недоробка.
+    // Чоловічі й жіночі знімки — два окремі кола, інакше під іменем «Софія»
+    // опинявся бородань, і картка читалася як помилка.
     public static void Apply(IReadOnlyList<DirectoryExecutor> executors)
     {
-        for (var i = 0; i < executors.Count; i++)
+        int men = 0, women = 0;
+
+        foreach (var executor in executors)
         {
-            executors[i].Artwork = i % Portraits + 1;
+            executor.Portrait = PersonGender.Detect(executor.Name) == Gender.Female
+                ? $"/img/executors/women/{women++ % WomenPortraits + 1}.jpg"
+                : $"/img/executors/men/{men++ % MenPortraits + 1}.jpg";
         }
     }
 

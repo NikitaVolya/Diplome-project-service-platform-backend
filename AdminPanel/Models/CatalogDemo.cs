@@ -23,10 +23,12 @@ public static class CatalogDemo
         }));
         data.Executors =
         [
-            new() { Name = "Олександр К.", Rating = 4.9, Reviews = 32, Completed = 522, FromPrice = 600, Artwork = 1 },
-            new() { Name = "Іван П.", Rating = 4.8, Reviews = 218, Completed = 412, FromPrice = 250, Artwork = 2 },
-            new() { Name = "Сергій М.", Rating = 4.9, Reviews = 341, Completed = 687, FromPrice = 350, Artwork = 3 },
-            new() { Name = "Андрій Л.", Rating = 4.8, Reviews = 172, Completed = 305, FromPrice = 400, Artwork = 4 }
+            // Світлини тут не вказані: їх роздає CatalogArtwork.Apply — за статтю імені,
+            // тими самими правилами, що й для справжніх виконавців.
+            new() { Name = "Олександр К.", Rating = 4.9, Reviews = 32, Completed = 522, FromPrice = 600 },
+            new() { Name = "Ольга П.", Rating = 4.8, Reviews = 218, Completed = 412, FromPrice = 250 },
+            new() { Name = "Сергій М.", Rating = 4.9, Reviews = 341, Completed = 687, FromPrice = 350 },
+            new() { Name = "Анастасія К.", Rating = 4.8, Reviews = 172, Completed = 305, FromPrice = 400 }
         ];
         return data;
     }

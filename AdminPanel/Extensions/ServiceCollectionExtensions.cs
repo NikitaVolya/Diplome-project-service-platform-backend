@@ -1,3 +1,4 @@
+using AdminPanel.Models;
 using AdminPanel.Services;
 using BLL.Admin.Interfaces;
 using BLL.Admin.Services;
@@ -88,6 +89,9 @@ namespace AdminPanel.Extensions
             // Дані для публічної головної сторінки порталу.
             services.AddScoped<IPublicCatalogService, PublicCatalogService>();
             services.AddScoped<ServiceDirectory>();
+
+            // Тільки читає файли з wwwroot і кешує результат — один екземпляр на застосунок.
+            services.AddSingleton<CatalogPhotos>();
 
             services.AddMemoryCache();
 

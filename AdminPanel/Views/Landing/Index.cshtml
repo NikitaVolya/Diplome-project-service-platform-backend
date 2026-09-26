@@ -199,7 +199,7 @@
                             {
                                 <div>Ще немає відгуків</div>
                             }
-                            <div>@PublicText.Price(service.FromPrice)</div>
+                            @if (service.FromPrice > 0) { <div>@PublicText.Price(service.FromPrice)</div> }
                         </div>
                     </div>
                 </a>

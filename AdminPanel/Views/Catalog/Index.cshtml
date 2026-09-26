@@ -1,4 +1,6 @@
 @model CatalogViewModel
+@inject CatalogPhotos Photos
+@inject IWebHostEnvironment Env
 @{
     Layout = "_LandingLayout";
     ViewData["Title"] = "Каталог послуг — Вибір";
@@ -7,6 +9,11 @@
     var parent = Model.Categories.FirstOrDefault(c => c.Id == selected?.ParentId);
     var rootId = Model.IsGlobalSearch ? null : parent?.Id ?? selected?.Id;
     var items = Model.ShowAll ? Model.Items : Model.Items.Take(15).ToList();
+    // У звичайному перегляді всі плитки з однієї категорії, у пошуку — з різних,
+    // тому назву напряму для кожної шукаємо окремо: з неї збирається шлях до знімка.
+    DirectoryCategory? ParentOf(DirectoryCategory item) => Model.Categories
+        .FirstOrDefault(c => c.Id == item.ParentId) ?? selected;
+    string ParentName(DirectoryCategory item) => ParentOf(item)?.Name ?? "";
 }
 @section Styles { <link rel="stylesheet" href="~/css/catalog.css" asp-append-version="true" /> }
 <main class="catalog">
@@ -46,7 +53,15 @@
                 </nav>
                 <section class="catalog-panel" aria-labelledby="category-title">
                     <div class="catalog-panel-head">
-                        <h2 id="category-title">@(Model.IsGlobalSearch ? "Результати пошуку" : selected.Name)</h2>
+                        @{ var headIcon = selected.Icon.Length > 0 ? selected.Icon : parent?.Icon ?? ""; }
+                        <div class="catalog-panel-title">
+                            @* Іконка напряму поруч із назвою — як у макеті. *@
+                            @if (!Model.IsGlobalSearch && headIcon.Length > 0)
+                            {
+                                <span class="catalog-panel-icon"><img src="@headIcon" width="28" height="28" alt="" aria-hidden="true" /></span>
+                            }
+                            <h2 id="category-title">@(Model.IsGlobalSearch ? "Результати пошуку" : selected.Name)</h2>
+                        </div>
                         @if (Model.IsGlobalSearch) { <span class="catalog-count">@PublicText.Categories(Model.Items.Count)</span> }
                         else { <a class="catalog-count" href="#executors">@PublicText.Executors(selected.Executors)</a> }
                     </div>
@@ -72,9 +87,22 @@
                         @foreach (var item in items)
                         {
                             <a class="catalog-card" asp-action="Index" asp-route-categoryId="@item.Id" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City">
-                                @if (item.ParentId.HasValue && item.Artwork > 0) { <span class="catalog-photo photo-@item.Artwork"><img src="~/img/catalog/categories-reference.png" alt="" loading="lazy" /></span> }
-                                else if (item.Icon.Length > 0) { <span class="catalog-category-name"><img src="@item.Icon" width="48" height="48" alt="" aria-hidden="true" /></span> }
-                                else { <span class="catalog-category-name" aria-hidden="true">@(string.IsNullOrEmpty(item.Name) ? "" : item.Name[..1])</span> }
+                                @{
+                                    var photo = Photos.Find(ParentName(item), item.Name);
+                                    var slot = photo == null && Env.IsDevelopment()
+                                        ? CatalogPhotos.Expected(ParentName(item), item.Name)
+                                        : null;
+                                }
+                                @if (photo != null) { <span class="catalog-photo"><img src="@photo" alt="" loading="lazy" /></span> }
+                                else
+                                {
+                                    @* Знімка ще немає — місце під нього лишається того самого розміру. *@
+                                    <span class="catalog-photo catalog-photo--empty" title="@slot" aria-hidden="true">
+                                        @{ var mark = item.Icon.Length > 0 ? item.Icon : ParentOf(item)?.Icon ?? ""; }
+                                        @if (mark.Length > 0) { <img src="@mark" width="48" height="48" alt="" /> }
+                                        else { <span>@(string.IsNullOrEmpty(item.Name) ? "" : item.Name[..1])</span> }
+                                    </span>
+                                }
                                 <h3>@item.Name</h3><span class="catalog-card-count">@PublicText.Executors(item.Executors)</span><span class="catalog-card-arrow" aria-hidden="true">›</span>
                             </a>
                         }
@@ -104,7 +132,7 @@
                     <div class="v-services">
                         @foreach (var service in Model.Services)
                         {
-                            <a class="v-service" asp-action="Index" asp-route-categoryId="@service.CategoryId" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City"><div class="v-service__img"><img src="@service.Image" alt="@service.Name" loading="lazy" /></div><div class="v-service__body"><div class="v-service__name">@service.Name</div><div class="v-service__meta"><div>@if (service.ReviewsCount > 0) { <span class="star">★</span> @PublicText.Rating(service.Rating) <span>(@PublicText.Reviews(service.ReviewsCount))</span> } else { <span>Ще немає відгуків</span> }</div><div>@PublicText.Price(service.FromPrice)</div></div></div></a>
+                            <a class="v-service" asp-action="Index" asp-route-categoryId="@service.CategoryId" asp-route-demo="@Model.IsDemo" asp-route-city="@Model.City"><div class="v-service__img"><img src="@service.Image" alt="@service.Name" loading="lazy" /></div><div class="v-service__body"><div class="v-service__name">@service.Name</div><div class="v-service__meta"><div>@if (service.ReviewsCount > 0) { <span class="star">★</span> @PublicText.Rating(service.Rating) <span>(@PublicText.Reviews(service.ReviewsCount))</span> } else { <span>Ще немає відгуків</span> }</div>@if (service.FromPrice > 0) { <div>@PublicText.Price(service.FromPrice)</div> }</div></div></a>
                         }
                     </div>
                 </section>
@@ -113,12 +141,16 @@
             {
             <section class="catalog-section" id="executors"><div class="v-section__head"><h2 class="v-section__title">Популярні виконавці:</h2>@if (Model.Executors.Count > 4) { <button class="catalog-text-button" type="button" id="show-executors" aria-expanded="false">Переглянути всіх →</button> }</div>
                 @if (Model.Executors.Count == 0) { <p class="catalog-empty">У цій категорії ще немає виконавців із завершеними замовленнями.</p> }
+                @* Своїх виконавців не вистачило на ряд — кажемо це прямо, щоб сантехнік
+                   під заголовком «Послуги для тварин» не виглядав помилкою. *@
+                else if (Model.ExecutorsScope == ExecutorScope.Direction) { <p class="catalog-scope">Своїх виконавців у цій категорії поки мало — показуємо також найкращих у напрямі «@(parent?.Name ?? selected?.Name)».</p> }
+                else if (Model.ExecutorsScope == ExecutorScope.Platform) { <p class="catalog-scope">У цій категорії ще мало виконавців — показуємо найкращих на платформі.</p> }
                 <div class="catalog-executors">
                     @for (var i = 0; i < Model.Executors.Count; i++)
                     {
                         var person = Model.Executors[i];
                         <article class="catalog-executor" hidden="@(i >= 4)">
-                            @if (person.Artwork > 0) { <span class="catalog-portrait"><img src="~/img/executors/executor-@(person.Artwork).jpg" alt="Фото виконавця @person.Name" loading="lazy" /></span> }
+                            @if (person.Portrait.Length > 0) { <span class="catalog-portrait"><img src="@person.Portrait" alt="Фото виконавця @person.Name" loading="lazy" /></span> }
                             else { <span class="catalog-avatar" aria-hidden="true">@(person.Name[..1])</span> }
                             <div><h3>@person.Name</h3><p>@if (person.Reviews > 0) { <span class="star">★</span> @PublicText.Rating(person.Rating) <span>(@PublicText.Reviews(person.Reviews))</span> } else { <span>Ще немає відгуків</span> }<br />Виконано завдань: @person.Completed<br />@PublicText.Price(person.FromPrice)</p></div>
                         </article>

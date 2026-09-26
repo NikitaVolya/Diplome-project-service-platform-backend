@@ -43,8 +43,8 @@ namespace BLL.Public
         private static readonly (string Category, string Label, string Image)[] FeaturedServices =
         {
             ("Сантехнічні роботи", "Сантехнік", "/img/landing/service-1.jpg"),
-            ("Прибирання квартири", "Прибирання квартири", "/img/landing/service-2.jpg"),
-            ("Дизайн логотипу", "Дизайн логотипу", "/img/landing/service-3.jpg"),
+            ("Прибирання квартир", "Прибирання квартири", "/img/landing/service-2.jpg"),
+            ("Логотипи та стиль", "Дизайн логотипу", "/img/landing/service-3.jpg"),
             ("Електромонтажні роботи", "Електрик", "/img/landing/service-4.jpg")
         };
 
@@ -164,37 +164,40 @@ namespace BLL.Public
 
             List<CategoryStats> stats;
             List<CategoryRating> ratings;
+            List<FeaturedCategory> found;
 
             var featured = FeaturedServices.Select(f => f.Category).ToList();
 
             try
             {
-                stats = await _db.Orders
+                // Спершу самі напрями, а не замовлення: вітрина в макеті завжди з чотирьох
+                // карток, і послуга, на яку ще ніхто не замовляв, теж має бути на місці.
+                // Раніше картки будувалися із замовлень, тому напрям без жодного
+                // завершеного замовлення просто зникав, а ряд розпадався.
+                found = await _db.Categories
                     .AsNoTracking()
-                    .Where(o => o.Status == OrderStatus.Completed && featured.Contains(o.Category.Name))
-                    .GroupBy(o => new { o.CategoryId, o.Category.Name })
-                    .Select(g => new CategoryStats
-                    {
-                        CategoryId = g.Key.CategoryId,
-                        Name = g.Key.Name,
-                        OrdersCount = g.Count(),
-                        MinPrice = g.Min(o => o.Price)
-                    })
+                    .Where(c => c.IsActive && featured.Contains(c.Name))
+                    .Select(c => new FeaturedCategory { CategoryId = c.Id, Name = c.Name })
                     .ToListAsync(cancellationToken);
 
-                if (stats.Count == 0)
+                if (found.Count == 0)
                 {
                     return FallbackServices;
                 }
 
-                // Порядок карток — той, що в макеті, а не за кількістю замовлень:
-                // у макеті блок стоїть як вітрина, і ряд має виглядати однаково щоразу.
-                stats = stats
-                    .OrderBy(s => featured.FindIndex(name => SameName(name, s.Name)))
-                    .Take(take)
-                    .ToList();
+                var categoryIds = found.Select(c => c.CategoryId).ToList();
 
-                var categoryIds = stats.Select(s => s.CategoryId).ToList();
+                stats = await _db.Orders
+                    .AsNoTracking()
+                    .Where(o => o.Status == OrderStatus.Completed && categoryIds.Contains(o.CategoryId))
+                    .GroupBy(o => o.CategoryId)
+                    .Select(g => new CategoryStats
+                    {
+                        CategoryId = g.Key,
+                        OrdersCount = g.Count(),
+                        MinPrice = g.Min(o => o.Price)
+                    })
+                    .ToListAsync(cancellationToken);
 
                 ratings = await _db.Reviews
                     .AsNoTracking()
@@ -214,32 +217,52 @@ namespace BLL.Public
                 return FallbackServices;
             }
 
-            var result = new List<PublicServiceItem>(stats.Count);
+            var result = new List<PublicServiceItem>(FeaturedServices.Length);
 
-            foreach (var row in stats)
+            // Порядок карток — той, що в макеті, а не за кількістю замовлень:
+            // блок стоїть як вітрина, і ряд має виглядати однаково щоразу.
+            foreach (var card in FeaturedServices)
             {
-                var rating = ratings.FirstOrDefault(r => r.CategoryId == row.CategoryId);
+                var category = found.FirstOrDefault(c => SameName(c.Name, card.Category));
 
-                var card = FeaturedServices.FirstOrDefault(f => SameName(f.Category, row.Name));
+                if (category == null)
+                {
+                    continue;
+                }
+
+                var row = stats.FirstOrDefault(s => s.CategoryId == category.CategoryId);
+                var rating = ratings.FirstOrDefault(r => r.CategoryId == category.CategoryId);
 
                 result.Add(new PublicServiceItem
                 {
-                    CategoryId = row.CategoryId,
-                    Name = card.Label ?? row.Name,
-                    FromPrice = Math.Round(row.MinPrice, 0),
+                    CategoryId = category.CategoryId,
+                    Name = card.Label,
+                    // Нуль означає «ще не було завершених замовлень» — сторінка тоді
+                    // не показує ціну, замість того щоб писати «від 0 грн».
+                    FromPrice = row == null ? 0 : Math.Round(row.MinPrice, 0),
                     Rating = rating == null ? 0 : Math.Round(rating.Average, 1),
                     ReviewsCount = rating?.Count ?? 0,
-                    Image = card.Image ?? "/img/landing/service-1.jpg"
+                    Image = card.Image
                 });
+
+                if (result.Count == take)
+                {
+                    break;
+                }
             }
 
-            return result;
+            return result.Count > 0 ? result : FallbackServices;
+        }
+
+        private class FeaturedCategory
+        {
+            public int CategoryId { get; set; }
+            public string Name { get; set; } = string.Empty;
         }
 
         private class CategoryStats
         {
             public int CategoryId { get; set; }
-            public string Name { get; set; } = string.Empty;
             public int OrdersCount { get; set; }
             public decimal MinPrice { get; set; }
         }
