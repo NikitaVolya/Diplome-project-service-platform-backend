@@ -1,0 +1,158 @@
+@model SearchViewModel
+@inject CatalogPhotos Photos
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Пошук послуги — Вибір";
+
+    var steps = new[]
+    {
+        ("bi-pencil-square", "Створіть запит", "Опишіть, що вам потрібно. Вкажіть деталі та бюджет."),
+        ("bi-search", "Оберіть виконавця", "Порівняйте профілі, рейтинг, відгуки та ціну."),
+        ("bi-chat-dots", "Домовтеся про виконання", "Підтвердьте замовлення та деталі."),
+        ("bi-hand-thumbs-up", "Отримайте результат", "Прийміть роботу та залиште відгук.")
+    };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/search.css" asp-append-version="true" /> }
+
+<main class="search">
+    <div class="v-container">
+        <nav class="search-crumbs" aria-label="Навігація">
+            <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>Пошук послуги</span>
+        </nav>
+
+        <h1 class="search__title">Пошук послуги</h1>
+        <p class="search__lead">Знайдіть потрібну послугу швидко та легко</p>
+
+        <form class="search-bar" method="get" asp-controller="Catalog" asp-action="Index" role="search">
+            <span class="search-bar__field">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input name="q" value="@Model.Query" placeholder="Що вам потрібно?" aria-label="Що вам потрібно?" />
+            </span>
+            <span class="search-bar__field">
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                <input name="city" value="@Model.City" placeholder="Місто або онлайн" aria-label="Місто або онлайн" />
+            </span>
+            <button class="search-bar__submit" type="submit">Знайти</button>
+        </form>
+
+        <section class="search-section">
+            <div class="v-section__head">
+                <h2 class="v-section__title">Популярні категорії:</h2>
+                <a class="v-link" asp-controller="Catalog" asp-action="Index">Усі категорії <i class="bi bi-arrow-right"></i></a>
+            </div>
+
+            <div class="search-cats">
+                @foreach (var category in Model.Categories)
+                {
+                    <a class="search-cat" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@category.Id">
+                        <span class="search-cat__icon"><img src="@category.Icon" alt="" width="28" height="28" /></span>
+                        <span class="search-cat__name">@category.Name</span>
+                    </a>
+                }
+
+                <a class="search-cat search-cat--more" asp-controller="Catalog" asp-action="Index">
+                    <span class="search-cat__icon" aria-hidden="true">&hellip;</span>
+                    <span class="search-cat__name">Більше</span>
+                </a>
+            </div>
+        </section>
+
+        @if (Model.Services.Count > 0)
+        {
+            <section class="search-section">
+                <div class="v-section__head">
+                    <h2 class="v-section__title">Популярне поруч із вами:</h2>
+                    <a class="v-link" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                <div class="v-services">
+                    @foreach (var service in Model.Services)
+                    {
+                        <a class="v-service" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@service.CategoryId">
+                            <div class="v-service__img"><img src="@service.Image" alt="@service.Name" loading="lazy" /></div>
+                            <div class="v-service__body">
+                                <div class="v-service__name">@service.Name</div>
+                                <div class="v-service__meta">
+                                    <div>
+                                        @if (service.ReviewsCount > 0)
+                                        {
+                                            <span class="star">★</span> @PublicText.Rating(service.Rating) <span>(@PublicText.Reviews(service.ReviewsCount))</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Ще немає відгуків</span>
+                                        }
+                                    </div>
+                                    @if (service.FromPrice > 0) { <div>@PublicText.Price(service.FromPrice)</div> }
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        <section class="search-how">
+            <h2>Як це працює?</h2>
+            <p class="search-how__lead">Знайти потрібну людину — простіше, ніж здається</p>
+
+            <ol class="search-how__steps">
+                @for (var i = 0; i < steps.Length; i++)
+                {
+                    var (icon, title, text) = steps[i];
+                    <li>
+                        <span class="search-how__dot">@(i + 1)</span>
+                        <i class="bi @icon" aria-hidden="true"></i>
+                        <b>@title</b>
+                        <span>@text</span>
+                    </li>
+                }
+            </ol>
+        </section>
+    </div>
+
+    <section class="search-cta">
+        <div class="v-container search-cta__inner">
+            <div class="search-cta__text">
+                <h2>Не знайшли потрібну послугу?</h2>
+                <p>Опишіть свою задачу, і ми допоможемо знайти виконавця!</p>
+                <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">Створити замовлення</a>
+            </div>
+            <div class="search-cta__img">
+                <img src="~/img/landing/cta.jpg" alt="Ідеї та рішення" loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+    @if (Model.Recent.Count > 0)
+    {
+        <div class="v-container">
+            <section class="search-section">
+                <div class="v-section__head">
+                    <h2 class="v-section__title">@(Model.RecentIsFallback ? "Часто шукають:" : "Останні перегляди:")</h2>
+                    <a class="v-link" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                <div class="search-recent">
+                    @foreach (var item in Model.Recent)
+                    {
+                        var photo = Photos.Find(item.Parent, item.Name);
+                        <a class="search-recent__card" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@item.CategoryId">
+                            <span class="search-recent__img">
+                                @if (photo != null)
+                                {
+                                    <img src="@photo" alt="@item.Name" loading="lazy" />
+                                }
+                            </span>
+                            <span class="search-recent__name">@item.Name</span>
+                            @if (item.FromPrice > 0) { <span class="search-recent__price">@PublicText.Price(item.FromPrice)</span> }
+                        </a>
+                    }
+                </div>
+            </section>
+        </div>
+    }
+</main>

@@ -6,7 +6,6 @@
     <title>@ViewData["Title"]</title>
     <meta name="description" content="Вибір — платформа пошуку перевірених виконавців та замовлення послуг." />
     <link rel="icon" type="image/png" href="~/img/favicon.png" />
-    @* Шрифти макета: Onest, Inter, Unbounded — з Google Fonts. *@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&amp;family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500&amp;display=swap" />
@@ -30,7 +29,7 @@
         </a>
 
         <a class="v-pill" asp-controller="Catalog" asp-action="Index"><i class="bi bi-grid-3x3-gap-fill"></i> Каталог послуг</a>
-        <a class="v-pill v-pill--light" asp-controller="Landing" asp-action="Index" asp-fragment="search"><i class="bi bi-search"></i> Пошуковий сервіс</a>
+        <a class="v-pill v-pill--light" asp-controller="Search" asp-action="Index"><i class="bi bi-search"></i> Пошуковий сервіс</a>
 
         <nav class="v-nav" id="public-navigation" aria-label="Головне меню">
             <a class="v-nav__catalog" asp-controller="Catalog" asp-action="Index">Каталог послуг</a>
@@ -50,10 +49,17 @@
                 <i class="bi bi-speedometer2"></i> Адмін-панель
             </a>
         }
+        else if (User.Identity?.IsAuthenticated == true)
+        {
+            <span class="v-user" title="@User.Identity!.Name">@(User.FindFirst(AppUserClaimsPrincipalFactory.FirstNameClaim)?.Value ?? User.Identity!.Name)</span>
+            <form method="post" asp-controller="Auth" asp-action="Logout" class="v-logout">
+                <button class="v-btn v-btn--ghost" type="submit">Вийти</button>
+            </form>
+        }
         else
         {
-            <a class="v-btn v-btn--ghost" asp-controller="Account" asp-action="Login">Увійти</a>
-            <button class="v-btn v-btn--primary" type="button" data-catalog-info>Реєстрація</button>
+            <a class="v-btn v-btn--ghost" asp-controller="Auth" asp-action="Login">Увійти</a>
+            <a class="v-btn v-btn--primary" asp-controller="Auth" asp-action="Register">Реєстрація</a>
         }
     </div>
 </header>

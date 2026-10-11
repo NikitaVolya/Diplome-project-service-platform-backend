@@ -1,0 +1,15 @@
+@model int
+@{
+    var steps = new[] { "Контакт", "Про себе", "Готово" };
+}
+
+<ol class="auth-steps">
+    @for (var i = 0; i < steps.Length; i++)
+    {
+        var number = i + 1;
+        <li class="@(number == Model ? "is-current" : null)">
+            <span class="auth-steps__dot">@number</span>
+            <span class="auth-steps__label">@steps[i]</span>
+        </li>
+    }
+</ol>

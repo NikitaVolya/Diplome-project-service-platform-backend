@@ -1,0 +1,44 @@
+@model VerifyCodeViewModel
+@{
+    var action = ViewData["CodeAction"] as string ?? "VerifyCode";
+    var purpose = ViewData["CodePurpose"] as string ?? "PasswordReset";
+    var stub = TempData.Peek("Auth.StubCode") as string;
+}
+
+<form method="post" asp-action="@action" novalidate>
+    <partial name="_AuthErrors" />
+
+    <div class="auth-field">
+        <label asp-for="Code">Код з e-mail</label>
+
+        <div class="auth-code" data-auth-code>
+            @for (var i = 0; i < 6; i++)
+            {
+                <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code"
+                       aria-label="Символ коду @(i + 1)" />
+            }
+        </div>
+        <input type="hidden" asp-for="Code" />
+        <span asp-validation-for="Code" class="field-validation-error"></span>
+    </div>
+
+    <p class="auth-hint">Код дійсний протягом @Model.LifetimeMinutes хв</p>
+
+    <p class="auth-resend">
+        Не отримали код?
+        <button type="submit" form="auth-resend-form" data-auth-resend="@Model.ResendAfterSeconds">Надіслати ще раз</button>
+    </p>
+
+    <button class="auth-submit" type="submit">Продовжити</button>
+</form>
+
+<form method="post" asp-action="Resend" id="auth-resend-form">
+    <input type="hidden" name="purpose" value="@purpose" />
+</form>
+
+@if (stub != null)
+{
+    <p class="auth-stub">
+        Лист нікуди не пішов — пошта ще не підключена. Код для перевірки: <b>@stub</b>
+    </p>
+}

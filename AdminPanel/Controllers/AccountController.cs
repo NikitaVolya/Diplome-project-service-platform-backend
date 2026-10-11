@@ -31,7 +31,13 @@ namespace AdminPanel.Controllers
         {
             if (User.Identity?.IsAuthenticated == true)
             {
-                return RedirectToAction("Index", "Dashboard");
+                // Звичайного відвідувача, який забрів сюди вже увійшовши, відправляти
+                // в панель не можна: там на нього чекає тільки «доступ заборонено».
+                var isStaff = AppRoles.StaffRoles.Any(User.IsInRole);
+
+                return isStaff
+                    ? RedirectToAction("Index", "Dashboard")
+                    : RedirectToAction("Index", "Landing");
             }
 
             return View(new LoginViewModel { ReturnUrl = returnUrl });

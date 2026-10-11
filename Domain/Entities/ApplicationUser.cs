@@ -14,6 +14,39 @@ namespace Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
+        // ── Анкета з другого кроку реєстрації ───────────────────────────────
+
+        /// <summary>Виконавець може виступати приватною особою або компанією чи ФОП.</summary>
+        public bool IsCompany { get; set; }
+
+        /// <summary>Назва компанії — тільки для тих, хто обрав «Компанія/ФОП».</summary>
+        public string? CompanyName { get; set; }
+
+        public string? City { get; set; }
+        public string? PostalCode { get; set; }
+        public DateTime? BirthDate { get; set; }
+
+        /// <summary>«Male», «Female» або null, якщо людина не захотіла вказувати.</summary>
+        public string? Gender { get; set; }
+
+        /// <summary>Досвід роботи виконавця: ключ зі списку на формі, не вільний текст.</summary>
+        public string? Experience { get; set; }
+
+        /// <summary>
+        /// Напрям каталогу, у якому працює виконавець.
+        ///
+        /// Навмисно без зовнішнього ключа: напрями не видаляються, а ховаються, і вибір
+        /// людини не повинен заважати адміністраторові прибрати напрям із вітрини.
+        /// </summary>
+        public int? SpecializationCategoryId { get; set; }
+
+        /// <summary>Кілька слів про себе з форми реєстрації.</summary>
+        public string? About { get; set; }
+
+        public bool NotifyByEmail { get; set; }
+        public bool NotifyBySms { get; set; }
+        public bool NotifyByPush { get; set; }
+
         public ICollection<Order> CreatedOrders { get; set; } = new List<Order>();
         public ICollection<Order> ExecutedOrders { get; set; } = new List<Order>();
         public ICollection<Application> Applications { get; set; } = new List<Application>();

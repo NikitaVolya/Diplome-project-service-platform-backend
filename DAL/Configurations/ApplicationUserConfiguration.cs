@@ -30,6 +30,13 @@ namespace DAL.Configurations
 
             builder.Property(x => x.IsDeleted)
                 .HasDefaultValue(false);
+
+            builder.Property(x => x.CompanyName).HasMaxLength(200);
+            builder.Property(x => x.City).HasMaxLength(100);
+            builder.Property(x => x.PostalCode).HasMaxLength(10);
+            builder.Property(x => x.Gender).HasMaxLength(20);
+            builder.Property(x => x.Experience).HasMaxLength(40);
+            builder.Property(x => x.About).HasMaxLength(1000);
         }
     }
 }

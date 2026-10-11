@@ -1,0 +1,86 @@
+@model PublicLoginViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Вхід — Вибір";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-controller="Landing" asp-action="Index" data-auth-back>
+            <span aria-hidden="true">&lsaquo;</span> Назад
+        </a>
+
+        <div class="auth-card">
+            <span class="auth-card__icon" aria-hidden="true">
+                <partial name="_AuthFaceIcon" />
+            </span>
+
+            <h2>Вхід</h2>
+            <p class="auth-card__lead">Раді бачити вас знову!</p>
+
+            <form method="post" asp-action="Login" novalidate>
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <partial name="_AuthErrors" />
+
+                <div class="auth-field">
+                    <label asp-for="Email">E-mail адресу</label>
+                    <span class="auth-input">
+                        <input asp-for="Email" type="email" autocomplete="email" placeholder="Введіть e-mail" />
+                    </span>
+                    <span asp-validation-for="Email" class="field-validation-error"></span>
+                </div>
+
+                <div class="auth-field">
+                    <label asp-for="Password">Пароль</label>
+                    <span class="auth-input" data-auth-password>
+                        <input asp-for="Password" type="password" autocomplete="current-password" placeholder="Введіть пароль" />
+                        <button class="auth-eye" type="button" aria-label="Показати пароль">
+                            <partial name="_AuthEyeIcon" />
+                        </button>
+                    </span>
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
+                    <span class="auth-forgot"><a asp-action="ForgotPassword">Забули пароль?</a></span>
+                </div>
+
+                <button class="auth-submit auth-submit--narrow" type="submit">Продовжити</button>
+            </form>
+
+            <p class="auth-or">або увійдіть за допомогою</p>
+
+            <div class="auth-socials">
+                @foreach (var (name, icon) in new[]
+                {
+                    ("Google", "google"), ("Facebook", "facebook"),
+                    ("Linkedin", "linkedin"), ("Apple", "apple")
+                })
+                {
+                    <button class="auth-social" type="button" disabled title="Вхід через @name буде доступний пізніше">
+                        <i class="bi bi-@icon" aria-hidden="true"></i> @name
+                    </button>
+                }
+            </div>
+
+            <p class="auth-switch">Ще не має акаунту? <a asp-action="Register">Зареєструватися</a></p>
+
+            <div class="auth-trust">
+                <div>
+                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                    <span><b>Безпечно</b>Ваші дані під захистом</span>
+                </div>
+                <div>
+                    <i class="bi bi-lightning-charge" aria-hidden="true"></i>
+                    <span><b>Швидко</b>Увійдіть за кілька секунд</span>
+                </div>
+                <div>
+                    <i class="bi bi-headset" aria-hidden="true"></i>
+                    <span><b>Підтримка 24/7</b>Ми завжди поруч</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts { <script src="~/js/auth.js" asp-append-version="true" defer></script> }

@@ -1,0 +1,78 @@
+@model string
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Реєстрація завершена — Вибір";
+
+    var executor = Model == "Executor";
+
+    var lead = executor ? "Ваш бізнес акаунт створено" : "Ваш акаунт створено";
+
+    var next = executor
+        ? "Заповніть профіль, додайте свої послуги та отримуйте більше замовлень."
+        : "Створюйте замовлення, знаходьте перевірених виконавців та керуйте своїми проєктами в особистому кабінеті.";
+
+    var features = executor
+        ? new[]
+        {
+            ("bi-person-bounding-box", "Створіть привабливий профіль", "Розкажіть про себе, досвід та навички"),
+            ("bi-journal-check", "Додайте свої послуги", "Опишіть, що ви вмієте та скільки це коштує"),
+            ("bi-star", "Отримуйте замовлення", "Відгукуйтесь на замовлення та знаходьте клієнтів"),
+            ("bi-bar-chart-line", "Розвивайте свій бізнес", "Підвищуйте рейтинг та отримуйте більше відгуків")
+        }
+        : new[]
+        {
+            ("bi-pencil-square", "Створюйте та публікуйте замовлення", "Опишіть задачу та отримуйте відгуки від виконавців"),
+            ("bi-heart", "Зберігайте обраних виконавців", "Формуйте список надійних фахівців"),
+            ("bi-chat-dots", "Спілкуйтесь у чаті", "Обговорюйте деталі та відстежуйте статус робіт"),
+            ("bi-credit-card", "Безпечні платежі", "Оплачуйте послуги зручно та безпечно")
+        };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-controller="Landing" asp-action="Index"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+
+        <h1 class="auth__title">Реєстрація</h1>
+
+        <partial name="_AuthSteps" model="3" />
+
+        <div class="auth-card auth-card--done">
+            <span class="auth-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4"
+                     stroke-linecap="round" stroke-linejoin="round"><path d="M10 25l10 10 18-22" /></svg>
+            </span>
+
+            <h2>Реєстрація успішна!</h2>
+            <p class="auth-card__lead">@lead</p>
+
+            <section class="auth-next">
+                <span class="auth-next__icon" aria-hidden="true">
+                    <partial name="@(executor ? "_AuthCaseIcon" : "_AuthStarIcon")" />
+                </span>
+                <div>
+                    <h3>Що далі?</h3>
+                    <p>@next</p>
+                </div>
+            </section>
+
+            <p class="auth-features__title">Можливості вашого кабінету:</p>
+
+            <ul class="auth-features">
+                @foreach (var (icon, title, text) in features)
+                {
+                    <li>
+                        <i class="bi @icon" aria-hidden="true"></i>
+                        <div>
+                            <b>@title</b>
+                            <span>@text</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            <a class="auth-submit auth-submit--link" asp-controller="Landing" asp-action="Index">Перейти в особистий кабінет</a>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,209 @@
+@model RegisterProfileViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Реєстрація — Вибір";
+    var executor = Model.IsExecutor;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-action="Register"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+
+        <h1 class="auth__title">Реєстрація</h1>
+
+        <partial name="_AuthSteps" model="2" />
+
+        <div class="auth-card auth-card--wide">
+            <span class="auth-card__icon" aria-hidden="true">
+                <partial name="@(executor ? "_AuthCaseIcon" : "_AuthFaceIcon")" />
+            </span>
+
+            <h2>@(executor ? "Про вас і ваш бізнес" : "Про вас")</h2>
+            <p class="auth-card__lead">Розкажіть трохи про себе</p>
+
+            <form method="post" asp-action="About" novalidate>
+                <partial name="_AuthErrors" />
+
+                @if (executor)
+                {
+                    <div class="auth-field">
+                        <label>Тип акаунту</label>
+                        <div class="auth-choice">
+                            <label class="auth-radio">
+                                <input type="radio" asp-for="IsCompany" value="false" checked="@(!Model.IsCompany)" data-company="false" />
+                                <span>Приватна особа</span>
+                            </label>
+                            <label class="auth-radio">
+                                <input type="radio" asp-for="IsCompany" value="true" checked="@Model.IsCompany" data-company="true" />
+                                <span>Компанія/ФОП</span>
+                            </label>
+                        </div>
+                    </div>
+                }
+
+                <div class="auth-grid">
+                    <div class="auth-field">
+                        <label asp-for="FirstName">Ім’я</label>
+                        <span class="auth-input"><input asp-for="FirstName" autocomplete="given-name" placeholder="Введіть ім’я" /></span>
+                        <span asp-validation-for="FirstName" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="LastName">Прізвище</label>
+                        <span class="auth-input"><input asp-for="LastName" autocomplete="family-name" placeholder="Введіть прізвище" /></span>
+                        <span asp-validation-for="LastName" class="field-validation-error"></span>
+                    </div>
+                </div>
+
+                @if (executor)
+                {
+                    <div class="auth-field auth-field--wide" data-company-field hidden="@(!Model.IsCompany)">
+                        <label asp-for="CompanyName">Назва компанії (необов’язково)</label>
+                        <span class="auth-input"><input asp-for="CompanyName" placeholder="Введіть назву" /></span>
+                        <span asp-validation-for="CompanyName" class="field-validation-error"></span>
+                    </div>
+                }
+
+                <div class="auth-grid">
+                    <div class="auth-field">
+                        <label asp-for="City">Місто</label>
+                        <span class="auth-input auth-input--select">
+                            <select asp-for="City">
+                                <option value="">Виберіть місто</option>
+                                @foreach (var city in RegistrationOptions.Cities)
+                                {
+                                    <option value="@city">@city</option>
+                                }
+                            </select>
+                        </span>
+                        <span asp-validation-for="City" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="PostalCode">Поштовий індекс (не обов’язково)</label>
+                        <span class="auth-input"><input asp-for="PostalCode" inputmode="numeric" placeholder="Введіть індекс" /></span>
+                        <span asp-validation-for="PostalCode" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="BirthDate">Дата народження</label>
+                        <span class="auth-input">
+                            <input asp-for="BirthDate" type="date" value="@(Model.BirthDate?.ToString("yyyy-MM-dd"))" placeholder="Введіть дату народження" />
+                        </span>
+                        <span asp-validation-for="BirthDate" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="Gender">Стать (не обов’язково)</label>
+                        <span class="auth-input auth-input--select">
+                            <select asp-for="Gender">
+                                <option value="">Виберіть стать</option>
+                                @foreach (var (value, label) in RegistrationOptions.Genders)
+                                {
+                                    <option value="@value">@label</option>
+                                }
+                            </select>
+                        </span>
+                        <span asp-validation-for="Gender" class="field-validation-error"></span>
+                    </div>
+
+                    @if (executor)
+                    {
+                        <div class="auth-field">
+                            <label asp-for="Experience">Досвід роботи</label>
+                            <span class="auth-input auth-input--select">
+                                <select asp-for="Experience">
+                                    <option value="">Оберіть досвід</option>
+                                    @foreach (var (value, label) in RegistrationOptions.Experience)
+                                    {
+                                        <option value="@value">@label</option>
+                                    }
+                                </select>
+                            </span>
+                            <span asp-validation-for="Experience" class="field-validation-error"></span>
+                        </div>
+
+                        <div class="auth-field">
+                            <label asp-for="SpecializationCategoryId">Спеціалізація</label>
+                            <span class="auth-input auth-input--select">
+                                <select asp-for="SpecializationCategoryId">
+                                    <option value="">Оберіть категорію послуг</option>
+                                    @foreach (var direction in Model.Directions)
+                                    {
+                                        <option value="@direction.Id">@direction.Name</option>
+                                    }
+                                </select>
+                            </span>
+                            <span asp-validation-for="SpecializationCategoryId" class="field-validation-error"></span>
+                        </div>
+                    }
+
+                    
+                    <div class="auth-field">
+                        <label asp-for="Password">Пароль</label>
+                        <span class="auth-input" data-auth-password>
+                            <input asp-for="Password" type="password" autocomplete="new-password"
+                                   placeholder="Придумайте пароль" data-auth-strength />
+                            <button class="auth-eye" type="button" aria-label="Показати пароль"><partial name="_AuthEyeIcon" /></button>
+                        </span>
+                        <span asp-validation-for="Password" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="ConfirmPassword">Підтвердіть пароль</label>
+                        <span class="auth-input" data-auth-password>
+                            <input asp-for="ConfirmPassword" type="password" autocomplete="new-password" placeholder="Повторіть пароль" />
+                            <button class="auth-eye" type="button" aria-label="Показати пароль"><partial name="_AuthEyeIcon" /></button>
+                        </span>
+                        <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+                    </div>
+                </div>
+
+                <div class="auth-rules auth-rules--inline" data-auth-rules>
+                    <h3>Пароль повинен містити:</h3>
+                    <ul>
+                        <li data-rule="length">Мінімум 8 символів</li>
+                        <li data-rule="case">Велику та маленьку літери</li>
+                        <li data-rule="digit">Цифру або спеціальний символ</li>
+                    </ul>
+                </div>
+
+                @if (executor)
+                {
+                    <div class="auth-field auth-field--wide">
+                        <label asp-for="About">Коротко про себе</label>
+                        <span class="auth-input auth-input--area">
+                            <textarea asp-for="About" rows="5" placeholder="Напишіть кілька слів про себе та свої послуги"></textarea>
+                        </span>
+                        <span asp-validation-for="About" class="field-validation-error"></span>
+                    </div>
+                }
+
+                <section class="auth-notify">
+                    <h3>Налаштування сповіщень</h3>
+                    <p>Як ви хочете отримувати повідомлення</p>
+                    <div class="auth-notify__row">
+                        <label class="auth-check"><input asp-for="NotifyByEmail" /> <span>Email</span></label>
+                        <label class="auth-check"><input asp-for="NotifyBySms" /> <span>SMS</span></label>
+                        <label class="auth-check"><input asp-for="NotifyByPush" /> <span>Push повідомлення в додатку</span></label>
+                    </div>
+                </section>
+
+                <label class="auth-check auth-check--terms">
+                    <input asp-for="AcceptTerms" />
+                    <span>
+                        Я погоджуюсь з <a asp-controller="Landing" asp-action="Index" asp-fragment="footer">Умовами використання</a>
+                        та <a asp-controller="Landing" asp-action="Index" asp-fragment="footer">Політикою конфіденційності</a>
+                    </span>
+                </label>
+                <span asp-validation-for="AcceptTerms" class="field-validation-error"></span>
+
+                <button class="auth-submit auth-submit--center" type="submit">Продовжити</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts { <script src="~/js/auth.js" asp-append-version="true" defer></script> }

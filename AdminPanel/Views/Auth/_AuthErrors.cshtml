@@ -1,0 +1,11 @@
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+{
+    <div class="auth-errors" role="alert">
+        <ul>
+            @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}

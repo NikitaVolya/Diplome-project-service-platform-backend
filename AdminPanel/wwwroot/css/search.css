@@ -1,0 +1,260 @@
+
+.search { padding-bottom: 90px; }
+
+.search-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 26px 0 0;
+    font-size: 15px;
+    color: var(--v-ink-soft);
+}
+
+.search-crumbs a { color: var(--v-ink); }
+.search-crumbs span[aria-hidden] { color: var(--v-purple-light); }
+
+.search__title { margin: 14px 0 0; font-size: 40px; font-weight: 600; letter-spacing: -.5px; }
+.search__lead { margin: 12px 0 0; font-size: 16px; }
+
+/* ── Рядок пошуку ───────────────────────────────────────────────────────── */
+
+.search-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 504px 181px;
+    gap: 21px;
+    max-width: 1496px;
+    margin: 32px auto 0;
+}
+
+.search-bar__field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar__field .bi {
+    position: absolute;
+    left: 18px;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--v-purple);
+    pointer-events: none;
+}
+
+.search-bar__field input {
+    width: 100%;
+    height: 44px;
+    padding: 0 18px 0 50px;
+    border: 1px solid var(--v-purple-light);
+    border-radius: 22px;
+    background: var(--v-field);
+    color: var(--v-ink);
+    font: inherit;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(62, 49, 128, .08);
+}
+
+.search-bar__field input::placeholder { color: #9A9AA6; }
+
+.search-bar__field input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(158, 139, 255, .25);
+}
+
+.search-bar__submit {
+    align-self: center;
+    height: 40px;
+    border: 0;
+    border-radius: 22px;
+    background: var(--v-purple-light);
+    color: #fff;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(62, 49, 128, .18);
+    transition: background .15s ease;
+}
+
+.search-bar__submit:hover { background: var(--v-purple); }
+
+/* ── Секції ─────────────────────────────────────────────────────────────── */
+
+.search-section { margin-top: 64px; }
+.search-section .v-section__head { margin-bottom: 22px; }
+
+/* ── Плитки напрямів ────────────────────────────────────────────────────── */
+
+/* У макеті рівно 12 плиток в один ряд: 11 напрямів і «Більше». */
+.search-cats {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 3px;
+}
+
+.search-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 136px;
+    padding: 22px 8px 16px;
+    border: 1px solid var(--v-lilac-tile);
+    border-radius: 18px;
+    background: var(--v-head);
+    color: var(--v-ink);
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 3px 6px rgba(62, 49, 128, .1);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.search-cat:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--v-shadow);
+    color: var(--v-ink);
+}
+
+.search-cat__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--v-lilac);
+    font-size: 22px;
+    line-height: 1;
+}
+
+.search-cat__icon img { width: 28px; height: 28px; }
+
+.search-cat__name { font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+
+/* ── «Як це працює?» ────────────────────────────────────────────────────── */
+
+.search-how { margin-top: 86px; text-align: center; }
+.search-how h2 { margin: 0; font-size: 28px; font-weight: 600; }
+.search-how__lead { margin: 14px 0 0; font-size: 16px; }
+
+.search-how__steps {
+    display: grid;
+    grid-template-columns: repeat(4, 259px);
+    justify-content: center;
+    gap: 0;
+    margin: 44px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.search-how__steps li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 18px;
+    text-align: center;
+}
+
+.search-how__dot {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--v-cyan);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+/* Пунктир між кружечками — від центру до центру, як у степері реєстрації. */
+.search-how__steps li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 27px;
+    left: calc(50% + 36px);
+    width: calc(100% - 72px);
+    border-top: 2px dotted #B9B9C9;
+}
+
+.search-how__steps .bi { margin: 34px 0 0; font-size: 34px; line-height: 1; }
+.search-how__steps b { margin: 22px 0 0; font-size: 16px; font-weight: 600; }
+.search-how__steps li > span:last-child { margin-top: 14px; font-size: 15px; line-height: 1.4; }
+
+/* ── Смуга «Не знайшли потрібну послугу?» ───────────────────────────────── */
+
+.search-cta { margin-top: 90px; padding: 36px 0; background: var(--v-lilac-soft); }
+
+.search-cta__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 593px;
+    align-items: center;
+    gap: 40px;
+}
+
+.search-cta__text { text-align: center; }
+.search-cta h2 { margin: 0; font-size: 30px; font-weight: 600; }
+.search-cta p { margin: 14px 0 26px; font-size: 16px; }
+
+.search-cta__img { border-radius: 15px; overflow: hidden; aspect-ratio: 593 / 199; }
+.search-cta__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Останні перегляди ──────────────────────────────────────────────────── */
+
+.search-recent {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.search-recent__card {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 14px;
+    border-radius: 15px;
+    background: var(--v-lilac-tile);
+    color: var(--v-ink);
+    text-align: center;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(62, 49, 128, .12);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.search-recent__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--v-shadow);
+    color: var(--v-ink);
+}
+
+.search-recent__img {
+    display: block;
+    aspect-ratio: 245 / 112;
+    background: var(--v-lilac-soft);
+    overflow: hidden;
+}
+
+.search-recent__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.search-recent__name { margin: 12px 12px 0; font-size: 15px; font-weight: 500; line-height: 1.25; }
+.search-recent__price { margin: 4px 12px 0; font-size: 15px; }
+
+/* ── Вузькі екрани ──────────────────────────────────────────────────────── */
+
+@media (max-width: 1500px) {
+    .search-bar { grid-template-columns: minmax(0, 1fr) 320px 160px; }
+    .search-cats { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+    .search-how__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .search-recent { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+    .search__title { font-size: 30px; }
+    .search-bar { grid-template-columns: minmax(0, 1fr); }
+    .search-cats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .search-how__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 0; }
+    .search-how__steps li:not(:last-child)::after { display: none; }
+    .search-cta__inner { grid-template-columns: minmax(0, 1fr); }
+    .search-recent { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .search-section { margin-top: 44px; }
+}

@@ -34,10 +34,6 @@ public sealed class CatalogController(ServiceDirectory directory, IPublicCatalog
                 model.Unavailable = true;
                 return View(model);
             }
-            // Вітрина «Популярне поруч із вами» однакова на всіх сторінках каталогу:
-            // це ті самі чотири напрями, що й на головній. Раніше вона залежала від
-            // того, чи є виконавці в обраній категорії, — і на порожньому напрямі
-            // сторінка обривалася одразу після плиток.
             if (model.City.Length == 0 && !model.IsGlobalSearch)
             {
                 var services = await popular.GetPopularServicesAsync(4, cancellationToken);
@@ -52,6 +48,11 @@ public sealed class CatalogController(ServiceDirectory directory, IPublicCatalog
         if (categoryId.HasValue && model.Selected == null) return NotFound();
         model.Items = data.Categories.Where(c => model.IsGlobalSearch || (c.ParentId == model.Selected?.Id && c.ParentId != null))
             .Where(c => model.Query.Length == 0 || c.Name.Contains(model.Query, StringComparison.OrdinalIgnoreCase)).ToList();
+        if (!model.IsDemo && model.Selected is { ParentId: not null })
+        {
+            RecentViews.Remember(HttpContext, model.Selected.Id);
+        }
+
         model.Executors = model.IsDemo && RootIdForDemo(model.Selected) != 1 ? new() : data.Executors;
         model.ExecutorsScope = data.ExecutorsScope;
         CatalogArtwork.Apply(model.Executors);

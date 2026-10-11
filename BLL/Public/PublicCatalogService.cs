@@ -14,18 +14,17 @@ namespace BLL.Public
         Task<IReadOnlyList<PublicServiceItem>> GetPopularServicesAsync(
             int take = 4,
             CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<PublicServiceItem>> GetServicesByIdsAsync(
+            IReadOnlyList<int> ids,
+            CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<PublicServiceItem>> GetMostOrderedServicesAsync(
+            int take = 6,
+            CancellationToken cancellationToken = default);
     }
-     
-    // Дані для публічної головної сторінки. Читає ті самі таблиці, що й адмінпанель, але лише те,
-    // що можна показувати незареєстрованому відвідувачу.
-    // Якщо база порожня, повертає той самий набір, що й у макеті, — сторінка ніколи не виглядає зламаною. 
     public class PublicCatalogService : IPublicCatalogService
     {
-        /// <summary>
-        /// Напрями, намальовані на плитках головної сторінки, у тому ж порядку.
-        /// Слугує і порядком сортування, і запасним списком, якщо база недоступна:
-        /// за Id порядок не відтворити — частину напрямів додано пізніше за решту.
-        /// </summary>
         private static readonly string[] LandingCategories =
         {
             "Дім і ремонт", "Прибирання", "Дизайн і творчість", "Автопослуги",
@@ -33,13 +32,6 @@ namespace BLL.Public
             "Спорт та здоров’я", "Діти та догляд", "Послуги для тварин", "Фото та відео"
         };
 
-        /// <summary>
-        /// Картки блока «Популярне поруч із вами». Дизайнер намалював рівно чотири —
-        /// з власними підписами та фотографіями, тому тут зв'язка «категорія в базі →
-        /// підпис на картці → фото». Показуємо лише ці напрями: інші фотографій не мають,
-        /// а картка з чужим знімком (3D-моделювання під фото сантехніка) виглядає як помилка.
-        /// Рейтинг, кількість відгуків і ціну беремо зі справжніх завершених замовлень.
-        /// </summary>
         private static readonly (string Category, string Label, string Image)[] FeaturedServices =
         {
             ("Сантехнічні роботи", "Сантехнік", "/img/landing/service-1.jpg"),
@@ -55,14 +47,9 @@ namespace BLL.Public
             new() { Name = "Дизайн логотипу", FromPrice = 800, Rating = 4.8, ReviewsCount = 24, Image = "/img/landing/service-3.jpg" },
             new() { Name = "Електрик", FromPrice = 600, Rating = 4.9, ReviewsCount = 27, Image = "/img/landing/service-4.jpg" }
         };
-         
-        // Відповідність «слово в назві категорії» → намальована дизайнерами іконка.
-        // Файли лежать у AdminPanel/wwwroot/img/icons/ (SVG, тому не розмиваються на будь-якому екрані).
-        // Порядок рядків важливий: перемагає перший збіг, тому вужчі слова стоять вище за ширші. 
+        
         private static readonly (string Keyword, string Icon)[] IconRules =
         {
-            // Спершу вужчі теми, інакше «Ремонт техніки» піймалося б на слові «ремонт»,
-            // а «Доставка» — на транспорті.
             ("техні", "cat-appliance"), ("побутов", "cat-appliance"), ("appliance", "cat-appliance"),
             ("вантаж", "cat-moving"), ("переїзд", "cat-moving"), ("перевез", "cat-moving"),
             ("moving", "cat-moving"), ("cargo", "cat-moving"), ("truck", "cat-moving"),
@@ -118,8 +105,6 @@ namespace BLL.Public
 
             try
             {
-                // Порядок плиток — той самий, що в макеті: у порядку створення категорій.
-                // Раніше вони сортувалися за кількістю замовлень, і ряд щоразу виглядав інакше.
                 categories = await _db.Categories
                     .AsNoTracking()
                     .Where(c => c.IsActive && c.ParentCategoryId == null)
@@ -127,8 +112,6 @@ namespace BLL.Public
                     .Select(c => new PublicCategoryItem { Id = c.Id, Name = c.Name })
                     .ToListAsync(cancellationToken);
 
-                // Спершу ті напрями, що є в макеті головної, у його порядку;
-                // усе, що адміністратор додасть згодом, — після них.
                 categories = categories
                     .OrderBy(c => LandingOrder(c.Name))
                     .ThenBy(c => c.Id)
@@ -170,10 +153,6 @@ namespace BLL.Public
 
             try
             {
-                // Спершу самі напрями, а не замовлення: вітрина в макеті завжди з чотирьох
-                // карток, і послуга, на яку ще ніхто не замовляв, теж має бути на місці.
-                // Раніше картки будувалися із замовлень, тому напрям без жодного
-                // завершеного замовлення просто зникав, а ряд розпадався.
                 found = await _db.Categories
                     .AsNoTracking()
                     .Where(c => c.IsActive && featured.Contains(c.Name))
@@ -219,8 +198,6 @@ namespace BLL.Public
 
             var result = new List<PublicServiceItem>(FeaturedServices.Length);
 
-            // Порядок карток — той, що в макеті, а не за кількістю замовлень:
-            // блок стоїть як вітрина, і ряд має виглядати однаково щоразу.
             foreach (var card in FeaturedServices)
             {
                 var category = found.FirstOrDefault(c => SameName(c.Name, card.Category));
@@ -237,8 +214,6 @@ namespace BLL.Public
                 {
                     CategoryId = category.CategoryId,
                     Name = card.Label,
-                    // Нуль означає «ще не було завершених замовлень» — сторінка тоді
-                    // не показує ціну, замість того щоб писати «від 0 грн».
                     FromPrice = row == null ? 0 : Math.Round(row.MinPrice, 0),
                     Rating = rating == null ? 0 : Math.Round(rating.Average, 1),
                     ReviewsCount = rating?.Count ?? 0,
@@ -274,13 +249,8 @@ namespace BLL.Public
             public int Count { get; set; }
         }
 
-        // Підбирає файл іконки за назвою категорії. Назви категорій задає адміністратор,
-        // тому шукаємо не точний збіг, а частину слова; якщо нічого не підійшло —
-        // показуємо нейтральні три крапки, як у макеті на плитці «Більше».
         public static string GetCategoryIcon(string name)
         {
-            // Слово має саме починатися з ключа, а не просто містити його: інакше коротке «it»
-            // спрацювало б у слові «fitness», а «car» — у «career».
             var words = name.ToLowerInvariant()
                 .Split(new[] { ' ', '\t', '-', '/', '&', ',', '.', '(', ')', '«', '»', '\'', '"' },
                        StringSplitOptions.RemoveEmptyEntries);
@@ -298,14 +268,98 @@ namespace BLL.Public
 
         private static string IconPath(string icon) => $"/img/icons/{icon}.svg";
 
-        /// <summary>Місце напряму в макеті головної; невідомі йдуть у кінець.</summary>
+        public async Task<IReadOnlyList<PublicServiceItem>> GetServicesByIdsAsync(
+            IReadOnlyList<int> ids,
+            CancellationToken cancellationToken = default)
+        {
+            if (ids.Count == 0)
+            {
+                return Array.Empty<PublicServiceItem>();
+            }
+
+            List<PublicServiceItem> items;
+
+            try
+            {
+                items = await _db.Categories
+                    .AsNoTracking()
+                    .Where(c => ids.Contains(c.Id) && c.IsActive && c.ParentCategoryId != null)
+                    .Select(c => new PublicServiceItem
+                    {
+                        CategoryId = c.Id,
+                        Name = c.Name,
+                        Parent = c.ParentCategory!.Name,
+                        FromPrice = c.Orders
+                            .Where(o => o.Status == OrderStatus.Completed)
+                            .Select(o => (decimal?)o.Price)
+                            .Min() ?? 0
+                    })
+                    .ToListAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Не вдалося прочитати нещодавно переглянуті послуги");
+                return Array.Empty<PublicServiceItem>();
+            }
+
+            foreach (var item in items)
+            {
+                item.FromPrice = Math.Round(item.FromPrice, 0);
+            }
+
+            return ids
+                .Select(id => items.FirstOrDefault(i => i.CategoryId == id))
+                .Where(item => item != null)
+                .Select(item => item!)
+                .ToList();
+        }
+
+        public async Task<IReadOnlyList<PublicServiceItem>> GetMostOrderedServicesAsync(
+            int take = 6,
+            CancellationToken cancellationToken = default)
+        {
+            take = Math.Clamp(take, 1, 24);
+
+            try
+            {
+                var popular = await _db.Orders
+                    .AsNoTracking()
+                    .Where(o => o.Category.IsActive && o.Category.ParentCategoryId != null)
+                    .GroupBy(o => o.CategoryId)
+                    .Select(g => new { CategoryId = g.Key, Count = g.Count() })
+                    .OrderByDescending(x => x.Count)
+                    .ThenBy(x => x.CategoryId)
+                    .Take(take)
+                    .ToListAsync(cancellationToken);
+
+                if (popular.Count > 0)
+                {
+                    return await GetServicesByIdsAsync(popular.Select(p => p.CategoryId).ToList(), cancellationToken);
+                }
+
+                var first = await _db.Categories
+                    .AsNoTracking()
+                    .Where(c => c.IsActive && c.ParentCategoryId != null)
+                    .OrderBy(c => c.Id)
+                    .Select(c => c.Id)
+                    .Take(take)
+                    .ToListAsync(cancellationToken);
+
+                return await GetServicesByIdsAsync(first, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Не вдалося прочитати найпопулярніші послуги");
+                return Array.Empty<PublicServiceItem>();
+            }
+        }
+
         private static int LandingOrder(string name)
         {
             var index = Array.FindIndex(LandingCategories, known => SameName(known, name));
             return index < 0 ? int.MaxValue : index;
         }
 
-        /// <summary>Апостроф у макеті ’, у базі ' — для порівняння зводимо до одного.</summary>
         private static bool SameName(string left, string right) =>
             string.Equals(left.Replace('\u2019', '\''), right.Replace('\u2019', '\''),
                           StringComparison.OrdinalIgnoreCase);

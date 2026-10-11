@@ -1,0 +1,33 @@
+@model VerifyCodeViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Відновлення пароля — Вибір";
+    ViewData["CodeAction"] = "VerifyCode";
+    ViewData["CodePurpose"] = "PasswordReset";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-action="ForgotPassword"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+
+        <div class="auth-split">
+            <div class="auth-split__aside">
+                <span class="auth-split__icon" aria-hidden="true"><partial name="_AuthFaceIcon" /></span>
+                <h2>Забули пароль?</h2>
+                <p class="auth-step-name">Крок 2</p>
+                <p>Перевірте код<br />Ми надіслали код підтвердження на ваш e-mail</p>
+            </div>
+
+            <div class="auth-split__form">
+                <h1>Відновлення пароля</h1>
+                <p>Ми допоможемо вам отримати доступ до вашого акаунта!</p>
+
+                <partial name="_AuthCodeForm" model="Model" />
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts { <script src="~/js/auth.js" asp-append-version="true" defer></script> }
