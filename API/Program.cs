@@ -1,22 +1,25 @@
 using API.Services;
+using API.Validators.Authentication;
 using BLL.Options;
 using BLL.Services;
 using BLL.Services.Interfaces;
+using BLL.Services.PaymentGateways;
+using DAL.Configurations;
 using DAL.Context;
+using DAL.Seed;
+using Domain.Entities;
+using FirebaseAdmin;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using API.Validators.Authentication;
-using DAL.Configurations;
 using System.Threading.Tasks;
-using DAL.Seed;
-using Microsoft.AspNetCore.Identity;
-using Domain.Entities;
-using Microsoft.Extensions.Options;
 
 
 namespace API
@@ -37,6 +40,15 @@ namespace API
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+
+            var firebaseKeyPath = Path.Combine(Directory.GetCurrentDirectory(), "firebase-key.json");
+            if (File.Exists(firebaseKeyPath))
+            {
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromFile(firebaseKeyPath)
+                });
+            }
 
             /* ADD AUTHENTICATION */
             builder.Services
@@ -109,6 +121,25 @@ namespace API
                 });
 
             builder.Services.AddAuthorization();
+
+            // Регистрация отдельных платежных шлюзов как реализации интерфейса IPaymentGateway
+            builder.Services.AddTransient<IPaymentGateway, LiqPayGateway>(provider =>
+                new LiqPayGateway(
+                    builder.Configuration["LiqPay:PublicKey"] ?? "sandbox_public",
+                    builder.Configuration["LiqPay:PrivateKey"] ?? "sandbox_private"
+                ));
+
+            builder.Services.AddTransient<IPaymentGateway, WayForPayGateway>(provider =>
+                new WayForPayGateway(
+                    builder.Configuration["WayForPay:MerchantAccount"] ?? "test_merch",
+                    builder.Configuration["WayForPay:MerchantSecretKey"] ?? "test_secret",
+                    builder.Configuration["WayForPay:DomainName"] ?? "test.com"
+                ));
+
+            builder.Services.AddTransient<IPaymentGateway, StripeGateway>();
+
+            // Регистрация самой фабрики шлюзов
+            builder.Services.AddSingleton<PaymentGatewayFactory>();
 
             /* ADD SWAGER */
             builder.Services.AddSwaggerGen(options =>

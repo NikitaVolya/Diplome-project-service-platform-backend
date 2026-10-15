@@ -41,6 +41,7 @@ namespace API.Services
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IReviewService, ReviewService>();
 
+            services.AddScoped<IFirebasePushService, FirebasePushService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IApplicationService, ApplicationService>();

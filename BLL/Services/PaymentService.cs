@@ -13,10 +13,14 @@ namespace BLL.Services
     public class PaymentService : IPaymentService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
 
-        public PaymentService(IUnitOfWork unitOfWork)
+        public PaymentService(
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<Payment?> GetByIdAsync(int id)
@@ -103,6 +107,30 @@ namespace BLL.Services
 
             await _unitOfWork.Payments.UpdateStatusAsync(payment.Id, newStatus, paidAt);
             await _unitOfWork.SaveChangesAsync();
+
+            string title = newStatus == PaymentStatus.Completed ? "Payment successful" : "Payment failed";
+            string message = newStatus == PaymentStatus.Completed
+                ? $"Your payment of {payment.Amount} for order #{payment.OrderId} was successfully processed."
+                : $"Payment for order #{payment.OrderId} could not be completed.";
+
+            await _notificationService.CreateNotificationAsync(
+                userId: payment.UserId,
+                title: title,
+                message: message
+            );
+
+            if (newStatus == PaymentStatus.Completed)
+            {
+                var order = await _unitOfWork.Orders.GetByIdAsync(payment.OrderId);
+                if (order != null && !string.IsNullOrEmpty(order.ExecutorId))
+                {
+                    await _notificationService.CreateNotificationAsync(
+                        userId: order.ExecutorId,
+                        title: "Order paid",
+                        message: $"The customer has paid for order #{order.Id}."
+                    );
+                }
+            }
         }
 
         public async Task RefundPaymentAsync(int paymentId, string currentUserId)
@@ -120,8 +148,15 @@ namespace BLL.Services
             {
                 throw new InvalidOperationException("Only completed payments can be refunded.");
             }
+
             await _unitOfWork.Payments.UpdateStatusAsync(payment.Id, PaymentStatus.Refunded);
             await _unitOfWork.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(
+                userId: payment.UserId,
+                title: "Payment refunded",
+                message: $"Your payment of {payment.Amount} for order #{payment.OrderId} has been refunded."
+            );
         }
     }
 }

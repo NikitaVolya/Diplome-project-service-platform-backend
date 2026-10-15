@@ -364,4 +364,5 @@ FodyWeavers.xsd
 
 # ASP.NET Core CONFIGURATION
 */appsettings.json
+*/firebase-key.json
 */appsettings.Development.json

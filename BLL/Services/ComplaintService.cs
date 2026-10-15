@@ -3,8 +3,6 @@ using DAL.UnitOfWork.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BLL.Services
@@ -12,10 +10,14 @@ namespace BLL.Services
     public class ComplaintService : IComplaintService
     {
         private readonly IUnitOfWork _unitOfWork;
-        
-        public ComplaintService(IUnitOfWork unitOfWork)
+        private readonly INotificationService _notificationService;
+
+        public ComplaintService(
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<Complaint?> GetByIdAsync(int id)
@@ -79,6 +81,16 @@ namespace BLL.Services
 
             await _unitOfWork.Complaints.AddAsync(complaint);
             await _unitOfWork.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(complaint.TargetUserId))
+            {
+                await _notificationService.CreateNotificationAsync(
+                    userId: complaint.TargetUserId,
+                    title: "Complaint received",
+                    message: $"A complaint regarding '{complaint.Reason}' has been filed against your account."
+                );
+            }
+
             return complaint;
         }
 
@@ -89,9 +101,16 @@ namespace BLL.Services
             {
                 throw new ArgumentException($"Complaint with ID {complaintId} does not exist.", nameof(complaintId));
             }
+
             complaint.Status = newStatus;
             await _unitOfWork.Complaints.UpdateAsync(complaint);
             await _unitOfWork.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(
+                userId: complaint.SenderId,
+                title: "Complaint status update",
+                message: $"Your complaint status has been changed to {newStatus}."
+            );
         }
     }
 }

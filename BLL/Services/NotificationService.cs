@@ -1,7 +1,9 @@
 ﻿using BLL.Services.Interfaces;
 using DAL.Repositories.Interfaces;
 using DAL.UnitOfWork.Interfaces;
+using Domain.Entities;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,14 @@ namespace BLL.Services
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFirebasePushService _pushService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NotificationService(IUnitOfWork unitOfWork)
+        public NotificationService(IUnitOfWork unitOfWork, IFirebasePushService pushService, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _pushService = pushService;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<Notification>> GetUserNotificationsAsync(string userId)
@@ -75,6 +81,14 @@ namespace BLL.Services
 
             await _unitOfWork.Notifications.AddAsync(notification);
             await _unitOfWork.SaveChangesAsync();
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (!string.IsNullOrEmpty(user?.DeviceToken))
+            {
+                await _pushService.SendPushNotificationAsync(user.DeviceToken, title, message);
+            }
+
             return notification;
         }
 
@@ -83,7 +97,9 @@ namespace BLL.Services
             if (userIds == null || !userIds.Any())
                 return;
 
-            var notifications = userIds.Select(userId => new Notification
+            var userIdsList = userIds.Distinct().ToList();
+
+            var notifications = userIdsList.Select(userId => new Notification
             {
                 UserId = userId,
                 Title = title,
@@ -98,6 +114,21 @@ namespace BLL.Services
             }
 
             await _unitOfWork.SaveChangesAsync();
+
+            var deviceTokens = new List<string>();
+            foreach (var id in userIdsList)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (!string.IsNullOrEmpty(user?.DeviceToken))
+                {
+                    deviceTokens.Add(user.DeviceToken);
+                }
+            }
+
+            if (deviceTokens.Any())
+            {
+                await _pushService.SendMulticastNotificationAsync(deviceTokens, title, message);
+            }
         }
 
         public async Task MarkAsReadAsync(int notificationId, string userId)
