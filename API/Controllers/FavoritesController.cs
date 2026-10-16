@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpGet("orders")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> GetFavoriteOrders()
         {
             var userId = GetCurrentUserId();
@@ -52,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpGet("orders/{orderId:int}/check")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> IsOrderFavorite(int orderId)
         {
             var userId = GetCurrentUserId();
@@ -70,7 +70,7 @@ namespace API.Controllers
         }
 
         [HttpPost("orders/{orderId:int}/toggle")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> ToggleFavoriteOrder(int orderId)
         {
             try
@@ -102,7 +102,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("orders/{orderId:int}")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> RemoveOrderFromFavorites(int orderId)
         {
             var userId = GetCurrentUserId();

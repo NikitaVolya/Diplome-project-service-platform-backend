@@ -1,7 +1,9 @@
 using API.DTO.Category;
 using API.Services;
+using API.Validators.Admin;
 using API.Validators.Authentication;
 using API.Validators.Category;
+using API.Validators.Statistic;
 using BLL.Options;
 using BLL.Services;
 using BLL.Services.Interfaces;
@@ -124,7 +126,6 @@ namespace API
 
             builder.Services.AddAuthorization();
 
-            // Регистрация отдельных платежных шлюзов как реализации интерфейса IPaymentGateway
             builder.Services.AddTransient<IPaymentGateway, LiqPayGateway>(provider =>
                 new LiqPayGateway(
                     builder.Configuration["LiqPay:PublicKey"] ?? "sandbox_public",
@@ -140,7 +141,6 @@ namespace API
 
             builder.Services.AddTransient<IPaymentGateway, StripeGateway>();
 
-            // Регистрация самой фабрики шлюзов
             builder.Services.AddSingleton<PaymentGatewayFactory>();
 
             /* ADD SWAGER */
@@ -178,12 +178,15 @@ namespace API
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             /* ADD FLUENT VALIDATORS */
-            builder.Services.AddFluentValidationAutoValidation();   
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<AddAdminRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<ForgotPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
-            builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<DateRangeValidator>();
 
 
 

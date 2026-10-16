@@ -39,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> GetById(int id)
         {
             var payment = await _paymentService.GetByIdAsync(id);
@@ -58,7 +58,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-payments")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetUserPayments()
         {
             var userId = GetCurrentUserId();
@@ -67,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpGet("order/{orderId:int}")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> GetOrderPayments(int orderId)
         {
             var payments = await _paymentService.GetOrderPaymentsAsync(orderId);
@@ -75,7 +75,7 @@ namespace API.Controllers
         }
 
         [HttpGet("order/{orderId:int}/is-paid")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> IsOrderPaid(int orderId)
         {
             var isPaid = await _paymentService.IsOrderPaidAsync(orderId);

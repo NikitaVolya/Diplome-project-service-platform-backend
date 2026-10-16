@@ -113,7 +113,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-assigned")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> GetMyAssignedOrders()
         {
             var currentUserId = GetCurrentUserId();

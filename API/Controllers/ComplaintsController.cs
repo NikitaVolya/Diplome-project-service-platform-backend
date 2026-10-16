@@ -55,7 +55,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-sent")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetMySentComplaints()
         {
             try
@@ -106,7 +106,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> Create([FromBody] CreateComplaintDto dto)
         {
             try
