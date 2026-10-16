@@ -1,5 +1,7 @@
+using API.DTO.Category;
 using API.Services;
 using API.Validators.Authentication;
+using API.Validators.Category;
 using BLL.Options;
 using BLL.Services;
 using BLL.Services.Interfaces;
@@ -181,6 +183,8 @@ namespace API
             builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+
 
 
             /* ADD OPTIONS */
