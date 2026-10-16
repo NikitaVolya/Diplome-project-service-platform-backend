@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -77,6 +78,42 @@ namespace BLL.Services
             await _userManager.UpdateAsync(user);
 
             return true;
+        }
+
+        public async Task BecomeExecuterAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || user.IsDeleted)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            var roleName = UserRole.Executer.ToRoleName();
+
+            if (await _userManager.IsInRoleAsync(user, roleName))
+            {
+                return;
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    string.Join("; ", result.Errors.Select(e => e.Description)));
+            }
+        }
+        public async Task<IList<string>> GetRolesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || user.IsDeleted)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            return await _userManager.GetRolesAsync(user);
         }
     }
 }

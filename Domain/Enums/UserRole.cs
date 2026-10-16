@@ -4,7 +4,8 @@ namespace Domain.Enums
 {
     public enum UserRole
     {
-        User,
+        Customer = 0,
+        Executer,
         Admin,
         SuperAdmin
     }

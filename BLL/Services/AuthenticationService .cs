@@ -1,6 +1,7 @@
 ﻿using BLL.Results;
 using BLL.Services.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -49,6 +50,16 @@ namespace BLL.Services
                         ", ",
                         result.Errors.Select(x => x.Description)
                     ));
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, UserRole.Customer.ToRoleName());
+
+            if (!roleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+
+                throw new InvalidOperationException(
+                    string.Join("; ", roleResult.Errors.Select(e => e.Description)));
             }
 
             return user;
