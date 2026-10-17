@@ -55,7 +55,7 @@ namespace DAL.Context
 
                 entity.Property(o => o.Price)
                       .HasPrecision(18, 2);
-
+                
                 entity.Property(o => o.Status)
                       .HasConversion<string>();
             });
