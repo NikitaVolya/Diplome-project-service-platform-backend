@@ -11,39 +11,81 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<OrderMessage>> GetMessagesByOrderIdAsync(int orderId)
+        public async Task<IEnumerable<OrderMessage>> GetConversationAsync(int orderId, string userAId, string userBId)
         {
             return await _context.OrderMessages
+                .AsNoTracking()
                 .Include(m => m.Sender)
-                .Where(m => m.OrderId == orderId)
+                .Include(m => m.Receiver)
+                .Where(m => m.OrderId == orderId &&
+                            ((m.SenderId == userAId && m.ReceiverId == userBId) ||
+                             (m.SenderId == userBId && m.ReceiverId == userAId)))
                 .OrderBy(m => m.SentAt)
+                .ThenBy(m => m.Id)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersWithMessagesForUserAsync(string userId)
+        public async Task<bool> HasConversationAsync(int orderId, string userAId, string userBId)
         {
-            return await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.Executor)
-                .Include(o => o.OrderMessages)
-                    .ThenInclude(m => m.Sender)
-                .Where(o => (o.CustomerId == userId || o.ExecutorId == userId) && o.OrderMessages.Any())
-                .ToListAsync();
+            return await _context.OrderMessages
+                .AnyAsync(m => m.OrderId == orderId &&
+                               ((m.SenderId == userAId && m.ReceiverId == userBId) ||
+                                (m.SenderId == userBId && m.ReceiverId == userAId)));
         }
 
-        public async Task MarkMessagesAsReadAsync(int orderId, string currentUserId)
+        public async Task MarkConversationAsReadAsync(int orderId, string senderId, string receiverId)
         {
             await _context.OrderMessages
-                .Where(m => m.OrderId == orderId && m.SenderId != currentUserId && !m.IsRead)
+                .Where(m => m.OrderId == orderId &&
+                            m.SenderId == senderId &&
+                            m.ReceiverId == receiverId &&
+                            !m.IsRead)
                 .ExecuteUpdateAsync(s => s.SetProperty(m => m.IsRead, true));
+        }
+
+        public async Task<IReadOnlyList<(OrderMessage LastMessage, int UnreadCount)>> GetDialogSummariesAsync(string userId, int? orderId = null)
+        {
+            // A conversation is identified by (order, the OTHER participant). Grouping happens in SQL:
+            // Id grows with every insert, so the maximum Id is the newest message of the conversation.
+            var groups = await _context.OrderMessages
+                .Where(m => (m.SenderId == userId || m.ReceiverId == userId) &&
+                            (orderId == null || m.OrderId == orderId))
+                .GroupBy(m => new
+                {
+                    m.OrderId,
+                    CounterpartId = m.SenderId == userId ? m.ReceiverId : m.SenderId
+                })
+                .Select(g => new
+                {
+                    LastMessageId = g.Max(m => m.Id),
+                    UnreadCount = g.Count(m => !m.IsRead && m.ReceiverId == userId)
+                })
+                .ToListAsync();
+
+            if (groups.Count == 0)
+            {
+                return Array.Empty<(OrderMessage LastMessage, int UnreadCount)>();
+            }
+
+            var lastMessageIds = groups.Select(g => g.LastMessageId).ToList();
+
+            var lastMessages = await _context.OrderMessages
+                .AsNoTracking()
+                .Include(m => m.Order)
+                .Include(m => m.Sender)
+                .Include(m => m.Receiver)
+                .Where(m => lastMessageIds.Contains(m.Id))
+                .ToDictionaryAsync(m => m.Id);
+
+            return groups
+                .Select(g => (lastMessages[g.LastMessageId], g.UnreadCount))
+                .ToList();
         }
 
         public async Task<int> GetTotalUnreadCountAsync(string userId)
         {
             return await _context.OrderMessages
-                .Where(m => m.SenderId != userId && !m.IsRead &&
-                           (m.Order.CustomerId == userId || m.Order.ExecutorId == userId))
-                .CountAsync();
+                .CountAsync(m => m.ReceiverId == userId && !m.IsRead);
         }
     }
 }

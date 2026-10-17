@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-stats")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> GetMyStatistic([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             try

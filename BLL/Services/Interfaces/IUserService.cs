@@ -15,5 +15,7 @@ namespace BLL.Services.Interfaces
             string lastName,
             string? avatarUrl);
         Task<bool> DeleteAsync(string id);
+        Task BecomeExecuterAsync(string userId);
+        Task<IList<string>> GetRolesAsync(string userId);
     }
 }

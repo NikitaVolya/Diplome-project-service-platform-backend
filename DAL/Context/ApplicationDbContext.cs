@@ -55,7 +55,7 @@ namespace DAL.Context
 
                 entity.Property(o => o.Price)
                       .HasPrecision(18, 2);
-                
+
                 entity.Property(o => o.Status)
                       .HasConversion<string>();
             });
@@ -177,6 +177,14 @@ namespace DAL.Context
                 entity.HasOne(m => m.Sender)
                     .WithMany(u => u.SentMessages)
                     .HasForeignKey(m => m.SenderId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Two relationships point at ApplicationUser, so both are configured explicitly.
+                // Restrict (not Cascade): SQL Server forbids several cascade paths, and chat history
+                // must not vanish when a user row is touched.
+                entity.HasOne(m => m.Receiver)
+                    .WithMany(u => u.ReceivedMessages)
+                    .HasForeignKey(m => m.ReceiverId)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.Property(m => m.Text)

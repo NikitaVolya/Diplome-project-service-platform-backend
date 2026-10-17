@@ -55,6 +55,7 @@ namespace DAL.Repositories
             var query = _dbSet
                 .Include(o => o.Category)
                 .Include(o => o.Customer)
+                .Include(o => o.Executor)
                 .AsQueryable();
 
             if (categoryId.HasValue)

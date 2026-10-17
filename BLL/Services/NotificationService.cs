@@ -174,7 +174,7 @@ namespace BLL.Services
             {
                 throw new UnauthorizedAccessException("You do not have permission to delete this notification.");
             }
-            await _unitOfWork.Notifications.DeleteAsync(notification);
+            _unitOfWork.Notifications.Remove(notification);
             await _unitOfWork.SaveChangesAsync();
         }
     }

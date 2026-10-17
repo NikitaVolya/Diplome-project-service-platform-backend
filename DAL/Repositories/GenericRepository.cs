@@ -40,5 +40,10 @@ namespace DAL.Repositories
                 _dbSet.Remove(entity);
             }
         }
+
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
     }
 }

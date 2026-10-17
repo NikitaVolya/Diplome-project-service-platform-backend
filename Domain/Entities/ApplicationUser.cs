@@ -27,5 +27,6 @@ namespace Domain.Entities
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
         public ICollection<OrderMessage> SentMessages { get; set; } = new List<OrderMessage>();
+        public ICollection<OrderMessage> ReceivedMessages { get; set; } = new List<OrderMessage>();
     }
 }

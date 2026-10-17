@@ -54,5 +54,34 @@ namespace DAL.Repositories
                 }
             }
         }
+
+        public async Task<bool> TryUpdateStatusAsync(
+            int paymentId,
+            PaymentStatus expectedStatus,
+            PaymentStatus newStatus,
+            DateTime? paidAt = null,
+            string? externalTransactionId = null)
+        {
+            var affectedRows = await _dbSet
+                .Where(p => p.Id == paymentId && p.Status == expectedStatus)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(p => p.Status, newStatus)
+                    .SetProperty(p => p.PaidAt, p => paidAt ?? p.PaidAt)
+                    .SetProperty(p => p.ExternalTransactionId, p => externalTransactionId ?? p.ExternalTransactionId));
+
+            return affectedRows > 0;
+        }
+
+        public async Task<Payment?> GetLatestPendingByProviderAsync(PaymentProvider provider)
+        {
+            // Provider defaults to the first enum value for payments that never reached a checkout,
+            // so a non-empty ExternalTransactionId is what proves that a checkout really happened.
+            return await _dbSet
+                .Where(p => p.Provider == provider
+                            && p.Status == PaymentStatus.Pending
+                            && p.ExternalTransactionId != "")
+                .OrderByDescending(p => p.CreatedAt)
+                .FirstOrDefaultAsync();
+        }
     }
 }

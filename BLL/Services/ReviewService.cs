@@ -165,7 +165,7 @@ namespace BLL.Services
             {
                 throw new UnauthorizedAccessException("You are not authorized to delete this review.");
             }
-            await _unitOfWork.Reviews.DeleteAsync(existingReview);
+            _unitOfWork.Reviews.Remove(existingReview);
             await _unitOfWork.SaveChangesAsync();
         }
     }

@@ -95,6 +95,7 @@ namespace BLL.Services
 
             application.Order.ExecutorId = application.ExecutorId;
             application.Order.Status = OrderStatus.InProgress;
+            application.Order.Price = application.ProposedPrice;
 
             var otherApplications = await _unitOfWork.Applications.GetByOrderIdAsync(application.OrderId);
             foreach (var otherApplication in otherApplications)

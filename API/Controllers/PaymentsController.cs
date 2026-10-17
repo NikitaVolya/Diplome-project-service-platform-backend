@@ -1,11 +1,11 @@
 ﻿using API.DTO.Payment;
 using AutoMapper;
+using BLL.Exceptions;
 using BLL.Services.Interfaces;
-using BLL.Services.PaymentGateways;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -16,16 +16,16 @@ namespace API.Controllers
     {
         private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
-        private readonly PaymentGatewayFactory _gatewayFactory;
+        private readonly ILogger<PaymentsController> _logger;
 
         public PaymentsController(
             IPaymentService paymentService,
             IMapper mapper,
-            PaymentGatewayFactory gatewayFactory)
+            ILogger<PaymentsController> logger)
         {
             _paymentService = paymentService;
             _mapper = mapper;
-            _gatewayFactory = gatewayFactory;
+            _logger = logger;
         }
 
         private string GetCurrentUserId()
@@ -33,27 +33,18 @@ namespace API.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
-                throw new UnauthorizedAccessException("User is not authenticated.");
+                throw new UnauthorizedException("User is not authenticated.");
             }
             return userId;
         }
+
+        private bool IsAdmin => User.IsInRole("Admin");
 
         [HttpGet("{id:int}")]
         [Authorize(Roles = "Customer,Executor,Admin")]
         public async Task<IActionResult> GetById(int id)
         {
-            var payment = await _paymentService.GetByIdAsync(id);
-            if (payment == null)
-            {
-                return NotFound(new { message = $"Payment with ID {id} not found." });
-            }
-
-            var userId = GetCurrentUserId();
-            if (payment.UserId != userId && !User.IsInRole("Admin"))
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = "You do not have access to this payment." });
-            }
-
+            var payment = await _paymentService.GetForUserAsync(id, GetCurrentUserId(), IsAdmin);
             return Ok(_mapper.Map<PaymentResponseDto>(payment));
         }
 
@@ -61,8 +52,7 @@ namespace API.Controllers
         [Authorize(Roles = "Customer,Executor")]
         public async Task<IActionResult> GetUserPayments()
         {
-            var userId = GetCurrentUserId();
-            var payments = await _paymentService.GetUserPaymentsAsync(userId);
+            var payments = await _paymentService.GetUserPaymentsAsync(GetCurrentUserId());
             return Ok(_mapper.Map<IEnumerable<PaymentResponseDto>>(payments));
         }
 
@@ -70,7 +60,7 @@ namespace API.Controllers
         [Authorize(Roles = "Customer,Executor,Admin")]
         public async Task<IActionResult> GetOrderPayments(int orderId)
         {
-            var payments = await _paymentService.GetOrderPaymentsAsync(orderId);
+            var payments = await _paymentService.GetOrderPaymentsAsync(orderId, GetCurrentUserId(), IsAdmin);
             return Ok(_mapper.Map<IEnumerable<PaymentResponseDto>>(payments));
         }
 
@@ -78,7 +68,7 @@ namespace API.Controllers
         [Authorize(Roles = "Customer,Executor,Admin")]
         public async Task<IActionResult> IsOrderPaid(int orderId)
         {
-            var isPaid = await _paymentService.IsOrderPaidAsync(orderId);
+            var isPaid = await _paymentService.IsOrderPaidAsync(orderId, GetCurrentUserId(), IsAdmin);
             return Ok(new { orderId, isPaid });
         }
 
@@ -86,97 +76,118 @@ namespace API.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
         {
-            try
-            {
-                var userId = GetCurrentUserId();
-                var payment = _mapper.Map<Payment>(dto);
-                payment.UserId = userId;
+            var payment = await _paymentService.CreatePaymentAsync(dto.OrderId, GetCurrentUserId());
+            var responseDto = _mapper.Map<PaymentResponseDto>(payment);
 
-                var createdPayment = await _paymentService.CreatePaymentAsync(payment);
-                var responseDto = _mapper.Map<PaymentResponseDto>(createdPayment);
-
-                return CreatedAtAction(nameof(GetById), new { id = createdPayment.Id }, responseDto);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
+            return CreatedAtAction(nameof(GetById), new { id = payment.Id }, responseDto);
         }
 
         [HttpPost("{id:int}/checkout")]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateGatewayCheckout(int id, [FromQuery] string providerName)
+        public async Task<IActionResult> CreateGatewayCheckout(
+            int id,
+            [FromQuery] string providerName,
+            CancellationToken cancellationToken)
         {
-            try
-            {
-                var payment = await _paymentService.GetByIdAsync(id);
-                if (payment == null)
-                {
-                    return NotFound(new { message = $"Payment with ID {id} not found." });
-                }
+            var checkout = await _paymentService.CreateCheckoutAsync(
+                id,
+                providerName,
+                GetCurrentUserId(),
+                cancellationToken);
 
-                var userId = GetCurrentUserId();
-                if (payment.UserId != userId && !User.IsInRole("Admin"))
-                {
-                    return StatusCode(StatusCodes.Status403Forbidden, new { message = "You do not have access to this payment." });
-                }
-
-                var gateway = _gatewayFactory.GetGateway(providerName);
-
-                var returnUrl = "https://mysite.com/checkout/result";
-                var serverUrl = "https://mysite.com/api/payments/webhook";
-
-                var paymentData = await gateway.CreatePaymentUrlAsync(payment, returnUrl, serverUrl);
-
-                return Ok(new { success = true, provider = gateway.ProviderName, data = paymentData });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            // Stripe: redirect the customer to checkout.redirectUrl.
+            // LiqPay / WayForPay: POST checkout.formFields to checkout.formAction.
+            return Ok(checkout);
         }
 
-        [HttpPost("callback")]
+        /// <summary>
+        /// Single entry point for all payment providers: POST /api/payments/webhook/{stripe|liqpay|wayforpay}.
+        /// Anonymous by nature, therefore NOTHING in the request is trusted until the provider's
+        /// signature has been verified inside the gateway.
+        /// </summary>
+        [HttpPost("webhook/{provider}")]
         [AllowAnonymous]
-        public async Task<IActionResult> ProcessCallback([FromBody] PaymentCallbackDto dto)
+        [RequestSizeLimit(65536)]
+        public async Task<IActionResult> Webhook(string provider, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _paymentService.ProcessCallbackAsync(dto.ExternalTransactionId, dto.NewStatus);
-                return Ok(new { message = "Payment status updated successfully." });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var request = await ReadWebhookRequestAsync(cancellationToken);
+
+            // Sizes only, never contents: bodies and signatures are secrets-adjacent.
+            _logger.LogInformation(
+                "Webhook {Provider}: content type '{ContentType}', raw body {RawLength} chars, {FieldCount} form/query fields.",
+                provider,
+                Request.ContentType ?? "none",
+                request.RawBody.Length,
+                request.Form.Count);
+
+            var acknowledgement = await _paymentService.HandleWebhookAsync(provider, request);
+
+            return acknowledgement is null ? Ok() : Ok(acknowledgement);
         }
 
         [HttpPost("{id:int}/refund")]
         [Authorize(Roles = "Customer,Admin")]
         public async Task<IActionResult> RefundPayment(int id)
         {
-            try
+            await _paymentService.RefundPaymentAsync(id, GetCurrentUserId());
+            return Ok(new { message = "Payment refunded successfully." });
+        }
+
+        /// <summary>
+        /// Collects everything a gateway might need, from every place a webhook can legitimately come from:
+        /// the raw body (Stripe and WayForPay sign these exact bytes), form fields (LiqPay's real
+        /// application/x-www-form-urlencoded callback) and the query string (manual testing).
+        /// </summary>
+        private async Task<GatewayRequest> ReadWebhookRequestAsync(CancellationToken cancellationToken)
+        {
+            // No-op when the global middleware already enabled buffering; makes this action
+            // independent of it, so the body can be read here AND again by the form reader.
+            Request.EnableBuffering();
+
+            // 1. Raw body, always (an empty string when there is none).
+            var rawBody = string.Empty;
+            if (Request.Body.CanSeek)
             {
-                var userId = GetCurrentUserId();
-                await _paymentService.RefundPaymentAsync(id, userId);
-                return Ok(new { message = "Payment refunded successfully." });
+                Request.Body.Position = 0;
             }
-            catch (InvalidOperationException ex)
+
+            using (var reader = new StreamReader(Request.Body, Encoding.UTF8, leaveOpen: true))
             {
-                return BadRequest(new { message = ex.Message });
+                rawBody = await reader.ReadToEndAsync(cancellationToken);
             }
-            catch (UnauthorizedAccessException ex)
+
+            if (Request.Body.CanSeek)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = ex.Message });
+                Request.Body.Position = 0;
             }
+
+            var form = new Dictionary<string, string>(StringComparer.Ordinal);
+
+            // 2. Real provider request (LiqPay): form fields.
+            if (Request.HasFormContentType)
+            {
+                var formCollection = await Request.ReadFormAsync(cancellationToken);
+                foreach (var field in formCollection)
+                {
+                    form[field.Key] = field.Value.ToString();
+                }
+            }
+
+            // 3. Manual testing: ?data=...&signature=...  (never overrides a real form field)
+            foreach (var queryField in Request.Query)
+            {
+                if (!form.ContainsKey(queryField.Key))
+                {
+                    form[queryField.Key] = queryField.Value.ToString();
+                }
+            }
+
+            var headers = Request.Headers.ToDictionary(
+                header => header.Key,
+                header => header.Value.ToString(),
+                StringComparer.OrdinalIgnoreCase);
+
+            return new GatewayRequest(rawBody, form, headers);
         }
     }
 }

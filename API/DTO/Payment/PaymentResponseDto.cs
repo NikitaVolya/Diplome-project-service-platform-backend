@@ -9,6 +9,7 @@ namespace API.DTO.Payment
         public string? OrderTitle { get; set; }
         public string UserId { get; set; } = string.Empty;
         public decimal Amount { get; set; }
+        public string Currency { get; set; } = string.Empty;
         public PaymentStatus Status { get; set; }
         public string? ExternalTransactionId { get; set; }
         public DateTime CreatedAt { get; set; }

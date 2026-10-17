@@ -16,6 +16,9 @@ namespace Domain.Models
         public string SenderId { get; set; } = null!;
         public ApplicationUser Sender { get; set; } = null!;
 
+        public string ReceiverId { get; set; } = null!;
+        public ApplicationUser Receiver { get; set; } = null!;
+
         public string Text { get; set; } = null!;
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
         public bool IsRead { get; set; } = false;

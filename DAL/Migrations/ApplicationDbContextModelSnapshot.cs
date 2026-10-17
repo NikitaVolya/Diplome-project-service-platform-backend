@@ -381,6 +381,10 @@ namespace DAL.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReceiverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -396,6 +400,8 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -770,6 +776,12 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.ApplicationUser", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.ApplicationUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
@@ -777,6 +789,8 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });
@@ -893,6 +907,8 @@ namespace DAL.Migrations
                     b.Navigation("Payments");
 
                     b.Navigation("ReceivedComplaints");
+
+                    b.Navigation("ReceivedMessages");
 
                     b.Navigation("ReceivedReviews");
 

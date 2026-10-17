@@ -1,5 +1,6 @@
 ﻿using API.DTO.OrderMessage;
 using AutoMapper;
+using BLL.Exceptions;
 using BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,61 +27,62 @@ namespace API.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
-                throw new UnauthorizedAccessException("User is not authenticated.");
+                throw new UnauthorizedException("User is not authenticated.");
             }
             return userId;
         }
 
+        private bool IsExecutor => User.IsInRole("Executor");
+
+        /// <summary>
+        /// Sends a message in ONE conversation of the order.
+        /// Executor: always writes to the customer of the order.
+        /// Customer: body.receiverId is the executor to write to (optional once an executor is assigned).
+        /// </summary>
         [HttpPost("orders/{orderId:int}")]
         [Authorize(Roles = "Customer,Executor")]
         public async Task<IActionResult> SendMessage(int orderId, [FromBody] SendOrderMessageDto dto)
         {
-            try
-            {
-                var userId = GetCurrentUserId();
-                var message = await _messageService.SendMessageAsync(orderId, userId, dto.Text);
-                var responseDto = _mapper.Map<OrderMessageResponseDto>(message);
-                return Ok(responseDto);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = ex.Message });
-            }
+            var message = await _messageService.SendMessageAsync(
+                orderId,
+                GetCurrentUserId(),
+                IsExecutor,
+                dto.ReceiverId,
+                dto.Text);
+
+            return Ok(_mapper.Map<OrderMessageResponseDto>(message));
         }
 
+        /// <summary>
+        /// Messages of ONE conversation of the order. participantId is the other side:
+        /// the executor for a customer (optional once an executor is assigned), ignored/optional for an executor.
+        /// Messages of other executors on the same order are never included.
+        /// </summary>
         [HttpGet("orders/{orderId:int}")]
         [Authorize(Roles = "Customer,Executor")]
-        public async Task<IActionResult> GetOrderMessages(int orderId)
+        public async Task<IActionResult> GetConversation(int orderId, [FromQuery] string? participantId = null)
         {
-            try
-            {
-                var userId = GetCurrentUserId();
-                var messages = await _messageService.GetOrderMessagesAsync(orderId, userId);
-                var responseDtos = _mapper.Map<IEnumerable<OrderMessageResponseDto>>(messages);
-                return Ok(responseDtos);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new { message = ex.Message });
-            }
+            var messages = await _messageService.GetConversationAsync(
+                orderId,
+                GetCurrentUserId(),
+                IsExecutor,
+                participantId);
+
+            return Ok(_mapper.Map<IEnumerable<OrderMessageResponseDto>>(messages));
         }
 
+        /// <summary>
+        /// All conversations of the current user, one entry per (order, other participant).
+        /// Optional ?orderId= narrows the list to one order (e.g. all executors a customer talks to about it).
+        /// </summary>
         [HttpGet("dialogs")]
         [Authorize(Roles = "Customer,Executor")]
-        public async Task<IActionResult> GetUserDialogs()
+        public async Task<IActionResult> GetUserDialogs([FromQuery] int? orderId = null)
         {
             var userId = GetCurrentUserId();
-            var orders = await _messageService.GetUserDialogsAsync(userId);
+            var dialogs = await _messageService.GetUserDialogsAsync(userId, orderId);
 
-            var dialogDtos = _mapper.Map<IEnumerable<OrderDialogResponseDto>>(orders, opts =>
+            var dialogDtos = _mapper.Map<IEnumerable<OrderDialogResponseDto>>(dialogs, opts =>
             {
                 opts.Items["CurrentUserId"] = userId;
             });
@@ -92,8 +94,7 @@ namespace API.Controllers
         [Authorize(Roles = "Customer,Executor")]
         public async Task<IActionResult> GetTotalUnreadCount()
         {
-            var userId = GetCurrentUserId();
-            var count = await _messageService.GetTotalUnreadCountAsync(userId);
+            var count = await _messageService.GetTotalUnreadCountAsync(GetCurrentUserId());
             return Ok(new { unreadCount = count });
         }
     }

@@ -1,9 +1,11 @@
-﻿using BLL.Services.Interfaces;
+﻿using BLL.Exceptions;
+using BLL.Services.Interfaces;
 using DAL.Repositories.Interfaces;
 using DAL.UnitOfWork.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BLL.Services
@@ -71,25 +73,12 @@ namespace BLL.Services
 
         public async Task<Order> CreateOrderAsync(Order order)
         {
-            if (string.IsNullOrWhiteSpace(order.Title))
-            {
-                throw new ArgumentException("Order title cannot be null or empty.", nameof(order.Title));
-            }
-
-            if (string.IsNullOrWhiteSpace(order.Description))
-            {
-                throw new ArgumentException("Order description cannot be null or empty.", nameof(order.Description));
-            }
-
-            if (order.Price < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(order.Price), "Order price cannot be negative.");
-            }
+            ValidateOrderFields(order);
 
             var category = await _unitOfWork.Categories.GetByIdAsync(order.CategoryId);
             if (category == null)
             {
-                throw new ArgumentException($"Category with ID {order.CategoryId} does not exist.", nameof(order.CategoryId));
+                throw new ValidationFailedException($"Category with ID {order.CategoryId} does not exist.");
             }
 
             if ((order.Latitude == 0 && order.Longitude == 0) && !string.IsNullOrWhiteSpace(order.Address))
@@ -117,11 +106,26 @@ namespace BLL.Services
             var existingOrder = await _unitOfWork.Orders.GetByIdAsync(order.Id);
             if (existingOrder == null)
             {
-                throw new ArgumentException($"Order with ID {order.Id} does not exist.", nameof(order.Id));
+                throw new NotFoundException($"Order with ID {order.Id} does not exist.");
             }
             if (existingOrder.CustomerId != currentUserId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to update this order.");
+                throw new ForbiddenException("You are not authorized to update this order.");
+            }
+
+            // Only an order that nobody has started working on may be edited.
+            // Otherwise the customer could change the price after an executor was assigned.
+            if (existingOrder.Status != OrderStatus.Pending)
+            {
+                throw new ConflictException("Only orders with Pending status can be edited.");
+            }
+
+            ValidateOrderFields(order);
+
+            var category = await _unitOfWork.Categories.GetByIdAsync(order.CategoryId);
+            if (category == null)
+            {
+                throw new ValidationFailedException($"Category with ID {order.CategoryId} does not exist.");
             }
 
             if (!string.IsNullOrWhiteSpace(order.Address) &&
@@ -143,9 +147,12 @@ namespace BLL.Services
             existingOrder.Title = order.Title;
             existingOrder.Description = order.Description;
             existingOrder.Price = order.Price;
-            existingOrder.Status = order.Status;
             existingOrder.Address = order.Address;
             existingOrder.CategoryId = order.CategoryId;
+
+            // IMPORTANT: Status is deliberately NOT copied from the incoming object.
+            // UpdateOrderDto has no Status, so AutoMapper leaves the default (Pending) there,
+            // and copying it used to reset every edited order back to Pending.
 
             await _unitOfWork.Orders.UpdateAsync(existingOrder);
             await _unitOfWork.SaveChangesAsync();
@@ -156,11 +163,11 @@ namespace BLL.Services
             var existingOrder = await _unitOfWork.Orders.GetByIdAsync(orderId);
             if (existingOrder == null)
             {
-                throw new ArgumentException($"Order with ID {orderId} does not exist.", nameof(orderId));
+                throw new NotFoundException($"Order with ID {orderId} does not exist.");
             }
             if (existingOrder.CustomerId != currentUserId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to cancel this order.");
+                throw new ForbiddenException("You are not authorized to cancel this order.");
             }
 
             existingOrder.Status = OrderStatus.Cancelled;
@@ -173,11 +180,11 @@ namespace BLL.Services
             var existingOrder = await _unitOfWork.Orders.GetByIdAsync(orderId);
             if (existingOrder == null)
             {
-                throw new ArgumentException($"Order with ID {orderId} does not exist.", nameof(orderId));
+                throw new NotFoundException($"Order with ID {orderId} does not exist.");
             }
             if (existingOrder.CustomerId != currentUserId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to complete this order.");
+                throw new ForbiddenException("You are not authorized to complete this order.");
             }
 
             existingOrder.Status = OrderStatus.Completed;
@@ -188,19 +195,24 @@ namespace BLL.Services
 
         public async Task AssignExecutorAsync(int orderId, string executorId, string currentUserId)
         {
+            if (string.IsNullOrWhiteSpace(executorId))
+            {
+                throw new ValidationFailedException("Executor ID is required.");
+            }
+
             var existingOrder = await _unitOfWork.Orders.GetByIdAsync(orderId);
             if (existingOrder == null)
             {
-                throw new ArgumentException($"Order with ID {orderId} does not exist.", nameof(orderId));
+                throw new NotFoundException($"Order with ID {orderId} does not exist.");
             }
             if (existingOrder.CustomerId != currentUserId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to assign an executor to this order.");
+                throw new ForbiddenException("You are not authorized to assign an executor to this order.");
             }
 
             if (existingOrder.Status != OrderStatus.Pending)
             {
-                throw new InvalidOperationException("Executor can only be assigned to orders with Pending status.");
+                throw new ConflictException("Executor can only be assigned to orders with Pending status.");
             }
 
             existingOrder.ExecutorId = executorId;
@@ -214,14 +226,44 @@ namespace BLL.Services
             var existingOrder = await _unitOfWork.Orders.GetByIdAsync(orderId);
             if (existingOrder == null)
             {
-                throw new ArgumentException($"Order with ID {orderId} does not exist.", nameof(orderId));
+                throw new NotFoundException($"Order with ID {orderId} does not exist.");
             }
             if (existingOrder.CustomerId != currentUserId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to delete this order.");
+                throw new ForbiddenException("You are not authorized to delete this order.");
             }
-            await _unitOfWork.Orders.DeleteAsync(existingOrder);
+
+            // Payments are cascade-deleted together with their order (see ApplicationDbContext).
+            // Financial records must never disappear silently, so an order that has payments
+            // can only be cancelled, not deleted.
+            var payments = await _unitOfWork.Payments.GetByOrderIdAsync(orderId);
+            if (payments.Any())
+            {
+                throw new ConflictException("This order has payments and cannot be deleted. Cancel it instead.");
+            }
+
+            // The repository's DeleteAsync expects an entity KEY, not an entity;
+            // passing the entity made EF throw. Remove(entity) is the correct call.
+            _unitOfWork.Orders.Remove(existingOrder);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        private static void ValidateOrderFields(Order order)
+        {
+            if (string.IsNullOrWhiteSpace(order.Title))
+            {
+                throw new ValidationFailedException("Order title cannot be null or empty.");
+            }
+
+            if (string.IsNullOrWhiteSpace(order.Description))
+            {
+                throw new ValidationFailedException("Order description cannot be null or empty.");
+            }
+
+            if (order.Price < 0)
+            {
+                throw new ValidationFailedException("Order price cannot be negative.");
+            }
         }
     }
 }

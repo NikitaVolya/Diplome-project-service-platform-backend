@@ -1,8 +1,10 @@
 ﻿using API.DTO.Authentication;
+using API.DTO.User;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace API.Controllers
@@ -27,9 +29,23 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("me")]
-        public IActionResult Me()
+        public async Task<ActionResult<UserMeResponseDto>> Me()
         {
-            return Ok(User.Identity?.Name);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var user = await _userService.GetByIdAsync(userId);
+
+            if (user == null || user.IsDeleted)
+                return NotFound(new { message = "User not found." });
+
+            var dto = _mapper.Map<UserMeResponseDto>(user);
+
+            dto.Roles = (await _userService.GetRolesAsync(userId)).ToList();
+
+            return Ok(dto);
         }
 
         [HttpPost("register")]
@@ -57,6 +73,31 @@ namespace API.Controllers
         public IActionResult Logout()
         {
             return NoContent();
+        }
+
+        [HttpPost("become-executer")]
+        [Authorize]
+        public async Task<IActionResult> BecomeExecuter()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            try
+            {
+                await _userService.BecomeExecuterAsync(userId);
+
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

@@ -1,5 +1,18 @@
+using API.DTO.Category;
+using API.DTO.Payment;
+using API.Middleware;
 using API.Services;
+using API.Swagger;
+using API.Validators.Admin;
 using API.Validators.Authentication;
+using API.Validators.Category;
+using API.Validators.Complaint;
+using API.Validators.Notification;
+using API.Validators.Order;
+using API.Validators.OrderMessage;
+using API.Validators.Payment;
+using API.Validators.Review;
+using API.Validators.Statistic;
 using BLL.Options;
 using BLL.Services;
 using BLL.Services.Interfaces;
@@ -21,7 +34,6 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace API
 {
     public class Program
@@ -29,7 +41,6 @@ namespace API
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
 
             /* CONNECT DATABASE */
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -39,6 +50,10 @@ namespace API
                 );
 
             builder.Services.AddControllers();
+
+            /* GLOBAL ERROR HANDLING */
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
 
             var firebaseKeyPath = Path.Combine(Directory.GetCurrentDirectory(), "firebase-key.json");
@@ -122,26 +137,45 @@ namespace API
 
             builder.Services.AddAuthorization();
 
-            // Регистрация отдельных платежных шлюзов как реализации интерфейса IPaymentGateway
-            builder.Services.AddTransient<IPaymentGateway, LiqPayGateway>(provider =>
-                new LiqPayGateway(
-                    builder.Configuration["LiqPay:PublicKey"] ?? "sandbox_public",
-                    builder.Configuration["LiqPay:PrivateKey"] ?? "sandbox_private"
-                ));
+            /* PAYMENT GATEWAYS & OPTIONS */
+            builder.Services.AddOptions<PaymentOptions>()
+                .Bind(builder.Configuration.GetSection(PaymentOptions.SectionName))
+                .Validate(o => Uri.TryCreate(o.PublicBaseUrl, UriKind.Absolute, out _), "Payments:PublicBaseUrl must be an absolute URL.")
+                .Validate(o => Uri.TryCreate(o.ReturnUrl, UriKind.Absolute, out _), "Payments:ReturnUrl must be an absolute URL.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.Currency), "Payments:Currency is required.")
+                .Validate(
+                    o => builder.Environment.IsDevelopment() ||
+                           (!o.Development.MapUnreferencedTestEvents && !o.Development.SkipAmountCheckForTestEvents),
+                    "Payments:Development options may only be enabled in the Development environment.")
+                .ValidateOnStart();
 
-            builder.Services.AddTransient<IPaymentGateway, WayForPayGateway>(provider =>
-                new WayForPayGateway(
-                    builder.Configuration["WayForPay:MerchantAccount"] ?? "test_merch",
-                    builder.Configuration["WayForPay:MerchantSecretKey"] ?? "test_secret",
-                    builder.Configuration["WayForPay:DomainName"] ?? "test.com"
-                ));
+            builder.Services.AddOptions<StripeOptions>()
+                .Bind(builder.Configuration.GetSection(StripeOptions.SectionName))
+                .Validate(o => !string.IsNullOrWhiteSpace(o.SecretKey), "Stripe:SecretKey is required.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.WebhookSecret), "Stripe:WebhookSecret is required.")
+                .ValidateOnStart();
 
-            builder.Services.AddTransient<IPaymentGateway, StripeGateway>();
+            builder.Services.AddOptions<LiqPayOptions>()
+                .Bind(builder.Configuration.GetSection(LiqPayOptions.SectionName))
+                .Validate(o => !string.IsNullOrWhiteSpace(o.PublicKey), "LiqPay:PublicKey is required.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.PrivateKey), "LiqPay:PrivateKey is required.")
+                .ValidateOnStart();
 
-            // Регистрация самой фабрики шлюзов
+            builder.Services.AddOptions<WayForPayOptions>()
+                .Bind(builder.Configuration.GetSection(WayForPayOptions.SectionName))
+                .Validate(o => !string.IsNullOrWhiteSpace(o.MerchantAccount), "WayForPay:MerchantAccount is required.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.MerchantSecretKey), "WayForPay:MerchantSecretKey is required.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.DomainName), "WayForPay:DomainName is required.")
+                .ValidateOnStart();
+
+            // Gateways are stateless, so singletons are fine.
+            builder.Services.AddSingleton<IPaymentGateway, LiqPayGateway>();
+            builder.Services.AddSingleton<IPaymentGateway, WayForPayGateway>();
+            builder.Services.AddSingleton<IPaymentGateway, StripeGateway>();
+
             builder.Services.AddSingleton<PaymentGatewayFactory>();
 
-            /* ADD SWAGER */
+            /* ADD SWAGGER */
             builder.Services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("Bearer",
@@ -155,6 +189,9 @@ namespace API
                         Description = "Bearer {token}"
                     });
 
+                // Makes Swagger UI send real webhook test requests (form fields / JSON body).
+                options.OperationFilter<WebhookRequestBodyOperationFilter>();
+
                 options.AddSecurityRequirement(
                     new OpenApiSecurityRequirement {
                             {
@@ -167,7 +204,7 @@ namespace API
                                             Id = "Bearer"
                                         }
                                 },
-                                Array.Empty<string>()
+                            Array.Empty<string>()
                             }
                     });
             });
@@ -176,12 +213,25 @@ namespace API
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             /* ADD FLUENT VALIDATORS */
-            builder.Services.AddFluentValidationAutoValidation();   
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<AddAdminRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<ForgotPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
-            builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
-
+            builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateComplaintValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateComplaintStatusValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateMassNotificationValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateOrderValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<SendOrderMessageValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreatePaymentValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<PaymentCallbackValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateReviewValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateReviewValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<DateRangeValidator>();
 
             /* ADD OPTIONS */
             builder.Services.Configure<EmailOptions>(
@@ -197,24 +247,29 @@ namespace API
                     "AdminSeed:Password must be provided in configuration.")
                 .ValidateOnStart();
 
-            /* ADD REPOSITORIES */
-
-            /* ADD SERVICES */
+            /* ADD REPOSITORIES & SERVICES */
             builder.Services.AddApplicationServices();
-
 
             builder.Services
             .AddIdentityCore<ApplicationUser>(options =>
-             {
-                 options.User.RequireUniqueEmail = true;
-             })
+            {
+                options.User.RequireUniqueEmail = true;
+            })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-
-
             var app = builder.Build();
+
+            // Request body buffering for webhooks
+            app.Use(async (context, next) =>
+            {
+                context.Request.EnableBuffering();
+                await next();
+            });
+
+            // Must be the first middleware so it can catch exceptions from everything below.
+            app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
             {
@@ -235,8 +290,7 @@ namespace API
 
             app.MapControllers();
 
-
-            /* ADD SEADS */
+            /* ADD SEEDS */
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

@@ -1,6 +1,6 @@
 ﻿namespace API.DTO.Order
 {
-    public class CreateOrderDto
+    public class CreateOrderDto : IOrderInputDto
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
