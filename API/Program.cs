@@ -3,6 +3,7 @@ using API.Services;
 using API.Validators.Admin;
 using API.Validators.Authentication;
 using API.Validators.Category;
+using API.Validators.Complaint;
 using API.Validators.Statistic;
 using BLL.Options;
 using BLL.Services;
@@ -180,12 +181,18 @@ namespace API
             /* ADD FLUENT VALIDATORS */
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<AddAdminRequestValidator>();
+
             builder.Services.AddValidatorsFromAssemblyContaining<ForgotPasswordRequestValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordRequestValidator>();
+
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateComplaintValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateComplaintStatusValidator>();
+
             builder.Services.AddValidatorsFromAssemblyContaining<DateRangeValidator>();
 
 
