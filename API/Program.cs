@@ -4,6 +4,7 @@ using API.Validators.Admin;
 using API.Validators.Authentication;
 using API.Validators.Category;
 using API.Validators.Complaint;
+using API.Validators.Notification;
 using API.Validators.Statistic;
 using BLL.Options;
 using BLL.Services;
@@ -192,6 +193,8 @@ namespace API
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateComplaintValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<UpdateComplaintStatusValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateMassNotificationValidator>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<DateRangeValidator>();
 
