@@ -150,7 +150,7 @@ namespace API.Controllers
         {
             try
             {
-                await _paymentService.ProcessCallbackAsync(dto.ExternalTransactionId, dto.NewStatus);
+                await _paymentService.ProcessCallbackAsync(dto.ExternalTransactionId, dto.NewStatus!.Value);
                 return Ok(new { message = "Payment status updated successfully." });
             }
             catch (InvalidOperationException ex)
