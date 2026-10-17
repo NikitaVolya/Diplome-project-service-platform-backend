@@ -1,0 +1,70 @@
+@model RegisterStepOneViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Реєстрація — Вибір";
+
+    var executor = Model.IsExecutor;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-controller="Landing" asp-action="Index" data-auth-back>
+            <span aria-hidden="true">&lsaquo;</span> Назад
+        </a>
+
+        <h1 class="auth__title">Реєстрація</h1>
+
+        <partial name="_AuthSteps" model="1" />
+
+        <div class="auth-card">
+            <span class="auth-card__icon" aria-hidden="true">
+                <span data-role-icon="Customer" class="@(executor ? "d-none" : null)"><partial name="_AuthFaceIcon" /></span>
+                <span data-role-icon="Executor" class="@(executor ? null : "d-none")"><partial name="_AuthCaseIcon" /></span>
+            </span>
+
+            <h2>Створіть акаунт</h2>
+
+            <p class="auth-card__lead">
+                <span data-role-lead="Customer" class="@(executor ? "d-none" : null)">Знайдіть найкращих виконавців для будь-яких завдань</span>
+                <span data-role-lead="Executor" class="@(executor ? null : "d-none")">Отримуйте замовлення та розвивайте свій бізнес</span>
+            </p>
+
+            <form method="post" asp-action="Register" novalidate>
+                <partial name="_AuthErrors" />
+
+                <div class="auth-roles" role="radiogroup" aria-label="Ким ви будете на платформі">
+                    <label class="auth-role">
+                        <input type="radio" asp-for="Role" value="Customer" data-role-pick />
+                        <span>Я замовник</span>
+                    </label>
+                    <label class="auth-role">
+                        <input type="radio" asp-for="Role" value="Executor" data-role-pick />
+                        <span>Я виконавець</span>
+                    </label>
+                </div>
+                <span asp-validation-for="Role" class="field-validation-error"></span>
+
+                <div class="auth-field">
+                    <label asp-for="Email">Ваш e-mail</label>
+                    <span class="auth-input">
+                        <input asp-for="Email" type="email" autocomplete="email" placeholder="Введіть e-mail" />
+                    </span>
+                    <span asp-validation-for="Email" class="field-validation-error"></span>
+                    <p class="auth-hint">Ми надішлемо код підтвердження на цей e-mail</p>
+                </div>
+
+                <button class="auth-submit" type="submit">Продовжити</button>
+            </form>
+
+            <p class="auth-terms">
+                Реєструючись ви погоджуєтесь з нашими
+                <a asp-controller="Landing" asp-action="Index" asp-fragment="footer">Умовами використання</a> та
+                <a asp-controller="Landing" asp-action="Index" asp-fragment="footer">Політикою конфіденційності</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+@section Scripts { <script src="~/js/auth.js" asp-append-version="true" defer></script> }

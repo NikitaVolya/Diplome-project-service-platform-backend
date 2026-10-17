@@ -1,0 +1,107 @@
+using AdminPanel.Models;
+using AdminPanel.Services;
+using BLL.Admin.Interfaces;
+using BLL.Admin.Services;
+using BLL.Public;
+using DAL.Context;
+using DAL.Seed;
+using Domain.Common;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+
+namespace AdminPanel.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddAdminIdentity(this IServiceCollection services)
+        {
+            services
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = false;
+
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.AllowedForNewUsers = true;
+
+                    options.SignIn.RequireConfirmedEmail = false;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddClaimsPrincipalFactory<AppUserClaimsPrincipalFactory>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "ServiceHub.Admin";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                options.SlidingExpiration = true;
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddAdminAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AppRoles.StaffPolicy, policy =>
+                    policy.RequireRole(AppRoles.StaffRoles));
+
+                options.AddPolicy(AppRoles.AdminOnlyPolicy, policy =>
+                    policy.RequireRole(AppRoles.Admin));
+
+                options.AddPolicy(AppRoles.ModerationPolicy, policy =>
+                    policy.RequireRole(AppRoles.Admin, AppRoles.Moderator));
+
+                options.FallbackPolicy = options.GetPolicy(AppRoles.StaffPolicy);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddAdminServices(this IServiceCollection services)
+        {
+            services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+            services.AddScoped<IAdminUserService, AdminUserService>();
+            services.AddScoped<IAdminOrderService, AdminOrderService>();
+            services.AddScoped<IAdminCategoryService, AdminCategoryService>();
+            services.AddScoped<IAdminModerationService, AdminModerationService>();
+            services.AddScoped<IAdminPaymentService, AdminPaymentService>();
+            services.AddScoped<IAdminChatService, AdminChatService>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+            services.AddScoped<INavigationBadgeService, NavigationBadgeService>();
+
+            services.AddScoped<IPublicCatalogService, PublicCatalogService>();
+            services.AddScoped<ServiceDirectory>();
+
+            // Коди підтвердження для реєстрації та відновлення пароля.
+            // Лежать у памʼяті застосунку, тому екземпляр потрібен один на всіх.
+            services.AddSingleton<IVerificationCodes, VerificationCodes>();
+
+            // Поки пошта не налаштована, код іде в журнал. Щоб почати слати листи,
+            // достатньо замінити цей рядок реалізацією з SMTP — більше ніде нічого.
+            services.AddSingleton<IVerificationCodeSender, LoggingVerificationCodeSender>();
+
+            // Тільки читає файли з wwwroot і кешує результат — один екземпляр на застосунок.
+            services.AddSingleton<CatalogPhotos>();
+
+            services.AddMemoryCache();
+
+            // Сервіс без стану: одного екземпляра вистачає на весь застосунок.
+            services.AddSingleton<IExcelExportService, ExcelExportService>();
+
+            return services;
+        }
+    }
+}

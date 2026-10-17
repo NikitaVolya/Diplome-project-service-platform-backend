@@ -1,0 +1,264 @@
+Фотографії плиток каталогу
+==========================
+
+Куди класти: wwwroot/img/catalog/tiles/<напрям>/<підкатегорія>.jpg
+Розмір у макеті: 304x296 (плитка 152x148 на подвійній щільності).
+Можна .jpg, .jpeg, .png або .webp — застосунок бере перший, що знайде.
+Нічого в коді та базі міняти не треба: файл із правильним іменем
+підхоплюється сам. Поки файлу немає, плитка показує заглушку.
+Зараз на місці: 220 фото, бракує: 0.
+
+Якщо додаси нову підкатегорію, ім'я файлу для неї можна підглянути
+на самій сторінці: наведи мишу на порожню плитку — у підказці буде шлях.
+
+Дім і ремонт  ->  dim-i-remont/
+    [+] Сантехнічні роботи                       santekhnichni-roboty.jpg
+    [+] Електромонтажні роботи                   elektromontazhni-roboty.jpg
+    [+] Ремонт квартир і будинків                remont-kvartyr-i-budynkiv.jpg
+    [+] Будівельні роботи                        budivelni-roboty.jpg
+    [+] Меблі та столярні роботи                 mebli-ta-stoliarni-roboty.jpg
+    [+] Вікна, двері та скло                     vikna-dveri-ta-sklo.jpg
+    [+] Покрівля та фасади                       pokrivlia-ta-fasady.jpg
+    [+] Опалення та водопостачання               opalennia-ta-vodopostachannia.jpg
+    [+] Встановлення та ремонт техніки           vstanovlennia-ta-remont-tekhniky.jpg
+    [+] Системи безпеки та розумний дім          systemy-bezpeky-ta-rozumnyi-dim.jpg
+    [+] Оздоблювальні роботи                     ozdobliuvalni-roboty.jpg
+    [+] Ландшафтні та зовнішні роботи            landshaftni-ta-zovnishni-roboty.jpg
+    [+] Домашній майстер                         domashnii-maister.jpg
+    [+] Вентиляція та кондиціонування            ventyliatsiia-ta-kondytsionuvannia.jpg
+    [+] Інші роботи                              inshi-roboty.jpg
+
+Прибирання  ->  prybyrannia/
+    [+] Прибирання квартир                       prybyrannia-kvartyr.jpg
+    [+] Генеральне прибирання                    heneralne-prybyrannia.jpg
+    [+] Прибирання після ремонту                 prybyrannia-pislia-remontu.jpg
+    [+] Прибирання після переїзду                prybyrannia-pislia-pereizdu.jpg
+    [+] Прибирання офісів                        prybyrannia-ofisiv.jpg
+    [+] Прибирання ресторанів                    prybyrannia-restoraniv.jpg
+    [+] Виробничий клінінг                       vyrobnychyi-klininh.jpg
+    [+] Миття вікон                              myttia-vikon.jpg
+    [+] Миття фасадів                            myttia-fasadiv.jpg
+    [+] Хімчистка меблів і текстилю              khimchystka-mebliv-i-tekstyliu.jpg
+    [+] Прибирання території                     prybyrannia-terytorii.jpg
+    [+] Дезінфекція                              dezinfektsiia.jpg
+    [+] Прибирання після аварій                  prybyrannia-pislia-avarii.jpg
+    [+] Організація простору                     orhanizatsiia-prostoru.jpg
+    [+] Еко-прибирання                           eko-prybyrannia.jpg
+
+Доставка  ->  dostavka/
+    [+] Вантажні перевезення                     vantazhni-perevezennia.jpg
+    [+] Перевезення меблів, техніки              perevezennia-mebliv-tekhniky.jpg
+    [+] Послуги вантажників                      posluhy-vantazhnykiv.jpg
+    [+] Квартирні переїзди                       kvartyrni-pereizdy.jpg
+    [+] Таксі та водійські послуги               taksi-ta-vodiiski-posluhy.jpg
+    [+] Міжміські перевезення                    mizhmiski-perevezennia.jpg
+    [+] Кур'єрська доставка                      kurierska-dostavka.jpg
+    [+] Доставка товарів, продуктів              dostavka-tovariv-produktiv.jpg
+    [+] Доставка готової їжі                     dostavka-hotovoi-izhi.jpg
+    [+] Доставка ліків                           dostavka-likiv.jpg
+    [+] Документи та посилки                     dokumenty-ta-posylky.jpg
+    [+] Доставка квітів                          dostavka-kvitiv.jpg
+    [+] Вивіз сміття                             vyviz-smittia.jpg
+    [+] Логістичні послуги                       lohistychni-posluhy.jpg
+    [+] Міжнародні перевезення                   mizhnarodni-perevezennia.jpg
+
+Краса та догляд  ->  krasa-ta-dohliad/
+    [+] Перукарські послуги                      perukarski-posluhy.jpg
+    [+] Манікюр і педикюр                        manikiur-i-pedykiur.jpg
+    [+] Візажист-стиліст                         vizazhyst-stylist.jpg
+    [+] Нарощення вій                            naroshchennia-vii.jpg
+    [+] Масаж                                    masazh.jpg
+    [+] Косметологія                             kosmetolohiia.jpg
+    [+] SPA та догляд                            spa-ta-dohliad.jpg
+    [+] Нарощування волосся                      naroshchuvannia-volossia.jpg
+    [+] Депіляція                                depiliatsiia.jpg
+    [+] Догляд за бровами                        dohliad-za-brovamy.jpg
+    [+] Перманентний макіяж                      permanentnyi-makiiazh.jpg
+    [+] Дієтолог                                 diietoloh.jpg
+    [+] Психолог                                 psykholoh.jpg
+    [+] Езотеричні послуги                       ezoterychni-posluhy.jpg
+    [+] Інше                                     inshe.jpg
+
+Спорт та здоров'я  ->  sport-ta-zdorovia/
+    [+] Фітнес                                   fitnes.jpg
+    [+] Персональні тренування                   personalni-trenuvannia.jpg
+    [+] Йога та пілатес                          ioha-ta-pilates.jpg
+    [+] Реабілітація                             reabilitatsiia.jpg
+    [+] Фізіотерапія                             fizioterapiia.jpg
+    [+] Дієтолог                                 diietoloh.jpg
+    [+] Психолог                                 psykholoh.jpg
+    [+] Бойові мистецтва                         boiovi-mystetstva.jpg
+    [+] Танці                                    tantsi.jpg
+    [+] Інше                                     inshe.jpg
+
+IT та розробка  ->  it-ta-rozrobka/
+    [+] Розробка сайтів                          rozrobka-saitiv.jpg
+    [+] Підтримка сайтів                         pidtrymka-saitiv.jpg
+    [+] Landing Pages                            landing-pages.jpg
+    [+] Верстка та Front-end                     verstka-ta-front-end.jpg
+    [+] Мобільні застосунки                      mobilni-zastosunky.jpg
+    [+] Розробка ігор                            rozrobka-ihor.jpg
+    [+] Тестування ПЗ                            testuvannia-pz.jpg
+    [+] Технічне завдання                        tekhnichne-zavdannia.jpg
+    [+] Кібербезпека                             kiberbezpeka.jpg
+    [+] Бізнес-системи                           biznes-systemy.jpg
+    [+] AI-послуги                               ai-posluhy.jpg
+    [+] AI-контент                               ai-kontent.jpg
+    [+] AI-консалтинг                            ai-konsaltynh.jpg
+    [+] AI-розробка                              ai-rozrobka.jpg
+    [+] AI-аналітика                             ai-analityka.jpg
+
+Дизайн і творчість  ->  dyzain-i-tvorchist/
+    [+] Логотипи та стиль                        lohotypy-ta-styl.jpg
+    [+] Брендинг                                 brendynh.jpg
+    [+] Веб та UI/UX дизайн                      veb-ta-ui-ux-dyzain.jpg
+    [+] Графічний дизайн                         hrafichnyi-dyzain.jpg
+    [+] Поліграфія                               polihrafiia.jpg
+    [+] Банери та реклама                        banery-ta-reklama.jpg
+    [+] Друк                                     druk.jpg
+    [+] Ілюстрації та малюнки                    iliustratsii-ta-maliunky.jpg
+    [+] 3D дизайн                                3d-dyzain.jpg
+    [+] Дизайн інтер'єру                         dyzain-interieru.jpg
+    [+] Гейм-дизайн                              heim-dyzain.jpg
+    [+] Анімація та моушн                        animatsiia-ta-moushn.jpg
+    [+] Творчі послуги                           tvorchi-posluhy.jpg
+    [+] Handmade та рукоділля                    handmade-ta-rukodillia.jpg
+    [+] Інше в дизайні                           inshe-v-dyzaini.jpg
+
+Фото та відео  ->  foto-ta-video/
+    [+] Фотозйомка                               fotoziomka.jpg
+    [+] Відеозйомка                              videoziomka.jpg
+    [+] Весільна фото- та відеозйомка            vesilna-foto-ta-videoziomka.jpg
+    [+] Предметна зйомка                         predmetna-ziomka.jpg
+    [+] Портретна та сімейна зйомка              portretna-ta-simeina-ziomka.jpg
+    [+] Фото для бізнесу                         foto-dlia-biznesu.jpg
+    [+] Обробка фотографій                       obrobka-fotohrafii.jpg
+    [+] Монтаж відео                             montazh-video.jpg
+    [+] Оцифрування фото та відео                otsyfruvannia-foto-ta-video.jpg
+    [+] Інші фото- та відеопослуги               inshi-foto-ta-videoposluhy.jpg
+
+Бізнес-послуги  ->  biznes-posluhy/
+    [+] Бухгалтерські послуги                    bukhhalterski-posluhy.jpg
+    [+] Юридичні послуги                         iurydychni-posluhy.jpg
+    [+] Фінансові послуги                        finansovi-posluhy.jpg
+    [+] Консалтинг для бізнесу                   konsaltynh-dlia-biznesu.jpg
+    [+] Кадрові послуги                          kadrovi-posluhy.jpg
+    [+] Рекрутингові послуги                     rekrutynhovi-posluhy.jpg
+    [+] Послуги кол-центру                       posluhy-kol-tsentru.jpg
+    [+] Ріелторські послуги                      rieltorski-posluhy.jpg
+    [+] Бізнес-асистент                          biznes-asystent.jpg
+    [+] Реєстрація бізнесу                       reiestratsiia-biznesu.jpg
+    [+] Адміністративні послуги                  administratyvni-posluhy.jpg
+    [+] Безпека бізнесу                          bezpeka-biznesu.jpg
+    [+] Міграційні послуги                       mihratsiini-posluhy.jpg
+    [+] Переклад документів                      pereklad-dokumentiv.jpg
+    [+] Інші бізнес-послуги                      inshi-biznes-posluhy.jpg
+
+Автопослуги  ->  avtoposluhy/
+    [+] Допомога в дорозі                        dopomoha-v-dorozi.jpg
+    [+] Діагностика та ТО                        diahnostyka-ta-to.jpg
+    [+] Автоелектрика                            avtoelektryka.jpg
+    [+] Кузовний ремонт                          kuzovnyi-remont.jpg
+    [+] Ремонт двигуна                           remont-dvyhuna.jpg
+    [+] Ремонт КПП                               remont-kpp.jpg
+    [+] Ходова та підвіска                       khodova-ta-pidviska.jpg
+    [+] Гальмівна та кермова системи             halmivna-ta-kermova-systemy.jpg
+    [+] Шиномонтаж                               shynomontazh.jpg
+    [+] Автоскло                                 avtosklo.jpg
+    [+] Автокондиціонер                          avtokondytsioner.jpg
+    [+] Догляд за автомобілем                    dohliad-za-avtomobilem.jpg
+    [+] Газобалонне обладнання                   hazobalonne-obladnannia.jpg
+    [+] Ремонт мототехніки                       remont-mototekhniky.jpg
+    [+] Страхування та інші послуги              strakhuvannia-ta-inshi-posluhy.jpg
+
+Маркетинг і реклама  ->  marketynh-i-reklama/
+    [+] Контекстна реклама                       kontekstna-reklama.jpg
+    [+] SEO-просування                           seo-prosuvannia.jpg
+    [+] Просування в соцмережах                  prosuvannia-v-sotsmerezhakh.jpg
+    [+] Копірайтинг                              kopiraitynh.jpg
+    [+] Контент-маркетинг                        kontent-marketynh.jpg
+    [+] Email-маркетинг                          email-marketynh.jpg
+    [+] Веб-аналітика                            veb-analityka.jpg
+    [+] Аудит сайту та CRO                       audyt-saitu-ta-cro.jpg
+    [+] Просування застосунків                   prosuvannia-zastosunkiv.jpg
+    [+] Просування на маркетплейсах              prosuvannia-na-marketpleisakh.jpg
+    [+] Інтернет-реклама                         internet-reklama.jpg
+    [+] Розміщення оголошень                     rozmishchennia-oholoshen.jpg
+    [+] Розповсюдження реклами                   rozpovsiudzhennia-reklamy.jpg
+    [+] Маркетингові консультації                marketynhovi-konsultatsii.jpg
+    [+] Інші маркетингові послуги                inshi-marketynhovi-posluhy.jpg
+
+Освіта і розвиток  ->  osvita-i-rozvytok/
+    [+] Репетитори та шкільні предмети           repetytory-ta-shkilni-predmety.jpg
+    [+] Іноземні мови                            inozemni-movy.jpg
+    [+] Підготовка до іспитів                    pidhotovka-do-ispytiv.jpg
+    [+] Комп'ютерні та IT-курси                  kompiuterni-ta-it-kursy.jpg
+    [+] Творчі заняття                           tvorchi-zaniattia.jpg
+    [+] Музика та вокал                          muzyka-ta-vokal.jpg
+    [+] Спорт і фізичний розвиток                sport-i-fizychnyi-rozvytok.jpg
+    [+] Професійне навчання                      profesiine-navchannia.jpg
+    [+] Бізнес та підприємництво                 biznes-ta-pidpryiemnytstvo.jpg
+    [+] Особистісний розвиток                    osobystisnyi-rozvytok.jpg
+    [+] Психологічні тренінги                    psykholohichni-treninhy.jpg
+    [+] Курси для дітей                          kursy-dlia-ditei.jpg
+    [+] Онлайн-навчання                          onlain-navchannia.jpg
+    [+] Консультації та наставництво             konsultatsii-ta-nastavnytstvo.jpg
+    [+] Інші освітні послуги                     inshi-osvitni-posluhy.jpg
+
+Послуги для тварин  ->  posluhy-dlia-tvaryn/
+    [+] Ветеринарні послуги                      veterynarni-posluhy.jpg
+    [+] Грумінг                                  hruminh.jpg
+    [+] Дресирування                             dresyruvannia.jpg
+    [+] Вигул собак                              vyhul-sobak.jpg
+    [+] Перетримка тварин                        peretrymka-tvaryn.jpg
+    [+] Зооняня                                  zooniania.jpg
+    [+] Догляд за тваринами                      dohliad-za-tvarynamy.jpg
+    [+] Перевезення тварин                       perevezennia-tvaryn.jpg
+    [+] Екзотичні тварини                        ekzotychni-tvaryny.jpg
+    [+] Акваріуми та рибки                       akvariumy-ta-rybky.jpg
+    [+] Розведення тварин                        rozvedennia-tvaryn.jpg
+    [+] Зооконсультації                          zookonsultatsii.jpg
+    [+] Облаштування для тварин                  oblashtuvannia-dlia-tvaryn.jpg
+    [+] Пошук і допомога                         poshuk-i-dopomoha.jpg
+    [+] Інші послуги                             inshi-posluhy.jpg
+
+Події та допомога  ->  podii-ta-dopomoha/
+    [+] Організація подій                        orhanizatsiia-podii.jpg
+    [+] Весільні послуги                         vesilni-posluhy.jpg
+    [+] Ведучі та шоумени                        veduchi-ta-shoumeny.jpg
+    [+] Музиканти та DJ                          muzykanty-ta-dj.jpg
+    [+] Аніматори                                animatory.jpg
+    [+] Декор та оформлення                      dekor-ta-oformlennia.jpg
+    [+] Кейтеринг                                keiterynh.jpg
+    [+] Оренда для подій                         orenda-dlia-podii.jpg
+    [+] Волонтерська допомога                    volonterska-dopomoha.jpg
+    [+] Супровід та допомога                     suprovid-ta-dopomoha.jpg
+    [+] Особистий помічник                       osobystyi-pomichnyk.jpg
+    [+] Допомога у справах                       dopomoha-u-spravakh.jpg
+    [+] Послуги на годину                        posluhy-na-hodynu.jpg
+    [+] Пошук житла                              poshuk-zhytla.jpg
+    [+] Інші послуги                             inshi-posluhy.jpg
+
+Діти та догляд  ->  dity-ta-dohliad/
+    [+] Послуги няні                             posluhy-niani.jpg
+    [+] Гувернантка                              huvernantka.jpg
+    [+] Супровід дітей                           suprovid-ditei.jpg
+    [+] Догляд за немовлятами                    dohliad-za-nemovliatamy.jpg
+    [+] Догляд за літніми                        dohliad-za-litnimy.jpg
+    [+] Особливий догляд                         osoblyvyi-dohliad.jpg
+    [+] Домашній догляд                          domashnii-dohliad.jpg
+    [+] Персональний догляд                      personalnyi-dohliad.jpg
+    [+] Супровід та допомога                     suprovid-ta-dopomoha.jpg
+    [+] Інші послуги                             inshi-posluhy.jpg
+
+Інше  ->  inshe/
+    [+] Переклади                                pereklady.jpg
+    [+] Апостиль та легалізація                  apostyl-ta-lehalizatsiia.jpg
+    [+] Набір та обробка тексту                  nabir-ta-obrobka-tekstu.jpg
+    [+] Робота в інтернеті                       robota-v-interneti.jpg
+    [+] Фріланс-послуги                          frilans-posluhy.jpg
+    [+] Пошук інформації                         poshuk-informatsii.jpg
+    [+] Допомога з документами                   dopomoha-z-dokumentamy.jpg
+    [+] Разові завдання                          razovi-zavdannia.jpg
+    [+] Нестандартні доручення                   nestandartni-doruchennia.jpg
+    [+] Інші послуги                             inshi-posluhy.jpg

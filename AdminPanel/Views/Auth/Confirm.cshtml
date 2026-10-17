@@ -1,0 +1,30 @@
+@model VerifyCodeViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Підтвердження пошти — Вибір";
+    ViewData["CodeAction"] = "Confirm";
+    ViewData["CodePurpose"] = "Registration";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
+
+<main class="auth">
+    <div class="v-container auth__inner">
+        <a class="auth-back" asp-action="Register"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+
+        <h1 class="auth__title">Реєстрація</h1>
+
+        <partial name="_AuthSteps" model="1" />
+
+        <div class="auth-card">
+            <span class="auth-card__icon" aria-hidden="true"><partial name="_AuthFaceIcon" /></span>
+
+            <h2>Перевірте код</h2>
+            <p class="auth-card__lead">Ми надіслали код підтвердження на @Model.Email</p>
+
+            <partial name="_AuthCodeForm" model="Model" />
+        </div>
+    </div>
+</main>
+
+@section Scripts { <script src="~/js/auth.js" asp-append-version="true" defer></script> }
