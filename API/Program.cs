@@ -1,10 +1,15 @@
 using API.DTO.Category;
+using API.DTO.Payment;
 using API.Services;
 using API.Validators.Admin;
 using API.Validators.Authentication;
 using API.Validators.Category;
 using API.Validators.Complaint;
 using API.Validators.Notification;
+using API.Validators.Order;
+using API.Validators.OrderMessage;
+using API.Validators.Payment;
+using API.Validators.Review;
 using API.Validators.Statistic;
 using BLL.Options;
 using BLL.Services;
@@ -195,6 +200,17 @@ namespace API
             builder.Services.AddValidatorsFromAssemblyContaining<UpdateComplaintStatusValidator>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateMassNotificationValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateOrderValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<SendOrderMessageValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreatePaymentValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<PaymentCallbackValidator>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateReviewValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UpdateReviewValidator>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<DateRangeValidator>();
 

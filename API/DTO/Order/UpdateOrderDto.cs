@@ -1,6 +1,6 @@
 ﻿namespace API.DTO.Order
 {
-    public class UpdateOrderDto
+    public class UpdateOrderDto : IOrderInputDto
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
