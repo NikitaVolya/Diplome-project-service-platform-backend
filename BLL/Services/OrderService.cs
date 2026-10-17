@@ -4,8 +4,6 @@ using DAL.UnitOfWork.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BLL.Services
@@ -13,10 +11,12 @@ namespace BLL.Services
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGoogleMapsService _googleMapsService;
 
-        public OrderService(IUnitOfWork unitOfWork)
+        public OrderService(IUnitOfWork unitOfWork, IGoogleMapsService googleMapsService)
         {
             _unitOfWork = unitOfWork;
+            _googleMapsService = googleMapsService;
         }
 
         public async Task<Order?> GetByIdAsync(int id)
@@ -52,10 +52,21 @@ namespace BLL.Services
             int? categoryId,
             OrderStatus? status,
             string? searchTerm,
+            double? latitude = null,
+            double? longitude = null,
+            double? radiusKm = null,
             int pageIndex = 1,
             int pageSize = 10)
         {
-            return await _unitOfWork.Orders.GetFilteredOrdersAsync(categoryId, status, searchTerm, pageIndex, pageSize);
+            return await _unitOfWork.Orders.GetFilteredOrdersAsync(
+                categoryId,
+                status,
+                searchTerm,
+                latitude,
+                longitude,
+                radiusKm,
+                pageIndex,
+                pageSize);
         }
 
         public async Task<Order> CreateOrderAsync(Order order)
@@ -81,6 +92,16 @@ namespace BLL.Services
                 throw new ArgumentException($"Category with ID {order.CategoryId} does not exist.", nameof(order.CategoryId));
             }
 
+            if ((order.Latitude == 0 && order.Longitude == 0) && !string.IsNullOrWhiteSpace(order.Address))
+            {
+                var coordinates = await _googleMapsService.GeocodeAddressAsync(order.Address);
+                if (coordinates.HasValue)
+                {
+                    order.Latitude = coordinates.Value.Latitude;
+                    order.Longitude = coordinates.Value.Longitude;
+                }
+            }
+
             order.CreatedAt = DateTime.UtcNow;
             order.Status = OrderStatus.Pending;
             order.ExecutorId = null;
@@ -102,6 +123,23 @@ namespace BLL.Services
             {
                 throw new UnauthorizedAccessException("You are not authorized to update this order.");
             }
+
+            if (!string.IsNullOrWhiteSpace(order.Address) &&
+               (order.Address != existingOrder.Address || (order.Latitude == 0 && order.Longitude == 0)))
+            {
+                var coordinates = await _googleMapsService.GeocodeAddressAsync(order.Address);
+                if (coordinates.HasValue)
+                {
+                    existingOrder.Latitude = coordinates.Value.Latitude;
+                    existingOrder.Longitude = coordinates.Value.Longitude;
+                }
+            }
+            else
+            {
+                existingOrder.Latitude = order.Latitude;
+                existingOrder.Longitude = order.Longitude;
+            }
+
             existingOrder.Title = order.Title;
             existingOrder.Description = order.Description;
             existingOrder.Price = order.Price;

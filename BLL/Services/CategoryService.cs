@@ -38,24 +38,54 @@ namespace BLL.Services
             return await _unitOfWork.Categories.GetWithSubcategoriesByIdAsync(id);
         }
 
+        private async Task ValidateParentCategoryAsync(
+            int? parentCategoryId,
+            int currentCategoryId)
+        {
+            var visited = new HashSet<int>();
+
+            while (parentCategoryId.HasValue)
+            {
+                int id = parentCategoryId.Value;
+
+                if (currentCategoryId == id)
+                {
+                    throw new ArgumentException(
+                        "A category cannot be its own ancestor.");
+                }
+
+                if (!visited.Add(id))
+                {
+                    throw new InvalidOperationException(
+                        "Circular category hierarchy detected.");
+                }
+
+                var parent = await _unitOfWork.Categories.GetByIdAsync(id);
+
+                if (parent == null)
+                {
+                    throw new ArgumentException(
+                        $"Parent category with id {id} does not exist.");
+                }
+
+                parentCategoryId = parent.ParentCategoryId;
+            }
+        }
+
         public async Task<Category> CreateCategoryAsync(Category category)
         {
             if (string.IsNullOrWhiteSpace(category.Name))
             {
-                throw new ArgumentException("Category name cannot be empty.");
+                throw new ArgumentException(
+                    "Category name cannot be empty.");
             }
 
-            if (category.ParentCategoryId.HasValue)
-            {
-                var parentCategory = await _unitOfWork.Categories.GetByIdAsync(category.ParentCategoryId.Value);
-                if (parentCategory == null)
-                {
-                    throw new ArgumentException("Parent category does not exist.");
-                }
-            }
+
+            await ValidateParentCategoryAsync(category.ParentCategoryId, category.Id);
 
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
+
             return category;
         }
 

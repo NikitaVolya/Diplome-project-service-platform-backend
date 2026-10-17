@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost("orders/{orderId:int}")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> SendMessage(int orderId, [FromBody] SendOrderMessageDto dto)
         {
             try
@@ -53,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpGet("orders/{orderId:int}")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetOrderMessages(int orderId)
         {
             try
@@ -74,7 +74,7 @@ namespace API.Controllers
         }
 
         [HttpGet("dialogs")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetUserDialogs()
         {
             var userId = GetCurrentUserId();
@@ -89,7 +89,7 @@ namespace API.Controllers
         }
 
         [HttpGet("unread/count")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetTotalUnreadCount()
         {
             var userId = GetCurrentUserId();

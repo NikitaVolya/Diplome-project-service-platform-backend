@@ -104,7 +104,7 @@ namespace API.Controllers
         }
 
         [HttpPost("mass-send")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> SendMassNotification([FromBody] CreateMassNotificationDto dto)
         {
             await _notificationService.SendMassNotificationAsync(dto.UserIds, dto.Title, dto.Message);

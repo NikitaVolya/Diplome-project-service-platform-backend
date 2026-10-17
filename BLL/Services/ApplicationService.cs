@@ -7,9 +7,14 @@ namespace BLL.Services
     public class ApplicationService : IApplicationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ApplicationService(IUnitOfWork unitOfWork)
+        private readonly INotificationService _notificationService;
+
+        public ApplicationService(
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<Application?> GetByIdAsync(int id)
@@ -55,8 +60,15 @@ namespace BLL.Services
                 CreatedAt = DateTime.UtcNow,
                 Status = ApplicationStatus.Pending
             };
+
             await _unitOfWork.Applications.AddAsync(application);
             await _unitOfWork.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(
+                userId: order.CustomerId,
+                title: "New application received",
+                message: $"An executor offered {proposedPrice} for your order #{order.Id}."
+            );
 
             return application;
         }
@@ -78,7 +90,7 @@ namespace BLL.Services
             {
                 throw new InvalidOperationException("Only pending applications can be accepted.");
             }
-            
+
             await _unitOfWork.Applications.UpdateStatusAsync(applicationId, ApplicationStatus.Accepted);
 
             application.Order.ExecutorId = application.ExecutorId;
@@ -90,10 +102,23 @@ namespace BLL.Services
                 if (otherApplication.Id != applicationId && otherApplication.Status == ApplicationStatus.Pending)
                 {
                     await _unitOfWork.Applications.UpdateStatusAsync(otherApplication.Id, ApplicationStatus.Rejected);
+
+                    // --- Notification for other rejected applicants ---
+                    await _notificationService.CreateNotificationAsync(
+                        userId: otherApplication.ExecutorId,
+                        title: "Application status update",
+                        message: $"Another executor was selected for order #{application.OrderId}."
+                    );
                 }
             }
 
             await _unitOfWork.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(
+                userId: application.ExecutorId,
+                title: "Application accepted!",
+                message: $"You have been assigned as the executor for order #{application.OrderId}."
+            );
         }
 
         public async Task RejectApplicationAsync(int applicationId, string currentUserId)
@@ -103,16 +128,25 @@ namespace BLL.Services
             {
                 throw new ArgumentException($"Application with id {applicationId} not found.");
             }
+
             if (application.Order.CustomerId != currentUserId)
             {
                 throw new UnauthorizedAccessException("Only the customer who created the order can reject applications.");
             }
+
             if (application.Status != ApplicationStatus.Pending)
             {
                 throw new InvalidOperationException("Only pending applications can be rejected.");
             }
+
             await _unitOfWork.Applications.UpdateStatusAsync(applicationId, ApplicationStatus.Rejected);
             await _unitOfWork.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(
+                userId: application.ExecutorId,
+                title: "Application declined",
+                message: $"The customer declined your application for order #{application.OrderId}."
+            );
         }
 
         public async Task DeleteAsync(int applicationId, string currentUserId)
@@ -122,14 +156,17 @@ namespace BLL.Services
             {
                 throw new ArgumentException($"Application with id {applicationId} not found.");
             }
+
             if (application.ExecutorId != currentUserId)
             {
                 throw new UnauthorizedAccessException("Only the executor who created the application can delete it.");
             }
+
             if (application.Status != ApplicationStatus.Pending)
             {
                 throw new InvalidOperationException("Only pending applications can be deleted.");
             }
+
             await _unitOfWork.Applications.DeleteAsync(applicationId);
             await _unitOfWork.SaveChangesAsync();
         }
