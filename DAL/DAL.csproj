@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
-    <Folder Include="Seed\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Seed\" />
   </ItemGroup>
 
   <ItemGroup>

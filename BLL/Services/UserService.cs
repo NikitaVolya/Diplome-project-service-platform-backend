@@ -1,0 +1,119 @@
+﻿using BLL.Services.Interfaces;
+using Domain.Entities;
+using Domain.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+
+namespace BLL.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+
+
+        public UserService(
+            UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
+
+        public async Task<ApplicationUser?> GetByIdAsync(string id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+
+
+        public async Task<ApplicationUser?> GetByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<ApplicationUser?> GetByUserNameAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+
+
+        public async Task<ApplicationUser> UpdateAsync(
+            string id,
+            string firstName,
+            string lastName,
+            string? avatarUrl)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.AvatarUrl = avatarUrl;
+            user.UpdatedAt = DateTime.UtcNow;
+
+
+            await _userManager.UpdateAsync(user);
+
+            return user;
+        }
+
+
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                return false;
+
+
+            user.IsDeleted = true;
+
+            await _userManager.UpdateAsync(user);
+
+            return true;
+        }
+
+        public async Task BecomeExecuterAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || user.IsDeleted)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            var roleName = UserRole.Executer.ToRoleName();
+
+            if (await _userManager.IsInRoleAsync(user, roleName))
+            {
+                return;
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    string.Join("; ", result.Errors.Select(e => e.Description)));
+            }
+        }
+        public async Task<IList<string>> GetRolesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || user.IsDeleted)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            return await _userManager.GetRolesAsync(user);
+        }
+    }
+}
