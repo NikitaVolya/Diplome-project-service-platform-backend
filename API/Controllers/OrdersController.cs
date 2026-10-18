@@ -1,11 +1,13 @@
 ﻿using API.DTO.Order;
 using AutoMapper;
+using BLL.Services;
 using BLL.Services.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+
 
 namespace API.Controllers
 {
@@ -16,11 +18,13 @@ namespace API.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
+        private readonly IGoogleMapsService _googleMapsService;
 
         public OrdersController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
             _mapper = mapper;
+            _googleMapsService = new GoogleMapsService(new HttpClient(), new ConfigurationBuilder().AddJsonFile("appsettings.json").Build(), null);
         }
 
         private string GetCurrentUserId()
@@ -35,7 +39,10 @@ namespace API.Controllers
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetOrderById(int id)
+        public async Task<IActionResult> GetOrderById(
+            int id,
+            [FromQuery] double? currentLat = null,
+            [FromQuery] double? currentLng = null)
         {
             var order = await _orderService.GetWithDetailsByIdAsync(id);
             if (order == null)
@@ -44,6 +51,22 @@ namespace API.Controllers
             }
 
             var responseDto = _mapper.Map<OrderResponseDto>(order);
+
+            if (currentLat.HasValue && currentLng.HasValue)
+            {
+                var routeDetails = await _googleMapsService.GetRouteDetailsAsync(
+                    currentLat.Value,
+                    currentLng.Value,
+                    order.Latitude,
+                    order.Longitude);
+
+                if (routeDetails.HasValue)
+                {
+                    responseDto.DistanceKm = routeDetails.Value.DistanceKm;
+                    responseDto.DurationMinutes = routeDetails.Value.DurationMinutes;
+                }
+            }
+
             return Ok(responseDto);
         }
 
@@ -53,10 +76,21 @@ namespace API.Controllers
             [FromQuery] int? categoryId,
             [FromQuery] OrderStatus? status,
             [FromQuery] string? searchTerm,
+            [FromQuery] double? latitude,
+            [FromQuery] double? longitude,
+            [FromQuery] double? radiusKm,
             [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10)
         {
-            var (items, totalCount) = await _orderService.GetFilteredOrdersAsync(categoryId, status, searchTerm, pageIndex, pageSize);
+            var (items, totalCount) = await _orderService.GetFilteredOrdersAsync(
+                categoryId,
+                status,
+                searchTerm,
+                latitude,
+                longitude,
+                radiusKm,
+                pageIndex,
+                pageSize);
 
             var itemsDto = _mapper.Map<IEnumerable<OrderResponseDto>>(items);
 
@@ -80,7 +114,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-assigned")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> GetMyAssignedOrders()
         {
             var currentUserId = GetCurrentUserId();

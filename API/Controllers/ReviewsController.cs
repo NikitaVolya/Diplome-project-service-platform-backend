@@ -94,7 +94,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> CreateReview([FromBody] CreateReviewDto dto)
         {
             try
@@ -119,7 +119,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReviewDto dto)
         {
             try
@@ -150,7 +150,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> DeleteReview(int id)
         {
             try

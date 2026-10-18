@@ -12,10 +12,14 @@ namespace BLL.Services
     public class ReviewService : IReviewService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
 
-        public ReviewService(IUnitOfWork unitOfWork)
+        public ReviewService(
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<Review?> GetByIdAsync(int id)
@@ -98,6 +102,15 @@ namespace BLL.Services
             await _unitOfWork.Reviews.AddAsync(review);
             await _unitOfWork.SaveChangesAsync();
 
+            if (!string.IsNullOrEmpty(review.TargetUserId))
+            {
+                await _notificationService.CreateNotificationAsync(
+                    userId: review.TargetUserId,
+                    title: "New review received",
+                    message: $"You received a {review.Rating}-star review for order #{review.OrderId}."
+                );
+            }
+
             return review;
         }
 
@@ -130,6 +143,15 @@ namespace BLL.Services
 
             await _unitOfWork.Reviews.UpdateAsync(existingReview);
             await _unitOfWork.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(existingReview.TargetUserId))
+            {
+                await _notificationService.CreateNotificationAsync(
+                    userId: existingReview.TargetUserId,
+                    title: "Review updated",
+                    message: $"A review for order #{existingReview.OrderId} has been updated."
+                );
+            }
         }
 
         public async Task DeleteReviewAsync(int reviewId, string currentUserId)

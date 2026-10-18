@@ -55,7 +55,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-applications")]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> GetMyApplications()
         {
             var currentUserId = GetCurrentUserId();
@@ -65,7 +65,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Executor")]
+        [Authorize(Roles = "Executer")]
         public async Task<IActionResult> Create([FromBody] CreateApplicationDto dto)
         {
             try
@@ -89,6 +89,8 @@ namespace API.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+
+
         }
 
         [HttpPatch("{id:int}/accept")]
@@ -140,7 +142,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Executor,Admin")]
+        [Authorize(Roles = "Executer,Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             try

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Domain.Models;
 using BLL.Services.Interfaces;
@@ -12,10 +11,14 @@ namespace BLL.Services
     public class OrderMessageService : IOrderMessageService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
 
-        public OrderMessageService(IUnitOfWork unitOfWork)
+        public OrderMessageService(
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<OrderMessage> SendMessageAsync(int orderId, string senderId, string text)
@@ -47,6 +50,17 @@ namespace BLL.Services
 
             await _unitOfWork.OrderMessages.AddAsync(message);
             await _unitOfWork.SaveChangesAsync();
+
+            var recipientId = senderId == order.CustomerId ? order.ExecutorId : order.CustomerId;
+
+            if (!string.IsNullOrEmpty(recipientId))
+            {
+                await _notificationService.CreateNotificationAsync(
+                    userId: recipientId,
+                    title: "New message in chat",
+                    message: text.Length > 50 ? $"{text.Substring(0, 47)}..." : text
+                );
+            }
 
             return message;
         }

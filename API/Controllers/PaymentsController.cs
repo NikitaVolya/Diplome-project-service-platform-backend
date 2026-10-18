@@ -1,6 +1,7 @@
 ﻿using API.DTO.Payment;
 using AutoMapper;
 using BLL.Services.Interfaces;
+using BLL.Services.PaymentGateways;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,16 @@ namespace API.Controllers
     {
         private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
+        private readonly PaymentGatewayFactory _gatewayFactory;
 
-        public PaymentsController(IPaymentService paymentService, IMapper mapper)
+        public PaymentsController(
+            IPaymentService paymentService,
+            IMapper mapper,
+            PaymentGatewayFactory gatewayFactory)
         {
             _paymentService = paymentService;
             _mapper = mapper;
+            _gatewayFactory = gatewayFactory;
         }
 
         private string GetCurrentUserId()
@@ -33,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> GetById(int id)
         {
             var payment = await _paymentService.GetByIdAsync(id);
@@ -52,7 +58,7 @@ namespace API.Controllers
         }
 
         [HttpGet("my-payments")]
-        [Authorize(Roles = "Customer,Executor")]
+        [Authorize(Roles = "Customer,Executer")]
         public async Task<IActionResult> GetUserPayments()
         {
             var userId = GetCurrentUserId();
@@ -61,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpGet("order/{orderId:int}")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> GetOrderPayments(int orderId)
         {
             var payments = await _paymentService.GetOrderPaymentsAsync(orderId);
@@ -69,7 +75,7 @@ namespace API.Controllers
         }
 
         [HttpGet("order/{orderId:int}/is-paid")]
-        [Authorize(Roles = "Customer,Executor,Admin")]
+        [Authorize(Roles = "Customer,Executer,Admin")]
         public async Task<IActionResult> IsOrderPaid(int orderId)
         {
             var isPaid = await _paymentService.IsOrderPaidAsync(orderId);
@@ -98,6 +104,43 @@ namespace API.Controllers
             catch (InvalidOperationException ex)
             {
                 return Conflict(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("{id:int}/checkout")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> CreateGatewayCheckout(int id, [FromQuery] string providerName)
+        {
+            try
+            {
+                var payment = await _paymentService.GetByIdAsync(id);
+                if (payment == null)
+                {
+                    return NotFound(new { message = $"Payment with ID {id} not found." });
+                }
+
+                var userId = GetCurrentUserId();
+                if (payment.UserId != userId && !User.IsInRole("Admin"))
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, new { message = "You do not have access to this payment." });
+                }
+
+                var gateway = _gatewayFactory.GetGateway(providerName);
+
+                var returnUrl = "https://mysite.com/checkout/result";
+                var serverUrl = "https://mysite.com/api/payments/webhook";
+
+                var paymentData = await gateway.CreatePaymentUrlAsync(payment, returnUrl, serverUrl);
+
+                return Ok(new { success = true, provider = gateway.ProviderName, data = paymentData });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
