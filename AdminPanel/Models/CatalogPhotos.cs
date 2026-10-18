@@ -3,22 +3,10 @@ using System.Text;
 
 namespace AdminPanel.Models;
 
-/// <summary>
-/// Фотографії на плитках підкатегорій каталогу.
-///
-/// Файли лежать у wwwroot/img/catalog/tiles/&lt;напрям&gt;/&lt;підкатегорія&gt;.jpg, де імена —
-/// транслітерація назв із бази: «Маркетинг і реклама» / «Контекстна реклама» →
-/// tiles/marketynh-i-reklama/kontekstna-reklama.jpg.
-///
-/// Нічого в базі для цього не потрібно: щоб додати знімок, достатньо покласти файл
-/// із правильним іменем. Поки файлу немає, плитка показує заглушку того ж розміру,
-/// тож сторінка не чекає, доки дизайнер віддасть усі знімки, і нічого не стрибає.
-/// </summary>
 public sealed class CatalogPhotos
 {
     private const string Folder = "img/catalog/tiles";
 
-    /// <summary>Формати, у яких може бути знімок; перший знайдений і виграє.</summary>
     private static readonly string[] Extensions = { ".jpg", ".jpeg", ".png", ".webp" };
 
     private static readonly Dictionary<char, string> Translit = new()
@@ -38,7 +26,6 @@ public sealed class CatalogPhotos
 
     public CatalogPhotos(IWebHostEnvironment environment) => _environment = environment;
 
-    /// <summary>Шлях до знімка для сторінки або null, якщо файлу ще немає.</summary>
     public string? Find(string category, string subcategory)
     {
         var key = $"{Slug(category)}/{Slug(subcategory)}";
@@ -59,14 +46,32 @@ public sealed class CatalogPhotos
         });
     }
 
-    /// <summary>Ім'я файлу, який треба покласти, щоб на плитці з'явився знімок.</summary>
     public static string Expected(string category, string subcategory) =>
         $"{Folder}/{Slug(category)}/{Slug(subcategory)}.jpg";
 
-    /// <summary>
-    /// Назва українською → ім'я файлу: маленькими латинськими, пробіли й розділові знаки
-    /// стають дефісом, апострофи зникають. «Кур'єрська доставка» → kurierska-dostavka.
-    /// </summary>
+    public string? FindIn(string folder, string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return null;
+        }
+
+        return _found.GetOrAdd($"{folder}/{Slug(name)}", path =>
+        {
+            foreach (var extension in Extensions)
+            {
+                var file = path + extension;
+
+                if (_environment.WebRootFileProvider.GetFileInfo(file).Exists)
+                {
+                    return "/" + file;
+                }
+            }
+
+            return null;
+        });
+    }
+
     public static string Slug(string value)
     {
         var builder = new StringBuilder(value.Length * 2);

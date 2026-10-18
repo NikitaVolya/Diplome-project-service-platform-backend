@@ -1,4 +1,4 @@
-using DAL.Context;
+﻿using DAL.Context;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Models;
@@ -101,6 +101,54 @@ namespace DAL.Seed
         private static readonly string[] Cities =
         {
             "Kyiv", "Lviv", "Odesa", "Kharkiv", "Dnipro", "Vinnytsia", "Poltava", "Chernivtsi"
+        };
+
+        /// <summary>Підписи під іменем виконавця в кабінеті.</summary>
+        private static readonly string[] Headlines =
+        {
+            "Графічний дизайнер", "Копірайтер", "Фотограф", "Веброзробник",
+            "Перекладач", "Маркетолог", "Ілюстратор", "Майстер з ремонту"
+        };
+
+        /// <summary>
+        /// Розділи портфоліо для демонстраційних робіт.
+        ///
+        /// Беремо лише ті чотири, для яких у wwwroot/img/portfolio лежать знімки з макета:
+        /// плитка без фото показує заглушку, і сторінка з них виглядала б напівпорожньою.
+        /// У фільтрі на сторінці розділів більше — туди людина додає власні роботи.
+        /// </summary>
+        private static readonly string[] PortfolioGroups =
+        {
+            "Логотипи", "Ілюстрації", "Реклама", "Web-дизайн"
+        };
+
+        /// <summary>Назви подій календаря за типом.</summary>
+        private static readonly string[] EventTitles =
+        {
+            "Дизайн логотипа", "Консультація", "Таргетована реклама", "Копірайтинг статті",
+            "Інстаграм пост", "Ілюстрації для книги", "Переклад текстів", "Правки по макету"
+        };
+
+        /// <summary>Скільки днів показує сторінка аналітики в одному періоді.</summary>
+        private const int AnalyticsDays = 30;
+
+        /// <summary>Мітки фаху для псевдоніма: «annadesign», «annaphoto».</summary>
+        private static readonly string[] NicknameTags =
+        {
+            "design", "photo", "text", "web", "art", "pro", "studio", "work"
+        };
+
+        /// <summary>Теми звернень у підтримку — ті самі, що у списку на формі.</summary>
+        private static readonly string[] TicketTopics =
+        {
+            "Початок роботи", "Замовлення та оплата", "Послуги та профіль",
+            "Виплата та фінанси", "Обліковий запис", "Правила та політики"
+        };
+
+        /// <summary>Категорії звернень.</summary>
+        private static readonly string[] TicketKinds =
+        {
+            "Питання", "Проблема", "Пропозиція"
         };
 
         private static readonly string[] ComplaintReasons =
@@ -284,8 +332,437 @@ namespace DAL.Seed
             }
 
             await SeedOrdersAsync(random, categories, customers, executors, cancellationToken);
+            await SeedCabinetAsync(random, customers, executors, cancellationToken);
+            await SeedExecutorCabinetAsync(random, categories, customers, executors, cancellationToken);
+            await SeedExecutorInsightsAsync(random, executors, cancellationToken);
 
             _logger.LogInformation("Seed: demo data ready");
+        }
+
+        /// <summary>
+        /// Те, з чого складається особистий кабінет замовника: збережені адреси, гроші на
+        /// рахунку, обрані виконавці. Без цього екрани кабінету виходять порожніми —
+        /// самих замовлень для них замало.
+        /// </summary>
+        private async Task SeedCabinetAsync(
+            Random random,
+            List<ApplicationUser> customers,
+            List<ApplicationUser> executors,
+            CancellationToken cancellationToken)
+        {
+            if (await _db.UserAddresses.AnyAsync(cancellationToken))
+            {
+                return;
+            }
+
+            var addresses = new List<UserAddress>();
+            var favorites = new List<Favorite>();
+
+            foreach (var customer in customers)
+            {
+                customer.WalletBalance = Math.Round((decimal)(random.Next(300, 9000) + random.NextDouble()), 2);
+                customer.PaymentCard = $"Visa •••• {random.Next(1000, 9999)}";
+                customer.Currency = "UAH";
+                customer.Language = "uk";
+                customer.TimeZoneName = "Europe/Kyiv";
+                customer.DateFormat = "dd.MM.yyyy";
+                customer.TimeFormat = "24";
+                customer.Theme = "light";
+                customer.ProfileVisibility = "Registered";
+                customer.ShowOnlineStatus = true;
+                customer.NotifyByEmail = true;
+                customer.NotifyByPush = true;
+
+                var city = Cities[random.Next(Cities.Length)];
+
+                addresses.Add(new UserAddress
+                {
+                    UserId = customer.Id,
+                    Title = "Дім",
+                    Kind = AddressKind.Home,
+                    Line = $"вул. Левадна, {random.Next(1, 90)}, кв. {random.Next(1, 120)}",
+                    City = $"м. {city}",
+                    PostalCode = $"0{random.Next(1000, 9999)}",
+                    Note = $"Домофон {random.Next(1, 99)}К, поверх {random.Next(1, 12)}",
+                    IsPrimary = true
+                });
+
+                if (random.Next(100) < 70)
+                {
+                    addresses.Add(new UserAddress
+                    {
+                        UserId = customer.Id,
+                        Title = "Офіс",
+                        Kind = AddressKind.Office,
+                        Line = $"вул. Хрещатик, {random.Next(1, 60)}, офіс {random.Next(100, 1200)}",
+                        City = $"м. {city}",
+                        PostalCode = $"0{random.Next(1000, 9999)}",
+                        Note = $"Бізнес центр, поверх {random.Next(2, 20)}"
+                    });
+                }
+
+                if (random.Next(100) < 45)
+                {
+                    addresses.Add(new UserAddress
+                    {
+                        UserId = customer.Id,
+                        Title = "Дача",
+                        Kind = AddressKind.Country,
+                        Line = $"вул. Лісова {random.Next(1, 40)}",
+                        City = "с. Хотянівка",
+                        Region = "Київська обл.",
+                        PostalCode = $"0{random.Next(1000, 9999)}",
+                        Note = "Зелений паркан, перед останній будинок вулиці"
+                    });
+                }
+
+                // Обране: кілька виконавців, без повторів у межах однієї людини.
+                var picked = new HashSet<string>(StringComparer.Ordinal);
+                var wanted = random.Next(3, 9);
+
+                for (var i = 0; i < wanted && picked.Count < executors.Count; i++)
+                {
+                    var executor = executors[random.Next(executors.Count)];
+
+                    if (picked.Add(executor.Id))
+                    {
+                        favorites.Add(new Favorite { UserId = customer.Id, TargetExecutorId = executor.Id });
+                    }
+                }
+            }
+
+            _db.UserAddresses.AddRange(addresses);
+            _db.Favorites.AddRange(favorites);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation(
+                "Seed: cabinet ready — {Addresses} addresses, {Favorites} favorites",
+                addresses.Count, favorites.Count);
+        }
+
+        /// <summary>
+        /// Кабінет виконавця: власні послуги, портфоліо, календар і підписи профілю.
+        /// Без цього всі сім екранів виконавця стояли б порожні — самих замовлень для них замало.
+        /// </summary>
+        private async Task SeedExecutorCabinetAsync(
+            Random random,
+            List<Category> categories,
+            List<ApplicationUser> customers,
+            List<ApplicationUser> executors,
+            CancellationToken cancellationToken)
+        {
+            if (await _db.ExecutorServices.AnyAsync(cancellationToken))
+            {
+                return;
+            }
+
+            // Послуги вішаємо на кінцеві напрями: саме там їх шукають у каталозі.
+            var leaves = categories.Where(c => c.ParentCategoryId != null).ToList();
+
+            if (leaves.Count == 0)
+            {
+                _logger.LogWarning("Seed: no leaf categories, skipping executor services");
+                return;
+            }
+
+            var services = new List<ExecutorService>();
+            var works = new List<PortfolioWork>();
+            var events = new List<CalendarEvent>();
+
+            for (var index = 0; index < executors.Count; index++)
+            {
+                var executor = executors[index];
+
+                // Частині виконавців додаємо й роль замовника: у житті та сама людина і
+                // виконує, і замовляє, а в кабінеті тоді працює перемикач боку.
+                if (index % 6 == 0 && !await _userManager.IsInRoleAsync(executor, AppRoles.Customer))
+                {
+                    await _userManager.AddToRoleAsync(executor, AppRoles.Customer);
+                }
+
+                executor.Headline = Headlines[random.Next(Headlines.Length)];
+                executor.ProfileViews = random.Next(18, 320);
+                executor.Presence = random.Next(100) < 70 ? "online" : "away";
+                executor.Experience ??= $"{random.Next(1, 9)}";
+
+                // ── Послуги ──────────────────────────────────────────────────
+                var own = new HashSet<int>();
+                var wanted = random.Next(3, 9);
+
+                for (var i = 0; i < wanted; i++)
+                {
+                    var category = leaves[random.Next(leaves.Count)];
+
+                    if (!own.Add(category.Id))
+                    {
+                        continue;
+                    }
+
+                    // Більшість послуг опубліковані, кілька на паузі або в чернетках —
+                    // щоб усі чотири плитки на екрані «Мої послуги» мали непорожні числа.
+                    var roll = random.Next(100);
+                    var state = roll switch
+                    {
+                        < 70 => ServiceState.Active,
+                        < 85 => ServiceState.Paused,
+                        _ => ServiceState.Draft
+                    };
+
+                    services.Add(new ExecutorService
+                    {
+                        OwnerId = executor.Id,
+                        CategoryId = category.Id,
+                        Title = category.Name,
+                        Description = $"Виконую «{category.Name.ToLowerInvariant()}» під ключ. " +
+                                      "Обговорюємо деталі в чаті, правки входять у вартість.",
+                        FromPrice = Math.Round((decimal)(random.Next(300, 6000) / 100 * 100), 2),
+                        State = state,
+                        CreatedAt = DateTime.UtcNow.AddDays(-random.Next(5, _options.DemoHistoryDays))
+                    });
+                }
+
+                // ── Портфоліо ────────────────────────────────────────────────
+                var groups = PortfolioGroups
+                    .OrderBy(_ => random.Next())
+                    .Take(random.Next(2, 5))
+                    .ToList();
+
+                foreach (var group in groups)
+                {
+                    // По чотири роботи в розділі — саме стільки в рядку на макеті.
+                    for (var i = 0; i < 4; i++)
+                    {
+                        works.Add(new PortfolioWork
+                        {
+                            OwnerId = executor.Id,
+                            Group = group,
+                            Title = $"{group}: робота {i + 1}",
+
+                            // Вага задає і порядок розділів, і місце роботи всередині розділу.
+                            Sort = PortfolioSections.Rank(group, i),
+                            CreatedAt = DateTime.UtcNow.AddDays(-random.Next(1, 200))
+                        });
+                    }
+                }
+            }
+
+            // ── Календар: тиждень навколо сьогодні для кожного виконавця ──────
+            var monday = DateTime.UtcNow.Date.AddDays(-(((int)DateTime.UtcNow.DayOfWeek + 6) % 7));
+
+            foreach (var executor in executors)
+            {
+                var count = random.Next(3, 9);
+
+                for (var i = 0; i < count; i++)
+                {
+                    var day = monday.AddDays(random.Next(0, 7));
+                    var hour = random.Next(8, 18);
+                    var start = day.AddHours(hour);
+
+                    var kind = random.Next(100) switch
+                    {
+                        < 50 => EventKind.Meeting,
+                        < 80 => EventKind.Deadline,
+                        < 93 => EventKind.Personal,
+                        _ => EventKind.Busy
+                    };
+
+                    var partner = customers[random.Next(customers.Count)];
+
+                    events.Add(new CalendarEvent
+                    {
+                        OwnerId = executor.Id,
+                        Title = EventTitles[random.Next(EventTitles.Length)],
+                        Kind = kind,
+                        StartAt = start,
+                        EndAt = start.AddHours(random.Next(1, 3)),
+                        PartnerName = kind is EventKind.Personal or EventKind.Busy
+                            ? null
+                            : $"{partner.FirstName} {partner.LastName[0]}."
+                    });
+                }
+            }
+
+            _db.ExecutorServices.AddRange(services);
+            _db.PortfolioWorks.AddRange(works);
+            _db.CalendarEvents.AddRange(events);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation(
+                "Seed: executor cabinet ready - {Services} services, {Works} works, {Events} events",
+                services.Count, works.Count, events.Count);
+        }
+
+        /// <summary>
+        /// Те, що показують «Аналітика», «Фінанси» та «Підтримка»: денні підсумки переглядів
+        /// профілю, способи виведення коштів із кількома заявками та пара звернень у підтримку.
+        ///
+        /// Переглядів не вигадуємо на льоту при кожному відкритті сторінки: графік має бути
+        /// той самий і завтра, і після перезапуску, інакше порівняння з попереднім періодом
+        /// щоразу показувало б інші відсотки.
+        /// </summary>
+        private async Task SeedExecutorInsightsAsync(
+            Random random,
+            List<ApplicationUser> executors,
+            CancellationToken cancellationToken)
+        {
+            if (await _db.ProfileVisits.AnyAsync(cancellationToken))
+            {
+                return;
+            }
+
+            // Два періоди по 30 днів: поточний і попередній, із яким порівнюємо.
+            const int days = AnalyticsDays * 2;
+
+            var today = DateTime.UtcNow.Date;
+            var visits = new List<ProfileVisit>(executors.Count * days);
+            var methods = new List<PayoutMethod>();
+            var payouts = new List<Payout>();
+            var tickets = new List<SupportTicket>();
+
+            for (var index = 0; index < executors.Count; index++)
+            {
+                var executor = executors[index];
+
+                executor.Nickname ??= Nickname(executor, index);
+
+                // Базовий рівень у кожного свій, плюс повільне зростання й денні коливання:
+                // так на графіку видно тренд, а не рівний частокіл.
+                var baseLine = random.Next(14, 46);
+                var growth = (random.NextDouble() * 0.7) + 0.1;
+                var week = 0;
+
+                for (var back = days - 1; back >= 0; back--)
+                {
+                    var day = today.AddDays(-back);
+                    var position = days - 1 - back;
+
+                    // У вихідні замовників менше — провали на графіку не випадкові.
+                    var weekend = day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+
+                    var total = (int)Math.Round(baseLine + position * growth);
+                    total = Math.Max(3, total + random.Next(-6, 9) - (weekend ? 7 : 0));
+
+                    // Частки джерел тримаємо близькими до макета: пошук, каталог, прямі, поради.
+                    var search = (int)Math.Round(total * 0.42);
+                    var catalog = (int)Math.Round(total * 0.28);
+                    var direct = (int)Math.Round(total * 0.18);
+                    var referral = (int)Math.Round(total * 0.08);
+                    var other = Math.Max(0, total - search - catalog - direct - referral);
+
+                    visits.Add(new ProfileVisit
+                    {
+                        OwnerId = executor.Id,
+                        Day = day,
+                        FromSearch = search,
+                        FromCatalog = catalog,
+                        FromDirect = direct,
+                        FromReferral = referral,
+                        FromOther = other,
+                        PortfolioViews = (int)Math.Round(total * (0.5 + random.NextDouble() * 0.4))
+                    });
+
+                    if (back < 7)
+                    {
+                        week += total;
+                    }
+                }
+
+                // Віджет під меню показує тиждень — беремо те саме число, що й графік.
+                executor.ProfileViews = week;
+
+                // ── Способи виведення ────────────────────────────────────────
+                var card = new PayoutMethod
+                {
+                    OwnerId = executor.Id,
+                    Kind = PayoutKind.Card,
+                    Label = $"Visa ****** {random.Next(1000, 9999)}",
+                    Note = "основна карта",
+                    IsPrimary = true,
+                    CreatedAt = today.AddDays(-random.Next(60, 400))
+                };
+
+                methods.Add(card);
+
+                if (index % 3 == 0)
+                {
+                    methods.Add(new PayoutMethod
+                    {
+                        OwnerId = executor.Id,
+                        Kind = PayoutKind.PayPal,
+                        Label = $"{executor.Nickname}@gmail.com",
+                        Note = "Pay Pal",
+                        CreatedAt = today.AddDays(-random.Next(30, 300))
+                    });
+                }
+
+                // ── Заявки на виплату ────────────────────────────────────────
+                for (var i = 0; i < random.Next(1, 4); i++)
+                {
+                    var created = today.AddDays(-random.Next(2, AnalyticsDays * 2));
+                    var done = created < today.AddDays(-3);
+
+                    payouts.Add(new Payout
+                    {
+                        OwnerId = executor.Id,
+                        Method = card,
+                        MethodLabel = card.Label,
+                        Amount = random.Next(10, 60) * 100,
+                        Status = done ? PayoutStatus.Paid : PayoutStatus.Pending,
+                        CreatedAt = created,
+                        PaidAt = done ? created.AddDays(random.Next(1, 3)) : null
+                    });
+                }
+
+                // ── Звернення в підтримку ────────────────────────────────────
+                if (index % 5 == 0)
+                {
+                    var asked = today.AddDays(-random.Next(1, 40));
+                    var answered = asked < today.AddDays(-2);
+
+                    tickets.Add(new SupportTicket
+                    {
+                        OwnerId = executor.Id,
+                        Topic = TicketTopics[random.Next(TicketTopics.Length)],
+                        Category = TicketKinds[random.Next(TicketKinds.Length)],
+                        Message = "Доброго дня! Підкажіть, будь ласка, як правильно вчинити — " +
+                                  "у кабінеті не бачу потрібної кнопки.",
+                        Status = answered ? TicketStatus.Answered : TicketStatus.New,
+                        CreatedAt = asked,
+                        AnsweredAt = answered ? asked.AddHours(random.Next(1, 9)) : null
+                    });
+                }
+            }
+
+            _db.ProfileVisits.AddRange(visits);
+            _db.PayoutMethods.AddRange(methods);
+            _db.Payouts.AddRange(payouts);
+            _db.SupportTickets.AddRange(tickets);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation(
+                "Seed: executor insights ready - {Visits} days, {Methods} payout methods, {Payouts} payouts, {Tickets} tickets",
+                visits.Count, methods.Count, payouts.Count, tickets.Count);
+        }
+
+        /// <summary>
+        /// Псевдонім виду «annadesign»: латиниця з пошти плюс коротка мітка фаху.
+        /// Унікальності не доводимо — це підпис у профілі, а не другий логін.
+        /// </summary>
+        private static string Nickname(ApplicationUser executor, int index)
+        {
+            var mail = executor.Email ?? string.Empty;
+            var at = mail.IndexOf('@');
+            var head = at > 0 ? mail[..at] : executor.FirstName;
+
+            var letters = new string(head.Where(char.IsLetter).ToArray()).ToLowerInvariant();
+
+            if (letters.Length == 0)
+            {
+                letters = "vybir";
+            }
+
+            return letters + NicknameTags[index % NicknameTags.Length];
         }
 
         /// <summary>
@@ -566,9 +1043,15 @@ namespace DAL.Seed
                         OrderId = order.Id,
                         ExecutorId = applicant.Id,
                         ProposedPrice = Math.Round(order.Price * (decimal)(0.8 + random.NextDouble() * 0.5), 2),
+                        Days = random.Next(1, 15),
                         Comment = "I can take this order, I have done similar work before.",
                         CreatedAt = order.CreatedAt.AddHours(random.Next(1, 48)),
-                        Status = ApplicationStatus.Rejected
+
+                        // Поки замовлення чекає виконавця, відгуки на нього теж не розглянуті —
+                        // інакше на сторінці деталей ніколи не було б кнопок «Прийняти»/«Відхилити».
+                        Status = order.Status == OrderStatus.Pending
+                            ? ApplicationStatus.Pending
+                            : ApplicationStatus.Rejected
                     });
                 }
 
@@ -579,6 +1062,7 @@ namespace DAL.Seed
                         OrderId = order.Id,
                         ExecutorId = order.ExecutorId,
                         ProposedPrice = order.Price,
+                        Days = random.Next(1, 10),
                         Comment = "Ready to start right away.",
                         CreatedAt = order.CreatedAt.AddHours(random.Next(1, 24)),
                         Status = ApplicationStatus.Accepted

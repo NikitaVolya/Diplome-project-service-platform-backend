@@ -1,0 +1,75 @@
+@model CabinetReviewsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Відгуки</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                @if (Model.Awaiting.Count > 0)
+                {
+                    <section class="cab-panel cab-panel--mint">
+                        <h2 class="cab-panel__title">Очікують вашого відгуку</h2>
+
+                        <div class="cab-orders">
+                            @foreach (var order in Model.Awaiting)
+                            {
+                                <partial name="_CabinetOrder" model="order" />
+                            }
+                        </div>
+                    </section>
+                }
+
+                <section class="cab-panel">
+                    <h2 class="cab-panel__title">Ваші відгуки</h2>
+
+                    @if (Model.Reviews.Count == 0)
+                    {
+                        <p class="cab-empty">Ви ще не залишали відгуків.</p>
+                    }
+
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <article class="cab-review">
+                            <img src="@review.TargetPortrait" alt="" loading="lazy" />
+
+                            <div>
+                                <b>@review.TargetName</b>
+                                <span class="cab-review__stars" aria-label="@review.Rating з 5">
+                                    @for (var i = 0; i < 5; i++)
+                                    {
+                                        <i class="bi @(i < review.Rating ? "bi-star-fill" : "bi-star")" aria-hidden="true"></i>
+                                    }
+                                </span>
+                                <p>@review.Comment</p>
+                            </div>
+
+                            <div class="cab-review__meta">
+                                <a asp-action="Order" asp-route-id="@review.OrderId">@review.OrderTitle</a><br />
+                                @CabinetFormat.LongDate(review.CreatedAt)
+                            </div>
+                        </article>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

@@ -32,9 +32,12 @@
 .landing *::after { box-sizing: border-box; }
 
 .landing {
+    /* Типове поле body у 8px зсувало всі суцільні смуги (шапку, «Чому обирають»,
+       підвал) усередину й лишало білі щілини по краях. У макеті вони на всю ширину. */
     margin: 0;
     background: #fff;
     color: var(--v-ink);
+    /* Onest — основний шрифт макета. Резерв на випадок, якщо файл не завантажився. */
     font-family: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     font-size: 16px;
     line-height: 1.25;
@@ -77,6 +80,8 @@
 .v-header__row {
     display: flex;
     align-items: center;
+    /* Ширини елементів у макеті задані вручну, тому вільне місце просто
+       розподіляємо між ними — крайні лишаються на межах колонки 190…1730. */
     justify-content: space-between;
     gap: 12px;
 }
@@ -204,6 +209,9 @@
     background: var(--v-mint);
     border-radius: var(--v-radius-lg) 0 0 var(--v-radius-lg);
     margin-left: var(--v-inset-hero);
+    /* Блок зсунутий ліворуч на --v-inset-hero, тож щоб його вміст стояв на тій самій
+       колонці 190…1730, що й решта сторінки, поле зліва на пів відступу менше,
+       а справа — на стільки ж більше за звичайний жолоб сторінки. */
     padding: 24px max(24px, calc((100% - 1540px) / 2))
              24px max(24px, calc((100% - 1540px) / 2 - var(--v-inset-hero)));
     display: grid;
@@ -264,6 +272,7 @@
     font-weight: 500;
     background: transparent;
     color: var(--v-ink);
+    /* У макеті підказка стоїть посередині поля, а не притиснута ліворуч. */
     text-align: center;
 }
 
@@ -309,6 +318,8 @@
 
 /* секції взагалі */
 
+/* Відступи взяті з макета (кадр 1920): вони задають позиції всіх смуг по вертикалі
+   — «Чому обирають» на 1480, картки послуг на 2037, смуга заклику на 2402. */
 .v-section { padding: 62px 0 40px; }
 .v-section--tight { padding: 65px 0 30px; }
 #categories + .v-section { padding-bottom: 51px; }
@@ -347,6 +358,8 @@
     margin: 0 0 15px;
 }
 
+/* «Одна платформа — дві можливості» в макеті набрано великим шрифтом заголовків,
+   тому окреме правило: .v-display стоїть вище й програвало б .v-h2. */
 .v-h2.v-display {
     font-family: 'Unbounded', 'Onest', sans-serif;
     font-size: 32px;
@@ -417,7 +430,7 @@
 
 /* дві можливості */
 
-
+/* Пара карток у макеті вужча за решту сторінки: 630 + 20 + 630 = 1280. */
 .v-duo {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -433,6 +446,8 @@
     min-height: 126px;
 }
 
+/* Заголовок картки стоїть над текстовою колонкою, а не над усією карткою,
+   тому зсунутий праворуч рівно на ширину іконки з проміжком. */
 .v-duo__card h3 {
     font-size: 20px;
     font-weight: 600;
@@ -552,6 +567,7 @@
 
 .v-service {
     background: var(--v-mint);
+    /* У макеті картка обведена тонкою бірюзовою лінією. */
     border: 1px solid #00F0FF;
     border-radius: 15px;
     overflow: hidden;
@@ -622,6 +638,8 @@
     overflow: hidden;
 }
 
+/* Розмитий логотип у макеті — окреме зображення 1034x479, що виступає за верхній
+   і нижній край підвалу; видно рівно ту частину, яку не обрізав overflow. */
 .v-footer__mark {
     position: absolute;
     left: 51.57%;
@@ -636,12 +654,15 @@
 
 .v-footer__grid {
     display: grid;
+    /* Колонки в макеті різної ширини й розставлені вручну — беремо їх пропорції. */
     grid-template-columns: 345fr 225fr 277fr 304fr 203fr 185fr;
     gap: 0;
     position: relative;
     z-index: 1;
 }
 
+/* Підвал зсунутий праворуч на --v-inset-footer, тому його вміст вирівнюємо
+   не по центру підвалу, а по тій самій колонці 190…1730, що й уся сторінка. */
 .v-footer > .v-container {
     width: min(1540px, calc(100% - 48px));
     margin-inline: 0;
@@ -717,6 +738,8 @@
 .v-bottom a { color: #D8D4F0; }
 .v-bottom a:hover { color: #fff; }
 
+
+/* Між 1100 і 1440 шапка ще показує все меню, але вміст уже не влазить у колонку. */
 @media (max-width: 1440px) {
     .v-nav { gap: 24px; }
     .v-pill { padding-inline: 16px; gap: 10px; }
@@ -863,3 +886,84 @@
 /* Імʼя користувача та вихід у шапці — показуються замість «Увійти» і «Реєстрація». */
 .v-user { font-size: 16px; font-weight: 500; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .v-logout { margin: 0; }
+
+/* Картка користувача в шапці: фото, імʼя, роль і меню кабінету.
+   Зроблена на <details>, тому відкривається без JavaScript. */
+
+.v-me { position: relative; }
+
+.v-me > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 162px;
+    height: 56px;
+    padding: 0 10px;
+    border-radius: 15px;
+    background: var(--v-purple-light);
+    color: #fff;
+    cursor: pointer;
+    list-style: none;
+}
+
+.v-me > summary::-webkit-details-marker { display: none; }
+.v-me > summary:hover { filter: brightness(1.05); }
+.v-me > summary img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; flex: none; }
+
+.v-me > summary > span {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.v-me > summary b {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.v-me > summary span span { font-size: 13px; opacity: .9; }
+.v-me > summary i { font-size: 13px; }
+.v-me[open] > summary i { transform: rotate(180deg); }
+
+.v-me__menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 30;
+    min-width: 230px;
+    padding: 8px;
+    border-radius: 15px;
+    background: #fff;
+    border: 1px solid var(--v-purple-light);
+    box-shadow: var(--v-shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.v-me__menu a,
+.v-me__menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--v-ink);
+    background: none;
+    border: 0;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+}
+
+.v-me__menu a:hover,
+.v-me__menu button:hover { background: var(--v-lilac-soft); color: var(--v-purple); }
+.v-me__menu .v-logout { border-top: 1px solid #E6E3F5; margin-top: 4px; padding-top: 4px; }
+
+/* Активний пункт головного меню — зараз це «Профіль», коли людина в кабінеті. */
+.v-nav a.is-current { opacity: 1; color: var(--v-purple); font-weight: 600; }

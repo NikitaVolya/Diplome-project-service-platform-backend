@@ -1,0 +1,156 @@
+@model CabinetOrderViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var order = Model.Details.Order;
+    var hasExecutor = !string.IsNullOrEmpty(order.ExecutorId);
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Деталі замовлення</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--lilac">
+                    <div class="cab-detail__head">
+                        <div>
+                            <h2>@order.Title</h2>
+                            <div class="cab-detail__meta">
+                                <span class="cab-tag">@CabinetContent.StatusTitle(order.Status, hasExecutor)</span>
+                                <span>Створено @CabinetFormat.LongDateTime(order.CreatedAt)</span>
+                            </div>
+                        </div>
+
+                        <div class="cab-detail__act">
+                            <a asp-action="Order" asp-route-id="@order.Id">
+                                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Поділитися
+                            </a>
+                            <a asp-action="Messages" asp-route-orderId="@order.Id">
+                                <i class="bi bi-chevron-down" aria-hidden="true"></i> Ще
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="cab-detail">
+                        <div>
+                            <article class="cab-card">
+                                <h3>Опис замовлення</h3>
+                                <p>@Model.Details.Description</p>
+
+                                <h3 style="font-size:17px;margin-top:22px">Деталі</h3>
+                                <div class="cab-facts">
+                                    @foreach (var (name, value) in Model.Facts)
+                                    {
+                                        <span>@name</span>
+                                        <span>@value</span>
+                                    }
+                                </div>
+                            </article>
+
+                            <article class="cab-card">
+                                <h3>Активність замовлення</h3>
+                                <ul class="cab-feed">
+                                    @foreach (var item in Model.Details.Activity.OrderBy(a => a.At))
+                                    {
+                                        <li>
+                                            @item.Text
+                                            <span>@CabinetFormat.LongDateTime(item.At)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </article>
+                        </div>
+
+                        <div>
+                            <article class="cab-card">
+                                <h3>Відгуки виконавців (@Model.Details.Bids.Count)</h3>
+
+                                @if (Model.Details.Bids.Count == 0)
+                                {
+                                    <p>Виконавці ще не відгукнулися. Щойно хтось запропонує ціну, пропозиція зʼявиться тут.</p>
+                                }
+
+                                @foreach (var bid in Model.Details.Bids)
+                                {
+                                    <div class="cab-bid">
+                                        <img src="@bid.Portrait" alt="" loading="lazy" />
+
+                                        <div>
+                                            <div class="cab-bid__top">
+                                                <b>@bid.Name</b>
+                                                <span class="cab-bid__rate">
+                                                    <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                                    @CabinetFormat.Rating(bid.Rating) (@PublicText.Reviews(bid.Reviews))
+                                                </span>
+                                            </div>
+
+                                            <div class="cab-bid__role">@bid.Role</div>
+
+                                            @if (bid.Status == ApplicationStatus.Pending)
+                                            {
+                                                <div class="cab-bid__act">
+                                                    <form method="post" asp-action="Bid">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@bid.Id" />
+                                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                                        <button class="cab-bid__yes" type="submit" name="accept" value="true">Прийняти</button>
+                                                    </form>
+
+                                                    <form method="post" asp-action="Bid">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@bid.Id" />
+                                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                                        <button class="cab-bid__no" type="submit" name="accept" value="false">Відхилити</button>
+                                                    </form>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="cab-bid__act">
+                                                    <span class="cab-state cab-state--@(bid.Status == ApplicationStatus.Accepted ? "ok" : "off")"
+                                                          style="width:auto;padding:0 18px;height:32px;font-size:14px">
+                                                        @(bid.Status == ApplicationStatus.Accepted ? "Підтверджено" : "Відхилено")
+                                                    </span>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <div class="cab-bid__price">
+                                            @CabinetFormat.Number(bid.Price) грн.<br />
+                                            @(bid.Days > 0 ? PublicText.Count(bid.Days, "день", "дні", "днів") : "термін не вказано")
+                                        </div>
+                                    </div>
+                                }
+                            </article>
+
+                            <section class="cab-need">
+                                <h3>Потрібна допомога?</h3>
+                                <p>Якщо у вас виникли питання або проблеми із замовленням, зверніться до нашої підтримки.</p>
+                                <div class="cab-need__act">
+                                    <a class="v-btn v-btn--soft" asp-action="Support">Написати в підтримку</a>
+                                    <a class="v-btn v-btn--ghost" asp-controller="Pages" asp-action="Security">Правила безпеки</a>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

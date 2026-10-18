@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="utf-8" />
@@ -20,6 +20,25 @@
                   && (User.IsInRole(AppRoles.Admin)
                       || User.IsInRole(AppRoles.Moderator)
                       || User.IsInRole(AppRoles.Support));
+
+    var signedIn = User.Identity?.IsAuthenticated == true;
+
+    var inCabinet = string.Equals(
+        ViewContext.RouteData.Values["controller"] as string, "Cabinet", StringComparison.OrdinalIgnoreCase);
+
+    var shortName = User.FindFirst(AppUserClaimsPrincipalFactory.ShortNameClaim)?.Value
+                    ?? User.FindFirst(AppUserClaimsPrincipalFactory.FirstNameClaim)?.Value
+                    ?? User.Identity?.Name
+                    ?? string.Empty;
+
+    var roleName = isStaff
+        ? "команда"
+        : CabinetRole.Current(Context) == CabinetSide.Executor ? "виконавець" : "клієнт";
+
+    var avatar = User.FindFirst(AppUserClaimsPrincipalFactory.AvatarClaim)?.Value
+                 ?? CabinetArtwork.Portrait(
+                        shortName,
+                        User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
 }
 
 <header class="v-header">
@@ -34,27 +53,46 @@
         <nav class="v-nav" id="public-navigation" aria-label="Головне меню">
             <a class="v-nav__catalog" asp-controller="Catalog" asp-action="Index">Каталог послуг</a>
             <a class="v-nav__catalog" asp-controller="Account" asp-action="Login">Увійти</a>
-            <a asp-controller="Landing" asp-action="Index" asp-fragment="how">Допомога</a>
-            <a asp-controller="Landing" asp-action="Index" asp-fragment="why">Блог</a>
+            <a asp-controller="Pages" asp-action="Help">Допомога</a>
+            <a asp-controller="Pages" asp-action="Blog">Блог</a>
             <a asp-controller="Landing" asp-action="Index" asp-fragment="services">Конкурси</a>
             <a asp-controller="Landing" asp-action="Index" asp-fragment="services">Вакансії</a>
-            <a href="#footer">Профіль</a>
+            <a class="@(inCabinet ? "is-current" : null)" aria-current="@(inCabinet ? "page" : null)"
+               asp-controller="Cabinet" asp-action="Index">Профіль</a>
         </nav>
 
         <button class="v-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="public-navigation"><i class="bi bi-list" aria-hidden="true"></i></button>
 
-        @if (isStaff)
+        @if (signedIn)
         {
-            <a class="v-btn v-btn--primary" asp-controller="Dashboard" asp-action="Index">
-                <i class="bi bi-speedometer2"></i> Адмін-панель
-            </a>
-        }
-        else if (User.Identity?.IsAuthenticated == true)
-        {
-            <span class="v-user" title="@User.Identity!.Name">@(User.FindFirst(AppUserClaimsPrincipalFactory.FirstNameClaim)?.Value ?? User.Identity!.Name)</span>
-            <form method="post" asp-controller="Auth" asp-action="Logout" class="v-logout">
-                <button class="v-btn v-btn--ghost" type="submit">Вийти</button>
-            </form>
+            <details class="v-me">
+                <summary title="@User.Identity!.Name">
+                    <img src="@avatar" alt="" />
+                    <span>
+                        <b>@shortName</b>
+                        <span>@roleName</span>
+                    </span>
+                    <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </summary>
+
+                <div class="v-me__menu">
+                    <a asp-controller="Cabinet" asp-action="Index">Особистий кабінет</a>
+                    <a asp-controller="Cabinet" asp-action="Orders">Мої замовлення</a>
+                    <a asp-controller="Cabinet" asp-action="Messages">Повідомлення</a>
+                    <a asp-controller="Cabinet" asp-action="Settings">Налаштування</a>
+
+                    @if (isStaff)
+                    {
+                        <a asp-controller="Dashboard" asp-action="Index">
+                            <i class="bi bi-speedometer2" aria-hidden="true"></i> Адмін-панель
+                        </a>
+                    }
+
+                    <form method="post" asp-controller="Auth" asp-action="Logout" class="v-logout">
+                        <button type="submit">Вийти</button>
+                    </form>
+                </div>
+            </details>
         }
         else
         {
@@ -91,11 +129,11 @@
             <div>
                 <h5>Платформа</h5>
                 <ul>
-                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="why">Безпека</a></li>
+                    <li><a asp-controller="Pages" asp-action="Security">Безпека</a></li>
                     <li><a asp-controller="Landing" asp-action="Index" asp-fragment="services">Відгуки</a></li>
-                    <li><a href="#">Блог</a></li>
-                    <li><a href="#">Новини</a></li>
-                    <li><a asp-controller="Landing" asp-action="Index" asp-fragment="how">FAQ</a></li>
+                    <li><a asp-controller="Pages" asp-action="Blog">Блог</a></li>
+                    <li><a asp-controller="Pages" asp-action="Blog" asp-route-category="Новини">Новини</a></li>
+                    <li><a asp-controller="Pages" asp-action="Help">FAQ</a></li>
                 </ul>
             </div>
 
@@ -115,7 +153,7 @@
                     <li><a href="#">Правила для виконавців</a></li>
                     <li><a href="#">Комісії та тарифи</a></li>
                     <li><a href="#">Поради виконавцям</a></li>
-                    <li><a href="#">Центр допомоги</a></li>
+                    <li><a asp-controller="Pages" asp-action="Help">Центр допомоги</a></li>
                 </ul>
             </div>
 

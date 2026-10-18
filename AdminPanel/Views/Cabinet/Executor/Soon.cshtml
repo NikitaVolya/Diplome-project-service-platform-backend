@@ -1,0 +1,56 @@
+@model ExecSoonViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <div class="exec-head">
+                        <h1>@Model.Heading</h1>
+                    </div>
+
+                    <div class="exec-soon">
+                        <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                        <h2>Розділ у роботі</h2>
+                        <p>@Model.Lead</p>
+
+                        <ul>
+                            @foreach (var plan in Model.Plans)
+                            {
+                                <li><span>@plan</span></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="exec-tip">
+                        <i class="bi bi-graph-up" aria-hidden="true"></i>
+                        <div>
+                            <b>Поки що цифри є на головній</b>
+                            <p>Картка «Статистика за місяць» показує перегляди, замовлення й заробіток.</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-action="Index">На головну кабінету</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

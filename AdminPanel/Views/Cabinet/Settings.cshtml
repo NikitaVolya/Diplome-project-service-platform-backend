@@ -1,0 +1,312 @@
+@model CabinetSettingsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var avatar = string.IsNullOrEmpty(Model.Avatar)
+        ? CabinetArtwork.Portrait(Model.FirstName + " " + Model.LastName, Model.Email)
+        : Model.Avatar;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head">
+                <h1>Налаштування</h1>
+                <p>Керуйте своїм акаунтом, сповіщеннями та безпекою.</p>
+            </div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <form class="cab-set" method="post" asp-action="Settings">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="cab-errors"></div>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-person-badge" aria-hidden="true"></i> Профіль</h2>
+
+                        <div class="cab-set__pair">
+                            <div class="cab-field">
+                                <label asp-for="FirstName">Ім'я</label>
+                                <input asp-for="FirstName" type="text" required />
+                            </div>
+
+                            <div class="cab-field">
+                                <label asp-for="LastName">Прізвище</label>
+                                <input asp-for="LastName" type="text" required />
+                            </div>
+
+                            <div class="cab-set__inline">
+                                <div class="cab-field">
+                                    <label asp-for="Email">E-mail</label>
+                                    @* Пошта — логін акаунта, її змінюють окремо з підтвердженням коду. *@
+                                    <input asp-for="Email" type="email" readonly />
+                                </div>
+                                <a class="v-btn v-btn--soft" asp-controller="Auth" asp-action="ForgotPassword">Змінити</a>
+                            </div>
+
+                            <div class="cab-set__inline">
+                                <div class="cab-field">
+                                    <label asp-for="Phone">Номер телефону</label>
+                                    <input asp-for="Phone" type="tel" />
+                                </div>
+                                <button class="v-btn v-btn--soft" type="submit">Змінити</button>
+                            </div>
+                        </div>
+
+                        <div class="cab-set__card">
+                            <span style="font-size:15px;color:#374151">Фото профілю</span>
+                            <div class="cab-set__photo" style="margin-top:12px">
+                                <img src="@avatar" alt="Фото профілю" />
+                                <span>JPG, PNG (максимально 2 Мб)</span>
+                                @* Завантаження фото зʼявиться разом зі сховищем файлів. *@
+                                <button class="v-btn v-btn--soft" type="button" disabled
+                                        title="Завантаження фото зʼявиться пізніше">Змінити фото</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-shield-lock" aria-hidden="true"></i> Безпека</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span style="letter-spacing:3px">••••••••••••</span>
+                                <a class="v-btn v-btn--soft" asp-controller="Auth" asp-action="ForgotPassword">Змінити</a>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Двоетапна перевірка</b>
+                                    <span>Додатковий рівень захисту вашого акаунту</span>
+                                </span>
+                                @* Другий крок входу ще не зроблено: якби перемикач справді вмикав двоетапну
+                                       перевірку, людина більше не змогла б увійти — коду надіслати нема куди.
+                                       Тому показуємо стан, але не даємо його змінити. *@
+                                <label class="cab-switch cab-switch--off"
+                                       title="Двоетапна перевірка зʼявиться разом із кодами входу">
+                                    <input type="checkbox" disabled checked="@Model.TwoFactor" />
+                                    <input type="hidden" asp-for="TwoFactor" />
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-bell" aria-hidden="true"></i> Сповіщення</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Електронна пошта</b>
+                                    <span>Отримувати сповіщення на email</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="NotifyByEmail" type="checkbox" /><span></span></label>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Push-сповіщення</b>
+                                    <span>Отримувати сповіщення в додатку</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="NotifyByPush" type="checkbox" /><span></span></label>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>SMS-сповіщення</b>
+                                    <span>Отримувати важливі сповіщення на SMS</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="NotifyBySms" type="checkbox" /><span></span></label>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Маркетингові розсилки</b>
+                                    <span>Отримувати новини та акції</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="NotifyMarketing" type="checkbox" /><span></span></label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-eye-slash" aria-hidden="true"></i> Конфіденційність</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Хто може бачити мій профіль</b>
+                                    <span>Виконавець може бачити ваш основний профіль</span>
+                                </span>
+                                <select asp-for="ProfileVisibility">
+                                    @foreach (var option in CabinetContent.Visibility)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.ProfileVisibility == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Активність та статус</b>
+                                    <span>Показувати статус онлайн виконавцям</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="ShowOnlineStatus" type="checkbox" /><span></span></label>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Історія замовлень</b>
+                                    <span>Дозволити виконавцям переглядати історію моїх замовлень</span>
+                                </span>
+                                <label class="cab-switch"><input asp-for="ShareOrderHistory" type="checkbox" /><span></span></label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-credit-card-2-front" aria-hidden="true"></i> Платежі</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Основний спосіб оплати</b>
+                                    <span>Карта, з якої списуються кошти за замовлення</span>
+                                </span>
+                                <span style="display:flex;align-items:center;gap:18px">
+                                    <span class="cab-skill">@(string.IsNullOrEmpty(Model.PaymentCard) ? "Карту не додано" : Model.PaymentCard)</span>
+                                    @* Прив'язка карти зʼявиться разом із платіжним шлюзом. *@
+                                    <button class="v-btn v-btn--soft" type="button" disabled
+                                            title="Прив'язка карти зʼявиться пізніше">Змінити</button>
+                                </span>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Валюта рахунків</b>
+                                    <span>У цій валюті показуються суми та рахунки</span>
+                                </span>
+                                <select asp-for="Currency">
+                                    @foreach (var option in CabinetContent.Currencies)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.Currency == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-translate" aria-hidden="true"></i> Мова та регіон</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span><b>Мова інтерфейсу</b></span>
+                                <select asp-for="Language">
+                                    @foreach (var option in CabinetContent.Languages)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.Language == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span><b>Часовий пояс</b></span>
+                                <select asp-for="TimeZoneName">
+                                    @foreach (var option in CabinetContent.TimeZones)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.TimeZoneName == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span><b>Формат дати</b></span>
+                                <select asp-for="DateFormat">
+                                    @foreach (var option in CabinetContent.DateFormats)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.DateFormat == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span><b>Формат часу</b></span>
+                                <select asp-for="TimeFormat">
+                                    @foreach (var option in CabinetContent.TimeFormats)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.TimeFormat == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-eyeglasses" aria-hidden="true"></i> Вигляд</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span><b>Тема інтерфейсу</b></span>
+                                <span class="cab-theme">
+                                    <input type="radio" id="theme-light" name="Theme" value="light" checked="@(Model.Theme != "dark")" />
+                                    <label for="theme-light">Світла</label>
+                                    <input type="radio" id="theme-dark" name="Theme" value="dark" checked="@(Model.Theme == "dark")" />
+                                    <label for="theme-dark">Темна</label>
+                                </span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cab-set__group">
+                        <h2><i class="bi bi-three-dots" aria-hidden="true"></i> Інше</h2>
+
+                        <div class="cab-set__card">
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Вийти з усіх пристроїв</b>
+                                    <span>Ви вилогуєтесь з усіх пристроїв, окрім поточного</span>
+                                </span>
+                                @* Вихід з інших пристроїв робиться оновленням стемпа безпеки — зробимо разом
+                                   зі списком сесій, щоб людина бачила, що саме закривається. *@
+                                <button class="cab-danger" type="button" disabled
+                                        title="Зʼявиться разом зі списком активних сесій">Вийти з усіх пристроїв</button>
+                            </div>
+
+                            <div class="cab-set__row">
+                                <span>
+                                    <b>Видалити акаунт</b>
+                                    <span>Безповоротне видалення акаунту та всіх даних</span>
+                                </span>
+                                @* Видалення акаунта зачіпає замовлення й платежі — робимо його через звернення
+                                   до підтримки, щоб ніхто не стер історію одним випадковим натисканням. *@
+                                <a class="cab-danger" style="display:inline-flex;align-items:center;justify-content:center"
+                                   asp-action="Support">Видалити акаунт</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="cab-set__act">
+                        <button class="v-btn v-btn--primary" type="submit">Зберегти зміни</button>
+                        <a class="v-btn v-btn--ghost" asp-action="Settings">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

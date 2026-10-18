@@ -1,0 +1,84 @@
+@model CabinetOrdersViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Orders.Page,
+        Pages = Model.Orders.Pages,
+        Action = "Orders",
+        Route = new Dictionary<string, string?>
+        {
+            ["tab"] = Model.Tab,
+            ["q"] = Model.Query.Length > 0 ? Model.Query : null
+        }
+    };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Мої замовлення</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel">
+                    <div class="cab-rowhead">
+                        <h2>Мої замовлення:</h2>
+                        <a class="cab-all" asp-action="Create">Створити замовлення <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+
+                    <div class="cab-tabs">
+                        @foreach (var tab in CabinetContent.OrderTabs)
+                        {
+                            <a asp-action="Orders" asp-route-tab="@tab.Key" asp-route-q="@Model.Query"
+                               class="@(Model.Tab == tab.Key ? "is-current" : null)">@tab.Title</a>
+                        }
+                    </div>
+
+                    <form class="cab-filters cab-filters--right" method="get" asp-action="Orders">
+                        <input type="hidden" name="tab" value="@Model.Tab" />
+
+                        <label class="cab-find">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query" placeholder="Пошук замовлень"
+                                   aria-label="Пошук замовлень" />
+                        </label>
+
+                        <button class="v-btn v-btn--ghost" type="submit">
+                            <i class="bi bi-funnel" aria-hidden="true"></i> Фільтри
+                        </button>
+                    </form>
+
+                    @if (Model.Orders.Items.Count == 0)
+                    {
+                        <p class="cab-empty">Замовлень за цим фільтром немає.</p>
+                    }
+
+                    <div class="cab-orders">
+                        @foreach (var order in Model.Orders.Items)
+                        {
+                            <partial name="_CabinetOrder" model="order" />
+                        }
+                    </div>
+
+                    <partial name="_CabinetPager" model="pager" />
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

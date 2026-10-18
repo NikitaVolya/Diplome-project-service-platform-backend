@@ -1,0 +1,212 @@
+@model CabinetCreateOrderViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Створити замовлення</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--lilac cab-panel--wide">
+                    <p class="cab-panel__lead">Опишіть, що вам потрібно, та отримуйте відгуки від перевірених виконавців</p>
+
+                    <form method="post" asp-action="Create">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="All" class="cab-errors"></div>
+
+                        <section class="cab-step">
+                            <div class="cab-step__head">
+                                <span class="cab-step__no">1</span>
+                                <span>
+                                    <b>Що вам потрібно?</b>
+                                    <span>Опишіть послугу, яку ви шукаєте</span>
+                                </span>
+                            </div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label asp-for="OrderTitle">Назва замовлення *</label>
+                                    <input asp-for="OrderTitle" type="text"
+                                           placeholder="Наприклад: Дизайн логотипу для кав’ярні" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label asp-for="CategoryId">Категорія *</label>
+                                    <select asp-for="CategoryId" required>
+                                        <option value="0">Оберіть категорію послуг</option>
+                                        @foreach (var category in Model.Categories)
+                                        {
+                                            <option value="@category.Key" selected="@(Model.CategoryId.ToString() == category.Key)">@category.Title</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label asp-for="Description">Опис завдання *</label>
+                                    <textarea asp-for="Description" maxlength="2000" rows="7"
+                                              placeholder="Опишіть ваше завдання, цілі, побажання, обсяг роботи, тощо." required></textarea>
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label>Додайте файли (не більше 10)</label>
+                                    <div class="cab-drop">
+                                        <i class="bi bi-paperclip" aria-hidden="true"></i>
+                                        <span>
+                                            Перетягніть файли сюди, або виберіть з комп’ютера.<br />
+                                            Підтримуються: JPG, PNG, PDF, DOC, ZIP. Максимальний розмір 10 Мб
+                                            <br /><b>Завантаження файлів зʼявиться в наступній версії.</b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="cab-step">
+                            <div class="cab-step__head">
+                                <span class="cab-step__no">2</span>
+                                <span><b>Деталі замовлення</b></span>
+                            </div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label>Бюджет</label>
+                                    <div class="cab-money">
+                                        <select asp-for="Budget" aria-label="Тип бюджету">
+                                            @foreach (var budget in CabinetContent.Budgets)
+                                            {
+                                                <option value="@budget.Key" selected="@(Model.Budget == budget.Key)">@budget.Title</option>
+                                            }
+                                        </select>
+                                        <span>від</span>
+                                        <input asp-for="PriceFrom" type="number" min="0" max="1000000" step="50" />
+                                        <span>до</span>
+                                        <input asp-for="PriceTo" type="number" min="0" max="1000000" step="50" />
+                                        <span>грн.</span>
+                                    </div>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label asp-for="Deadline">Термін виконання</label>
+                                    <select asp-for="Deadline">
+                                        @foreach (var deadline in CabinetContent.Deadlines)
+                                        {
+                                            <option value="@deadline.Key" selected="@(Model.Deadline == deadline.Key)">@deadline.Title</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="cab-step">
+                            <div class="cab-step__head">
+                                <span class="cab-step__no">3</span>
+                                <span><b>Додаткова інформація</b></span>
+                            </div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label>Місце виконання</label>
+                                    <div class="cab-radios">
+                                        <label class="cab-radio">
+                                            <input type="radio" name="Place" value="online" checked="@(Model.Place == "online")" />
+                                            <span>Онлайн</span>
+                                        </label>
+                                        <label class="cab-radio">
+                                            <input type="radio" name="Place" value="onsite" checked="@(Model.Place == "onsite")" />
+                                            <span>Потрібна зустріч</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label>Тип замовлення</label>
+                                    <div class="cab-radios">
+                                        <label class="cab-radio">
+                                            <input type="radio" name="Kind" value="once" checked="@(Model.Kind == "once")" />
+                                            <span>Одноразове</span>
+                                        </label>
+                                        <label class="cab-radio">
+                                            <input type="radio" name="Kind" value="ongoing" checked="@(Model.Kind == "ongoing")" />
+                                            <span>Постійне співробітництво</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label asp-for="Executors">Кількість виконавців</label>
+                                    <select asp-for="Executors">
+                                        @foreach (var count in CabinetContent.ExecutorCounts)
+                                        {
+                                            <option value="@count.Key" selected="@(Model.Executors == count.Key)">@count.Title</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label asp-for="Level">Рівень досвіду виконавців</label>
+                                    <select asp-for="Level">
+                                        @foreach (var level in CabinetContent.ExperienceLevels)
+                                        {
+                                            <option value="@level.Key" selected="@(Model.Level == level.Key)">@level.Title</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label asp-for="AddressId">Адреса (для зустрічі)</label>
+                                    <select asp-for="AddressId">
+                                        <option value="">Не потрібна</option>
+                                        @foreach (var address in Model.Addresses)
+                                        {
+                                            <option value="@address.Id" selected="@(Model.AddressId == address.Id)">
+                                                @address.Title — @address.Line, @address.City
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="cab-step">
+                            <div class="cab-step__head">
+                                <span class="cab-step__no">4</span>
+                                <span>
+                                    <b>Контактна інформація</b>
+                                    <span>Виконавці не бачать ваші контакти, поки не відгукнуться на замовлення</span>
+                                </span>
+                            </div>
+
+                            <label class="cab-check">
+                                <input asp-for="SharePhone" type="checkbox" />
+                                <span>Показувати номер телефону виконавцям, як відгукнуться.</span>
+                            </label>
+                        </section>
+
+                        <div class="cab-create__act">
+                            <a class="v-btn v-btn--ghost" asp-action="Orders">Скасувати</a>
+                            <button class="v-btn v-btn--soft" type="submit">Опублікувати замовлення</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,4 +1,4 @@
-using AdminPanel.Models;
+﻿using AdminPanel.Models;
 using AdminPanel.Services;
 using BLL.Admin.Interfaces;
 using BLL.Admin.Services;
@@ -13,6 +13,10 @@ namespace AdminPanel.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Identity на cookie для адмінки. Мобільний API автентифікується через JWT у власному хості;
+        /// дві схеми ніде не перетинаються, тому сесії браузера не потрапляють у публічний API.
+        /// </summary>
         public static IServiceCollection AddAdminIdentity(this IServiceCollection services)
         {
             services
@@ -32,6 +36,7 @@ namespace AdminPanel.Extensions
                     options.SignIn.RequireConfirmedEmail = false;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                // Імʼя користувача має потрапити в cookie, щоб шапка сайту не показувала e-mail.
                 .AddClaimsPrincipalFactory<AppUserClaimsPrincipalFactory>()
                 .AddDefaultTokenProviders();
 
@@ -63,6 +68,7 @@ namespace AdminPanel.Extensions
                 options.AddPolicy(AppRoles.ModerationPolicy, policy =>
                     policy.RequireRole(AppRoles.Admin, AppRoles.Moderator));
 
+                // Жодна сторінка панелі не є анонімною, якщо явно не вказано протилежне.
                 options.FallbackPolicy = options.GetPolicy(AppRoles.StaffPolicy);
             });
 
@@ -82,8 +88,18 @@ namespace AdminPanel.Extensions
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             services.AddScoped<INavigationBadgeService, NavigationBadgeService>();
 
+            // Дані для публічної головної сторінки порталу.
             services.AddScoped<IPublicCatalogService, PublicCatalogService>();
             services.AddScoped<ServiceDirectory>();
+
+            // Дані особистого кабінету замовника.
+            services.AddScoped<ICabinetService, CabinetService>();
+
+            // Дані кабінету виконавця: власні послуги, портфоліо, календар.
+            services.AddScoped<IExecutorCabinetService, ExecutorCabinetService>();
+
+            // Аналітика, фінанси та звернення в підтримку з кабінету виконавця.
+            services.AddScoped<IExecutorInsightsService, ExecutorInsightsService>();
 
             // Коди підтвердження для реєстрації та відновлення пароля.
             // Лежать у памʼяті застосунку, тому екземпляр потрібен один на всіх.

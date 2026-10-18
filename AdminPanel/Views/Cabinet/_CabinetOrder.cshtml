@@ -1,0 +1,44 @@
+@model CabinetOrder
+@{
+    var hasExecutor = !string.IsNullOrEmpty(Model.ExecutorId);
+    var tone = CabinetContent.StatusTone(Model.Status, hasExecutor);
+}
+
+<article class="cab-order">
+    <span class="cab-order__img">
+        <img src="@Model.Image" alt="@Model.Title" loading="lazy" />
+    </span>
+
+    <div class="cab-order__body">
+        <h3 class="cab-order__name">@Model.Title</h3>
+        <p class="cab-order__cat">@Model.Category</p>
+        <p class="cab-order__when">
+            <i class="bi bi-alarm" aria-hidden="true"></i>
+            @CabinetFormat.DateTimeShort(Model.ExecutionAt ?? Model.CreatedAt)
+        </p>
+    </div>
+
+    <span class="cab-state cab-state--@tone">@CabinetContent.StatusTitle(Model.Status, hasExecutor)</span>
+
+    <div class="cab-order__who">
+        <span>Виконавець</span>
+        @if (hasExecutor)
+        {
+            <span class="cab-order__exec">
+                <img src="@Model.ExecutorPortrait" alt="" loading="lazy" />
+                @Model.ExecutorName
+            </span>
+        }
+        else
+        {
+            <span class="cab-order__exec">—</span>
+        }
+    </div>
+
+    <div class="cab-order__price">@CabinetFormat.From(Model.Price)</div>
+
+    <a class="cab-order__go" asp-controller="Cabinet" asp-action="Order" asp-route-id="@Model.Id"
+       aria-label="Відкрити замовлення @Model.Title">
+        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+    </a>
+</article>

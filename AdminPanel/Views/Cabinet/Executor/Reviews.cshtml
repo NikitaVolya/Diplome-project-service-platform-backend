@@ -1,0 +1,179 @@
+@model ExecReviewsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Reviews.Page,
+        Pages = Model.Reviews.Pages,
+        Action = "Reviews",
+        Route = new Dictionary<string, string?> { ["tab"] = Model.Tab, ["sort"] = Model.Sort }
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head exec-head__row">
+                        <div>
+                            <h1>Відгуки</h1>
+                            <p>Відгуки клієнтів про вашу роботу та послуги</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">
+                            Запросити відгук <i class="bi bi-envelope" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <div class="exec-stats">
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">Усього відгуків</span>
+                            <span class="exec-stat__value">@Model.Reviews.Total</span>
+                            <span class="exec-stat__note">за весь час</span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">Середній рейтинг</span>
+                            <span class="exec-stat__value exec-stat__value--small">
+                                @CabinetFormat.Rating(Model.Reviews.Average)
+                                <span class="exec-review__stars" aria-hidden="true">
+                                    @for (var i = 0; i < 5; i++)
+                                    {
+                                        <i class="bi @(i < Math.Round(Model.Reviews.Average) ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </span>
+                            </span>
+                            <span class="exec-stat__note">на основі @PublicText.Reviews(Model.Reviews.Total)</span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">Відгуки з фото</span>
+                            <span class="exec-stat__value">@Model.Reviews.WithPhoto</span>
+                            <span class="exec-stat__note">
+                                @(Model.Reviews.Total > 0 ? $"{Model.Reviews.WithPhoto * 100 / Model.Reviews.Total}% від усіх" : "немає")
+                            </span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">Рекомендації</span>
+                            <span class="exec-stat__value">@Model.Reviews.Recommend%</span>
+                            <span class="exec-stat__note">клієнти рекомендують</span>
+                        </article>
+                    </div>
+
+                    <div class="exec-bar__row">
+                        <div class="exec-tabs" style="padding-top:0">
+                            @foreach (var tab in ExecutorContent.ReviewTabs)
+                            {
+                                <a asp-action="Reviews" asp-route-tab="@tab.Key" asp-route-sort="@Model.Sort"
+                                   class="@(Model.Tab == tab.Key ? "is-current" : null)">@tab.Title</a>
+                            }
+                        </div>
+
+                        <form method="get" asp-action="Reviews">
+                            <input type="hidden" name="tab" value="@Model.Tab" />
+                            <div class="cab-field" style="width:236px">
+                                <select name="sort" aria-label="Порядок" onchange="this.form.submit()">
+                                    @foreach (var sort in ExecutorContent.ReviewSorts)
+                                    {
+                                        <option value="@sort.Key" selected="@(Model.Sort == sort.Key)">@sort.Title</option>
+                                    }
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    @if (Model.Tab == "torate")
+                    {
+                        @if (Model.Reviews.Awaiting.Count == 0)
+                        {
+                            <p class="cab-empty">Усі завершені замовлення вже оцінені.</p>
+                        }
+
+                        @foreach (var order in Model.Reviews.Awaiting)
+                        {
+                            <partial name="Executor/_ExecOrder" model="order" />
+                        }
+                    }
+                    else
+                    {
+                        @if (Model.Reviews.Items.Count == 0)
+                        {
+                            <p class="cab-empty">
+                                @(Model.Tab == "given" ? "Ви ще не писали відгуків." : "Відгуків поки немає.")
+                            </p>
+                        }
+
+                        @foreach (var review in Model.Reviews.Items)
+                        {
+                            <article class="exec-review">
+                                <img class="exec-review__face" src="@review.Portrait" alt="" loading="lazy" />
+
+                                <div>
+                                    <div class="exec-review__top">
+                                        <b>@review.PersonName</b>
+                                        <span class="exec-review__stars" aria-label="@review.Rating з 5">
+                                            @for (var i = 0; i < 5; i++)
+                                            {
+                                                <i class="bi @(i < review.Rating ? "bi-star-fill" : "bi-star")" aria-hidden="true"></i>
+                                            }
+                                        </span>
+                                    </div>
+
+                                    <p class="exec-review__role">@review.OrderTitle</p>
+                                    <p class="exec-review__text">@review.Comment</p>
+
+                                    <p class="exec-review__meta">
+                                        <span>Замовлення @review.OrderId</span>
+                                        <span>@review.CreatedAt.ToString("dd.MM.yyyy")</span>
+                                    </p>
+                                </div>
+
+                                <span class="exec-review__shot">
+                                    @if (!string.IsNullOrEmpty(review.Image))
+                                    {
+                                        <img src="@review.Image" alt="" loading="lazy" />
+                                    }
+                                </span>
+
+                                <a class="exec-dots" asp-action="Messages" aria-label="Дії з відгуком">
+                                    <i class="bi bi-three-dots" aria-hidden="true"></i>
+                                </a>
+                            </article>
+                        }
+
+                        <partial name="_CabinetPager" model="pager" />
+                    }
+
+                    <div class="exec-tip">
+                        <i class="bi bi-bag-heart" aria-hidden="true"></i>
+                        <div>
+                            <b>Більше відгуків — більше довіри</b>
+                            <p>Запросіть клієнтів залишити відгуки після завершення замовлення.</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">Запросити відгук</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

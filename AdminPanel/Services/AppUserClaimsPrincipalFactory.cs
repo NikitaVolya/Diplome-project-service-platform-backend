@@ -9,6 +9,10 @@ public sealed class AppUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<A
 {
     public const string FirstNameClaim = "first_name";
 
+    public const string ShortNameClaim = "short_name";
+
+    public const string AvatarClaim = "avatar";
+
     public AppUserClaimsPrincipalFactory(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
@@ -24,6 +28,14 @@ public sealed class AppUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<A
         if (!string.IsNullOrWhiteSpace(user.FirstName))
         {
             identity.AddClaim(new Claim(FirstNameClaim, user.FirstName));
+
+            var initial = string.IsNullOrWhiteSpace(user.LastName) ? string.Empty : $" {user.LastName[0]}.";
+            identity.AddClaim(new Claim(ShortNameClaim, user.FirstName + initial));
+        }
+
+        if (!string.IsNullOrWhiteSpace(user.AvatarUrl))
+        {
+            identity.AddClaim(new Claim(AvatarClaim, user.AvatarUrl));
         }
 
         return identity;

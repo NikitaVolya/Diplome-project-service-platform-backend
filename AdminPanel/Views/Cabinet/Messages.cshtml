@@ -1,0 +1,158 @@
+@model CabinetMessagesViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var filters = new[] { ("all", "Усі"), ("unread", "Непрочитані"), ("archive", "Архів") };
+    DateTime? lastDay = null;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Повідомлення</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <div class="cab-chat">
+                    <section class="cab-chat__list">
+                        <form class="cab-chat__find" method="get" asp-action="Messages">
+                            <input type="hidden" name="filter" value="@Model.Filter" />
+                            <label class="cab-find">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <input type="search" name="q" value="@Model.Query" placeholder="Пошук замовлень"
+                                       aria-label="Пошук замовлень" />
+                            </label>
+                        </form>
+
+                        <nav class="cab-chat__tabs" aria-label="Фільтр листувань">
+                            @foreach (var (key, title) in filters)
+                            {
+                                <a asp-action="Messages" asp-route-filter="@key" asp-route-q="@Model.Query"
+                                   class="@(Model.Filter == key ? "is-current" : null)">@title</a>
+                            }
+                        </nav>
+
+                        <h2 class="cab-chat__title">Повідомлення</h2>
+
+                        <div class="cab-chat__rows">
+                            @if (Model.Threads.Count == 0)
+                            {
+                                <p class="cab-empty">Листувань немає.</p>
+                            }
+
+                            @foreach (var thread in Model.Threads)
+                            {
+                                var current = Model.Chat?.Head.OrderId == thread.OrderId;
+
+                                <a class="cab-thread @(current ? "is-current" : null)"
+                                   asp-action="Messages" asp-route-orderId="@thread.OrderId"
+                                   asp-route-filter="@Model.Filter" asp-route-q="@Model.Query">
+                                    <img src="@thread.PartnerPortrait" alt="" loading="lazy" />
+                                    <span>
+                                        <b>@thread.PartnerName</b>
+                                        <p>@thread.Last</p>
+                                    </span>
+                                    <span class="cab-thread__meta">
+                                        @if (thread.Unread > 0)
+                                        {
+                                            <span class="cab-thread__count">@thread.Unread</span>
+                                        }
+                                        <span>@CabinetFormat.Ago(thread.LastAt)</span>
+                                    </span>
+                                </a>
+                            }
+                        </div>
+                    </section>
+
+                    <section class="cab-chat__room">
+                        @if (Model.Chat == null)
+                        {
+                            <p class="cab-empty">Оберіть розмову зліва.</p>
+                        }
+                        else
+                        {
+                            <header class="cab-chat__head">
+                                <img src="@Model.Chat.Head.PartnerPortrait" alt="" />
+                                <span>
+                                    <b>@Model.Chat.Head.PartnerName</b>
+                                    <span>Виконавець замовлення</span>
+                                </span>
+                                <i class="bi bi-three-dots" aria-hidden="true"></i>
+                            </header>
+
+                            <div class="cab-chat__order">
+                                <div>
+                                    Замовлення: @Model.Chat.Head.OrderTitle<br />
+                                    ID:@Model.Chat.Head.OrderId
+                                </div>
+                                <a class="v-btn v-btn--soft" asp-action="Order" asp-route-id="@Model.Chat.Head.OrderId">
+                                    Переглянути замовлення
+                                </a>
+                            </div>
+
+                            <div class="cab-chat__flow">
+                                @if (Model.Chat.Messages.Count == 0)
+                                {
+                                    <p class="cab-empty">Повідомлень ще немає — напишіть першим.</p>
+                                }
+
+                                @foreach (var message in Model.Chat.Messages)
+                                {
+                                    if (lastDay?.Date != message.SentAt.Date)
+                                    {
+                                        lastDay = message.SentAt;
+                                        <p class="cab-chat__day">@CabinetFormat.LongDate(message.SentAt)</p>
+                                    }
+
+                                    <div class="cab-msg @(message.Mine ? "cab-msg--mine" : null)">
+                                        <div class="cab-msg__who">
+                                            @if (!message.Mine)
+                                            {
+                                                <img src="@message.Portrait" alt="" loading="lazy" />
+                                                <b>@message.Author</b>
+                                            }
+                                            <span>@message.SentAt.ToString("HH:mm")</span>
+                                        </div>
+                                        <p class="cab-msg__text">@message.Text</p>
+                                    </div>
+                                }
+                            </div>
+
+                            <form class="cab-chat__send" method="post" asp-action="Send">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="orderId" value="@Model.Chat.Head.OrderId" />
+
+                                <button class="cab-chat__clip" type="button" disabled
+                                        title="Вкладення зʼявляться пізніше" aria-label="Додати файл">
+                                    <i class="bi bi-paperclip" aria-hidden="true"></i>
+                                </button>
+
+                                <div class="cab-chat__box">
+                                    <input type="text" name="text" maxlength="1000" placeholder="Напишіть повідомлення"
+                                           aria-label="Текст повідомлення" />
+                                    <button type="submit" aria-label="Надіслати">
+                                        <i class="bi bi-send" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        }
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

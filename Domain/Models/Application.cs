@@ -17,6 +17,9 @@ namespace Domain.Models
         public ApplicationUser? Executor { get; set; }
 
         public decimal ProposedPrice { get; set; }
+
+        public int? Days { get; set; }
+
         public string? Comment { get; set; }
 
         public DateTime CreatedAt { get; set; }

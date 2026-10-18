@@ -13,39 +13,50 @@ namespace Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
-
-        // ── Анкета з другого кроку реєстрації ───────────────────────────────
-
-        /// <summary>Виконавець може виступати приватною особою або компанією чи ФОП.</summary>
         public bool IsCompany { get; set; }
-
-        /// <summary>Назва компанії — тільки для тих, хто обрав «Компанія/ФОП».</summary>
         public string? CompanyName { get; set; }
 
         public string? City { get; set; }
         public string? PostalCode { get; set; }
         public DateTime? BirthDate { get; set; }
-
-        /// <summary>«Male», «Female» або null, якщо людина не захотіла вказувати.</summary>
         public string? Gender { get; set; }
-
-        /// <summary>Досвід роботи виконавця: ключ зі списку на формі, не вільний текст.</summary>
         public string? Experience { get; set; }
-
-        /// <summary>
-        /// Напрям каталогу, у якому працює виконавець.
-        ///
-        /// Навмисно без зовнішнього ключа: напрями не видаляються, а ховаються, і вибір
-        /// людини не повинен заважати адміністраторові прибрати напрям із вітрини.
-        /// </summary>
         public int? SpecializationCategoryId { get; set; }
-
-        /// <summary>Кілька слів про себе з форми реєстрації.</summary>
         public string? About { get; set; }
 
         public bool NotifyByEmail { get; set; }
         public bool NotifyBySms { get; set; }
         public bool NotifyByPush { get; set; }
+        public bool NotifyMarketing { get; set; }
+        public bool NotifyOrders { get; set; } = true;
+        public bool NotifyMessages { get; set; } = true;
+        public bool NotifyReviews { get; set; } = true;
+        public bool NotifyReminders { get; set; } = true;
+        public decimal WalletBalance { get; set; }
+        public string? ProfileVisibility { get; set; }
+        public bool ShowOnlineStatus { get; set; } = true;
+        public bool ShareOrderHistory { get; set; }
+        public string? Language { get; set; }
+        public string? TimeZoneName { get; set; }
+        public string? DateFormat { get; set; }
+        public string? TimeFormat { get; set; }
+        public string? Theme { get; set; }
+        public string? PaymentCard { get; set; }
+        public string? Currency { get; set; }
+        public string? Headline { get; set; }
+        public string? Nickname { get; set; }
+        public int ProfileViews { get; set; }
+        public string? Presence { get; set; }
+
+        public ICollection<ExecutorService> Services { get; set; } = new List<ExecutorService>();
+        public ICollection<PortfolioWork> Portfolio { get; set; } = new List<PortfolioWork>();
+        public ICollection<CalendarEvent> Events { get; set; } = new List<CalendarEvent>();
+        public ICollection<ProfileVisit> Visits { get; set; } = new List<ProfileVisit>();
+        public ICollection<PayoutMethod> PayoutMethods { get; set; } = new List<PayoutMethod>();
+        public ICollection<Payout> Payouts { get; set; } = new List<Payout>();
+        public ICollection<SupportTicket> Tickets { get; set; } = new List<SupportTicket>();
+
+        public ICollection<UserAddress> Addresses { get; set; } = new List<UserAddress>();
 
         public ICollection<Order> CreatedOrders { get; set; } = new List<Order>();
         public ICollection<Order> ExecutedOrders { get; set; } = new List<Order>();

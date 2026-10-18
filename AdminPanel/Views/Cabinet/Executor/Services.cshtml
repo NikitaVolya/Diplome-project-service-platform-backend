@@ -1,0 +1,247 @@
+@model ExecServicesViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Services.Page,
+        Pages = Model.Services.Pages,
+        Action = "Services",
+        Route = new Dictionary<string, string?>
+        {
+            ["q"] = Model.Query.Length > 0 ? Model.Query : null,
+            ["categoryId"] = Model.CategoryId > 0 ? Model.CategoryId.ToString() : null
+        }
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head exec-head__row">
+                        <div>
+                            <h1>Мої послуги</h1>
+                            <p>Керуйте своїми послугами, цінами та доступністю</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-action="Services" asp-route-add="true">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i> Додати послугу
+                        </a>
+                    </div>
+
+                    <div class="exec-stats">
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">Активні послуги</span>
+                            <span class="exec-stat__value">@Model.Services.Active</span>
+                            <span class="exec-stat__note">опубліковано</span>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">На паузі</span>
+                            <span class="exec-stat__value">@Model.Services.Paused</span>
+                            <span class="exec-stat__note">тимчасово недоступні</span>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">Чернетки</span>
+                            <span class="exec-stat__value">@Model.Services.Drafts</span>
+                            <span class="exec-stat__note">не опубліковані</span>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">Всього замовлень</span>
+                            <span class="exec-stat__value">@Model.Services.OrdersTotal</span>
+                            <span class="exec-stat__note">отримано через послуги</span>
+                        </article>
+                    </div>
+
+                    <form class="exec-filters" method="get" asp-action="Services">
+                        <label class="cab-find cab-find--plain">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query"
+                                   placeholder="Пошук за назвою послуги" aria-label="Пошук послуг" />
+                        </label>
+
+                        <div class="cab-field" style="width:365px">
+                            <select name="categoryId" aria-label="Категорія послуг" onchange="this.form.submit()">
+                                <option value="0">Оберіть категорію послуг</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category.Key" selected="@(Model.CategoryId.ToString() == category.Key)">@category.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+
+                    @if (Model.Form != null)
+                    {
+                        <form class="cab-form" method="post" asp-action="SaveService">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="Id" value="@Model.Form.Id" />
+
+                            <h3>@(Model.Form.Id > 0 ? "Редагувати послугу" : "Нова послуга")</h3>
+
+                            <div asp-validation-summary="All" class="cab-errors"></div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label for="svc-title">Назва послуги</label>
+                                    <input id="svc-title" type="text" name="Title" value="@Model.Form.Title"
+                                           maxlength="120" placeholder="Дизайн логотипа" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="svc-cat">Категорія</label>
+                                    <select id="svc-cat" name="CategoryId" required>
+                                        <option value="0">Оберіть напрям</option>
+                                        @foreach (var category in Model.Categories)
+                                        {
+                                            <option value="@category.Key" selected="@(Model.Form.CategoryId.ToString() == category.Key)">@category.Title</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="svc-price">Ціна від, грн</label>
+                                    <input id="svc-price" type="number" name="FromPrice" value="@Model.Form.FromPrice"
+                                           min="0" max="1000000" step="50" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="svc-image">Ім'я файлу знімка</label>
+                                    <input id="svc-image" type="text" name="Image" value="@Model.Form.Image"
+                                           maxlength="120" placeholder="dyzain-lohotypa" />
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label for="svc-text">Опис</label>
+                                    <textarea id="svc-text" name="Description" maxlength="2000" rows="4"
+                                              placeholder="Що входить у послугу, скільки правок, у які строки">@Model.Form.Description</textarea>
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label class="cab-check">
+                                        <input type="checkbox" name="Publish" value="true" checked="@Model.Form.Publish" />
+                                        <span>Опублікувати одразу</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="cab-form__act">
+                                <button class="v-btn v-btn--primary" type="submit">Зберегти</button>
+                                <a class="v-btn v-btn--ghost" asp-action="Services">Скасувати</a>
+                            </div>
+                        </form>
+                    }
+
+                    @if (Model.Services.Items.Count == 0)
+                    {
+                        <p class="cab-empty">Послуг за цим фільтром немає. Натисніть «Додати послугу».</p>
+                    }
+
+                    @foreach (var service in Model.Services.Items)
+                    {
+                        <article class="exec-service">
+                            <span class="exec-service__img">
+                                <img src="@service.Image" alt="@service.Title" loading="lazy" />
+                            </span>
+
+                            <div class="exec-service__body">
+                                <h3 class="exec-service__name">@service.Title</h3>
+                                <p class="exec-service__cat">@(string.IsNullOrEmpty(service.Parent) ? service.Category : service.Parent)</p>
+
+                                @if (service.State == ServiceState.Draft)
+                                {
+                                    <p class="exec-service__rate">створено @CabinetFormat.LongDate(service.CreatedAt)</p>
+                                }
+                                else if (service.Reviews > 0)
+                                {
+                                    <p class="exec-service__rate">
+                                        <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                        @CabinetFormat.Rating(service.Rating) (@PublicText.Reviews(service.Reviews))
+                                    </p>
+                                }
+                            </div>
+
+                            <div class="exec-service__count">
+                                @if (service.State != ServiceState.Draft)
+                                {
+                                    <text>Замовлень: @service.Orders</text>
+                                }
+                            </div>
+
+                            <div class="exec-service__price">@CabinetFormat.From(service.FromPrice)</div>
+
+                            <div class="exec-service__right">
+                                <span class="exec-service__state">
+                                    @ExecutorContent.ServiceTitle(service.State)
+
+                                    @if (service.State != ServiceState.Draft)
+                                    {
+                                        <form method="post" asp-action="ToggleService">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@service.Id" />
+                                            <label class="exec-switch">
+                                                <input type="checkbox" checked="@(service.State == ServiceState.Active)"
+                                                       onchange="this.form.submit()"
+                                                       aria-label="Увімкнути або призупинити послугу @service.Title" />
+                                                <span></span>
+                                            </label>
+                                        </form>
+                                    }
+                                </span>
+
+                                <div class="exec-service__act">
+                                    @if (service.State == ServiceState.Draft)
+                                    {
+                                        <a class="exec-btn-edit" asp-action="Services" asp-route-edit="@service.Id">Продовжити</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="exec-btn-edit" asp-action="Services" asp-route-edit="@service.Id">Редагувати</a>
+                                    }
+
+                                    <form method="post" asp-action="DeleteService">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@service.Id" />
+                                        <button class="exec-btn-drop" type="submit">Видалити</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    }
+
+                    <partial name="_CabinetPager" model="pager" />
+
+                    <div class="exec-tip">
+                        <i class="bi bi-lightbulb" aria-hidden="true"></i>
+                        <div>
+                            <b>Як зробити послуги популярнішими?</b>
+                            <p>Додайте якісні фото, детальний опис і відповідайте на запити швидко.</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-controller="Pages" asp-action="Help">Переглянути поради</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,143 @@
+@model CabinetHomeViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <span>Особистий кабінет</span>
+            </nav>
+
+            <div class="cab-head">
+                <h1 class="cab-head__hi">Вітаємо, @Model.FirstName! <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
+                <p>Тут ви можете керувати своїми замовленнями та переглядати важливу інформацію</p>
+            </div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--mint">
+                    <div class="cab-stats">
+                        <article class="cab-stat">
+                            <span class="cab-stat__name">Активні замовлення</span>
+                            <span class="cab-stat__value">@Model.Summary.Active</span>
+                            <a class="cab-stat__more" asp-action="Orders" asp-route-tab="active">
+                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="cab-stat">
+                            <span class="cab-stat__name">Завершені замовлення</span>
+                            <span class="cab-stat__value">@Model.Summary.Completed</span>
+                            <a class="cab-stat__more" asp-action="Orders" asp-route-tab="completed">
+                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="cab-stat">
+                            <span class="cab-stat__name">Очікують відгуку</span>
+                            <span class="cab-stat__value">@Model.Summary.AwaitingReview</span>
+                            <a class="cab-stat__more" asp-action="Reviews">
+                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="cab-stat">
+                            <span class="cab-stat__name">Витрачено коштів</span>
+                            <span class="cab-stat__value">@CabinetFormat.Money(Model.Summary.Spent)</span>
+                            <a class="cab-stat__more" asp-action="Payments">
+                                Детальніше <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="cab-panel">
+                    <div class="cab-rowhead">
+                        <h2>Мої замовлення:</h2>
+                        <a class="cab-all" asp-action="Orders">Переглянути всі <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+
+                    <div class="cab-tabs">
+                        @foreach (var tab in CabinetContent.HomeTabs)
+                        {
+                            <a asp-action="Index" asp-route-tab="@tab.Key"
+                               class="@(Model.Tab == tab.Key ? "is-current" : null)">@tab.Title</a>
+                        }
+                    </div>
+
+                    @if (Model.Summary.Orders.Count == 0)
+                    {
+                        <p class="cab-empty">У цій вкладці поки немає замовлень.</p>
+                    }
+
+                    <div class="cab-orders">
+                        @foreach (var order in Model.Summary.Orders)
+                        {
+                            <partial name="_CabinetOrder" model="order" />
+                        }
+                    </div>
+                </section>
+
+                <div class="cab-duo">
+                    <section class="cab-box">
+                        <h2>Рекомендоване для вас</h2>
+
+                        @foreach (var service in Model.Summary.Recommended)
+                        {
+                            <a class="cab-offer" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@service.CategoryId">
+                                <img src="@service.Image" alt="" loading="lazy" />
+                                <span>
+                                    <b>@service.Name</b>
+                                    <span>@CabinetFormat.From(service.FromPrice)</span>
+                                </span>
+                            </a>
+                        }
+
+                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги</a>
+                    </section>
+
+                    <section class="cab-box cab-box--mint">
+                        <h2>Повідомлення</h2>
+
+                        @if (Model.Summary.Threads.Count == 0)
+                        {
+                            <p class="cab-empty">Листування ще немає.</p>
+                        }
+
+                        @foreach (var thread in Model.Summary.Threads)
+                        {
+                            <a class="cab-note" asp-action="Messages" asp-route-orderId="@thread.OrderId">
+                                <img src="@thread.PartnerPortrait" alt="" loading="lazy" />
+                                <span>
+                                    <b>@thread.PartnerName</b>
+                                    <p>@thread.Last</p>
+                                </span>
+                                <span class="cab-note__time">
+                                    @CabinetFormat.Ago(thread.LastAt)
+                                    @if (thread.Unread > 0)
+                                    {
+                                        <span class="cab-note__dot" aria-label="@PublicText.Count(thread.Unread, "непрочитане", "непрочитані", "непрочитаних")"></span>
+                                    }
+                                </span>
+                            </a>
+                        }
+
+                        <a class="cab-box__more" asp-action="Messages">Переглянути всі повідомлення</a>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

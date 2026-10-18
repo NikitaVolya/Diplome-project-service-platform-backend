@@ -1,0 +1,53 @@
+@model ExecutorPageModel
+@{
+}
+
+<aside class="cab-side">
+    <nav class="cab-menu" aria-label="Розділи кабінету">
+        @foreach (var item in ExecutorContent.Menu)
+        {
+            var current = item.Key == Model.Active;
+
+            <a asp-controller="Cabinet" asp-action="@item.Action"
+               class="@(current ? "is-current" : null)"
+               aria-current="@(current ? "page" : null)">
+                <i class="bi @item.Icon" aria-hidden="true"></i>
+                <span>@item.Title</span>
+
+                @if (item.Key == "orders" && Model.Fresh > 0)
+                {
+                    <span class="cab-menu__badge">@Model.Fresh</span>
+                }
+                else if (item.Key == "messages" && Model.Unread > 0)
+                {
+                    <span class="cab-menu__badge">@Model.Unread</span>
+                }
+            </a>
+        }
+    </nav>
+
+    @if (Model.CanSwitch)
+    {
+        <form method="post" asp-controller="Cabinet" asp-action="Switch">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="to" value="customer" />
+            <button class="cab-become" type="submit">
+                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати замовником
+            </button>
+        </form>
+    }
+    else
+    {
+        <a class="cab-become" asp-controller="Auth" asp-action="Register">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати замовником
+        </a>
+    }
+
+    <div class="exec-presence">
+        <div class="exec-presence__row">
+            <b>@Model.Presence</b>
+            <span class="exec-presence__pin" aria-hidden="true"><i class="bi bi-chevron-down"></i></span>
+        </div>
+        <p>Профіль переглянуто @PublicText.Count(Model.ProfileViews, "раз", "рази", "разів") за тиждень</p>
+    </div>
+</aside>

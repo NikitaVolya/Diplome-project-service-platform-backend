@@ -1,0 +1,35 @@
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Допомога — Вибір";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" /> }
+
+<main class="page">
+    <div class="v-container">
+        <nav class="page-crumbs" aria-label="Навігація">
+            <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>Допомога</span>
+        </nav>
+
+        <div class="page-head page-head--center">
+            <h1>Як ми можемо допомогти?</h1>
+            <p>Знайдіть відповіді на поширені запитання або звʼяжіться з нашою підтримкою</p>
+        </div>
+
+        <div class="page-cards page-cards--help">
+            @foreach (var card in PageContent.HelpSections)
+            {
+                <a class="page-card page-card--link" href="#faq">
+                    <i class="bi @card.Icon" aria-hidden="true"></i>
+                    <b>@card.Title</b>
+                    <span>@card.Text</span>
+                    <i class="bi bi-arrow-right page-card__arrow" aria-hidden="true"></i>
+                </a>
+            }
+        </div>
+
+        <div id="faq"><partial name="_Faq" /></div>
+    </div>
+</main>

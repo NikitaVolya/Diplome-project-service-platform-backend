@@ -1,0 +1,17 @@
+@model CabinetPageModel
+@{
+    var flash = TempData["Cabinet.Flash"] as string;
+}
+
+@if (!string.IsNullOrEmpty(flash))
+{
+    <p class="cab-flash" role="status">@flash</p>
+}
+
+@if (Model.IsDemo)
+{
+    <p class="cab-notice" role="status">
+        У вашому акаунті ще немає замовлень, тому екран показує демонстраційні дані.
+        Щойно ви <a asp-controller="Cabinet" asp-action="Create">створите замовлення</a>, тут зʼявиться ваша історія.
+    </p>
+}

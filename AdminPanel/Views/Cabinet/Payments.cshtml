@@ -1,0 +1,167 @@
+@model CabinetPaymentsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var types = new[] { ("all", "Усі типи"), ("payment", "Оплати"), ("refund", "Повернення") };
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Transactions.Page,
+        Pages = Model.Transactions.Pages,
+        Action = "Payments",
+        Route = new Dictionary<string, string?>
+        {
+            ["type"] = Model.Type,
+            ["tab"] = Model.Tab,
+            ["q"] = Model.Query.Length > 0 ? Model.Query : null
+        }
+    };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="Навігація">
+                <a asp-controller="Landing" asp-action="Index">Головна</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">Особистий кабінет</a>
+            </nav>
+
+            <div class="cab-head"><h1>Платежі та рахунки</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--pay">
+                    <p class="cab-panel__lead">Вся інформація про ваші платежі, транзакції та рахунки</p>
+
+                    <div class="cab-stats">
+                        <article class="cab-stat cab-stat--pay">
+                            <span class="cab-stat__name"><i class="bi bi-wallet2" aria-hidden="true"></i> Баланс гаманця</span>
+                            <span class="cab-stat__value">@CabinetFormat.Number(Model.Wallet.Balance) грн</span>
+                            <button class="cab-stat__btn" type="button" disabled title="Поповнення зʼявиться разом із платіжним шлюзом">
+                                Поповнити
+                            </button>
+                        </article>
+
+                        <article class="cab-stat cab-stat--pay">
+                            <span class="cab-stat__name"><i class="bi bi-cash-coin" aria-hidden="true"></i> Усього витрачено</span>
+                            <span class="cab-stat__value">@CabinetFormat.Number(Model.Wallet.Spent) грн</span>
+                            <span class="cab-stat__more">За весь час</span>
+                        </article>
+
+                        <article class="cab-stat cab-stat--pay">
+                            <span class="cab-stat__name"><i class="bi bi-hourglass-split" aria-hidden="true"></i> В очікуванні</span>
+                            <span class="cab-stat__value">@CabinetFormat.Number(Model.Wallet.Pending) грн</span>
+                            <span class="cab-stat__more">@PublicText.Count(Model.Wallet.PendingCount, "платіж", "платежі", "платежів")</span>
+                        </article>
+
+                        <article class="cab-stat cab-stat--pay">
+                            <span class="cab-stat__name"><i class="bi bi-receipt" aria-hidden="true"></i> Всього транзакцій</span>
+                            <span class="cab-stat__value">@Model.Wallet.Total</span>
+                            <span class="cab-stat__more">За весь час</span>
+                        </article>
+                    </div>
+
+                    <div class="cab-tabs">
+                        <a asp-action="Payments" asp-route-tab="transactions" asp-route-type="@Model.Type"
+                           class="@(Model.Tab == "transactions" ? "is-current" : null)">Транзакції</a>
+                        <a asp-action="Payments" asp-route-tab="invoices" asp-route-type="@Model.Type"
+                           class="@(Model.Tab == "invoices" ? "is-current" : null)">Рахунки</a>
+                    </div>
+
+                    <form class="cab-filters" method="get" asp-action="Payments">
+                        <input type="hidden" name="tab" value="@Model.Tab" />
+
+                        <div class="cab-field" style="width:236px">
+                            <select name="type" aria-label="Тип транзакції" onchange="this.form.submit()">
+                                @foreach (var (key, title) in types)
+                                {
+                                    <option value="@key" selected="@(Model.Type == key)">@title</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label class="cab-find cab-find--plain" style="width:365px">
+                            <i class="bi bi-calendar3" aria-hidden="true"></i>
+                            <input type="text" value="@($"{DateTime.Now:01.MM.yyyy} - {DateTime.Now:dd.MM.yyyy}")"
+                                   readonly aria-label="Період" />
+                        </label>
+
+                        <label class="cab-find cab-find--plain" style="flex:1">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query"
+                                   placeholder="Пошук замовлень за назвою, ID…" aria-label="Пошук транзакцій" />
+                        </label>
+                    </form>
+
+                    @if (Model.Tab == "invoices")
+                    {
+                        <p class="cab-empty">
+                            Рахунки-фактури зʼявляться, коли платформа почне їх виставляти.
+                            Усі платежі поки показано на вкладці «Транзакції».
+                        </p>
+                    }
+                    else
+                    {
+                        @if (Model.Transactions.Items.Count == 0)
+                        {
+                            <p class="cab-empty">Транзакцій за цим фільтром немає.</p>
+                        }
+
+                        @foreach (var tx in Model.Transactions.Items)
+                        {
+                            <article class="cab-tx">
+                                <div class="cab-tx__date">
+                                    @CabinetFormat.TableDate(tx.CreatedAt)<br />
+                                    @tx.CreatedAt.ToString("HH.mm")
+                                </div>
+
+                                <div class="cab-tx__name">
+                                    <b>@tx.Title</b>
+                                    <span>Замовлення @tx.OrderId</span>
+                                </div>
+
+                                <div class="cab-tx__kind">
+                                    <i class="bi @(tx.Incoming ? "bi-arrow-up" : "bi-arrow-down")" aria-hidden="true"></i>
+                                    @CabinetContent.PaymentKind(tx.Status)
+                                </div>
+
+                                <div class="cab-tx__sum @(tx.Incoming ? "is-in" : null)">
+                                    @CabinetFormat.Signed(tx.Amount, tx.Incoming)
+                                </div>
+
+                                <span class="cab-pay cab-pay--@CabinetContent.PaymentTone(tx.Status)">
+                                    @CabinetContent.PaymentTitle(tx.Status)
+                                </span>
+
+                                <a class="cab-order__go" asp-action="Order" asp-route-id="@tx.OrderId"
+                                   aria-label="Відкрити замовлення @tx.Title">
+                                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                                </a>
+                            </article>
+                        }
+
+                        <partial name="_CabinetPager" model="pager" />
+                    }
+
+                    <div class="cab-help">
+                        <i class="bi bi-headset" aria-hidden="true"></i>
+                        <div>
+                            <b>Питання щодо платежів</b>
+                            <p>Наші фахівці завжди готові допомогти вам 24/7</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-action="Support">Зв’язатися з підтримкою</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

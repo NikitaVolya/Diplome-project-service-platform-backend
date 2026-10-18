@@ -1,0 +1,40 @@
+@model Article
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title + " — Вибір";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" /> }
+
+<main class="page">
+    <div class="v-container">
+        <nav class="page-crumbs" aria-label="Навігація">
+            <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <a asp-action="Blog">Блог</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>@Model.Category</span>
+        </nav>
+
+        <article class="article">
+            <p class="article__meta">
+                <a asp-action="Blog" asp-route-category="@Model.Category">@Model.Category</a>
+                <span>@PageContent.FormatDate(Model.Date)</span>
+            </p>
+
+            <h1>@Model.Title</h1>
+            <p class="article__lead">@Model.Excerpt</p>
+
+            <div class="article__img"><img src="@Model.Image" alt="@Model.Title" /></div>
+
+            @foreach (var paragraph in Model.Body)
+            {
+                <p>@paragraph</p>
+            }
+
+            <a class="v-btn v-btn--soft article__back" asp-action="Blog">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> Усі статті
+            </a>
+        </article>
+    </div>
+</main>

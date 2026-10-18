@@ -1,0 +1,52 @@
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = "Безпека — Вибір";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" /> }
+
+<main class="page">
+    <div class="v-container">
+        <nav class="page-crumbs" aria-label="Навігація">
+            <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>Безпека</span>
+        </nav>
+
+        <div class="page-head">
+            <h1>Безпека</h1>
+            <p>Ми робимо все можливе, щоб ваша робота на платформі була безпечною та надійною.</p>
+            <h2 class="page-head__sub">Як ми забезпечуємо вашу безпеку</h2>
+        </div>
+
+        <div class="page-cards page-cards--4">
+            @foreach (var card in PageContent.Security)
+            {
+                <article class="page-card">
+                    <i class="bi @card.Icon" aria-hidden="true"></i>
+                    <b>@card.Title</b>
+                    <span>@card.Text</span>
+                </article>
+            }
+        </div>
+
+        <partial name="_Faq" />
+
+        <section class="page-bottom">
+            <div class="page-brand">
+                <span class="page-brand__mark" aria-hidden="true">V</span>
+                <b>Вибір</b>
+                <span>Піклується про вашу безпеку та захищає ваші дані.</span>
+            </div>
+
+            <div class="page-need">
+                <i class="bi bi-life-preserver" aria-hidden="true"></i>
+                <div>
+                    <b>Потрібна допомога?</b>
+                    <span>Якщо у вас виникли питання щодо безпеки або ви зіткнулися з проблемою — ми завжди готові допомогти.</span>
+                </div>
+                <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">Зв’язатися з підтримкою</a>
+            </div>
+        </section>
+    </div>
+</main>
