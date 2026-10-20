@@ -5,9 +5,9 @@
 
     var filters = new[]
     {
-        ("all", "Усі", Model.TotalThreads),
-        ("unread", "Непрочитані", Model.UnreadThreads),
-        ("archive", "Архів", 0)
+        ("all", T("Усі"), Model.TotalThreads),
+        ("unread", T("Непрочитані"), Model.UnreadThreads),
+        ("archive", T("Архів"), 0)
     };
 
     DateTime? lastDay = null;
@@ -21,10 +21,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -36,8 +36,8 @@
                     <partial name="Executor/_ExecNotices" />
 
                     <div class="exec-head">
-                        <h1>Повідомлення</h1>
-                        <p>Спілкуйтеся з клієнтами та керуйте листуванням</p>
+                        <h1>@T("Повідомлення")</h1>
+                        <p>@T("Спілкуйтеся з клієнтами та керуйте листуванням")</p>
                     </div>
 
                     <div class="cab-chat">
@@ -46,12 +46,12 @@
                                 <input type="hidden" name="filter" value="@Model.Filter" />
                                 <label class="cab-find">
                                     <i class="bi bi-search" aria-hidden="true"></i>
-                                    <input type="search" name="q" value="@Model.Query" placeholder="Пошук замовлень"
-                                           aria-label="Пошук замовлень" />
+                                    <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук замовлень")"
+                                           aria-label="@T("Пошук замовлень")" />
                                 </label>
                             </form>
 
-                            <nav class="cab-chat__tabs" aria-label="Фільтр листувань">
+                            <nav class="cab-chat__tabs" aria-label="@T("Фільтр листувань")">
                                 @foreach (var (key, title, count) in filters)
                                 {
                                     <a asp-action="Messages" asp-route-filter="@key" asp-route-q="@Model.Query"
@@ -68,7 +68,7 @@
                             <div class="cab-chat__rows">
                                 @if (Model.Threads.Count == 0)
                                 {
-                                    <p class="cab-empty">Листувань немає.</p>
+                                    <p class="cab-empty">@T("Листувань немає.")</p>
                                 }
 
                                 @foreach (var thread in Model.Threads)
@@ -80,7 +80,7 @@
                                        asp-route-filter="@Model.Filter" asp-route-q="@Model.Query">
                                         <img src="@thread.PartnerPortrait" alt="" loading="lazy" />
                                         <span>
-                                            <b>@thread.PartnerName</b>
+                                            <b>@T(thread.PartnerName)</b>
                                             <p>@thread.Last</p>
                                         </span>
                                         <span class="cab-thread__meta">
@@ -98,15 +98,15 @@
                         <section class="cab-chat__room">
                             @if (Model.Chat == null)
                             {
-                                <p class="cab-empty">Оберіть розмову зліва.</p>
+                                <p class="cab-empty">@T("Оберіть розмову зліва.")</p>
                             }
                             else
                             {
                                 <header class="cab-chat__head">
                                     <img src="@Model.Chat.Head.PartnerPortrait" alt="" />
                                     <span>
-                                        <b>@Model.Chat.Head.PartnerName</b>
-                                        <span>Замовник</span>
+                                        <b>@T(Model.Chat.Head.PartnerName)</b>
+                                        <span>@T("Замовник")</span>
                                     </span>
                                     <i class="bi bi-telephone" aria-hidden="true" style="margin-left:auto"></i>
                                     <i class="bi bi-three-dots" aria-hidden="true" style="margin-left:16px"></i>
@@ -114,16 +114,16 @@
 
                                 <div class="cab-chat__order">
                                     <div>
-                                        Замовлення: @Model.Chat.Head.OrderTitle<br />
+                                        @T("Замовлення:") @Model.Chat.Head.OrderTitle<br />
                                         ID:@Model.Chat.Head.OrderId
                                     </div>
-                                    <a class="v-btn v-btn--soft" asp-action="Orders">Переглянути замовлення</a>
+                                    <a class="v-btn v-btn--soft" asp-action="Orders">@T("Переглянути замовлення")</a>
                                 </div>
 
                                 <div class="cab-chat__flow">
                                     @if (Model.Chat.Messages.Count == 0)
                                     {
-                                        <p class="cab-empty">Повідомлень ще немає — напишіть першим.</p>
+                                        <p class="cab-empty">@T("Повідомлень ще немає — напишіть першим.")</p>
                                     }
 
                                     @foreach (var message in Model.Chat.Messages)
@@ -153,14 +153,14 @@
                                     <input type="hidden" name="orderId" value="@Model.Chat.Head.OrderId" />
 
                                     <button class="cab-chat__clip" type="button" disabled
-                                            title="Вкладення зʼявляться пізніше" aria-label="Додати файл">
+                                            title="@T("Вкладення зʼявляться пізніше")" aria-label="@T("Додати файл")">
                                         <i class="bi bi-paperclip" aria-hidden="true"></i>
                                     </button>
 
                                     <div class="cab-chat__box">
-                                        <input type="text" name="text" maxlength="1000" placeholder="Напишіть повідомлення"
-                                               aria-label="Текст повідомлення" />
-                                        <button type="submit" aria-label="Надіслати">
+                                        <input type="text" name="text" maxlength="1000" placeholder="@T("Напишіть повідомлення")"
+                                               aria-label="@T("Текст повідомлення")" />
+                                        <button type="submit" aria-label="@T("Надіслати")">
                                             <i class="bi bi-send" aria-hidden="true"></i>
                                         </button>
                                     </div>

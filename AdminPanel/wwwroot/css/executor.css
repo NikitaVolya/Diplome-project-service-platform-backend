@@ -1582,6 +1582,17 @@
 .exec-set__line > span:first-child span { font-size: 14px; color: #4B5563; }
 .exec-set__line .cab-select { background: #fff; border-color: var(--v-purple); }
 .exec-set__line .cab-select select { min-width: 200px; }
+
+/* Загальне правило «.exec-set select» вище дає полям рамку й відступи. Список усередині
+   .cab-select має свою рамку — на обгортці, тож тут рамку прибираємо, інакше їх дві. */
+.exec-set .cab-select select {
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
 .exec-set__dots { letter-spacing: 2px; color: #4B5563; }
 
 .exec-accounts {

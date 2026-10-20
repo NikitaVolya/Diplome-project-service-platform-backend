@@ -2,14 +2,14 @@
 @inject CatalogPhotos Photos
 @{
     Layout = "_LandingLayout";
-    ViewData["Title"] = "Пошук послуги — Вибір";
+    ViewData["Title"] = T("Пошук послуги — Вибір");
 
     var steps = new[]
     {
-        ("bi-pencil-square", "Створіть запит", "Опишіть, що вам потрібно. Вкажіть деталі та бюджет."),
-        ("bi-search", "Оберіть виконавця", "Порівняйте профілі, рейтинг, відгуки та ціну."),
-        ("bi-chat-dots", "Домовтеся про виконання", "Підтвердьте замовлення та деталі."),
-        ("bi-hand-thumbs-up", "Отримайте результат", "Прийміть роботу та залиште відгук.")
+        ("bi-pencil-square", T("Створіть запит"), T("Опишіть, що вам потрібно. Вкажіть деталі та бюджет.")),
+        ("bi-search", T("Оберіть виконавця"), T("Порівняйте профілі, рейтинг, відгуки та ціну.")),
+        ("bi-chat-dots", T("Домовтеся про виконання"), T("Підтвердьте замовлення та деталі.")),
+        ("bi-hand-thumbs-up", T("Отримайте результат"), T("Прийміть роботу та залиште відгук."))
     };
 }
 
@@ -17,31 +17,31 @@
 
 <main class="search">
     <div class="v-container">
-        <nav class="search-crumbs" aria-label="Навігація">
-            <a asp-controller="Landing" asp-action="Index">Головна</a>
+        <nav class="search-crumbs" aria-label="@T("Навігація")">
+            <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
             <span aria-hidden="true">&rsaquo;</span>
-            <span>Пошук послуги</span>
+            <span>@T("Пошук послуги")</span>
         </nav>
 
-        <h1 class="search__title">Пошук послуги</h1>
-        <p class="search__lead">Знайдіть потрібну послугу швидко та легко</p>
+        <h1 class="search__title">@T("Пошук послуги")</h1>
+        <p class="search__lead">@T("Знайдіть потрібну послугу швидко та легко")</p>
 
         <form class="search-bar" method="get" asp-controller="Catalog" asp-action="Index" role="search">
             <span class="search-bar__field">
                 <i class="bi bi-search" aria-hidden="true"></i>
-                <input name="q" value="@Model.Query" placeholder="Що вам потрібно?" aria-label="Що вам потрібно?" />
+                <input name="q" value="@Model.Query" placeholder="@T("Що вам потрібно?")" aria-label="@T("Що вам потрібно?")" />
             </span>
             <span class="search-bar__field">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>
-                <input name="city" value="@Model.City" placeholder="Місто або онлайн" aria-label="Місто або онлайн" />
+                <input name="city" value="@Model.City" placeholder="@T("Місто або онлайн")" aria-label="@T("Місто або онлайн")" />
             </span>
-            <button class="search-bar__submit" type="submit">Знайти</button>
+            <button class="search-bar__submit" type="submit">@T("Знайти")</button>
         </form>
 
         <section class="search-section">
             <div class="v-section__head">
-                <h2 class="v-section__title">Популярні категорії:</h2>
-                <a class="v-link" asp-controller="Catalog" asp-action="Index">Усі категорії <i class="bi bi-arrow-right"></i></a>
+                <h2 class="v-section__title">@T("Популярні категорії:")</h2>
+                <a class="v-link" asp-controller="Catalog" asp-action="Index">@T("Усі категорії") <i class="bi bi-arrow-right"></i></a>
             </div>
 
             <div class="search-cats">
@@ -49,13 +49,13 @@
                 {
                     <a class="search-cat" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@category.Id">
                         <span class="search-cat__icon"><img src="@category.Icon" alt="" width="28" height="28" /></span>
-                        <span class="search-cat__name">@category.Name</span>
+                        <span class="search-cat__name">@T(category.Name)</span>
                     </a>
                 }
 
                 <a class="search-cat search-cat--more" asp-controller="Catalog" asp-action="Index">
                     <span class="search-cat__icon" aria-hidden="true">&hellip;</span>
-                    <span class="search-cat__name">Більше</span>
+                    <span class="search-cat__name">@T("Більше")</span>
                 </a>
             </div>
         </section>
@@ -64,17 +64,17 @@
         {
             <section class="search-section">
                 <div class="v-section__head">
-                    <h2 class="v-section__title">Популярне поруч із вами:</h2>
-                    <a class="v-link" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+                    <h2 class="v-section__title">@T("Популярне поруч із вами:")</h2>
+                    <a class="v-link" asp-controller="Catalog" asp-action="Index">@T("Переглянути всі послуги") <i class="bi bi-arrow-right"></i></a>
                 </div>
 
                 <div class="v-services">
                     @foreach (var service in Model.Services)
                     {
                         <a class="v-service" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@service.CategoryId">
-                            <div class="v-service__img"><img src="@service.Image" alt="@service.Name" loading="lazy" /></div>
+                            <div class="v-service__img"><img src="@service.Image" alt="@T(service.Name)" loading="lazy" /></div>
                             <div class="v-service__body">
-                                <div class="v-service__name">@service.Name</div>
+                                <div class="v-service__name">@T(service.Name)</div>
                                 <div class="v-service__meta">
                                     <div>
                                         @if (service.ReviewsCount > 0)
@@ -83,7 +83,7 @@
                                         }
                                         else
                                         {
-                                            <span>Ще немає відгуків</span>
+                                            <span>@T("Ще немає відгуків")</span>
                                         }
                                     </div>
                                     @if (service.FromPrice > 0) { <div>@PublicText.Price(service.FromPrice)</div> }
@@ -96,8 +96,8 @@
         }
 
         <section class="search-how">
-            <h2>Як це працює?</h2>
-            <p class="search-how__lead">Знайти потрібну людину — простіше, ніж здається</p>
+            <h2>@T("Як це працює?")</h2>
+            <p class="search-how__lead">@T("Знайти потрібну людину — простіше, ніж здається")</p>
 
             <ol class="search-how__steps">
                 @for (var i = 0; i < steps.Length; i++)
@@ -117,12 +117,12 @@
     <section class="search-cta">
         <div class="v-container search-cta__inner">
             <div class="search-cta__text">
-                <h2>Не знайшли потрібну послугу?</h2>
-                <p>Опишіть свою задачу, і ми допоможемо знайти виконавця!</p>
-                <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">Створити замовлення</a>
+                <h2>@T("Не знайшли потрібну послугу?")</h2>
+                <p>@T("Опишіть свою задачу, і ми допоможемо знайти виконавця!")</p>
+                <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">@T("Створити замовлення")</a>
             </div>
             <div class="search-cta__img">
-                <img src="~/img/landing/cta.jpg" alt="Ідеї та рішення" loading="lazy" />
+                <img src="~/img/landing/cta.jpg" alt="@T("Ідеї та рішення")" loading="lazy" />
             </div>
         </div>
     </section>
@@ -132,8 +132,8 @@
         <div class="v-container">
             <section class="search-section">
                 <div class="v-section__head">
-                    <h2 class="v-section__title">@(Model.RecentIsFallback ? "Часто шукають:" : "Останні перегляди:")</h2>
-                    <a class="v-link" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги <i class="bi bi-arrow-right"></i></a>
+                    <h2 class="v-section__title">@T(Model.RecentIsFallback ? "Часто шукають:" : "Останні перегляди:")</h2>
+                    <a class="v-link" asp-controller="Catalog" asp-action="Index">@T("Переглянути всі послуги") <i class="bi bi-arrow-right"></i></a>
                 </div>
 
                 <div class="search-recent">
@@ -144,10 +144,10 @@
                             <span class="search-recent__img">
                                 @if (photo != null)
                                 {
-                                    <img src="@photo" alt="@item.Name" loading="lazy" />
+                                    <img src="@photo" alt="@T(item.Name)" loading="lazy" />
                                 }
                             </span>
-                            <span class="search-recent__name">@item.Name</span>
+                            <span class="search-recent__name">@T(item.Name)</span>
                             @if (item.FromPrice > 0) { <span class="search-recent__price">@PublicText.Price(item.FromPrice)</span> }
                         </a>
                     }

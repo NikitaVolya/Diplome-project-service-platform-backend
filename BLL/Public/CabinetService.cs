@@ -293,7 +293,8 @@ namespace BLL.Public
             {
                 details.Activity.Add(new CabinetEvent
                 {
-                    Text = $"Новий відгук від {ShortName(bid.Name)}",
+                    Text = "Новий відгук від {0}",
+                    Arg = ShortName(bid.Name),
                     At = bid.CreatedAt
                 });
             }

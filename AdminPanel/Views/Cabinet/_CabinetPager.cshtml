@@ -8,11 +8,11 @@
 
 @if (Model.Pages > 1)
 {
-    <nav class="cab-pager" aria-label="Сторінки">
+    <nav class="cab-pager" aria-label="@T("Сторінки")">
         <a class="@(Model.Page == 1 ? "is-off" : null)"
            asp-controller="Cabinet" asp-action="@Model.Action"
            asp-all-route-data="Model.For(Model.Page - 1)"
-           aria-label="Попередня сторінка">&lsaquo;</a>
+           aria-label="@T("Попередня сторінка")">&lsaquo;</a>
 
         @for (var i = first; i <= last; i++)
         {
@@ -29,6 +29,6 @@
         <a class="@(Model.Page == Model.Pages ? "is-off" : null)"
            asp-controller="Cabinet" asp-action="@Model.Action"
            asp-all-route-data="Model.For(Model.Page + 1)"
-           aria-label="Наступна сторінка">&rsaquo;</a>
+           aria-label="@T("Наступна сторінка")">&rsaquo;</a>
     </nav>
 }

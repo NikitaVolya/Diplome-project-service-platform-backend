@@ -1,3 +1,4 @@
+using AdminPanel.Localization;
 using AdminPanel.Models;
 using BLL.Admin.Interfaces;
 using BLL.Public;
@@ -67,7 +68,7 @@ public sealed class AuthController : Controller
         
         if (user == null || user.IsDeleted)
         {
-            ModelState.AddModelError(string.Empty, "Невірний e-mail або пароль.");
+            ModelState.AddModelError(string.Empty, Tr.T("Невірний e-mail або пароль."));
             return View(model);
         }
 
@@ -77,13 +78,13 @@ public sealed class AuthController : Controller
         if (result.IsLockedOut)
         {
             ModelState.AddModelError(string.Empty,
-                "Акаунт тимчасово заблоковано через невдалі спроби входу. Спробуйте за 15 хвилин.");
+                Tr.T("Акаунт тимчасово заблоковано через невдалі спроби входу. Спробуйте за 15 хвилин."));
             return View(model);
         }
 
         if (!result.Succeeded)
         {
-            ModelState.AddModelError(string.Empty, "Невірний e-mail або пароль.");
+            ModelState.AddModelError(string.Empty, Tr.T("Невірний e-mail або пароль."));
             return View(model);
         }
 
@@ -108,14 +109,17 @@ public sealed class AuthController : Controller
     }
 
     [HttpGet]
-    public IActionResult Register()
+    public IActionResult Register(string? role)
     {
         if (User.Identity?.IsAuthenticated == true)
         {
             return RedirectToAction("Index", "Landing");
         }
 
-        return View(new RegisterStepOneViewModel());
+        // Роль приходить із вікна «Оберіть дію»; невідоме значення просто ігноруємо.
+        var known = role == AppRoles.Customer || role == AppRoles.Executor;
+
+        return View(new RegisterStepOneViewModel { Role = known ? role : null });
     }
 
     [HttpPost]
@@ -124,7 +128,7 @@ public sealed class AuthController : Controller
     {
         if (model.Role != AppRoles.Customer && model.Role != AppRoles.Executor)
         {
-            ModelState.AddModelError(nameof(model.Role), "Оберіть, ким ви будете на платформі");
+            ModelState.AddModelError(nameof(model.Role), Tr.T("Оберіть, ким ви будете на платформі"));
         }
 
         if (!ModelState.IsValid)
@@ -137,7 +141,7 @@ public sealed class AuthController : Controller
         if (taken is { IsDeleted: false })
         {
             ModelState.AddModelError(nameof(model.Email),
-                "Такий e-mail уже зареєстрований. Спробуйте увійти або відновити пароль.");
+                Tr.T("Такий e-mail уже зареєстрований. Спробуйте увійти або відновити пароль."));
             return View(model);
         }
 
@@ -175,7 +179,7 @@ public sealed class AuthController : Controller
 
         if (!_codes.Verify(email, CodePurpose.Registration, model.Code))
         {
-            ModelState.AddModelError(nameof(model.Code), "Код невірний або вже застарів.");
+            ModelState.AddModelError(nameof(model.Code), Tr.T("Код невірний або вже застарів."));
             Keep("Auth.Email", "Auth.Role");
             return View(CodeModel(email));
         }
@@ -225,22 +229,22 @@ public sealed class AuthController : Controller
 
         if (!RegistrationOptions.IsKnownCity(model.City))
         {
-            ModelState.AddModelError(nameof(model.City), "Оберіть місто зі списку");
+            ModelState.AddModelError(nameof(model.City), Tr.T("Оберіть місто зі списку"));
         }
 
         if (!RegistrationOptions.IsKnownGender(model.Gender))
         {
-            ModelState.AddModelError(nameof(model.Gender), "Оберіть стать зі списку");
+            ModelState.AddModelError(nameof(model.Gender), Tr.T("Оберіть стать зі списку"));
         }
 
         if (model.IsExecutor && !RegistrationOptions.IsKnownExperience(model.Experience))
         {
-            ModelState.AddModelError(nameof(model.Experience), "Оберіть досвід зі списку");
+            ModelState.AddModelError(nameof(model.Experience), Tr.T("Оберіть досвід зі списку"));
         }
 
         if (model.BirthDate is { } born && (born > DateTime.UtcNow.AddYears(-14) || born < DateTime.UtcNow.AddYears(-100)))
         {
-            ModelState.AddModelError(nameof(model.BirthDate), "Перевірте дату народження");
+            ModelState.AddModelError(nameof(model.BirthDate), Tr.T("Перевірте дату народження"));
         }
 
         if (!ModelState.IsValid)
@@ -406,7 +410,7 @@ public sealed class AuthController : Controller
 
         if (!_codes.Verify(email, CodePurpose.PasswordReset, model.Code))
         {
-            ModelState.AddModelError(nameof(model.Code), "Код невірний або вже застарів.");
+            ModelState.AddModelError(nameof(model.Code), Tr.T("Код невірний або вже застарів."));
             Keep("Auth.Email");
             return View(CodeModel(email));
         }
@@ -534,11 +538,11 @@ public sealed class AuthController : Controller
 
     private static string Translate(IdentityError error) => error.Code switch
     {
-        "PasswordTooShort" => "Пароль має містити щонайменше 8 символів.",
-        "PasswordRequiresDigit" => "Додайте до пароля хоча б одну цифру.",
-        "PasswordRequiresUpper" => "Додайте до пароля велику літеру.",
-        "PasswordRequiresLower" => "Додайте до пароля маленьку літеру.",
-        "InvalidToken" => "Посилання застаріло. Почніть відновлення спочатку.",
+        "PasswordTooShort" => Tr.T("Пароль має містити щонайменше 8 символів."),
+        "PasswordRequiresDigit" => Tr.T("Додайте до пароля хоча б одну цифру."),
+        "PasswordRequiresUpper" => Tr.T("Додайте до пароля велику літеру."),
+        "PasswordRequiresLower" => Tr.T("Додайте до пароля маленьку літеру."),
+        "InvalidToken" => Tr.T("Посилання застаріло. Почніть відновлення спочатку."),
         _ => error.Description
     };
 }

@@ -139,7 +139,12 @@ namespace BLL.Public
 
     public sealed class CabinetEvent
     {
+        /// <summary>Подія українською; якщо є <see cref="Arg"/> — це шаблон з {0}.</summary>
         public string Text { get; set; } = string.Empty;
+
+        /// <summary>Підстановка в шаблон (імʼя тощо) — щоб сайт міг перекласти сам шаблон.</summary>
+        public string? Arg { get; set; }
+
         public DateTime At { get; set; }
     }
 

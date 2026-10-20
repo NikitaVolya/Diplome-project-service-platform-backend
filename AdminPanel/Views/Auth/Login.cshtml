@@ -1,7 +1,7 @@
 @model PublicLoginViewModel
 @{
     Layout = "_LandingLayout";
-    ViewData["Title"] = "Вхід — Вибір";
+    ViewData["Title"] = T("Вхід — Вибір");
 }
 
 @section Styles { <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" /> }
@@ -9,7 +9,7 @@
 <main class="auth">
     <div class="v-container auth__inner">
         <a class="auth-back" asp-controller="Landing" asp-action="Index" data-auth-back>
-            <span aria-hidden="true">&lsaquo;</span> Назад
+            <span aria-hidden="true">&lsaquo;</span> @T("Назад")
         </a>
 
         <div class="auth-card">
@@ -17,8 +17,8 @@
                 <partial name="_AuthFaceIcon" />
             </span>
 
-            <h2>Вхід</h2>
-            <p class="auth-card__lead">Раді бачити вас знову!</p>
+            <h2>@T("Вхід")</h2>
+            <p class="auth-card__lead">@T("Раді бачити вас знову!")</p>
 
             <form method="post" asp-action="Login" novalidate>
                 <input type="hidden" asp-for="ReturnUrl" />
@@ -26,29 +26,29 @@
                 <partial name="_AuthErrors" />
 
                 <div class="auth-field">
-                    <label asp-for="Email">E-mail адресу</label>
+                    <label asp-for="Email">@T("E-mail адресу")</label>
                     <span class="auth-input">
-                        <input asp-for="Email" type="email" autocomplete="email" placeholder="Введіть e-mail" />
+                        <input asp-for="Email" type="email" autocomplete="email" placeholder="@T("Введіть e-mail")" />
                     </span>
                     <span asp-validation-for="Email" class="field-validation-error"></span>
                 </div>
 
                 <div class="auth-field">
-                    <label asp-for="Password">Пароль</label>
+                    <label asp-for="Password">@T("Пароль")</label>
                     <span class="auth-input" data-auth-password>
-                        <input asp-for="Password" type="password" autocomplete="current-password" placeholder="Введіть пароль" />
-                        <button class="auth-eye" type="button" aria-label="Показати пароль">
+                        <input asp-for="Password" type="password" autocomplete="current-password" placeholder="@T("Введіть пароль")" />
+                        <button class="auth-eye" type="button" aria-label="@T("Показати пароль")" data-label-show="@T("Показати пароль")" data-label-hide="@T("Приховати пароль")">
                             <partial name="_AuthEyeIcon" />
                         </button>
                     </span>
                     <span asp-validation-for="Password" class="field-validation-error"></span>
-                    <span class="auth-forgot"><a asp-action="ForgotPassword">Забули пароль?</a></span>
+                    <span class="auth-forgot"><a asp-action="ForgotPassword">@T("Забули пароль?")</a></span>
                 </div>
 
-                <button class="auth-submit auth-submit--narrow" type="submit">Продовжити</button>
+                <button class="auth-submit auth-submit--narrow" type="submit">@T("Продовжити")</button>
             </form>
 
-            <p class="auth-or">або увійдіть за допомогою</p>
+            <p class="auth-or">@T("або увійдіть за допомогою")</p>
 
             <div class="auth-socials">
                 @foreach (var (name, icon) in new[]
@@ -57,26 +57,26 @@
                     ("Linkedin", "linkedin"), ("Apple", "apple")
                 })
                 {
-                    <button class="auth-social" type="button" disabled title="Вхід через @name буде доступний пізніше">
+                    <button class="auth-social" type="button" disabled title="@F("Вхід через {0} буде доступний пізніше", name)">
                         <i class="bi bi-@icon" aria-hidden="true"></i> @name
                     </button>
                 }
             </div>
 
-            <p class="auth-switch">Ще не має акаунту? <a asp-action="Register">Зареєструватися</a></p>
+            <p class="auth-switch">@T("Ще не має акаунту?") <a asp-action="Register" data-role-choice>@T("Зареєструватися")</a></p>
 
             <div class="auth-trust">
                 <div>
                     <i class="bi bi-shield-check" aria-hidden="true"></i>
-                    <span><b>Безпечно</b>Ваші дані під захистом</span>
+                    <span><b>@T("Безпечно")</b>@T("Ваші дані під захистом")</span>
                 </div>
                 <div>
                     <i class="bi bi-lightning-charge" aria-hidden="true"></i>
-                    <span><b>Швидко</b>Увійдіть за кілька секунд</span>
+                    <span><b>@T("Швидко")</b>@T("Увійдіть за кілька секунд")</span>
                 </div>
                 <div>
                     <i class="bi bi-headset" aria-hidden="true"></i>
-                    <span><b>Підтримка 24/7</b>Ми завжди поруч</span>
+                    <span><b>@T("Підтримка 24/7")</b>@T("Ми завжди поруч")</span>
                 </div>
             </div>
         </div>

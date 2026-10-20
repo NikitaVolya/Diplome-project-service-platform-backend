@@ -3,7 +3,7 @@
 }
 
 <aside class="cab-side">
-    <nav class="cab-menu" aria-label="Розділи кабінету">
+    <nav class="cab-menu" aria-label="@T("Розділи кабінету")">
         @foreach (var item in ExecutorContent.Menu)
         {
             var current = item.Key == Model.Active;
@@ -26,28 +26,20 @@
         }
     </nav>
 
-    @if (Model.CanSwitch)
-    {
-        <form method="post" asp-controller="Cabinet" asp-action="Switch">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="to" value="customer" />
-            <button class="cab-become" type="submit">
-                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати замовником
-            </button>
-        </form>
-    }
-    else
-    {
-        <a class="cab-become" asp-controller="Auth" asp-action="Register">
-            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати замовником
-        </a>
-    }
+    @* Якщо ролі замовника ще немає, Switch додасть її цьому ж акаунту. *@
+    <form method="post" asp-controller="Cabinet" asp-action="Switch">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="to" value="customer" />
+        <button class="cab-become" type="submit">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> @T("Стати замовником")
+        </button>
+    </form>
 
     <div class="exec-presence">
         <div class="exec-presence__row">
             <b>@Model.Presence</b>
             <span class="exec-presence__pin" aria-hidden="true"><i class="bi bi-chevron-down"></i></span>
         </div>
-        <p>Профіль переглянуто @PublicText.Count(Model.ProfileViews, "раз", "рази", "разів") за тиждень</p>
+        <p>@F("Профіль переглянуто {0} за тиждень", PublicText.Count(Model.ProfileViews, "раз", "рази", "разів"))</p>
     </div>
 </aside>

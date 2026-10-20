@@ -1,0 +1,26 @@
+@* Вікно «Оберіть дію» (макет Desktop - 1): відкривається кнопкою «Реєстрація»
+   і веде на реєстрацію вже з вибраною роллю. Без JavaScript кнопка просто
+   відкриває сторінку реєстрації, де роль обирається перемикачем. *@
+<dialog class="v-role-dialog" id="role-choice" aria-labelledby="role-choice-title">
+    <form method="dialog" class="v-role-dialog__close-form">
+        <button class="v-role-dialog__close" type="submit" aria-label="@T("Закрити")">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5l16 16M20 4L4 20" /></svg>
+        </button>
+    </form>
+
+    <h2 class="v-role-dialog__title" id="role-choice-title">@T("Оберіть дію")</h2>
+
+    <div class="v-role-dialog__choices">
+        <a class="v-role-card" asp-controller="Auth" asp-action="Register" asp-route-role="@AppRoles.Customer">
+            <img src="~/img/icons/duo-need.svg" width="48" height="48" alt="" aria-hidden="true" />
+            <span>@T("Замовити послугу")</span>
+        </a>
+
+        <span class="v-role-dialog__divider" aria-hidden="true"></span>
+
+        <a class="v-role-card" asp-controller="Auth" asp-action="Register" asp-route-role="@AppRoles.Executor">
+            <img src="~/img/icons/duo-earn.svg" width="48" height="48" alt="" aria-hidden="true" />
+            <span>@T("Почати заробляти")</span>
+        </a>
+    </div>
+</dialog>

@@ -1,4 +1,5 @@
 using System.Globalization;
+using AdminPanel.Localization;
 
 namespace AdminPanel.Models;
 
@@ -27,21 +28,30 @@ public static class CabinetFormat
         "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"
     };
 
+    /// <summary>
+    /// «19 серпня» — день із місяцем у родовому відмінку. Для інших мов сайту назву місяця
+    /// бере .NET із культури перемикача («19 August», «19. August», «19 sierpnia»).
+    /// </summary>
+    private static string DayAndMonth(DateTime value, string dayFormat = "d") =>
+        Tr.IsUkrainian
+            ? $"{value.Day.ToString(dayFormat == "dd" ? "00" : "0")} {Months[value.Month - 1]}"
+            : value.ToString(Tr.Ui.DateTimeFormat.MonthDayPattern, Tr.Ui);
+
     /// <summary>«19 серпня 14.00» — підпис під назвою замовлення.</summary>
     public static string DateTimeShort(DateTime value) =>
-        $"{value.Day} {Months[value.Month - 1]} {value:HH.mm}";
+        $"{DayAndMonth(value)} {value:HH.mm}";
 
     /// <summary>«19 серпня 2026» — у стрічці активності та деталях.</summary>
     public static string LongDate(DateTime value) =>
-        $"{value.Day} {Months[value.Month - 1]} {value.Year}";
+        $"{DayAndMonth(value)} {value.Year}";
 
     /// <summary>«19 серпня 2026 о 14.43».</summary>
     public static string LongDateTime(DateTime value) =>
-        $"{LongDate(value)} о {value:HH.mm}";
+        Tr.F("{0} о {1}", LongDate(value), value.ToString("HH.mm"));
 
     /// <summary>«26.08.2026 14.00» — два рядки таблиці транзакцій.</summary>
     public static string TableDate(DateTime value) =>
-        $"{value.Day:00} {Months[value.Month - 1]} {value.Year}";
+        $"{DayAndMonth(value, "dd")} {value.Year}";
 
     /// <summary>
     /// «10.30», «Вчора», «2 дні тому», «3 місяці тому» — так підписані рядки
@@ -59,19 +69,19 @@ public static class CabinetFormat
 
         if (days == 1)
         {
-            return "Вчора";
+            return Tr.T("Вчора");
         }
 
         if (days < 30)
         {
-            return PublicText.Count(days, "день", "дні", "днів") + " тому";
+            return Tr.F("{0} тому", PublicText.Count(days, "день", "дні", "днів"));
         }
 
         var months = Math.Max(1, days / 30);
 
-        return months < 12
-            ? PublicText.Count(months, "місяць", "місяці", "місяців") + " тому"
-            : PublicText.Count(Math.Max(1, months / 12), "рік", "роки", "років") + " тому";
+        return Tr.F("{0} тому", months < 12
+            ? PublicText.Count(months, "місяць", "місяці", "місяців")
+            : PublicText.Count(Math.Max(1, months / 12), "рік", "роки", "років"));
     }
 
     /// <summary>«2 450» — саме число, без одиниці виміру.</summary>
@@ -80,15 +90,30 @@ public static class CabinetFormat
 
     /// <summary>«8 545 грн.» — число з нерозривними пробілами, як у макеті.</summary>
     public static string Money(decimal value) =>
-        value.ToString("N0", Numbers) + " грн.";
+        Tr.F("{0} грн.", value.ToString("N0", Numbers));
+
+    /// <summary>«8 545 грн» — те саме, але без крапки, як на плитках гаманця.</summary>
+    public static string Uah(decimal value) =>
+        Tr.F("{0} грн", value.ToString("N0", Numbers));
 
     /// <summary>«від 600 грн.» — ціна на картці замовлення.</summary>
     public static string From(decimal value) =>
-        value <= 0 ? "Договірна" : "від " + Money(value);
+        value <= 0 ? Tr.T("Договірна") : Tr.F("від {0}", Money(value));
 
     /// <summary>«-2 500 грн» чи «+1 500 грн» у списку транзакцій.</summary>
     public static string Signed(decimal value, bool incoming) =>
-        (incoming ? "+" : "-") + value.ToString("N0", Numbers) + " грн";
+        (incoming ? "+" : "-") + Uah(value);
+
+    /// <summary>
+    /// Значення з BLL на кшталт «2450 грн»: одиницю перекладаємо, число лишаємо.
+    /// </summary>
+    public static string Units(string? value)
+    {
+        const string uah = " грн";
+        return value != null && value.EndsWith(uah, StringComparison.Ordinal)
+            ? Tr.F("{0} грн", value[..^uah.Length])
+            : value ?? string.Empty;
+    }
 
     /// <summary>«4.9» — рейтинг з одним знаком.</summary>
     public static string Rating(double value) =>
@@ -96,7 +121,7 @@ public static class CabinetFormat
 
     /// <summary>«1 серпня» — підпис дня під графіком.</summary>
     public static string DayMonth(DateTime value) =>
-        $"{value.Day} {Months[value.Month - 1]}";
+        DayAndMonth(value);
 
     /// <summary>«31.08.2026» — дата в таблиці транзакцій.</summary>
     public static string Digits(DateTime value) =>

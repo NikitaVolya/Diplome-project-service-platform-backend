@@ -24,10 +24,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -39,9 +39,9 @@
                     <partial name="Executor/_ExecNotices" />
 
                     <div class="exec-head exec-head__row">
-                        <h1>Замовлення</h1>
+                        <h1>@T("Замовлення")</h1>
                         <button class="v-btn v-btn--ghost" type="submit" form="exec-orders-filter">
-                            <i class="bi bi-funnel" aria-hidden="true"></i> Фільтри
+                            <i class="bi bi-funnel" aria-hidden="true"></i> @T("Фільтри")
                         </button>
                     </div>
 
@@ -65,34 +65,34 @@
 
                     <div class="exec-stats">
                         <article class="exec-stat exec-stat--soft">
-                            <span class="exec-stat__name">Нові замовлення</span>
+                            <span class="exec-stat__name">@T("Нові замовлення")</span>
                             <span class="exec-stat__value">@Model.Counters.Fresh</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="fresh">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat exec-stat--soft">
-                            <span class="exec-stat__name">Активні замовлення</span>
+                            <span class="exec-stat__name">@T("Активні замовлення")</span>
                             <span class="exec-stat__value">@Model.Counters.Active</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="work">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat exec-stat--soft">
-                            <span class="exec-stat__name">Завершені замовлення</span>
+                            <span class="exec-stat__name">@T("Завершені замовлення")</span>
                             <span class="exec-stat__value">@Model.Counters.Completed</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="completed">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat exec-stat--soft">
-                            <span class="exec-stat__name">Зароблено</span>
+                            <span class="exec-stat__name">@T("Зароблено")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(Model.Counters.Earned)</span>
                             <a class="exec-stat__more" asp-action="Finance">
-                                Детальніше <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Детальніше") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
                     </div>
@@ -103,19 +103,19 @@
                         <label class="cab-find cab-find--plain">
                             <i class="bi bi-search" aria-hidden="true"></i>
                             <input type="search" name="q" value="@Model.Query"
-                                   placeholder="Пошук за назвою замовлення, клієнтом" aria-label="Пошук замовлень" />
+                                   placeholder="@T("Пошук за назвою замовлення, клієнтом")" aria-label="@T("Пошук замовлень")" />
                         </label>
 
                         <label class="cab-find cab-find--plain" style="width:365px">
                             <i class="bi bi-calendar3" aria-hidden="true"></i>
                             <input type="text" value="@($"{DateTime.Now:01.MM.yyyy} - {DateTime.Now:dd.MM.yyyy}")"
-                                   readonly aria-label="Період" />
+                                   readonly aria-label="@T("Період")" />
                         </label>
                     </form>
 
                     @if (Model.Orders.Items.Count == 0)
                     {
-                        <p class="cab-empty">Замовлень за цим фільтром немає.</p>
+                        <p class="cab-empty">@T("Замовлень за цим фільтром немає.")</p>
                     }
 
                     @foreach (var order in Model.Orders.Items)
@@ -128,10 +128,10 @@
                     <div class="exec-tip">
                         <i class="bi bi-lightbulb" aria-hidden="true"></i>
                         <div>
-                            <b>Порада</b>
-                            <p>Відповідайте швидко на нові замовлення — це підвищує ваш рейтинг та шанси отримати роботу.</p>
+                            <b>@T("Порада")</b>
+                            <p>@T("Відповідайте швидко на нові замовлення — це підвищує ваш рейтинг та шанси отримати роботу.")</p>
                         </div>
-                        <a class="v-btn v-btn--soft" asp-controller="Pages" asp-action="Help">Дізнатися більше</a>
+                        <a class="v-btn v-btn--soft" asp-controller="Pages" asp-action="Help">@T("Дізнатися більше")</a>
                     </div>
                 </section>
             </div>

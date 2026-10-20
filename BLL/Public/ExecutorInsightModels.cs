@@ -66,7 +66,12 @@ namespace BLL.Public
     public sealed class ExecTxn
     {
         public DateTime Date { get; set; }
+
+        /// <summary>Назва операції; якщо є <see cref="TitleArg"/> — це шаблон з {0}.</summary>
         public string Title { get; set; } = string.Empty;
+
+        /// <summary>Підстановка в шаблон назви (куди виведено кошти).</summary>
+        public string? TitleArg { get; set; }
 
         public bool Income { get; set; }
 

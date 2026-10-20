@@ -967,3 +967,188 @@
 
 /* Активний пункт головного меню — зараз це «Профіль», коли людина в кабінеті. */
 .v-nav a.is-current { opacity: 1; color: var(--v-purple); font-weight: 600; }
+
+/* ── Перемикач мови внизу сторінки (Component 78 з макета) ──────────────────
+   Біля краю сторінки місця під список немає, тому панель відкривається вгору:
+   її нижній край збігається з рядком перемикача, а поточна мова — першим рядком. */
+.v-lang { position: relative; }
+
+.v-lang > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    list-style: none;
+    color: #D8D4F0;
+    user-select: none;
+}
+.v-lang > summary::-webkit-details-marker { display: none; }
+.v-lang > summary:hover { color: #fff; }
+
+.v-lang__chevron {
+    width: 12px;
+    height: 8px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+}
+
+.v-lang__panel {
+    position: absolute;
+    right: -16px;
+    bottom: -6px;
+    z-index: 60;
+    min-width: 162px;
+    padding: 6px 0 8px;
+    border-radius: 15px;
+    background: #3E3180;
+    box-shadow: 0 16px 40px rgba(24, 14, 74, .35);
+    font-size: 14px;
+    line-height: 16px;
+}
+.v-lang:not([open]) .v-lang__panel { display: none; }
+
+.v-lang__current,
+.v-lang__menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 6px 16px;
+    color: #fff;
+    font: inherit;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.v-lang__current {
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+.v-lang__current .v-lang__chevron { width: 14px; height: 9px; }
+
+.v-lang__menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.v-lang .v-lang__menu a { color: #fff; }
+.v-lang__menu a:hover,
+.v-lang__menu a:focus-visible,
+.v-lang__current:hover,
+.v-lang__current:focus-visible {
+    background: rgba(255, 255, 255, .1);
+    outline: none;
+}
+
+@media (max-width: 480px) {
+    .v-lang__panel { right: auto; left: -12px; }
+}
+
+/* ── Вікно «Оберіть дію» перед реєстрацією (макет Desktop - 1) ─────────────── */
+.v-role-dialog {
+    width: min(818px, calc(100% - 32px));
+    min-height: min(686px, calc(100vh - 32px));
+    padding: 0;
+    border: 0;
+    border-radius: 15px;
+    color: #1F2937;
+    background: #fff url('../img/landing/auth-watermark.png') repeat;
+    overflow: hidden;
+}
+.v-role-dialog[open] { display: flex; flex-direction: column; justify-content: center; }
+.v-role-dialog::backdrop { background: rgba(31, 41, 55, .45); }
+
+/* Світла смуга посередині, як у макеті: фон із водяними знаками видно лише по краях. */
+.v-role-dialog::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, .7) 0, rgba(255, 255, 255, .9) 20%, #fff 51%,
+        rgba(255, 255, 255, .9) 80%, rgba(255, 255, 255, .7) 100%);
+    pointer-events: none;
+}
+
+.v-role-dialog__close-form { position: absolute; top: 23px; right: 21px; z-index: 2; margin: 0; }
+.v-role-dialog__close {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}
+.v-role-dialog__close svg { width: 24px; height: 24px; fill: none; stroke: #1F2937; stroke-width: 2; stroke-linecap: round; }
+.v-role-dialog__close:hover { background: #F1EEFF; }
+
+.v-role-dialog__title {
+    position: relative;
+    margin: 56px 24px 36px;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.v-role-dialog__choices {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px 1px 200px;
+    justify-content: center;
+    gap: 50px;
+    margin: 0 24px 64px;
+}
+
+.v-role-dialog__divider {
+    width: 1px;
+    background: linear-gradient(180deg, rgba(98, 80, 204, 0), #6250CC 6%, #6250CC 94%, rgba(98, 80, 204, 0));
+}
+
+.v-role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    min-height: 297px;
+    padding: 24px 16px;
+    border-radius: 15px;
+    background: rgba(0, 240, 255, .2);
+    color: #1F2937;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.v-role-card img { width: 48px; height: 48px; }
+.v-role-card:hover,
+.v-role-card:focus-visible {
+    background: rgba(0, 240, 255, .32);
+    box-shadow: 0 10px 28px rgba(98, 80, 204, .16);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+@media (max-width: 560px) {
+    .v-role-dialog { min-height: 0; }
+    .v-role-dialog__title { margin: 56px 16px 24px; font-size: 26px; }
+    .v-role-dialog__choices { grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0 16px 24px; }
+    .v-role-dialog__divider { display: none; }
+    .v-role-card { min-height: 160px; gap: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .v-role-card { transition: none; }
+    .v-role-card:hover { transform: none; }
+}

@@ -294,7 +294,8 @@ namespace BLL.Public
                 .Select(p => new ExecTxn
                 {
                     Date = p.CreatedAt,
-                    Title = $"Виведення коштів на {p.MethodLabel ?? "картку"}",
+                    Title = "Виведення коштів на {0}",
+                    TitleArg = p.MethodLabel ?? "картку",
                     Income = false,
                     Amount = p.Amount,
                     StateKey = p.Status == PayoutStatus.Paid ? "paid" : "pending",

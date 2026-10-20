@@ -11,7 +11,14 @@ public sealed record Article(
 
 public sealed record FaqItem(string Question, string Answer);
 
-public sealed record InfoCard(string Icon, string Title, string Text);
+/// <summary>Іконка, заголовок і текст картки. Заголовок і текст віддаються вже перекладеними.</summary>
+public sealed record InfoCard(string Icon, string Title, string Text)
+{
+    private readonly string _title = Title;
+    private readonly string _text = Text;
+    public string Title { get => Localization.Tr.T(_title); init => _title = value; }
+    public string Text { get => Localization.Tr.T(_text); init => _text = value; }
+}
 
 public static class PageContent
 {
@@ -183,6 +190,12 @@ public static class PageContent
 
     public static string FormatDate(DateOnly date)
     {
+        // Для інших мов назву місяця бере сама .NET із культури перемикача.
+        if (!Localization.Tr.IsUkrainian)
+        {
+            return date.ToString("d MMMM yyyy", Localization.Tr.Ui);
+        }
+
         string[] months =
         {
             "січня", "лютого", "березня", "квітня", "травня", "червня",

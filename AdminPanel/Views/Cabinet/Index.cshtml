@@ -9,15 +9,15 @@
 <main class="cab">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <span>Особистий кабінет</span>
+                <span>@T("Особистий кабінет")</span>
             </nav>
 
             <div class="cab-head">
-                <h1 class="cab-head__hi">Вітаємо, @Model.FirstName! <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
-                <p>Тут ви можете керувати своїми замовленнями та переглядати важливу інформацію</p>
+                <h1 class="cab-head__hi">@F("Вітаємо, {0}!", Model.FirstName) <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
+                <p>@T("Тут ви можете керувати своїми замовленнями та переглядати важливу інформацію")</p>
             </div>
         </div>
 
@@ -30,34 +30,34 @@
                 <section class="cab-panel cab-panel--mint">
                     <div class="cab-stats">
                         <article class="cab-stat">
-                            <span class="cab-stat__name">Активні замовлення</span>
+                            <span class="cab-stat__name">@T("Активні замовлення")</span>
                             <span class="cab-stat__value">@Model.Summary.Active</span>
                             <a class="cab-stat__more" asp-action="Orders" asp-route-tab="active">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="cab-stat">
-                            <span class="cab-stat__name">Завершені замовлення</span>
+                            <span class="cab-stat__name">@T("Завершені замовлення")</span>
                             <span class="cab-stat__value">@Model.Summary.Completed</span>
                             <a class="cab-stat__more" asp-action="Orders" asp-route-tab="completed">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="cab-stat">
-                            <span class="cab-stat__name">Очікують відгуку</span>
+                            <span class="cab-stat__name">@T("Очікують відгуку")</span>
                             <span class="cab-stat__value">@Model.Summary.AwaitingReview</span>
                             <a class="cab-stat__more" asp-action="Reviews">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="cab-stat">
-                            <span class="cab-stat__name">Витрачено коштів</span>
+                            <span class="cab-stat__name">@T("Витрачено коштів")</span>
                             <span class="cab-stat__value">@CabinetFormat.Money(Model.Summary.Spent)</span>
                             <a class="cab-stat__more" asp-action="Payments">
-                                Детальніше <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Детальніше") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
                     </div>
@@ -65,8 +65,8 @@
 
                 <section class="cab-panel">
                     <div class="cab-rowhead">
-                        <h2>Мої замовлення:</h2>
-                        <a class="cab-all" asp-action="Orders">Переглянути всі <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        <h2>@T("Мої замовлення:")</h2>
+                        <a class="cab-all" asp-action="Orders">@T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                     </div>
 
                     <div class="cab-tabs">
@@ -79,7 +79,7 @@
 
                     @if (Model.Summary.Orders.Count == 0)
                     {
-                        <p class="cab-empty">У цій вкладці поки немає замовлень.</p>
+                        <p class="cab-empty">@T("У цій вкладці поки немає замовлень.")</p>
                     }
 
                     <div class="cab-orders">
@@ -92,7 +92,7 @@
 
                 <div class="cab-duo">
                     <section class="cab-box">
-                        <h2>Рекомендоване для вас</h2>
+                        <h2>@T("Рекомендоване для вас")</h2>
 
                         @foreach (var service in Model.Summary.Recommended)
                         {
@@ -105,15 +105,15 @@
                             </a>
                         }
 
-                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">Переглянути всі послуги</a>
+                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">@T("Переглянути всі послуги")</a>
                     </section>
 
                     <section class="cab-box cab-box--mint">
-                        <h2>Повідомлення</h2>
+                        <h2>@T("Повідомлення")</h2>
 
                         @if (Model.Summary.Threads.Count == 0)
                         {
-                            <p class="cab-empty">Листування ще немає.</p>
+                            <p class="cab-empty">@T("Листування ще немає.")</p>
                         }
 
                         @foreach (var thread in Model.Summary.Threads)
@@ -121,7 +121,7 @@
                             <a class="cab-note" asp-action="Messages" asp-route-orderId="@thread.OrderId">
                                 <img src="@thread.PartnerPortrait" alt="" loading="lazy" />
                                 <span>
-                                    <b>@thread.PartnerName</b>
+                                    <b>@T(thread.PartnerName)</b>
                                     <p>@thread.Last</p>
                                 </span>
                                 <span class="cab-note__time">
@@ -134,7 +134,7 @@
                             </a>
                         }
 
-                        <a class="cab-box__more" asp-action="Messages">Переглянути всі повідомлення</a>
+                        <a class="cab-box__more" asp-action="Messages">@T("Переглянути всі повідомлення")</a>
                     </section>
                 </div>
             </div>

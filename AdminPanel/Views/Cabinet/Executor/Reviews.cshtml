@@ -20,10 +20,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -36,23 +36,23 @@
 
                     <div class="exec-head exec-head__row">
                         <div>
-                            <h1>Відгуки</h1>
-                            <p>Відгуки клієнтів про вашу роботу та послуги</p>
+                            <h1>@T("Відгуки")</h1>
+                            <p>@T("Відгуки клієнтів про вашу роботу та послуги")</p>
                         </div>
                         <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">
-                            Запросити відгук <i class="bi bi-envelope" aria-hidden="true"></i>
+                            @T("Запросити відгук") <i class="bi bi-envelope" aria-hidden="true"></i>
                         </a>
                     </div>
 
                     <div class="exec-stats">
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Усього відгуків</span>
+                            <span class="exec-stat__name">@T("Усього відгуків")</span>
                             <span class="exec-stat__value">@Model.Reviews.Total</span>
-                            <span class="exec-stat__note">за весь час</span>
+                            <span class="exec-stat__note">@T("за весь час")</span>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Середній рейтинг</span>
+                            <span class="exec-stat__name">@T("Середній рейтинг")</span>
                             <span class="exec-stat__value exec-stat__value--small">
                                 @CabinetFormat.Rating(Model.Reviews.Average)
                                 <span class="exec-review__stars" aria-hidden="true">
@@ -62,21 +62,21 @@
                                     }
                                 </span>
                             </span>
-                            <span class="exec-stat__note">на основі @PublicText.Reviews(Model.Reviews.Total)</span>
+                            <span class="exec-stat__note">@F("на основі {0}", PublicText.Reviews(Model.Reviews.Total))</span>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Відгуки з фото</span>
+                            <span class="exec-stat__name">@T("Відгуки з фото")</span>
                             <span class="exec-stat__value">@Model.Reviews.WithPhoto</span>
                             <span class="exec-stat__note">
-                                @(Model.Reviews.Total > 0 ? $"{Model.Reviews.WithPhoto * 100 / Model.Reviews.Total}% від усіх" : "немає")
+                                @(Model.Reviews.Total > 0 ? F("{0}% від усіх", Model.Reviews.WithPhoto * 100 / Model.Reviews.Total) : T("немає"))
                             </span>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Рекомендації</span>
+                            <span class="exec-stat__name">@T("Рекомендації")</span>
                             <span class="exec-stat__value">@Model.Reviews.Recommend%</span>
-                            <span class="exec-stat__note">клієнти рекомендують</span>
+                            <span class="exec-stat__note">@T("клієнти рекомендують")</span>
                         </article>
                     </div>
 
@@ -92,7 +92,7 @@
                         <form method="get" asp-action="Reviews">
                             <input type="hidden" name="tab" value="@Model.Tab" />
                             <div class="cab-field" style="width:236px">
-                                <select name="sort" aria-label="Порядок" onchange="this.form.submit()">
+                                <select name="sort" aria-label="@T("Порядок")" onchange="this.form.submit()">
                                     @foreach (var sort in ExecutorContent.ReviewSorts)
                                     {
                                         <option value="@sort.Key" selected="@(Model.Sort == sort.Key)">@sort.Title</option>
@@ -106,7 +106,7 @@
                     {
                         @if (Model.Reviews.Awaiting.Count == 0)
                         {
-                            <p class="cab-empty">Усі завершені замовлення вже оцінені.</p>
+                            <p class="cab-empty">@T("Усі завершені замовлення вже оцінені.")</p>
                         }
 
                         @foreach (var order in Model.Reviews.Awaiting)
@@ -119,7 +119,7 @@
                         @if (Model.Reviews.Items.Count == 0)
                         {
                             <p class="cab-empty">
-                                @(Model.Tab == "given" ? "Ви ще не писали відгуків." : "Відгуків поки немає.")
+                                @T(Model.Tab == "given" ? "Ви ще не писали відгуків." : "Відгуків поки немає.")
                             </p>
                         }
 
@@ -131,7 +131,7 @@
                                 <div>
                                     <div class="exec-review__top">
                                         <b>@review.PersonName</b>
-                                        <span class="exec-review__stars" aria-label="@review.Rating з 5">
+                                        <span class="exec-review__stars" aria-label="@F("{0} з 5", review.Rating)">
                                             @for (var i = 0; i < 5; i++)
                                             {
                                                 <i class="bi @(i < review.Rating ? "bi-star-fill" : "bi-star")" aria-hidden="true"></i>
@@ -143,7 +143,7 @@
                                     <p class="exec-review__text">@review.Comment</p>
 
                                     <p class="exec-review__meta">
-                                        <span>Замовлення @review.OrderId</span>
+                                        <span>@F("Замовлення {0}", review.OrderId)</span>
                                         <span>@review.CreatedAt.ToString("dd.MM.yyyy")</span>
                                     </p>
                                 </div>
@@ -155,7 +155,7 @@
                                     }
                                 </span>
 
-                                <a class="exec-dots" asp-action="Messages" aria-label="Дії з відгуком">
+                                <a class="exec-dots" asp-action="Messages" aria-label="@T("Дії з відгуком")">
                                     <i class="bi bi-three-dots" aria-hidden="true"></i>
                                 </a>
                             </article>
@@ -167,10 +167,10 @@
                     <div class="exec-tip">
                         <i class="bi bi-bag-heart" aria-hidden="true"></i>
                         <div>
-                            <b>Більше відгуків — більше довіри</b>
-                            <p>Запросіть клієнтів залишити відгуки після завершення замовлення.</p>
+                            <b>@T("Більше відгуків — більше довіри")</b>
+                            <p>@T("Запросіть клієнтів залишити відгуки після завершення замовлення.")</p>
                         </div>
-                        <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">Запросити відгук</a>
+                        <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">@T("Запросити відгук")</a>
                     </div>
                 </section>
             </div>

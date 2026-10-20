@@ -1,12 +1,28 @@
+using AdminPanel.Localization;
 using Domain.Models;
 
 namespace AdminPanel.Models;
 
-public sealed record CabinetNavItem(string Key, string Title, string Icon, string Action);
+// Підписи в цих записах — українські ключі перекладу. Властивість Title щоразу віддає
+// переклад на мову сайту, тож представлення можуть просто писати @item.Title.
 
-public sealed record SupportTopic(string Title, string Anchor);
+public sealed record CabinetNavItem(string Key, string Title, string Icon, string Action)
+{
+    private readonly string _title = Title;
+    public string Title { get => Tr.T(_title); init => _title = value; }
+}
 
-public sealed record Choice(string Key, string Title);
+public sealed record SupportTopic(string Title, string Anchor)
+{
+    private readonly string _title = Title;
+    public string Title { get => Tr.T(_title); init => _title = value; }
+}
+
+public sealed record Choice(string Key, string Title)
+{
+    private readonly string _title = Title;
+    public string Title { get => Tr.T(_title); init => _title = value; }
+}
 
 public static class CabinetContent
 {
@@ -68,11 +84,9 @@ public static class CabinetContent
         new("Nobody", "Ніхто, крім виконавців моїх замовлень")
     };
 
+    /// <summary>Ті самі мови, що й у перемикачі внизу сайту.</summary>
     public static readonly Choice[] Languages =
-    {
-        new("uk", "Українська"),
-        new("en", "English")
-    };
+        PublicCulture.Languages.Select(l => new Choice(l.Code, l.Title)).ToArray();
 
     public static readonly Choice[] TimeZones =
     {
@@ -136,10 +150,10 @@ public static class CabinetContent
 
     public static string StatusTitle(OrderStatus status, bool hasExecutor) => status switch
     {
-        OrderStatus.Pending => hasExecutor ? "Підтверджено" : "Очікує виконавця",
-        OrderStatus.InProgress => "В процесі",
-        OrderStatus.Completed => "Виконано",
-        _ => "Скасовано"
+        OrderStatus.Pending => hasExecutor ? Tr.T("Підтверджено") : Tr.T("Очікує виконавця"),
+        OrderStatus.InProgress => Tr.T("В процесі"),
+        OrderStatus.Completed => Tr.T("Виконано"),
+        _ => Tr.T("Скасовано")
     };
 
     public static string StatusTone(OrderStatus status, bool hasExecutor) => status switch
@@ -152,10 +166,10 @@ public static class CabinetContent
 
     public static string PaymentTitle(PaymentStatus status) => status switch
     {
-        PaymentStatus.Completed => "Успішно",
-        PaymentStatus.Pending => "В очікуванні",
-        PaymentStatus.Refunded => "Повернено",
-        _ => "Не вдалося"
+        PaymentStatus.Completed => Tr.T("Успішно"),
+        PaymentStatus.Pending => Tr.T("В очікуванні"),
+        PaymentStatus.Refunded => Tr.T("Повернено"),
+        _ => Tr.T("Не вдалося")
     };
 
     public static string PaymentTone(PaymentStatus status) => status switch
@@ -167,8 +181,8 @@ public static class CabinetContent
     };
 
     public static string PaymentKind(PaymentStatus status) =>
-        status == PaymentStatus.Refunded ? "Повернення" : "Оплата замовлення";
+        status == PaymentStatus.Refunded ? Tr.T("Повернення") : Tr.T("Оплата замовлення");
 
     public static string Title(Choice[] options, string? key, string fallback) =>
-        options.FirstOrDefault(o => string.Equals(o.Key, key, StringComparison.OrdinalIgnoreCase))?.Title ?? fallback;
+        Tr.T(options.FirstOrDefault(o => string.Equals(o.Key, key, StringComparison.OrdinalIgnoreCase))?.Title ?? fallback);
 }

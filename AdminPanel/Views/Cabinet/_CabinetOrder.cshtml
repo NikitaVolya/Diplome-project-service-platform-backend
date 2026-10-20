@@ -21,7 +21,7 @@
     <span class="cab-state cab-state--@tone">@CabinetContent.StatusTitle(Model.Status, hasExecutor)</span>
 
     <div class="cab-order__who">
-        <span>Виконавець</span>
+        <span>@T("Виконавець")</span>
         @if (hasExecutor)
         {
             <span class="cab-order__exec">
@@ -38,7 +38,7 @@
     <div class="cab-order__price">@CabinetFormat.From(Model.Price)</div>
 
     <a class="cab-order__go" asp-controller="Cabinet" asp-action="Order" asp-route-id="@Model.Id"
-       aria-label="Відкрити замовлення @Model.Title">
+       aria-label="@F("Відкрити замовлення {0}", Model.Title)">
         <i class="bi bi-chevron-right" aria-hidden="true"></i>
     </a>
 </article>

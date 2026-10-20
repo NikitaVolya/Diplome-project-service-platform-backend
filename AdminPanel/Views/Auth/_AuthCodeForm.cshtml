@@ -9,27 +9,27 @@
     <partial name="_AuthErrors" />
 
     <div class="auth-field">
-        <label asp-for="Code">Код з e-mail</label>
+        <label asp-for="Code">@T("Код з e-mail")</label>
 
         <div class="auth-code" data-auth-code>
             @for (var i = 0; i < 6; i++)
             {
                 <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code"
-                       aria-label="Символ коду @(i + 1)" />
+                       aria-label="@F("Символ коду {0}", i + 1)" />
             }
         </div>
         <input type="hidden" asp-for="Code" />
         <span asp-validation-for="Code" class="field-validation-error"></span>
     </div>
 
-    <p class="auth-hint">Код дійсний протягом @Model.LifetimeMinutes хв</p>
+    <p class="auth-hint">@F("Код дійсний протягом {0} хв", Model.LifetimeMinutes)</p>
 
     <p class="auth-resend">
-        Не отримали код?
-        <button type="submit" form="auth-resend-form" data-auth-resend="@Model.ResendAfterSeconds">Надіслати ще раз</button>
+        @T("Не отримали код?")
+        <button type="submit" form="auth-resend-form" data-auth-resend="@Model.ResendAfterSeconds">@T("Надіслати ще раз")</button>
     </p>
 
-    <button class="auth-submit" type="submit">Продовжити</button>
+    <button class="auth-submit" type="submit">@T("Продовжити")</button>
 </form>
 
 <form method="post" asp-action="Resend" id="auth-resend-form">
@@ -39,6 +39,6 @@
 @if (stub != null)
 {
     <p class="auth-stub">
-        Лист нікуди не пішов — пошта ще не підключена. Код для перевірки: <b>@stub</b>
+        @T("Лист нікуди не пішов — пошта ще не підключена. Код для перевірки:") <b>@stub</b>
     </p>
 }

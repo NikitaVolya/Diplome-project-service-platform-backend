@@ -112,6 +112,9 @@ namespace AdminPanel.Extensions
             // Тільки читає файли з wwwroot і кешує результат — один екземпляр на застосунок.
             services.AddSingleton<CatalogPhotos>();
 
+            // Фото профілю з кабінету: зберігає у wwwroot/uploads/avatars.
+            services.AddSingleton<AvatarStorage>();
+
             services.AddMemoryCache();
 
             // Сервіс без стану: одного екземпляра вистачає на весь застосунок.

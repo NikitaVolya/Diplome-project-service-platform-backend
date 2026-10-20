@@ -12,13 +12,13 @@
 <main class="cab">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
 
-            <div class="cab-head"><h1>Деталі замовлення</h1></div>
+            <div class="cab-head"><h1>@T("Деталі замовлення")</h1></div>
         </div>
 
         <div class="cab-body">
@@ -33,16 +33,16 @@
                             <h2>@order.Title</h2>
                             <div class="cab-detail__meta">
                                 <span class="cab-tag">@CabinetContent.StatusTitle(order.Status, hasExecutor)</span>
-                                <span>Створено @CabinetFormat.LongDateTime(order.CreatedAt)</span>
+                                <span>@F("Створено {0}", CabinetFormat.LongDateTime(order.CreatedAt))</span>
                             </div>
                         </div>
 
                         <div class="cab-detail__act">
                             <a asp-action="Order" asp-route-id="@order.Id">
-                                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Поділитися
+                                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> @T("Поділитися")
                             </a>
                             <a asp-action="Messages" asp-route-orderId="@order.Id">
-                                <i class="bi bi-chevron-down" aria-hidden="true"></i> Ще
+                                <i class="bi bi-chevron-down" aria-hidden="true"></i> @T("Ще")
                             </a>
                         </div>
                     </div>
@@ -50,10 +50,10 @@
                     <div class="cab-detail">
                         <div>
                             <article class="cab-card">
-                                <h3>Опис замовлення</h3>
+                                <h3>@T("Опис замовлення")</h3>
                                 <p>@Model.Details.Description</p>
 
-                                <h3 style="font-size:17px;margin-top:22px">Деталі</h3>
+                                <h3 style="font-size:17px;margin-top:22px">@T("Деталі")</h3>
                                 <div class="cab-facts">
                                     @foreach (var (name, value) in Model.Facts)
                                     {
@@ -64,12 +64,12 @@
                             </article>
 
                             <article class="cab-card">
-                                <h3>Активність замовлення</h3>
+                                <h3>@T("Активність замовлення")</h3>
                                 <ul class="cab-feed">
                                     @foreach (var item in Model.Details.Activity.OrderBy(a => a.At))
                                     {
                                         <li>
-                                            @item.Text
+                                            @(item.Arg == null ? T(item.Text) : F(item.Text, item.Arg))
                                             <span>@CabinetFormat.LongDateTime(item.At)</span>
                                         </li>
                                     }
@@ -79,11 +79,11 @@
 
                         <div>
                             <article class="cab-card">
-                                <h3>Відгуки виконавців (@Model.Details.Bids.Count)</h3>
+                                <h3>@F("Відгуки виконавців ({0})", Model.Details.Bids.Count)</h3>
 
                                 @if (Model.Details.Bids.Count == 0)
                                 {
-                                    <p>Виконавці ще не відгукнулися. Щойно хтось запропонує ціну, пропозиція зʼявиться тут.</p>
+                                    <p>@T("Виконавці ще не відгукнулися. Щойно хтось запропонує ціну, пропозиція зʼявиться тут.")</p>
                                 }
 
                                 @foreach (var bid in Model.Details.Bids)
@@ -100,7 +100,7 @@
                                                 </span>
                                             </div>
 
-                                            <div class="cab-bid__role">@bid.Role</div>
+                                            <div class="cab-bid__role">@T(bid.Role)</div>
 
                                             @if (bid.Status == ApplicationStatus.Pending)
                                             {
@@ -109,14 +109,14 @@
                                                         @Html.AntiForgeryToken()
                                                         <input type="hidden" name="id" value="@bid.Id" />
                                                         <input type="hidden" name="orderId" value="@order.Id" />
-                                                        <button class="cab-bid__yes" type="submit" name="accept" value="true">Прийняти</button>
+                                                        <button class="cab-bid__yes" type="submit" name="accept" value="true">@T("Прийняти")</button>
                                                     </form>
 
                                                     <form method="post" asp-action="Bid">
                                                         @Html.AntiForgeryToken()
                                                         <input type="hidden" name="id" value="@bid.Id" />
                                                         <input type="hidden" name="orderId" value="@order.Id" />
-                                                        <button class="cab-bid__no" type="submit" name="accept" value="false">Відхилити</button>
+                                                        <button class="cab-bid__no" type="submit" name="accept" value="false">@T("Відхилити")</button>
                                                     </form>
                                                 </div>
                                             }
@@ -125,26 +125,26 @@
                                                 <div class="cab-bid__act">
                                                     <span class="cab-state cab-state--@(bid.Status == ApplicationStatus.Accepted ? "ok" : "off")"
                                                           style="width:auto;padding:0 18px;height:32px;font-size:14px">
-                                                        @(bid.Status == ApplicationStatus.Accepted ? "Підтверджено" : "Відхилено")
+                                                        @T(bid.Status == ApplicationStatus.Accepted ? "Підтверджено" : "Відхилено")
                                                     </span>
                                                 </div>
                                             }
                                         </div>
 
                                         <div class="cab-bid__price">
-                                            @CabinetFormat.Number(bid.Price) грн.<br />
-                                            @(bid.Days > 0 ? PublicText.Count(bid.Days, "день", "дні", "днів") : "термін не вказано")
+                                            @CabinetFormat.Money(bid.Price)<br />
+                                            @(bid.Days > 0 ? PublicText.Count(bid.Days, "день", "дні", "днів") : T("термін не вказано"))
                                         </div>
                                     </div>
                                 }
                             </article>
 
                             <section class="cab-need">
-                                <h3>Потрібна допомога?</h3>
-                                <p>Якщо у вас виникли питання або проблеми із замовленням, зверніться до нашої підтримки.</p>
+                                <h3>@T("Потрібна допомога?")</h3>
+                                <p>@T("Якщо у вас виникли питання або проблеми із замовленням, зверніться до нашої підтримки.")</p>
                                 <div class="cab-need__act">
-                                    <a class="v-btn v-btn--soft" asp-action="Support">Написати в підтримку</a>
-                                    <a class="v-btn v-btn--ghost" asp-controller="Pages" asp-action="Security">Правила безпеки</a>
+                                    <a class="v-btn v-btn--soft" asp-action="Support">@T("Написати в підтримку")</a>
+                                    <a class="v-btn v-btn--ghost" asp-controller="Pages" asp-action="Security">@T("Правила безпеки")</a>
                                 </div>
                             </section>
                         </div>

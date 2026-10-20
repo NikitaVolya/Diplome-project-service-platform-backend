@@ -1,0 +1,4119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Пн-Пт: 9.00 - 18.00" xml:space="preserve">
+    <value>Lun–ven : 9 h 00–18 h 00</value>
+  </data>
+  <data name="Вибір — платформа пошуку перевірених виконавців та замовлення послуг." xml:space="preserve">
+    <value>Vybir, la plateforme pour trouver des prestataires vérifiés et commander des services.</value>
+  </data>
+  <data name="команда" xml:space="preserve">
+    <value>équipe</value>
+  </data>
+  <data name="виконавець" xml:space="preserve">
+    <value>prestataire</value>
+  </data>
+  <data name="клієнт" xml:space="preserve">
+    <value>client</value>
+  </data>
+  <data name="Вибір — на головну" xml:space="preserve">
+    <value>Vybir — retour à l’accueil</value>
+  </data>
+  <data name="Вибір" xml:space="preserve">
+    <value>Vybir</value>
+  </data>
+  <data name="Каталог послуг" xml:space="preserve">
+    <value>Catalogue des services</value>
+  </data>
+  <data name="Пошуковий сервіс" xml:space="preserve">
+    <value>Service de recherche</value>
+  </data>
+  <data name="Головне меню" xml:space="preserve">
+    <value>Menu principal</value>
+  </data>
+  <data name="Увійти" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="Допомога" xml:space="preserve">
+    <value>Aide</value>
+  </data>
+  <data name="Блог" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Конкурси" xml:space="preserve">
+    <value>Concours</value>
+  </data>
+  <data name="Вакансії" xml:space="preserve">
+    <value>Offres d’emploi</value>
+  </data>
+  <data name="Профіль" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="Відкрити меню" xml:space="preserve">
+    <value>Ouvrir le menu</value>
+  </data>
+  <data name="Закрити меню" xml:space="preserve">
+    <value>Fermer le menu</value>
+  </data>
+  <data name="Особистий кабінет" xml:space="preserve">
+    <value>Mon espace</value>
+  </data>
+  <data name="Мої замовлення" xml:space="preserve">
+    <value>Mes commandes</value>
+  </data>
+  <data name="Повідомлення" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="Налаштування" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="Адмін-панель" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="Вийти" xml:space="preserve">
+    <value>Se déconnecter</value>
+  </data>
+  <data name="Реєстрація" xml:space="preserve">
+    <value>S’inscrire</value>
+  </data>
+  <data name="Єдина платформа для пошуку перевірених виконавців та розвитку вашого бізнесу" xml:space="preserve">
+    <value>La plateforme unique pour trouver des prestataires vérifiés et développer votre activité</value>
+  </data>
+  <data name="Платформа" xml:space="preserve">
+    <value>Plateforme</value>
+  </data>
+  <data name="Безпека" xml:space="preserve">
+    <value>Sécurité</value>
+  </data>
+  <data name="Відгуки" xml:space="preserve">
+    <value>Avis</value>
+  </data>
+  <data name="Новини" xml:space="preserve">
+    <value>Actualités</value>
+  </data>
+  <data name="Для клієнтів" xml:space="preserve">
+    <value>Pour les clients</value>
+  </data>
+  <data name="Як замовити послугу" xml:space="preserve">
+    <value>Comment commander un service</value>
+  </data>
+  <data name="Оплата та гарантії" xml:space="preserve">
+    <value>Paiement et garanties</value>
+  </data>
+  <data name="Повернення коштів" xml:space="preserve">
+    <value>Remboursements</value>
+  </data>
+  <data name="Правила платформи" xml:space="preserve">
+    <value>Règles de la plateforme</value>
+  </data>
+  <data name="Для виконавців" xml:space="preserve">
+    <value>Pour les prestataires</value>
+  </data>
+  <data name="Правила для виконавців" xml:space="preserve">
+    <value>Règles pour les prestataires</value>
+  </data>
+  <data name="Комісії та тарифи" xml:space="preserve">
+    <value>Commissions et tarifs</value>
+  </data>
+  <data name="Поради виконавцям" xml:space="preserve">
+    <value>Conseils aux prestataires</value>
+  </data>
+  <data name="Центр допомоги" xml:space="preserve">
+    <value>Centre d’aide</value>
+  </data>
+  <data name="Компанія" xml:space="preserve">
+    <value>Entreprise</value>
+  </data>
+  <data name="Про нас" xml:space="preserve">
+    <value>À propos</value>
+  </data>
+  <data name="Контакти" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="Кар'єра" xml:space="preserve">
+    <value>Carrières</value>
+  </data>
+  <data name="Партнери" xml:space="preserve">
+    <value>Partenaires</value>
+  </data>
+  <data name="Підтримка" xml:space="preserve">
+    <value>Assistance</value>
+  </data>
+  <data name="Підтримка 24/7" xml:space="preserve">
+    <value>Assistance 24 h/24, 7 j/7</value>
+  </data>
+  <data name="Вибір. Усі права захищені" xml:space="preserve">
+    <value>Vybir. Tous droits réservés</value>
+  </data>
+  <data name="Політика конфіденційності" xml:space="preserve">
+    <value>Politique de confidentialité</value>
+  </data>
+  <data name="Умови використання" xml:space="preserve">
+    <value>Conditions d’utilisation</value>
+  </data>
+  <data name="Політика файлів cookie" xml:space="preserve">
+    <value>Politique relative aux cookies</value>
+  </data>
+  <data name="Мова сайту" xml:space="preserve">
+    <value>Langue du site</value>
+  </data>
+  <data name="Можливості для виконавців" xml:space="preserve">
+    <value>Opportunités pour les prestataires</value>
+  </data>
+  <data name="Реєстрація та пошук замовлень поки недоступні. Зараз ви можете переглянути категорії послуг і виконавців у каталозі." xml:space="preserve">
+    <value>L’inscription et la recherche de commandes ne sont pas encore disponibles. Pour l’instant, vous pouvez parcourir les catégories de services et les prestataires du catalogue.</value>
+  </data>
+  <data name="Зрозуміло" xml:space="preserve">
+    <value>Compris</value>
+  </data>
+  <data name="Вибір — пошук виконавців та замовлення послуг" xml:space="preserve">
+    <value>Vybir — trouver des prestataires et commander des services</value>
+  </data>
+  <data name="Замовляй чи заробляй — вибір за тобою!" xml:space="preserve">
+    <value>Commandez ou gagnez de l’argent — à vous de choisir !</value>
+  </data>
+  <data name="Знаходьте перевірених фахівців для своїх завдань або знаходьте замовлення, щоб реалізувати свої навички та заробляти." xml:space="preserve">
+    <value>Trouvez des spécialistes vérifiés pour vos tâches, ou trouvez des commandes pour mettre vos compétences à profit et gagner de l’argent.</value>
+  </data>
+  <data name="Послуга або категорія" xml:space="preserve">
+    <value>Service ou catégorie</value>
+  </data>
+  <data name="Яка послуга потрібна?" xml:space="preserve">
+    <value>De quel service avez-vous besoin ?</value>
+  </data>
+  <data name="Місто або район" xml:space="preserve">
+    <value>Ville ou quartier</value>
+  </data>
+  <data name="Знайти" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="Популярне:" xml:space="preserve">
+    <value>Populaire :</value>
+  </data>
+  <data name="Команда за роботою в офісі" xml:space="preserve">
+    <value>Une équipe au travail dans un bureau</value>
+  </data>
+  <data name="Популярні категорії:" xml:space="preserve">
+    <value>Catégories populaires :</value>
+  </data>
+  <data name="Усі категорії" xml:space="preserve">
+    <value>Toutes les catégories</value>
+  </data>
+  <data name="Більше" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="Одна платформа — дві можливості." xml:space="preserve">
+    <value>Une plateforme — deux possibilités.</value>
+  </data>
+  <data name="Потрібна послуга?" xml:space="preserve">
+    <value>Besoin d’un service ?</value>
+  </data>
+  <data name="Знайдіть спеціаліста для ремонту, прибирання, дизайну, навчання та інших завдань." xml:space="preserve">
+    <value>Trouvez un spécialiste pour des travaux, du ménage, du design, des cours et bien d’autres tâches.</value>
+  </data>
+  <data name="Знайти виконавця" xml:space="preserve">
+    <value>Trouver un prestataire</value>
+  </data>
+  <data name="Хочете заробляти?" xml:space="preserve">
+    <value>Vous voulez gagner de l’argent ?</value>
+  </data>
+  <data name="Створіть профіль, показуйте свої навички та знаходьте замовлення поруч із вами." xml:space="preserve">
+    <value>Créez un profil, montrez vos compétences et trouvez des commandes près de chez vous.</value>
+  </data>
+  <data name="Знайти замовлення" xml:space="preserve">
+    <value>Trouver des commandes</value>
+  </data>
+  <data name="Як це працює?" xml:space="preserve">
+    <value>Comment ça marche ?</value>
+  </data>
+  <data name="Знайти потрібну людину — простіше, ніж здається" xml:space="preserve">
+    <value>Trouver la bonne personne est plus simple qu’il n’y paraît</value>
+  </data>
+  <data name="Створіть запит" xml:space="preserve">
+    <value>Créez une demande</value>
+  </data>
+  <data name="Опишіть, що вам потрібно. Вкажіть деталі та бюджет." xml:space="preserve">
+    <value>Décrivez ce dont vous avez besoin. Précisez les détails et le budget.</value>
+  </data>
+  <data name="Оберіть виконавця" xml:space="preserve">
+    <value>Choisissez un prestataire</value>
+  </data>
+  <data name="Порівняйте профілі, рейтинг, відгуки та ціну." xml:space="preserve">
+    <value>Comparez les profils, les notes, les avis et les prix.</value>
+  </data>
+  <data name="Домовтеся про виконання" xml:space="preserve">
+    <value>Mettez-vous d’accord</value>
+  </data>
+  <data name="Підтвердьте замовлення та деталі." xml:space="preserve">
+    <value>Confirmez la commande et les détails.</value>
+  </data>
+  <data name="Отримайте результат" xml:space="preserve">
+    <value>Obtenez le résultat</value>
+  </data>
+  <data name="Прийміть роботу та залиште відгук." xml:space="preserve">
+    <value>Validez le travail et laissez un avis.</value>
+  </data>
+  <data name="Чому обирають" xml:space="preserve">
+    <value>Pourquoi choisir</value>
+  </data>
+  <data name="Ми допомагаємо швидше знаходити потрібних людей — без зайвих дзвінків, сумнівів і нескінченних пошуків." xml:space="preserve">
+    <value>Nous vous aidons à trouver plus vite les bonnes personnes — sans appels inutiles, sans doutes et sans recherches interminables.</value>
+  </data>
+  <data name="Перевірені виконавці" xml:space="preserve">
+    <value>Prestataires vérifiés</value>
+  </data>
+  <data name="Профілі, рейтинги та відгуки допомагають зробити впевнений вибір." xml:space="preserve">
+    <value>Les profils, les notes et les avis vous aident à choisir en toute confiance.</value>
+  </data>
+  <data name="Швидкий пошук" xml:space="preserve">
+    <value>Recherche rapide</value>
+  </data>
+  <data name="Знаходьте потрібного спеціаліста за категорією, ціною та локацією." xml:space="preserve">
+    <value>Trouvez le bon spécialiste par catégorie, prix et lieu.</value>
+  </data>
+  <data name="Безпечна взаємодія" xml:space="preserve">
+    <value>Échanges sécurisés</value>
+  </data>
+  <data name="Усі деталі замовлення та домовленості зручно зберігати на платформі." xml:space="preserve">
+    <value>Tous les détails de la commande et les accords sont conservés sur la plateforme.</value>
+  </data>
+  <data name="Чесні умови" xml:space="preserve">
+    <value>Conditions transparentes</value>
+  </data>
+  <data name="Заздалегідь бачите вартість послуги та умови виконання." xml:space="preserve">
+    <value>Vous connaissez à l’avance le prix du service et les conditions de réalisation.</value>
+  </data>
+  <data name="Популярне поруч із вами:" xml:space="preserve">
+    <value>Populaire près de chez vous :</value>
+  </data>
+  <data name="Переглянути всі послуги" xml:space="preserve">
+    <value>Voir tous les services</value>
+  </data>
+  <data name="Ще немає відгуків" xml:space="preserve">
+    <value>Pas encore d’avis</value>
+  </data>
+  <data name="Ідеї та рішення" xml:space="preserve">
+    <value>Idées et solutions</value>
+  </data>
+  <data name="Є завдання? Знайдемо рішення." xml:space="preserve">
+    <value>Une tâche ? Nous trouverons la solution.</value>
+  </data>
+  <data name="Покажіть, що ви вмієте, і знайдіть своє наступне завдання." xml:space="preserve">
+    <value>Montrez ce que vous savez faire et trouvez votre prochaine mission.</value>
+  </data>
+  <data name="Клінінг" xml:space="preserve">
+    <value>Ménage</value>
+  </data>
+  <data name="Прибирання" xml:space="preserve">
+    <value>Ménage</value>
+  </data>
+  <data name="Дизайн" xml:space="preserve">
+    <value>Design</value>
+  </data>
+  <data name="Розробка" xml:space="preserve">
+    <value>Développement</value>
+  </data>
+  <data name="Переклади" xml:space="preserve">
+    <value>Traductions</value>
+  </data>
+  <data name="Пошук послуги — Вибір" xml:space="preserve">
+    <value>Recherche de services — Vybir</value>
+  </data>
+  <data name="Навігація" xml:space="preserve">
+    <value>Navigation</value>
+  </data>
+  <data name="Головна" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="Пошук послуги" xml:space="preserve">
+    <value>Recherche de services</value>
+  </data>
+  <data name="Знайдіть потрібну послугу швидко та легко" xml:space="preserve">
+    <value>Trouvez le service qu’il vous faut, vite et facilement</value>
+  </data>
+  <data name="Що вам потрібно?" xml:space="preserve">
+    <value>De quoi avez-vous besoin ?</value>
+  </data>
+  <data name="Місто або онлайн" xml:space="preserve">
+    <value>Ville ou en ligne</value>
+  </data>
+  <data name="Не знайшли потрібну послугу?" xml:space="preserve">
+    <value>Vous n’avez pas trouvé le service recherché ?</value>
+  </data>
+  <data name="Опишіть свою задачу, і ми допоможемо знайти виконавця!" xml:space="preserve">
+    <value>Décrivez votre tâche et nous vous aiderons à trouver un prestataire !</value>
+  </data>
+  <data name="Створити замовлення" xml:space="preserve">
+    <value>Créer une commande</value>
+  </data>
+  <data name="Часто шукають:" xml:space="preserve">
+    <value>Recherches fréquentes :</value>
+  </data>
+  <data name="Останні перегляди:" xml:space="preserve">
+    <value>Consultés récemment :</value>
+  </data>
+  <data name="Каталог послуг — Вибір" xml:space="preserve">
+    <value>Catalogue des services — Vybir</value>
+  </data>
+  <data name="Навігаційний шлях" xml:space="preserve">
+    <value>Fil d’Ariane</value>
+  </data>
+  <data name="Знайдіть потрібну послугу серед тисяч перевірених виконавців." xml:space="preserve">
+    <value>Trouvez le service qu’il vous faut parmi des milliers de prestataires vérifiés.</value>
+  </data>
+  <data name="Перегляд макета: демонстраційні дані." xml:space="preserve">
+    <value>Aperçu de la maquette : données de démonstration.</value>
+  </data>
+  <data name="Перейти до каталогу послуг" xml:space="preserve">
+    <value>Aller au catalogue des services</value>
+  </data>
+  <data name="Каталог тимчасово недоступний" xml:space="preserve">
+    <value>Le catalogue est temporairement indisponible</value>
+  </data>
+  <data name="Не вдалося завантажити послуги. Спробуйте ще раз пізніше." xml:space="preserve">
+    <value>Impossible de charger les services. Veuillez réessayer plus tard.</value>
+  </data>
+  <data name="Спробувати ще раз" xml:space="preserve">
+    <value>Réessayer</value>
+  </data>
+  <data name="Каталог наповнюється" xml:space="preserve">
+    <value>Le catalogue est en cours de remplissage</value>
+  </data>
+  <data name="Активні категорії послуг з’являться тут незабаром." xml:space="preserve">
+    <value>Les catégories de services actives apparaîtront bientôt ici.</value>
+  </data>
+  <data name="Категорії послуг" xml:space="preserve">
+    <value>Catégories de services</value>
+  </data>
+  <data name="Результати пошуку" xml:space="preserve">
+    <value>Résultats de recherche</value>
+  </data>
+  <data name="Категорії за запитом «{0}»" xml:space="preserve">
+    <value>Catégories pour « {0} »</value>
+  </data>
+  <data name="Місце пошуку:" xml:space="preserve">
+    <value>Lieu de recherche :</value>
+  </data>
+  <data name="Назва послуги" xml:space="preserve">
+    <value>Nom du service</value>
+  </data>
+  <data name="Яка послуга вам потрібна?" xml:space="preserve">
+    <value>De quel service avez-vous besoin ?</value>
+  </data>
+  <data name="Скинути" xml:space="preserve">
+    <value>Réinitialiser</value>
+  </data>
+  <data name="Переглянути виконавців" xml:space="preserve">
+    <value>Voir les prestataires</value>
+  </data>
+  <data name="Як знайти послугу?" xml:space="preserve">
+    <value>Comment trouver un service ?</value>
+  </data>
+  <data name="Оберіть категорію та підкатегорію." xml:space="preserve">
+    <value>Choisissez une catégorie et une sous-catégorie.</value>
+  </data>
+  <data name="Уточніть деталі вашого завдання." xml:space="preserve">
+    <value>Précisez les détails de votre tâche.</value>
+  </data>
+  <data name="Порівняйте виконавців та оберіть найкращого." xml:space="preserve">
+    <value>Comparez les prestataires et choisissez le meilleur.</value>
+  </data>
+  <data name="Домовтеся про умови та отримайте результат." xml:space="preserve">
+    <value>Convenez des conditions et obtenez le résultat.</value>
+  </data>
+  <data name="Дізнатися більше" xml:space="preserve">
+    <value>En savoir plus</value>
+  </data>
+  <data name="Працюєте виконавцем?" xml:space="preserve">
+    <value>Vous êtes prestataire ?</value>
+  </data>
+  <data name="Знайдіть замовлення та розвивайте свій бізнес разом із нами." xml:space="preserve">
+    <value>Trouvez des commandes et développez votre activité avec nous.</value>
+  </data>
+  <data name="Стати виконавцем" xml:space="preserve">
+    <value>Devenir prestataire</value>
+  </data>
+  <data name="Переглянути всі послуги →" xml:space="preserve">
+    <value>Voir tous les services →</value>
+  </data>
+  <data name="Популярні виконавці:" xml:space="preserve">
+    <value>Prestataires populaires :</value>
+  </data>
+  <data name="Переглянути всіх →" xml:space="preserve">
+    <value>Tout voir →</value>
+  </data>
+  <data name="Показати менше ↑" xml:space="preserve">
+    <value>Afficher moins ↑</value>
+  </data>
+  <data name="У цій категорії ще немає виконавців із завершеними замовленнями." xml:space="preserve">
+    <value>Il n’y a pas encore de prestataires ayant terminé des commandes dans cette catégorie.</value>
+  </data>
+  <data name="Своїх виконавців у цій категорії поки мало — показуємо також найкращих у напрямі «{0}»." xml:space="preserve">
+    <value>Il y a encore peu de prestataires dans cette catégorie — nous affichons aussi les meilleurs du domaine « {0} ».</value>
+  </data>
+  <data name="У цій категорії ще мало виконавців — показуємо найкращих на платформі." xml:space="preserve">
+    <value>Il y a encore peu de prestataires dans cette catégorie — voici les meilleurs de la plateforme.</value>
+  </data>
+  <data name="Фото виконавця {0}" xml:space="preserve">
+    <value>Photo du prestataire {0}</value>
+  </data>
+  <data name="Виконано завдань:" xml:space="preserve">
+    <value>Missions réalisées :</value>
+  </data>
+  <data name="У деморежимі місце не враховується." xml:space="preserve">
+    <value>En mode démo, le lieu n’est pas pris en compte.</value>
+  </data>
+  <data name="Показано виконавців із завершеними замовленнями за цією адресою або місцем." xml:space="preserve">
+    <value>Sont affichés les prestataires ayant terminé des commandes à cette adresse ou à cet endroit.</value>
+  </data>
+  <data name="Пошук у каталозі" xml:space="preserve">
+    <value>Rechercher dans le catalogue</value>
+  </data>
+  <data name="Пошук у категорії" xml:space="preserve">
+    <value>Rechercher dans la catégorie</value>
+  </data>
+  <data name="За вашим запитом нічого не знайдено." xml:space="preserve">
+    <value>Aucun résultat pour votre recherche.</value>
+  </data>
+  <data name="У цій категорії немає підкатегорій." xml:space="preserve">
+    <value>Cette catégorie n’a pas de sous-catégories.</value>
+  </data>
+  <data name="Знайдені категорії" xml:space="preserve">
+    <value>Catégories trouvées</value>
+  </data>
+  <data name="Усі підкатегорії" xml:space="preserve">
+    <value>Toutes les sous-catégories</value>
+  </data>
+  <data name="Реєстрація — Вибір" xml:space="preserve">
+    <value>Inscription — Vybir</value>
+  </data>
+  <data name="Назад" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Розкажіть трохи про себе" xml:space="preserve">
+    <value>Parlez-nous un peu de vous</value>
+  </data>
+  <data name="Тип акаунту" xml:space="preserve">
+    <value>Type de compte</value>
+  </data>
+  <data name="Приватна особа" xml:space="preserve">
+    <value>Particulier</value>
+  </data>
+  <data name="Компанія/ФОП" xml:space="preserve">
+    <value>Entreprise / auto-entrepreneur</value>
+  </data>
+  <data name="Ім’я" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="Введіть ім’я" xml:space="preserve">
+    <value>Saisissez votre prénom</value>
+  </data>
+  <data name="Прізвище" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Введіть прізвище" xml:space="preserve">
+    <value>Saisissez votre nom</value>
+  </data>
+  <data name="Назва компанії (необов’язково)" xml:space="preserve">
+    <value>Nom de l’entreprise (facultatif)</value>
+  </data>
+  <data name="Введіть назву" xml:space="preserve">
+    <value>Saisissez le nom</value>
+  </data>
+  <data name="Місто" xml:space="preserve">
+    <value>Ville</value>
+  </data>
+  <data name="Виберіть місто" xml:space="preserve">
+    <value>Choisissez une ville</value>
+  </data>
+  <data name="Поштовий індекс (не обов’язково)" xml:space="preserve">
+    <value>Code postal (facultatif)</value>
+  </data>
+  <data name="Введіть індекс" xml:space="preserve">
+    <value>Saisissez le code postal</value>
+  </data>
+  <data name="Дата народження" xml:space="preserve">
+    <value>Date de naissance</value>
+  </data>
+  <data name="Введіть дату народження" xml:space="preserve">
+    <value>Saisissez votre date de naissance</value>
+  </data>
+  <data name="Стать (не обов’язково)" xml:space="preserve">
+    <value>Genre (facultatif)</value>
+  </data>
+  <data name="Виберіть стать" xml:space="preserve">
+    <value>Choisissez le genre</value>
+  </data>
+  <data name="Досвід роботи" xml:space="preserve">
+    <value>Expérience professionnelle</value>
+  </data>
+  <data name="Оберіть досвід" xml:space="preserve">
+    <value>Choisissez l’expérience</value>
+  </data>
+  <data name="Спеціалізація" xml:space="preserve">
+    <value>Spécialisation</value>
+  </data>
+  <data name="Оберіть категорію послуг" xml:space="preserve">
+    <value>Choisissez une catégorie de services</value>
+  </data>
+  <data name="Пароль" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="Придумайте пароль" xml:space="preserve">
+    <value>Créez un mot de passe</value>
+  </data>
+  <data name="Показати пароль" xml:space="preserve">
+    <value>Afficher le mot de passe</value>
+  </data>
+  <data name="Приховати пароль" xml:space="preserve">
+    <value>Masquer le mot de passe</value>
+  </data>
+  <data name="Підтвердіть пароль" xml:space="preserve">
+    <value>Confirmez le mot de passe</value>
+  </data>
+  <data name="Повторіть пароль" xml:space="preserve">
+    <value>Répétez le mot de passe</value>
+  </data>
+  <data name="Пароль повинен містити:" xml:space="preserve">
+    <value>Le mot de passe doit contenir :</value>
+  </data>
+  <data name="Мінімум 8 символів" xml:space="preserve">
+    <value>Au moins 8 caractères</value>
+  </data>
+  <data name="Велику та маленьку літери" xml:space="preserve">
+    <value>Des majuscules et des minuscules</value>
+  </data>
+  <data name="Цифру або спеціальний символ" xml:space="preserve">
+    <value>Un chiffre ou un caractère spécial</value>
+  </data>
+  <data name="Коротко про себе" xml:space="preserve">
+    <value>En quelques mots</value>
+  </data>
+  <data name="Напишіть кілька слів про себе та свої послуги" xml:space="preserve">
+    <value>Écrivez quelques mots sur vous et vos services</value>
+  </data>
+  <data name="Налаштування сповіщень" xml:space="preserve">
+    <value>Paramètres de notification</value>
+  </data>
+  <data name="Як ви хочете отримувати повідомлення" xml:space="preserve">
+    <value>Comment souhaitez-vous recevoir les notifications</value>
+  </data>
+  <data name="Push повідомлення в додатку" xml:space="preserve">
+    <value>Notifications push dans l’application</value>
+  </data>
+  <data name="Я погоджуюсь з" xml:space="preserve">
+    <value>J’accepte les</value>
+  </data>
+  <data name="Умовами використання" xml:space="preserve">
+    <value>Conditions d’utilisation</value>
+  </data>
+  <data name="та" xml:space="preserve">
+    <value>et la</value>
+  </data>
+  <data name="Політикою конфіденційності" xml:space="preserve">
+    <value>Politique de confidentialité</value>
+  </data>
+  <data name="Продовжити" xml:space="preserve">
+    <value>Continuer</value>
+  </data>
+  <data name="Про вас і ваш бізнес" xml:space="preserve">
+    <value>Vous et votre activité</value>
+  </data>
+  <data name="Про вас" xml:space="preserve">
+    <value>À propos de vous</value>
+  </data>
+  <data name="Підтвердження пошти — Вибір" xml:space="preserve">
+    <value>Confirmation de l’e-mail — Vybir</value>
+  </data>
+  <data name="Перевірте код" xml:space="preserve">
+    <value>Vérifiez le code</value>
+  </data>
+  <data name="Ми надіслали код підтвердження на {0}" xml:space="preserve">
+    <value>Nous avons envoyé un code de confirmation à {0}</value>
+  </data>
+  <data name="Реєстрація завершена — Вибір" xml:space="preserve">
+    <value>Inscription terminée — Vybir</value>
+  </data>
+  <data name="Реєстрація успішна!" xml:space="preserve">
+    <value>Inscription réussie !</value>
+  </data>
+  <data name="Що далі?" xml:space="preserve">
+    <value>Et ensuite ?</value>
+  </data>
+  <data name="Можливості вашого кабінету:" xml:space="preserve">
+    <value>Fonctionnalités de votre espace :</value>
+  </data>
+  <data name="Перейти в особистий кабінет" xml:space="preserve">
+    <value>Accéder à mon espace</value>
+  </data>
+  <data name="Ваш бізнес акаунт створено" xml:space="preserve">
+    <value>Votre compte professionnel a été créé</value>
+  </data>
+  <data name="Ваш акаунт створено" xml:space="preserve">
+    <value>Votre compte a été créé</value>
+  </data>
+  <data name="Заповніть профіль, додайте свої послуги та отримуйте більше замовлень." xml:space="preserve">
+    <value>Complétez votre profil, ajoutez vos services et recevez plus de commandes.</value>
+  </data>
+  <data name="Створюйте замовлення, знаходьте перевірених виконавців та керуйте своїми проєктами в особистому кабінеті." xml:space="preserve">
+    <value>Créez des commandes, trouvez des prestataires vérifiés et gérez vos projets dans votre espace personnel.</value>
+  </data>
+  <data name="Створіть привабливий профіль" xml:space="preserve">
+    <value>Créez un profil attrayant</value>
+  </data>
+  <data name="Розкажіть про себе, досвід та навички" xml:space="preserve">
+    <value>Parlez de vous, de votre expérience et de vos compétences</value>
+  </data>
+  <data name="Додайте свої послуги" xml:space="preserve">
+    <value>Ajoutez vos services</value>
+  </data>
+  <data name="Опишіть, що ви вмієте та скільки це коштує" xml:space="preserve">
+    <value>Décrivez ce que vous savez faire et combien cela coûte</value>
+  </data>
+  <data name="Отримуйте замовлення" xml:space="preserve">
+    <value>Recevez des commandes</value>
+  </data>
+  <data name="Відгукуйтесь на замовлення та знаходьте клієнтів" xml:space="preserve">
+    <value>Répondez aux commandes et trouvez des clients</value>
+  </data>
+  <data name="Розвивайте свій бізнес" xml:space="preserve">
+    <value>Développez votre activité</value>
+  </data>
+  <data name="Підвищуйте рейтинг та отримуйте більше відгуків" xml:space="preserve">
+    <value>Améliorez votre note et recevez plus d’avis</value>
+  </data>
+  <data name="Створюйте та публікуйте замовлення" xml:space="preserve">
+    <value>Créez et publiez des commandes</value>
+  </data>
+  <data name="Опишіть задачу та отримуйте відгуки від виконавців" xml:space="preserve">
+    <value>Décrivez votre tâche et recevez des propositions de prestataires</value>
+  </data>
+  <data name="Зберігайте обраних виконавців" xml:space="preserve">
+    <value>Enregistrez vos prestataires favoris</value>
+  </data>
+  <data name="Формуйте список надійних фахівців" xml:space="preserve">
+    <value>Constituez une liste de spécialistes fiables</value>
+  </data>
+  <data name="Спілкуйтесь у чаті" xml:space="preserve">
+    <value>Discutez par chat</value>
+  </data>
+  <data name="Обговорюйте деталі та відстежуйте статус робіт" xml:space="preserve">
+    <value>Échangez sur les détails et suivez l’avancement des travaux</value>
+  </data>
+  <data name="Безпечні платежі" xml:space="preserve">
+    <value>Paiements sécurisés</value>
+  </data>
+  <data name="Оплачуйте послуги зручно та безпечно" xml:space="preserve">
+    <value>Payez vos services facilement et en toute sécurité</value>
+  </data>
+  <data name="Відновлення пароля — Вибір" xml:space="preserve">
+    <value>Récupération du mot de passe — Vybir</value>
+  </data>
+  <data name="Забули пароль?" xml:space="preserve">
+    <value>Mot de passe oublié ?</value>
+  </data>
+  <data name="Крок 1" xml:space="preserve">
+    <value>Étape 1</value>
+  </data>
+  <data name="Введіть e-mail, пов’язаний з вашим акаунтом," xml:space="preserve">
+    <value>Saisissez l’e-mail associé à votre compte,</value>
+  </data>
+  <data name="і ми надішлемо вам код для скидання пароля" xml:space="preserve">
+    <value>et nous vous enverrons un code pour réinitialiser votre mot de passe</value>
+  </data>
+  <data name="Відновлення пароля" xml:space="preserve">
+    <value>Récupération du mot de passe</value>
+  </data>
+  <data name="Ми допоможемо вам отримати доступ до вашого акаунта!" xml:space="preserve">
+    <value>Nous vous aidons à retrouver l’accès à votre compte !</value>
+  </data>
+  <data name="Ваш e-mail" xml:space="preserve">
+    <value>Votre e-mail</value>
+  </data>
+  <data name="Введіть e-mail" xml:space="preserve">
+    <value>Saisissez votre e-mail</value>
+  </data>
+  <data name="Надіслати код" xml:space="preserve">
+    <value>Envoyer le code</value>
+  </data>
+  <data name="Ваші дані у безпеці та не будуть передані третім особам" xml:space="preserve">
+    <value>Vos données sont en sécurité et ne seront pas transmises à des tiers</value>
+  </data>
+  <data name="Вхід — Вибір" xml:space="preserve">
+    <value>Connexion — Vybir</value>
+  </data>
+  <data name="Вхід" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="Раді бачити вас знову!" xml:space="preserve">
+    <value>Ravis de vous revoir !</value>
+  </data>
+  <data name="E-mail адресу" xml:space="preserve">
+    <value>Adresse e-mail</value>
+  </data>
+  <data name="Введіть пароль" xml:space="preserve">
+    <value>Saisissez votre mot de passe</value>
+  </data>
+  <data name="або увійдіть за допомогою" xml:space="preserve">
+    <value>ou connectez-vous avec</value>
+  </data>
+  <data name="Вхід через {0} буде доступний пізніше" xml:space="preserve">
+    <value>La connexion via {0} sera disponible plus tard</value>
+  </data>
+  <data name="Ще не має акаунту?" xml:space="preserve">
+    <value>Pas encore de compte ?</value>
+  </data>
+  <data name="Зареєструватися" xml:space="preserve">
+    <value>S’inscrire</value>
+  </data>
+  <data name="Безпечно" xml:space="preserve">
+    <value>Sécurisé</value>
+  </data>
+  <data name="Ваші дані під захистом" xml:space="preserve">
+    <value>Vos données sont protégées</value>
+  </data>
+  <data name="Швидко" xml:space="preserve">
+    <value>Rapide</value>
+  </data>
+  <data name="Увійдіть за кілька секунд" xml:space="preserve">
+    <value>Connectez-vous en quelques secondes</value>
+  </data>
+  <data name="Ми завжди поруч" xml:space="preserve">
+    <value>Toujours à vos côtés</value>
+  </data>
+  <data name="Створіть акаунт" xml:space="preserve">
+    <value>Créez un compte</value>
+  </data>
+  <data name="Знайдіть найкращих виконавців для будь-яких завдань" xml:space="preserve">
+    <value>Trouvez les meilleurs prestataires pour toutes vos tâches</value>
+  </data>
+  <data name="Отримуйте замовлення та розвивайте свій бізнес" xml:space="preserve">
+    <value>Recevez des commandes et développez votre activité</value>
+  </data>
+  <data name="Ким ви будете на платформі" xml:space="preserve">
+    <value>Votre rôle sur la plateforme</value>
+  </data>
+  <data name="Я замовник" xml:space="preserve">
+    <value>Je suis client</value>
+  </data>
+  <data name="Я виконавець" xml:space="preserve">
+    <value>Je suis prestataire</value>
+  </data>
+  <data name="Ми надішлемо код підтвердження на цей e-mail" xml:space="preserve">
+    <value>Nous enverrons un code de confirmation à cette adresse e-mail</value>
+  </data>
+  <data name="Реєструючись ви погоджуєтесь з нашими" xml:space="preserve">
+    <value>En vous inscrivant, vous acceptez nos</value>
+  </data>
+  <data name="Новий пароль — Вибір" xml:space="preserve">
+    <value>Nouveau mot de passe — Vybir</value>
+  </data>
+  <data name="Крок 3" xml:space="preserve">
+    <value>Étape 3</value>
+  </data>
+  <data name="Створіть новий пароль" xml:space="preserve">
+    <value>Créez un nouveau mot de passe</value>
+  </data>
+  <data name="Новий пароль" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="Введіть новий пароль" xml:space="preserve">
+    <value>Saisissez un nouveau mot de passe</value>
+  </data>
+  <data name="Повторіть новий пароль" xml:space="preserve">
+    <value>Répétez le nouveau mot de passe</value>
+  </data>
+  <data name="Крок 2" xml:space="preserve">
+    <value>Étape 2</value>
+  </data>
+  <data name="Ми надіслали код підтвердження на ваш e-mail" xml:space="preserve">
+    <value>Nous avons envoyé un code de confirmation à votre adresse e-mail</value>
+  </data>
+  <data name="Код з e-mail" xml:space="preserve">
+    <value>Code reçu par e-mail</value>
+  </data>
+  <data name="Символ коду {0}" xml:space="preserve">
+    <value>Caractère du code {0}</value>
+  </data>
+  <data name="Код дійсний протягом {0} хв" xml:space="preserve">
+    <value>Le code est valable {0} min</value>
+  </data>
+  <data name="Не отримали код?" xml:space="preserve">
+    <value>Vous n’avez pas reçu le code ?</value>
+  </data>
+  <data name="Надіслати ще раз" xml:space="preserve">
+    <value>Renvoyer</value>
+  </data>
+  <data name="Лист нікуди не пішов — пошта ще не підключена. Код для перевірки:" xml:space="preserve">
+    <value>L’e-mail n’a pas été envoyé — la messagerie n’est pas encore configurée. Code de vérification :</value>
+  </data>
+  <data name="Контакт" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Про себе" xml:space="preserve">
+    <value>À propos de vous</value>
+  </data>
+  <data name="Готово" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Усі статті" xml:space="preserve">
+    <value>Tous les articles</value>
+  </data>
+  <data name="Блог — Вибір" xml:space="preserve">
+    <value>Blog — Vybir</value>
+  </data>
+  <data name="Корисні поради, новини та історії для замовників і виконавців" xml:space="preserve">
+    <value>Conseils utiles, actualités et histoires pour clients et prestataires</value>
+  </data>
+  <data name="Рубрики" xml:space="preserve">
+    <value>Rubriques</value>
+  </data>
+  <data name="У цій рубриці поки немає статей." xml:space="preserve">
+    <value>Il n’y a pas encore d’articles dans cette rubrique.</value>
+  </data>
+  <data name="Переглянути" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="Сторінки" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="Попередня сторінка" xml:space="preserve">
+    <value>Page précédente</value>
+  </data>
+  <data name="Наступна сторінка" xml:space="preserve">
+    <value>Page suivante</value>
+  </data>
+  <data name="Допомога — Вибір" xml:space="preserve">
+    <value>Aide — Vybir</value>
+  </data>
+  <data name="Як ми можемо допомогти?" xml:space="preserve">
+    <value>Comment pouvons-nous vous aider ?</value>
+  </data>
+  <data name="Знайдіть відповіді на поширені запитання або звʼяжіться з нашою підтримкою" xml:space="preserve">
+    <value>Trouvez les réponses aux questions fréquentes ou contactez notre assistance</value>
+  </data>
+  <data name="Безпека — Вибір" xml:space="preserve">
+    <value>Sécurité — Vybir</value>
+  </data>
+  <data name="Ми робимо все можливе, щоб ваша робота на платформі була безпечною та надійною." xml:space="preserve">
+    <value>Nous faisons tout notre possible pour que votre activité sur la plateforme soit sûre et fiable.</value>
+  </data>
+  <data name="Як ми забезпечуємо вашу безпеку" xml:space="preserve">
+    <value>Comment nous assurons votre sécurité</value>
+  </data>
+  <data name="Піклується про вашу безпеку та захищає ваші дані." xml:space="preserve">
+    <value>Veille à votre sécurité et protège vos données.</value>
+  </data>
+  <data name="Потрібна допомога?" xml:space="preserve">
+    <value>Besoin d’aide ?</value>
+  </data>
+  <data name="Якщо у вас виникли питання щодо безпеки або ви зіткнулися з проблемою — ми завжди готові допомогти." xml:space="preserve">
+    <value>Si vous avez des questions sur la sécurité ou rencontrez un problème — nous sommes toujours prêts à vous aider.</value>
+  </data>
+  <data name="Зв’язатися з підтримкою" xml:space="preserve">
+    <value>Contacter l’assistance</value>
+  </data>
+  <data name="Поширені запитання" xml:space="preserve">
+    <value>Questions fréquentes</value>
+  </data>
+  <data name="Переглянути всі запитання" xml:space="preserve">
+    <value>Voir toutes les questions</value>
+  </data>
+  <data name="Не знайшли відповіді?" xml:space="preserve">
+    <value>Vous n’avez pas trouvé de réponse ?</value>
+  </data>
+  <data name="Наша команда підтримки завжди готова допомогти." xml:space="preserve">
+    <value>Notre équipe d’assistance est toujours prête à vous aider.</value>
+  </data>
+  <data name="Online - chat" xml:space="preserve">
+    <value>Chat en ligne</value>
+  </data>
+  <data name="Телефон" xml:space="preserve">
+    <value>Téléphone</value>
+  </data>
+  <data name="Невірний e-mail або пароль." xml:space="preserve">
+    <value>E-mail ou mot de passe incorrect.</value>
+  </data>
+  <data name="Акаунт тимчасово заблоковано через невдалі спроби входу. Спробуйте за 15 хвилин." xml:space="preserve">
+    <value>Le compte est temporairement bloqué après des tentatives de connexion échouées. Réessayez dans 15 minutes.</value>
+  </data>
+  <data name="Оберіть, ким ви будете на платформі" xml:space="preserve">
+    <value>Choisissez votre rôle sur la plateforme</value>
+  </data>
+  <data name="Такий e-mail уже зареєстрований. Спробуйте увійти або відновити пароль." xml:space="preserve">
+    <value>Cette adresse e-mail est déjà enregistrée. Essayez de vous connecter ou de récupérer votre mot de passe.</value>
+  </data>
+  <data name="Код невірний або вже застарів." xml:space="preserve">
+    <value>Le code est incorrect ou a expiré.</value>
+  </data>
+  <data name="Оберіть місто зі списку" xml:space="preserve">
+    <value>Choisissez une ville dans la liste</value>
+  </data>
+  <data name="Оберіть стать зі списку" xml:space="preserve">
+    <value>Choisissez un genre dans la liste</value>
+  </data>
+  <data name="Оберіть досвід зі списку" xml:space="preserve">
+    <value>Choisissez l’expérience dans la liste</value>
+  </data>
+  <data name="Перевірте дату народження" xml:space="preserve">
+    <value>Vérifiez la date de naissance</value>
+  </data>
+  <data name="Пароль має містити щонайменше 8 символів." xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins 8 caractères.</value>
+  </data>
+  <data name="Додайте до пароля хоча б одну цифру." xml:space="preserve">
+    <value>Ajoutez au moins un chiffre au mot de passe.</value>
+  </data>
+  <data name="Додайте до пароля велику літеру." xml:space="preserve">
+    <value>Ajoutez une majuscule au mot de passe.</value>
+  </data>
+  <data name="Додайте до пароля маленьку літеру." xml:space="preserve">
+    <value>Ajoutez une minuscule au mot de passe.</value>
+  </data>
+  <data name="Посилання застаріло. Почніть відновлення спочатку." xml:space="preserve">
+    <value>Le lien a expiré. Recommencez la récupération.</value>
+  </data>
+  <data name="Перевірте адресу — схоже, в ній помилка" xml:space="preserve">
+    <value>Vérifiez l’adresse — elle semble contenir une erreur</value>
+  </data>
+  <data name="Введіть код із листа" xml:space="preserve">
+    <value>Saisissez le code reçu par e-mail</value>
+  </data>
+  <data name="Паролі не збігаються" xml:space="preserve">
+    <value>Les mots de passe ne correspondent pas</value>
+  </data>
+  <data name="Введіть імʼя" xml:space="preserve">
+    <value>Saisissez votre prénom</value>
+  </data>
+  <data name="Імʼя задовге" xml:space="preserve">
+    <value>Le prénom est trop long</value>
+  </data>
+  <data name="Прізвище задовге" xml:space="preserve">
+    <value>Le nom est trop long</value>
+  </data>
+  <data name="Назва компанії задовга" xml:space="preserve">
+    <value>Le nom de l’entreprise est trop long</value>
+  </data>
+  <data name="Оберіть місто" xml:space="preserve">
+    <value>Choisissez une ville</value>
+  </data>
+  <data name="Індекс складається з пʼяти цифр" xml:space="preserve">
+    <value>Le code postal comporte cinq chiffres</value>
+  </data>
+  <data name="Вкажіть дату народження" xml:space="preserve">
+    <value>Indiquez votre date de naissance</value>
+  </data>
+  <data name="Опис задовгий — лишіть до 1000 символів" xml:space="preserve">
+    <value>La description est trop longue — 1000 caractères maximum</value>
+  </data>
+  <data name="Погодьтеся з умовами, щоб продовжити" xml:space="preserve">
+    <value>Acceptez les conditions pour continuer</value>
+  </data>
+  <data name="{0} виконавці" xml:space="preserve">
+    <value>{0} prestataires</value>
+  </data>
+  <data name="{0} виконавців" xml:space="preserve">
+    <value>{0} prestataires</value>
+  </data>
+  <data name="{0} відгук" xml:space="preserve">
+    <value>{0} avis</value>
+  </data>
+  <data name="{0} відгуки" xml:space="preserve">
+    <value>{0} avis</value>
+  </data>
+  <data name="{0} відгуків" xml:space="preserve">
+    <value>{0} avis</value>
+  </data>
+  <data name="{0} категорія" xml:space="preserve">
+    <value>{0} catégorie</value>
+  </data>
+  <data name="{0} категорії" xml:space="preserve">
+    <value>{0} catégories</value>
+  </data>
+  <data name="{0} категорій" xml:space="preserve">
+    <value>{0} catégories</value>
+  </data>
+  <data name="від {0} грн" xml:space="preserve">
+    <value>à partir de {0} UAH</value>
+  </data>
+  <data name="{0} — напрям «{1}»" xml:space="preserve">
+    <value>{0} — domaine « {1} »</value>
+  </data>
+  <data name="Послуги напряму «{0}»" xml:space="preserve">
+    <value>Services du domaine « {0} »</value>
+  </data>
+  <data name="Перевірка користувачів" xml:space="preserve">
+    <value>Vérification des utilisateurs</value>
+  </data>
+  <data name="Ми перевіряємо профілі виконавців і клієнтів, щоб створити довірливе середовище." xml:space="preserve">
+    <value>Nous vérifions les profils des prestataires et des clients pour créer un environnement de confiance.</value>
+  </data>
+  <data name="Усі платежі проходять через платформу та захищені сучасними технологіями шифрування." xml:space="preserve">
+    <value>Tous les paiements passent par la plateforme et sont protégés par des technologies de chiffrement modernes.</value>
+  </data>
+  <data name="Захищене спілкування" xml:space="preserve">
+    <value>Communication protégée</value>
+  </data>
+  <data name="Спілкуйтеся в чаті платформи — ми не передаємо ваші контакти третім особам." xml:space="preserve">
+    <value>Échangez dans le chat de la plateforme — nous ne transmettons pas vos coordonnées à des tiers.</value>
+  </data>
+  <data name="Захист від шахрайства" xml:space="preserve">
+    <value>Protection contre la fraude</value>
+  </data>
+  <data name="Ми виявляємо підозрілу активність та допомагаємо захистити користувачів від шахрайства." xml:space="preserve">
+    <value>Nous détectons les activités suspectes et aidons à protéger les utilisateurs contre la fraude.</value>
+  </data>
+  <data name="Гарантія виконання" xml:space="preserve">
+    <value>Garantie de réalisation</value>
+  </data>
+  <data name="Ми допомагаємо вирішити спірні ситуації та повертаємо кошти, якщо послуга не виконана." xml:space="preserve">
+    <value>Nous aidons à résoudre les litiges et remboursons si le service n’a pas été réalisé.</value>
+  </data>
+  <data name="Служба підтримки" xml:space="preserve">
+    <value>Service d’assistance</value>
+  </data>
+  <data name="Наша команда підтримки готова допомогти вам 24/7 у будь-якій ситуації." xml:space="preserve">
+    <value>Notre équipe d’assistance est prête à vous aider 24 h/24, 7 j/7, dans toutes les situations.</value>
+  </data>
+  <data name="Конфіденційність даних" xml:space="preserve">
+    <value>Confidentialité des données</value>
+  </data>
+  <data name="Ми не розголошуємо ваші особисті дані та не передаємо їх третім особам." xml:space="preserve">
+    <value>Nous ne divulguons pas vos données personnelles et ne les transmettons pas à des tiers.</value>
+  </data>
+  <data name="Контроль якості" xml:space="preserve">
+    <value>Contrôle qualité</value>
+  </data>
+  <data name="Слідкуємо за дотриманням правил платформи та реагуємо на скарги щодо неналежного виконання замовлень." xml:space="preserve">
+    <value>Nous veillons au respect des règles de la plateforme et traitons les réclamations en cas de commandes mal exécutées.</value>
+  </data>
+  <data name="Початок роботи" xml:space="preserve">
+    <value>Premiers pas</value>
+  </data>
+  <data name="Все, що потрібно знати для початку роботи на платформі." xml:space="preserve">
+    <value>Tout ce qu’il faut savoir pour commencer sur la plateforme.</value>
+  </data>
+  <data name="Замовлення" xml:space="preserve">
+    <value>Commandes</value>
+  </data>
+  <data name="Як знайти, замовити та керувати послугами." xml:space="preserve">
+    <value>Comment trouver, commander et gérer des services.</value>
+  </data>
+  <data name="Платежі та безпека" xml:space="preserve">
+    <value>Paiements et sécurité</value>
+  </data>
+  <data name="Оплата послуг, комісії та безпека платежів для виконавців." xml:space="preserve">
+    <value>Paiement des services, commissions et sécurité des paiements pour les prestataires.</value>
+  </data>
+  <data name="Як пропонувати послуги та створити свій бізнес." xml:space="preserve">
+    <value>Comment proposer vos services et créer votre propre activité.</value>
+  </data>
+  <data name="Як створити замовлення?" xml:space="preserve">
+    <value>Comment créer une commande ?</value>
+  </data>
+  <data name="Оберіть послугу в каталозі та натисніть «Створити замовлення». Опишіть завдання, вкажіть місто, бажані терміни й бюджет. Щойно замовлення опубліковано, виконавці почнуть надсилати відгуки, а ви зможете порівняти їхні профілі та ціни." xml:space="preserve">
+    <value>Choisissez un service dans le catalogue et cliquez sur « Créer une commande ». Décrivez la tâche, indiquez la ville, les délais souhaités et le budget. Dès que la commande est publiée, les prestataires commencent à envoyer leurs propositions et vous pouvez comparer leurs profils et leurs prix.</value>
+  </data>
+  <data name="Як обрати виконавця?" xml:space="preserve">
+    <value>Comment choisir un prestataire ?</value>
+  </data>
+  <data name="У відгуках на ваше замовлення видно рейтинг виконавця, кількість завершених завдань і відгуки попередніх замовників. Напишіть у чат платформи, уточніть деталі — і підтвердьте того, хто підходить. До підтвердження ви нічого не платите." xml:space="preserve">
+    <value>Dans les propositions reçues, vous voyez la note du prestataire, le nombre de missions réalisées et les avis des clients précédents. Écrivez dans le chat de la plateforme, précisez les détails — et confirmez celui qui vous convient. Vous ne payez rien avant la confirmation.</value>
+  </data>
+  <data name="Як відбувається оплата?" xml:space="preserve">
+    <value>Comment se passe le paiement ?</value>
+  </data>
+  <data name="Оплата проходить через платформу: кошти резервуються після підтвердження замовлення й переходять виконавцеві, коли ви приймаєте роботу. Якщо послуга не виконана, кошти повертаються вам." xml:space="preserve">
+    <value>Le paiement passe par la plateforme : l’argent est réservé après la confirmation de la commande et versé au prestataire lorsque vous validez le travail. Si le service n’est pas réalisé, l’argent vous est remboursé.</value>
+  </data>
+  <data name="Як скасувати або змінити замовлення?" xml:space="preserve">
+    <value>Comment annuler ou modifier une commande ?</value>
+  </data>
+  <data name="Поки виконавця не підтверджено, замовлення можна змінити або скасувати будь-коли й без наслідків. Після підтвердження напишіть виконавцеві в чат: більшість правок узгоджуються там. Якщо домовитися не вдається, відкрийте звернення до підтримки." xml:space="preserve">
+    <value>Tant qu’aucun prestataire n’est confirmé, vous pouvez modifier ou annuler la commande à tout moment et sans conséquence. Après la confirmation, écrivez au prestataire dans le chat : la plupart des modifications se règlent là. Si vous ne parvenez pas à un accord, ouvrez une demande auprès de l’assistance.</value>
+  </data>
+  <data name="Як стати виконавцем на платформі?" xml:space="preserve">
+    <value>Comment devenir prestataire sur la plateforme ?</value>
+  </data>
+  <data name="Зареєструйтеся, обравши «Я виконавець», заповніть профіль і вкажіть напрям, у якому працюєте. Після цього ваш профіль зʼявиться в каталозі, і ви зможете відгукуватися на замовлення." xml:space="preserve">
+    <value>Inscrivez-vous en choisissant « Je suis prestataire », complétez votre profil et indiquez votre domaine d’activité. Votre profil apparaîtra ensuite dans le catalogue et vous pourrez répondre aux commandes.</value>
+  </data>
+  <data name="Як вивести кошти?" xml:space="preserve">
+    <value>Comment retirer mes gains ?</value>
+  </data>
+  <data name="Зароблене накопичується на балансі в особистому кабінеті. Виведення — на банківську картку; кошти за завершеним замовленням стають доступними після того, як замовник прийняв роботу." xml:space="preserve">
+    <value>Vos gains s’accumulent sur le solde de votre espace personnel. Le retrait se fait sur une carte bancaire ; l’argent d’une commande terminée devient disponible une fois que le client a validé le travail.</value>
+  </data>
+  <data name="Поради для замовників" xml:space="preserve">
+    <value>Conseils aux clients</value>
+  </data>
+  <data name="Поради для виконавців" xml:space="preserve">
+    <value>Conseils aux prestataires</value>
+  </data>
+  <data name="Історії успіху" xml:space="preserve">
+    <value>Histoires de réussite</value>
+  </data>
+  <data name="Як правильно сформулювати завдання для виконавця" xml:space="preserve">
+    <value>Comment bien formuler une tâche pour un prestataire</value>
+  </data>
+  <data name="Чітке завдання — запорука якісного результату. Дізнайтеся, як описати роботу, щоб отримати саме те, що ви очікуєте." xml:space="preserve">
+    <value>Une tâche claire est la clé d’un résultat de qualité. Découvrez comment décrire le travail pour obtenir exactement ce que vous attendez.</value>
+  </data>
+  <data name="Більшість суперечок між замовником і виконавцем починається з одного — завдання описали нечітко. Виконавець зрозумів його по-своєму, зробив по-своєму, і обидві сторони вважають, що праві." xml:space="preserve">
+    <value>La plupart des litiges entre un client et un prestataire commencent de la même façon : la tâche était décrite de manière floue. Le prestataire l’a comprise à sa façon, l’a faite à sa façon, et chacun pense avoir raison.</value>
+  </data>
+  <data name="Почніть із результату, а не з процесу. Замість «потрібен сантехнік на годину» напишіть «тече змішувач на кухні, потрібно замінити». Виконавець одразу розуміє обсяг і може назвати ціну без уточнень." xml:space="preserve">
+    <value>Commencez par le résultat, pas par le processus. Au lieu de « besoin d’un plombier pour une heure », écrivez « le robinet de la cuisine fuit, il faut le remplacer ». Le prestataire comprend tout de suite l’ampleur du travail et peut donner un prix sans poser de questions.</value>
+  </data>
+  <data name="Додайте три речі, які економлять найбільше часу: фотографію, терміни та бюджет. Фото знімає половину запитань, терміни відсіюють тих, хто не встигне, а бюджет — тих, кому ця робота нецікава." xml:space="preserve">
+    <value>Ajoutez trois éléments qui font gagner le plus de temps : une photo, les délais et le budget. La photo répond à la moitié des questions, les délais écartent ceux qui ne seront pas disponibles, et le budget ceux que ce travail n’intéresse pas.</value>
+  </data>
+  <data name="І наостанок: напишіть, що для вас означає «зроблено». Прибрано за собою, вивезено сміття, перевірено роботу — те, що здається очевидним вам, не завжди очевидне іншій людині." xml:space="preserve">
+    <value>Enfin, écrivez ce que « terminé » signifie pour vous. Nettoyé après le passage, déchets évacués, travail vérifié — ce qui vous paraît évident ne l’est pas toujours pour quelqu’un d’autre.</value>
+  </data>
+  <data name="5 способів підвищити свій рейтинг і отримувати більше замовлень" xml:space="preserve">
+    <value>5 façons d’améliorer votre note et d’obtenir plus de commandes</value>
+  </data>
+  <data name="Практичні поради, які допоможуть вам стати помітнішим на платформі та збільшити кількість замовлень." xml:space="preserve">
+    <value>Des conseils pratiques pour gagner en visibilité sur la plateforme et augmenter le nombre de commandes.</value>
+  </data>
+  <data name="Рейтинг на платформі — це не лише оцінки. Він складається з кількох речей, і на кожну з них можна вплинути вже цього тижня." xml:space="preserve">
+    <value>La note sur la plateforme ne se résume pas aux évaluations. Elle dépend de plusieurs éléments, et vous pouvez agir sur chacun d’eux dès cette semaine.</value>
+  </data>
+  <data name="Перше — швидкість відповіді. Замовник зазвичай пише кільком виконавцям одночасно, і той, хто відповів першим, уже має перевагу. Друге — заповнений профіль: фото, опис досвіду й перелік послуг дають більше, ніж здається." xml:space="preserve">
+    <value>Premièrement — la rapidité de réponse. Un client écrit généralement à plusieurs prestataires à la fois, et le premier à répondre a déjà un avantage. Deuxièmement — un profil complet : une photo, une description de votre expérience et la liste de vos services comptent plus qu’on ne le pense.</value>
+  </data>
+  <data name="Третє — відгуки. Не соромтеся нагадати замовникові залишити відгук після завершення роботи: більшість людей радо це роблять, просто забувають." xml:space="preserve">
+    <value>Troisièmement — les avis. N’hésitez pas à rappeler au client de laisser un avis une fois le travail terminé : la plupart le font volontiers, ils oublient simplement.</value>
+  </data>
+  <data name="Четверте — чесні терміни. Краще пообіцяти три дні й зробити за два, ніж навпаки. І пʼяте — не беріться за те, чого не вмієте: одна погана оцінка коштує дорожче за одне замовлення." xml:space="preserve">
+    <value>Quatrièmement — des délais honnêtes. Mieux vaut promettre trois jours et finir en deux que l’inverse. Et cinquièmement — n’acceptez pas ce que vous ne savez pas faire : une mauvaise note coûte plus cher qu’une commande.</value>
+  </data>
+  <data name="Нові функції на Вибір: що нового?" xml:space="preserve">
+    <value>Nouvelles fonctionnalités sur Vybir : quoi de neuf ?</value>
+  </data>
+  <data name="Ми постійно працюємо над тим, щоб зробити платформу зручнішою для вас. Дізнайтеся про останні оновлення." xml:space="preserve">
+    <value>Nous travaillons sans cesse pour rendre la plateforme plus pratique pour vous. Découvrez les dernières mises à jour.</value>
+  </data>
+  <data name="За останній місяць каталог послуг отримав повноцінну структуру: 16 напрямів і понад дві сотні підкатегорій, кожна зі своїм знімком. Знайти потрібну послугу тепер можна за кілька кліків." xml:space="preserve">
+    <value>Au cours du dernier mois, le catalogue des services a reçu une structure complète : 16 domaines et plus de deux cents sous-catégories, chacune avec sa propre image. Vous trouvez désormais le service voulu en quelques clics.</value>
+  </data>
+  <data name="Зʼявилася сторінка пошуку з фільтром за містом і блоком «Останні перегляди» — платформа памʼятає, що ви дивилися, і показує це на видному місці." xml:space="preserve">
+    <value>Une page de recherche est apparue, avec un filtre par ville et un bloc « Consultés récemment » — la plateforme se souvient de ce que vous avez regardé et l’affiche bien en vue.</value>
+  </data>
+  <data name="Запрацювали реєстрація та вхід: тепер можна створити акаунт замовника або виконавця, підтвердити пошту кодом і відновити пароль, якщо забули." xml:space="preserve">
+    <value>L’inscription et la connexion sont en service : vous pouvez créer un compte client ou prestataire, confirmer votre e-mail par un code et récupérer votre mot de passe en cas d’oubli.</value>
+  </data>
+  <data name="Історія успіху: як Олександр збільшив дохід удвічі на Вибір" xml:space="preserve">
+    <value>Histoire de réussite : comment Oleksandr a doublé ses revenus sur Vybir</value>
+  </data>
+  <data name="Виконавець із 6 місяцями роботи розповідає про свій шлях від перших замовлень до стабільного доходу." xml:space="preserve">
+    <value>Un prestataire présent depuis 6 mois sur la plateforme raconte son parcours, des premières commandes à un revenu stable.</value>
+  </data>
+  <data name="Олександр прийшов на платформу електриком із десятьма роками досвіду й жодного онлайн-замовлення. Перші два тижні — тиша: профіль без фото, опис у два рядки, відгуків немає." xml:space="preserve">
+    <value>Oleksandr est arrivé sur la plateforme en tant qu’électricien avec dix ans d’expérience et aucune commande en ligne. Les deux premières semaines — le silence : un profil sans photo, une description de deux lignes, aucun avis.</value>
+  </data>
+  <data name="«Я думав, що досвід говорить сам за себе, — каже він. — Виявилося, що на платформі про нього спершу має хтось написати»." xml:space="preserve">
+    <value>« Je pensais que l’expérience parlait d’elle-même, dit-il. Il s’est avéré que sur la plateforme, quelqu’un doit d’abord en parler. »</value>
+  </data>
+  <data name="Переломним став третій тиждень: Олександр заповнив профіль, додав фотографії своїх робіт і почав відповідати на замовлення протягом години. Перші три клієнти залишили відгуки — і далі пішло саме." xml:space="preserve">
+    <value>Le tournant a été la troisième semaine : Oleksandr a complété son profil, ajouté des photos de ses réalisations et commencé à répondre aux commandes dans l’heure. Les trois premiers clients ont laissé des avis — et ensuite, tout s’est enchaîné.</value>
+  </data>
+  <data name="Через півроку він виконує близько тридцяти замовлень на місяць і каже, що головне — не ціна, а передбачуваність: прийшов вчасно, зробив як домовилися, прибрав за собою." xml:space="preserve">
+    <value>Six mois plus tard, il réalise une trentaine de commandes par mois et affirme que l’essentiel n’est pas le prix mais la fiabilité : arriver à l’heure, faire comme convenu, ranger derrière soi.</value>
+  </data>
+  <data name="Як заощадити час та гроші при замовленні послуг" xml:space="preserve">
+    <value>Comment économiser du temps et de l’argent en commandant des services</value>
+  </data>
+  <data name="Кілька простих лайфхаків, які допоможуть вам отримати якісні послуги за оптимальною ціною та без зайвих витрат." xml:space="preserve">
+    <value>Quelques astuces simples pour obtenir des services de qualité au meilleur prix et sans dépenses inutiles.</value>
+  </data>
+  <data name="Найдорожче обходяться не високі ціни, а переробки. Тому більшість способів заощадити — це способи з першого разу отримати те, що потрібно." xml:space="preserve">
+    <value>Ce ne sont pas les prix élevés qui coûtent le plus cher, mais les travaux à refaire. La plupart des façons d’économiser consistent donc à obtenir du premier coup ce dont on a besoin.</value>
+  </data>
+  <data name="Порівнюйте не лише ціну, а й те, що в неї входить. Два виконавці можуть назвати різні суми просто тому, що один враховує матеріали, а другий — ні." xml:space="preserve">
+    <value>Comparez non seulement le prix, mais aussi ce qu’il comprend. Deux prestataires peuvent annoncer des montants différents simplement parce que l’un inclut les matériaux et l’autre non.</value>
+  </data>
+  <data name="Обʼєднуйте дрібні завдання. Викликати майстра окремо заради розетки, окремо заради полиці й окремо заради карниза — це тричі заплатити за виїзд." xml:space="preserve">
+    <value>Regroupez les petites tâches. Faire venir un artisan séparément pour une prise, pour une étagère et pour une tringle à rideaux, c’est payer trois fois le déplacement.</value>
+  </data>
+  <data name="І не женіться за найдешевшою пропозицією. Якщо ціна помітно нижча за решту, частіше це означає, що виконавець чогось не врахував, — і різниця зʼявиться вже в процесі." xml:space="preserve">
+    <value>Et ne courez pas après l’offre la moins chère. Si le prix est nettement inférieur aux autres, cela signifie souvent que le prestataire a oublié quelque chose — et la différence apparaîtra en cours de route.</value>
+  </data>
+  <data name="Вибір у вашому місті: ми розширюємося!" xml:space="preserve">
+    <value>Vybir dans votre ville : nous nous développons !</value>
+  </data>
+  <data name="Раді повідомити, що відтепер наші послуги доступні у ще більшій кількості міст по всій Україні." xml:space="preserve">
+    <value>Nous avons le plaisir d’annoncer que nos services sont désormais disponibles dans encore plus de villes à travers l’Ukraine.</value>
+  </data>
+  <data name="Ми почали з кількох обласних центрів, а сьогодні виконавців можна знайти вже у двадцяти шести містах — від Ужгорода до Харкова." xml:space="preserve">
+    <value>Nous avons commencé par quelques chefs-lieux de région, et aujourd’hui on trouve des prestataires dans vingt-six villes — d’Oujhorod à Kharkiv.</value>
+  </data>
+  <data name="Разом із новими містами зʼявився і фільтр за містом у пошуку: тепер видно саме тих виконавців, які працюють поруч, а не за триста кілометрів." xml:space="preserve">
+    <value>Avec les nouvelles villes est arrivé le filtre par ville dans la recherche : vous voyez désormais les prestataires qui travaillent près de chez vous, et non à trois cents kilomètres.</value>
+  </data>
+  <data name="Якщо вашого міста ще немає в списку — напишіть нам. Ми орієнтуємося саме на такі звернення, коли вирішуємо, куди рухатися далі." xml:space="preserve">
+    <value>Si votre ville ne figure pas encore dans la liste — écrivez-nous. C’est justement sur ces demandes que nous nous appuyons pour décider où aller ensuite.</value>
+  </data>
+  <data name="Київ" xml:space="preserve">
+    <value>Kyiv</value>
+  </data>
+  <data name="Харків" xml:space="preserve">
+    <value>Kharkiv</value>
+  </data>
+  <data name="Одеса" xml:space="preserve">
+    <value>Odesa</value>
+  </data>
+  <data name="Дніпро" xml:space="preserve">
+    <value>Dnipro</value>
+  </data>
+  <data name="Львів" xml:space="preserve">
+    <value>Lviv</value>
+  </data>
+  <data name="Запоріжжя" xml:space="preserve">
+    <value>Zaporizhzhia</value>
+  </data>
+  <data name="Кривий Ріг" xml:space="preserve">
+    <value>Kryvyi Rih</value>
+  </data>
+  <data name="Миколаїв" xml:space="preserve">
+    <value>Mykolaiv</value>
+  </data>
+  <data name="Вінниця" xml:space="preserve">
+    <value>Vinnytsia</value>
+  </data>
+  <data name="Полтава" xml:space="preserve">
+    <value>Poltava</value>
+  </data>
+  <data name="Чернігів" xml:space="preserve">
+    <value>Chernihiv</value>
+  </data>
+  <data name="Черкаси" xml:space="preserve">
+    <value>Cherkasy</value>
+  </data>
+  <data name="Житомир" xml:space="preserve">
+    <value>Zhytomyr</value>
+  </data>
+  <data name="Суми" xml:space="preserve">
+    <value>Sumy</value>
+  </data>
+  <data name="Хмельницький" xml:space="preserve">
+    <value>Khmelnytskyi</value>
+  </data>
+  <data name="Чернівці" xml:space="preserve">
+    <value>Chernivtsi</value>
+  </data>
+  <data name="Рівне" xml:space="preserve">
+    <value>Rivne</value>
+  </data>
+  <data name="Івано-Франківськ" xml:space="preserve">
+    <value>Ivano-Frankivsk</value>
+  </data>
+  <data name="Тернопіль" xml:space="preserve">
+    <value>Ternopil</value>
+  </data>
+  <data name="Луцьк" xml:space="preserve">
+    <value>Lutsk</value>
+  </data>
+  <data name="Ужгород" xml:space="preserve">
+    <value>Uzhhorod</value>
+  </data>
+  <data name="Кропивницький" xml:space="preserve">
+    <value>Kropyvnytskyi</value>
+  </data>
+  <data name="Кременчук" xml:space="preserve">
+    <value>Kremenchuk</value>
+  </data>
+  <data name="Біла Церква" xml:space="preserve">
+    <value>Bila Tserkva</value>
+  </data>
+  <data name="Бровари" xml:space="preserve">
+    <value>Brovary</value>
+  </data>
+  <data name="Ірпінь" xml:space="preserve">
+    <value>Irpin</value>
+  </data>
+  <data name="Жіноча" xml:space="preserve">
+    <value>Féminin</value>
+  </data>
+  <data name="Чоловіча" xml:space="preserve">
+    <value>Masculin</value>
+  </data>
+  <data name="Інша" xml:space="preserve">
+    <value>Autre</value>
+  </data>
+  <data name="Менше року" xml:space="preserve">
+    <value>Moins d’un an</value>
+  </data>
+  <data name="1–3 роки" xml:space="preserve">
+    <value>1–3 ans</value>
+  </data>
+  <data name="3–5 років" xml:space="preserve">
+    <value>3–5 ans</value>
+  </data>
+  <data name="5–10 років" xml:space="preserve">
+    <value>5–10 ans</value>
+  </data>
+  <data name="Понад 10 років" xml:space="preserve">
+    <value>Plus de 10 ans</value>
+  </data>
+  <data name="Дім і ремонт" xml:space="preserve">
+    <value>Maison et rénovation</value>
+  </data>
+  <data name="Доставка" xml:space="preserve">
+    <value>Livraison</value>
+  </data>
+  <data name="Краса та догляд" xml:space="preserve">
+    <value>Beauté et soins</value>
+  </data>
+  <data name="Спорт та здоров’я" xml:space="preserve">
+    <value>Sport et santé</value>
+  </data>
+  <data name="IT та розробка" xml:space="preserve">
+    <value>IT et développement</value>
+  </data>
+  <data name="Дизайн і творчість" xml:space="preserve">
+    <value>Design et création</value>
+  </data>
+  <data name="Фото та відео" xml:space="preserve">
+    <value>Photo et vidéo</value>
+  </data>
+  <data name="Бізнес-послуги" xml:space="preserve">
+    <value>Services aux entreprises</value>
+  </data>
+  <data name="Автопослуги" xml:space="preserve">
+    <value>Services auto</value>
+  </data>
+  <data name="Маркетинг і реклама" xml:space="preserve">
+    <value>Marketing et publicité</value>
+  </data>
+  <data name="Освіта і розвиток" xml:space="preserve">
+    <value>Éducation et développement</value>
+  </data>
+  <data name="Послуги для тварин" xml:space="preserve">
+    <value>Services pour animaux</value>
+  </data>
+  <data name="Події та допомога" xml:space="preserve">
+    <value>Événements et aide</value>
+  </data>
+  <data name="Діти та догляд" xml:space="preserve">
+    <value>Enfants et garde</value>
+  </data>
+  <data name="Інше" xml:space="preserve">
+    <value>Autre</value>
+  </data>
+  <data name="Сантехнічні роботи" xml:space="preserve">
+    <value>Travaux de plomberie</value>
+  </data>
+  <data name="Електромонтажні роботи" xml:space="preserve">
+    <value>Travaux d’électricité</value>
+  </data>
+  <data name="Ремонт квартир і будинків" xml:space="preserve">
+    <value>Rénovation d’appartements et de maisons</value>
+  </data>
+  <data name="Будівельні роботи" xml:space="preserve">
+    <value>Travaux de construction</value>
+  </data>
+  <data name="Меблі та столярні роботи" xml:space="preserve">
+    <value>Meubles et menuiserie</value>
+  </data>
+  <data name="Вікна, двері та скло" xml:space="preserve">
+    <value>Fenêtres, portes et vitrage</value>
+  </data>
+  <data name="Покрівля та фасади" xml:space="preserve">
+    <value>Toitures et façades</value>
+  </data>
+  <data name="Опалення та водопостачання" xml:space="preserve">
+    <value>Chauffage et alimentation en eau</value>
+  </data>
+  <data name="Встановлення та ремонт техніки" xml:space="preserve">
+    <value>Installation et réparation d’appareils</value>
+  </data>
+  <data name="Системи безпеки та розумний дім" xml:space="preserve">
+    <value>Systèmes de sécurité et maison connectée</value>
+  </data>
+  <data name="Оздоблювальні роботи" xml:space="preserve">
+    <value>Travaux de finition</value>
+  </data>
+  <data name="Ландшафтні та зовнішні роботи" xml:space="preserve">
+    <value>Aménagements paysagers et extérieurs</value>
+  </data>
+  <data name="Домашній майстер" xml:space="preserve">
+    <value>Homme à tout faire</value>
+  </data>
+  <data name="Вентиляція та кондиціонування" xml:space="preserve">
+    <value>Ventilation et climatisation</value>
+  </data>
+  <data name="Інші роботи" xml:space="preserve">
+    <value>Autres travaux</value>
+  </data>
+  <data name="Будівельні роботи, монтаж та встановлення" xml:space="preserve">
+    <value>Construction, montage et installation</value>
+  </data>
+  <data name="Оберіть потрібний напрям послуг" xml:space="preserve">
+    <value>Choisissez le domaine de services souhaité</value>
+  </data>
+  <data name="Сантехнік" xml:space="preserve">
+    <value>Plombier</value>
+  </data>
+  <data name="Прибирання квартири" xml:space="preserve">
+    <value>Ménage d’appartement</value>
+  </data>
+  <data name="Дизайн логотипу" xml:space="preserve">
+    <value>Création de logo</value>
+  </data>
+  <data name="Електрик" xml:space="preserve">
+    <value>Électricien</value>
+  </data>
+  <data name="Прибирання квартир, будинків та офісів" xml:space="preserve">
+    <value>Ménage d’appartements, de maisons et de bureaux</value>
+  </data>
+  <data name="Прибирання квартир" xml:space="preserve">
+    <value>Ménage d’appartements</value>
+  </data>
+  <data name="Генеральне прибирання" xml:space="preserve">
+    <value>Grand ménage</value>
+  </data>
+  <data name="Прибирання після ремонту" xml:space="preserve">
+    <value>Nettoyage après travaux</value>
+  </data>
+  <data name="Прибирання після переїзду" xml:space="preserve">
+    <value>Nettoyage après déménagement</value>
+  </data>
+  <data name="Прибирання офісів" xml:space="preserve">
+    <value>Nettoyage de bureaux</value>
+  </data>
+  <data name="Прибирання ресторанів" xml:space="preserve">
+    <value>Nettoyage de restaurants</value>
+  </data>
+  <data name="Виробничий клінінг" xml:space="preserve">
+    <value>Nettoyage industriel</value>
+  </data>
+  <data name="Миття вікон" xml:space="preserve">
+    <value>Nettoyage de vitres</value>
+  </data>
+  <data name="Миття фасадів" xml:space="preserve">
+    <value>Nettoyage de façades</value>
+  </data>
+  <data name="Хімчистка меблів і текстилю" xml:space="preserve">
+    <value>Nettoyage de meubles et textiles</value>
+  </data>
+  <data name="Прибирання території" xml:space="preserve">
+    <value>Nettoyage d’espaces extérieurs</value>
+  </data>
+  <data name="Дезінфекція" xml:space="preserve">
+    <value>Désinfection</value>
+  </data>
+  <data name="Прибирання після аварій" xml:space="preserve">
+    <value>Nettoyage après sinistre</value>
+  </data>
+  <data name="Організація простору" xml:space="preserve">
+    <value>Organisation de l’espace</value>
+  </data>
+  <data name="Еко-прибирання" xml:space="preserve">
+    <value>Ménage écologique</value>
+  </data>
+  <data name="Перевезення, кур'єрські послуги та доставка вантажів" xml:space="preserve">
+    <value>Transport, coursiers et livraison de marchandises</value>
+  </data>
+  <data name="Вантажні перевезення" xml:space="preserve">
+    <value>Transport de marchandises</value>
+  </data>
+  <data name="Перевезення меблів, техніки" xml:space="preserve">
+    <value>Transport de meubles et d’appareils</value>
+  </data>
+  <data name="Послуги вантажників" xml:space="preserve">
+    <value>Déménageurs</value>
+  </data>
+  <data name="Квартирні переїзди" xml:space="preserve">
+    <value>Déménagements d’appartements</value>
+  </data>
+  <data name="Таксі та водійські послуги" xml:space="preserve">
+    <value>Taxi et services de chauffeur</value>
+  </data>
+  <data name="Міжміські перевезення" xml:space="preserve">
+    <value>Transport interurbain</value>
+  </data>
+  <data name="Кур'єрська доставка" xml:space="preserve">
+    <value>Livraison par coursier</value>
+  </data>
+  <data name="Доставка товарів, продуктів" xml:space="preserve">
+    <value>Livraison de produits et de courses</value>
+  </data>
+  <data name="Доставка готової їжі" xml:space="preserve">
+    <value>Livraison de repas</value>
+  </data>
+  <data name="Доставка ліків" xml:space="preserve">
+    <value>Livraison de médicaments</value>
+  </data>
+  <data name="Документи та посилки" xml:space="preserve">
+    <value>Documents et colis</value>
+  </data>
+  <data name="Доставка квітів" xml:space="preserve">
+    <value>Livraison de fleurs</value>
+  </data>
+  <data name="Вивіз сміття" xml:space="preserve">
+    <value>Enlèvement des déchets</value>
+  </data>
+  <data name="Логістичні послуги" xml:space="preserve">
+    <value>Services logistiques</value>
+  </data>
+  <data name="Міжнародні перевезення" xml:space="preserve">
+    <value>Transport international</value>
+  </data>
+  <data name="Послуги для краси, здоров'я та догляду за собою" xml:space="preserve">
+    <value>Services de beauté, de santé et de bien-être</value>
+  </data>
+  <data name="Перукарські послуги" xml:space="preserve">
+    <value>Coiffure</value>
+  </data>
+  <data name="Манікюр і педикюр" xml:space="preserve">
+    <value>Manucure et pédicure</value>
+  </data>
+  <data name="Візажист-стиліст" xml:space="preserve">
+    <value>Maquilleur-styliste</value>
+  </data>
+  <data name="Нарощення вій" xml:space="preserve">
+    <value>Extensions de cils</value>
+  </data>
+  <data name="Масаж" xml:space="preserve">
+    <value>Massage</value>
+  </data>
+  <data name="Косметологія" xml:space="preserve">
+    <value>Cosmétologie</value>
+  </data>
+  <data name="SPA та догляд" xml:space="preserve">
+    <value>SPA et soins</value>
+  </data>
+  <data name="Нарощування волосся" xml:space="preserve">
+    <value>Extensions de cheveux</value>
+  </data>
+  <data name="Депіляція" xml:space="preserve">
+    <value>Épilation</value>
+  </data>
+  <data name="Догляд за бровами" xml:space="preserve">
+    <value>Soin des sourcils</value>
+  </data>
+  <data name="Перманентний макіяж" xml:space="preserve">
+    <value>Maquillage permanent</value>
+  </data>
+  <data name="Дієтолог" xml:space="preserve">
+    <value>Diététicien</value>
+  </data>
+  <data name="Психолог" xml:space="preserve">
+    <value>Psychologue</value>
+  </data>
+  <data name="Езотеричні послуги" xml:space="preserve">
+    <value>Services ésotériques</value>
+  </data>
+  <data name="Спорт та здоров'я" xml:space="preserve">
+    <value>Sport et santé</value>
+  </data>
+  <data name="Тренування, оздоровлення та турбота про здоров'я" xml:space="preserve">
+    <value>Entraînement, bien-être et soin de la santé</value>
+  </data>
+  <data name="Фітнес" xml:space="preserve">
+    <value>Fitness</value>
+  </data>
+  <data name="Персональні тренування" xml:space="preserve">
+    <value>Coaching personnel</value>
+  </data>
+  <data name="Йога та пілатес" xml:space="preserve">
+    <value>Yoga et Pilates</value>
+  </data>
+  <data name="Реабілітація" xml:space="preserve">
+    <value>Rééducation</value>
+  </data>
+  <data name="Фізіотерапія" xml:space="preserve">
+    <value>Kinésithérapie</value>
+  </data>
+  <data name="Бойові мистецтва" xml:space="preserve">
+    <value>Arts martiaux</value>
+  </data>
+  <data name="Танці" xml:space="preserve">
+    <value>Danse</value>
+  </data>
+  <data name="Розробка сайтів, додатків та цифрових рішень" xml:space="preserve">
+    <value>Développement de sites, d’applications et de solutions numériques</value>
+  </data>
+  <data name="Розробка сайтів" xml:space="preserve">
+    <value>Création de sites web</value>
+  </data>
+  <data name="Підтримка сайтів" xml:space="preserve">
+    <value>Maintenance de sites web</value>
+  </data>
+  <data name="Landing Pages" xml:space="preserve">
+    <value>Landing pages</value>
+  </data>
+  <data name="Верстка та Front-end" xml:space="preserve">
+    <value>Intégration et front-end</value>
+  </data>
+  <data name="Мобільні застосунки" xml:space="preserve">
+    <value>Applications mobiles</value>
+  </data>
+  <data name="Розробка ігор" xml:space="preserve">
+    <value>Développement de jeux</value>
+  </data>
+  <data name="Тестування ПЗ" xml:space="preserve">
+    <value>Tests logiciels</value>
+  </data>
+  <data name="Технічне завдання" xml:space="preserve">
+    <value>Cahier des charges</value>
+  </data>
+  <data name="Кібербезпека" xml:space="preserve">
+    <value>Cybersécurité</value>
+  </data>
+  <data name="Бізнес-системи" xml:space="preserve">
+    <value>Systèmes d’entreprise</value>
+  </data>
+  <data name="AI-послуги" xml:space="preserve">
+    <value>Services IA</value>
+  </data>
+  <data name="AI-контент" xml:space="preserve">
+    <value>Contenu IA</value>
+  </data>
+  <data name="AI-консалтинг" xml:space="preserve">
+    <value>Conseil en IA</value>
+  </data>
+  <data name="AI-розробка" xml:space="preserve">
+    <value>Développement IA</value>
+  </data>
+  <data name="AI-аналітика" xml:space="preserve">
+    <value>Analytique IA</value>
+  </data>
+  <data name="Дизайн, творчі послуги та створення контенту" xml:space="preserve">
+    <value>Design, services créatifs et création de contenu</value>
+  </data>
+  <data name="Логотипи та стиль" xml:space="preserve">
+    <value>Logos et identité visuelle</value>
+  </data>
+  <data name="Брендинг" xml:space="preserve">
+    <value>Branding</value>
+  </data>
+  <data name="Веб та UI/UX дизайн" xml:space="preserve">
+    <value>Design web et UI/UX</value>
+  </data>
+  <data name="Графічний дизайн" xml:space="preserve">
+    <value>Graphisme</value>
+  </data>
+  <data name="Поліграфія" xml:space="preserve">
+    <value>Design d’impression</value>
+  </data>
+  <data name="Банери та реклама" xml:space="preserve">
+    <value>Bannières et publicité</value>
+  </data>
+  <data name="Друк" xml:space="preserve">
+    <value>Impression</value>
+  </data>
+  <data name="Ілюстрації та малюнки" xml:space="preserve">
+    <value>Illustrations et dessins</value>
+  </data>
+  <data name="3D дизайн" xml:space="preserve">
+    <value>Design 3D</value>
+  </data>
+  <data name="Дизайн інтер'єру" xml:space="preserve">
+    <value>Design d’intérieur</value>
+  </data>
+  <data name="Гейм-дизайн" xml:space="preserve">
+    <value>Game design</value>
+  </data>
+  <data name="Анімація та моушн" xml:space="preserve">
+    <value>Animation et motion design</value>
+  </data>
+  <data name="Творчі послуги" xml:space="preserve">
+    <value>Services créatifs</value>
+  </data>
+  <data name="Handmade та рукоділля" xml:space="preserve">
+    <value>Fait main et travaux manuels</value>
+  </data>
+  <data name="Інше в дизайні" xml:space="preserve">
+    <value>Autres services de design</value>
+  </data>
+  <data name="Фотозйомка, відеозйомка та створення медіаконтенту" xml:space="preserve">
+    <value>Photo, vidéo et création de contenus médias</value>
+  </data>
+  <data name="Фотозйомка" xml:space="preserve">
+    <value>Séances photo</value>
+  </data>
+  <data name="Відеозйомка" xml:space="preserve">
+    <value>Tournage vidéo</value>
+  </data>
+  <data name="Весільна фото- та відеозйомка" xml:space="preserve">
+    <value>Photo et vidéo de mariage</value>
+  </data>
+  <data name="Предметна зйомка" xml:space="preserve">
+    <value>Photo de produits</value>
+  </data>
+  <data name="Портретна та сімейна зйомка" xml:space="preserve">
+    <value>Portraits et photos de famille</value>
+  </data>
+  <data name="Фото для бізнесу" xml:space="preserve">
+    <value>Photo pour entreprises</value>
+  </data>
+  <data name="Обробка фотографій" xml:space="preserve">
+    <value>Retouche photo</value>
+  </data>
+  <data name="Монтаж відео" xml:space="preserve">
+    <value>Montage vidéo</value>
+  </data>
+  <data name="Оцифрування фото та відео" xml:space="preserve">
+    <value>Numérisation de photos et de vidéos</value>
+  </data>
+  <data name="Інші фото- та відеопослуги" xml:space="preserve">
+    <value>Autres services photo et vidéo</value>
+  </data>
+  <data name="Професійні послуги для бізнесу та підприємців" xml:space="preserve">
+    <value>Services professionnels pour entreprises et entrepreneurs</value>
+  </data>
+  <data name="Бухгалтерські послуги" xml:space="preserve">
+    <value>Comptabilité</value>
+  </data>
+  <data name="Юридичні послуги" xml:space="preserve">
+    <value>Services juridiques</value>
+  </data>
+  <data name="Фінансові послуги" xml:space="preserve">
+    <value>Services financiers</value>
+  </data>
+  <data name="Консалтинг для бізнесу" xml:space="preserve">
+    <value>Conseil aux entreprises</value>
+  </data>
+  <data name="Кадрові послуги" xml:space="preserve">
+    <value>Services RH</value>
+  </data>
+  <data name="Рекрутингові послуги" xml:space="preserve">
+    <value>Recrutement</value>
+  </data>
+  <data name="Послуги кол-центру" xml:space="preserve">
+    <value>Services de centre d’appels</value>
+  </data>
+  <data name="Ріелторські послуги" xml:space="preserve">
+    <value>Services immobiliers</value>
+  </data>
+  <data name="Бізнес-асистент" xml:space="preserve">
+    <value>Assistant d’entreprise</value>
+  </data>
+  <data name="Реєстрація бізнесу" xml:space="preserve">
+    <value>Création d’entreprise</value>
+  </data>
+  <data name="Адміністративні послуги" xml:space="preserve">
+    <value>Services administratifs</value>
+  </data>
+  <data name="Безпека бізнесу" xml:space="preserve">
+    <value>Sécurité des entreprises</value>
+  </data>
+  <data name="Міграційні послуги" xml:space="preserve">
+    <value>Services d’immigration</value>
+  </data>
+  <data name="Переклад документів" xml:space="preserve">
+    <value>Traduction de documents</value>
+  </data>
+  <data name="Інші бізнес-послуги" xml:space="preserve">
+    <value>Autres services aux entreprises</value>
+  </data>
+  <data name="Ремонт, обслуговування та транспортні послуги" xml:space="preserve">
+    <value>Réparation, entretien et services de transport</value>
+  </data>
+  <data name="Допомога в дорозі" xml:space="preserve">
+    <value>Assistance routière</value>
+  </data>
+  <data name="Діагностика та ТО" xml:space="preserve">
+    <value>Diagnostic et révision</value>
+  </data>
+  <data name="Автоелектрика" xml:space="preserve">
+    <value>Électricité automobile</value>
+  </data>
+  <data name="Кузовний ремонт" xml:space="preserve">
+    <value>Carrosserie</value>
+  </data>
+  <data name="Ремонт двигуна" xml:space="preserve">
+    <value>Réparation moteur</value>
+  </data>
+  <data name="Ремонт КПП" xml:space="preserve">
+    <value>Réparation de boîte de vitesses</value>
+  </data>
+  <data name="Ходова та підвіска" xml:space="preserve">
+    <value>Train roulant et suspension</value>
+  </data>
+  <data name="Гальмівна та кермова системи" xml:space="preserve">
+    <value>Freinage et direction</value>
+  </data>
+  <data name="Шиномонтаж" xml:space="preserve">
+    <value>Montage de pneus</value>
+  </data>
+  <data name="Автоскло" xml:space="preserve">
+    <value>Vitrage automobile</value>
+  </data>
+  <data name="Автокондиціонер" xml:space="preserve">
+    <value>Climatisation automobile</value>
+  </data>
+  <data name="Догляд за автомобілем" xml:space="preserve">
+    <value>Entretien du véhicule</value>
+  </data>
+  <data name="Газобалонне обладнання" xml:space="preserve">
+    <value>Équipement GPL</value>
+  </data>
+  <data name="Ремонт мототехніки" xml:space="preserve">
+    <value>Réparation de motos</value>
+  </data>
+  <data name="Страхування та інші послуги" xml:space="preserve">
+    <value>Assurance et autres services</value>
+  </data>
+  <data name="Просування бізнесу, реклама та залучення клієнтів" xml:space="preserve">
+    <value>Promotion d’entreprise, publicité et acquisition de clients</value>
+  </data>
+  <data name="Контекстна реклама" xml:space="preserve">
+    <value>Publicité contextuelle</value>
+  </data>
+  <data name="SEO-просування" xml:space="preserve">
+    <value>Référencement SEO</value>
+  </data>
+  <data name="Просування в соцмережах" xml:space="preserve">
+    <value>Promotion sur les réseaux sociaux</value>
+  </data>
+  <data name="Копірайтинг" xml:space="preserve">
+    <value>Rédaction publicitaire</value>
+  </data>
+  <data name="Контент-маркетинг" xml:space="preserve">
+    <value>Marketing de contenu</value>
+  </data>
+  <data name="Email-маркетинг" xml:space="preserve">
+    <value>Marketing par e-mail</value>
+  </data>
+  <data name="Веб-аналітика" xml:space="preserve">
+    <value>Analyse web</value>
+  </data>
+  <data name="Аудит сайту та CRO" xml:space="preserve">
+    <value>Audit de site et CRO</value>
+  </data>
+  <data name="Просування застосунків" xml:space="preserve">
+    <value>Promotion d’applications</value>
+  </data>
+  <data name="Просування на маркетплейсах" xml:space="preserve">
+    <value>Promotion sur les marketplaces</value>
+  </data>
+  <data name="Інтернет-реклама" xml:space="preserve">
+    <value>Publicité en ligne</value>
+  </data>
+  <data name="Розміщення оголошень" xml:space="preserve">
+    <value>Diffusion d’annonces</value>
+  </data>
+  <data name="Розповсюдження реклами" xml:space="preserve">
+    <value>Distribution publicitaire</value>
+  </data>
+  <data name="Маркетингові консультації" xml:space="preserve">
+    <value>Conseil en marketing</value>
+  </data>
+  <data name="Інші маркетингові послуги" xml:space="preserve">
+    <value>Autres services marketing</value>
+  </data>
+  <data name="Навчання, репетиторство та розвиток навичок" xml:space="preserve">
+    <value>Formation, soutien scolaire et développement des compétences</value>
+  </data>
+  <data name="Репетитори та шкільні предмети" xml:space="preserve">
+    <value>Professeurs particuliers et matières scolaires</value>
+  </data>
+  <data name="Іноземні мови" xml:space="preserve">
+    <value>Langues étrangères</value>
+  </data>
+  <data name="Підготовка до іспитів" xml:space="preserve">
+    <value>Préparation aux examens</value>
+  </data>
+  <data name="Комп'ютерні та IT-курси" xml:space="preserve">
+    <value>Cours d’informatique et d’IT</value>
+  </data>
+  <data name="Творчі заняття" xml:space="preserve">
+    <value>Activités créatives</value>
+  </data>
+  <data name="Музика та вокал" xml:space="preserve">
+    <value>Musique et chant</value>
+  </data>
+  <data name="Спорт і фізичний розвиток" xml:space="preserve">
+    <value>Sport et développement physique</value>
+  </data>
+  <data name="Професійне навчання" xml:space="preserve">
+    <value>Formation professionnelle</value>
+  </data>
+  <data name="Бізнес та підприємництво" xml:space="preserve">
+    <value>Business et entrepreneuriat</value>
+  </data>
+  <data name="Особистісний розвиток" xml:space="preserve">
+    <value>Développement personnel</value>
+  </data>
+  <data name="Психологічні тренінги" xml:space="preserve">
+    <value>Formations en psychologie</value>
+  </data>
+  <data name="Курси для дітей" xml:space="preserve">
+    <value>Cours pour enfants</value>
+  </data>
+  <data name="Онлайн-навчання" xml:space="preserve">
+    <value>Formation en ligne</value>
+  </data>
+  <data name="Консультації та наставництво" xml:space="preserve">
+    <value>Conseil et mentorat</value>
+  </data>
+  <data name="Інші освітні послуги" xml:space="preserve">
+    <value>Autres services éducatifs</value>
+  </data>
+  <data name="Догляд, лікування та послуги для домашніх тварин" xml:space="preserve">
+    <value>Soins, traitements et services pour animaux de compagnie</value>
+  </data>
+  <data name="Ветеринарні послуги" xml:space="preserve">
+    <value>Services vétérinaires</value>
+  </data>
+  <data name="Грумінг" xml:space="preserve">
+    <value>Toilettage</value>
+  </data>
+  <data name="Дресирування" xml:space="preserve">
+    <value>Dressage</value>
+  </data>
+  <data name="Вигул собак" xml:space="preserve">
+    <value>Promenade de chiens</value>
+  </data>
+  <data name="Перетримка тварин" xml:space="preserve">
+    <value>Pension pour animaux</value>
+  </data>
+  <data name="Зооняня" xml:space="preserve">
+    <value>Garde d’animaux</value>
+  </data>
+  <data name="Догляд за тваринами" xml:space="preserve">
+    <value>Soins aux animaux</value>
+  </data>
+  <data name="Перевезення тварин" xml:space="preserve">
+    <value>Transport d’animaux</value>
+  </data>
+  <data name="Екзотичні тварини" xml:space="preserve">
+    <value>Animaux exotiques</value>
+  </data>
+  <data name="Акваріуми та рибки" xml:space="preserve">
+    <value>Aquariums et poissons</value>
+  </data>
+  <data name="Розведення тварин" xml:space="preserve">
+    <value>Élevage</value>
+  </data>
+  <data name="Зооконсультації" xml:space="preserve">
+    <value>Conseils animaliers</value>
+  </data>
+  <data name="Облаштування для тварин" xml:space="preserve">
+    <value>Équipement pour animaux</value>
+  </data>
+  <data name="Пошук і допомога" xml:space="preserve">
+    <value>Recherche et aide</value>
+  </data>
+  <data name="Інші послуги" xml:space="preserve">
+    <value>Autres services</value>
+  </data>
+  <data name="Організація подій та допомога в різних ситуаціях" xml:space="preserve">
+    <value>Organisation d’événements et aide dans diverses situations</value>
+  </data>
+  <data name="Організація подій" xml:space="preserve">
+    <value>Organisation d’événements</value>
+  </data>
+  <data name="Весільні послуги" xml:space="preserve">
+    <value>Services de mariage</value>
+  </data>
+  <data name="Ведучі та шоумени" xml:space="preserve">
+    <value>Animateurs et présentateurs</value>
+  </data>
+  <data name="Музиканти та DJ" xml:space="preserve">
+    <value>Musiciens et DJ</value>
+  </data>
+  <data name="Аніматори" xml:space="preserve">
+    <value>Animateurs pour enfants</value>
+  </data>
+  <data name="Декор та оформлення" xml:space="preserve">
+    <value>Décoration</value>
+  </data>
+  <data name="Кейтеринг" xml:space="preserve">
+    <value>Traiteur</value>
+  </data>
+  <data name="Оренда для подій" xml:space="preserve">
+    <value>Location pour événements</value>
+  </data>
+  <data name="Волонтерська допомога" xml:space="preserve">
+    <value>Aide bénévole</value>
+  </data>
+  <data name="Супровід та допомога" xml:space="preserve">
+    <value>Accompagnement et aide</value>
+  </data>
+  <data name="Особистий помічник" xml:space="preserve">
+    <value>Assistant personnel</value>
+  </data>
+  <data name="Допомога у справах" xml:space="preserve">
+    <value>Aide aux démarches</value>
+  </data>
+  <data name="Послуги на годину" xml:space="preserve">
+    <value>Services à l’heure</value>
+  </data>
+  <data name="Пошук житла" xml:space="preserve">
+    <value>Recherche de logement</value>
+  </data>
+  <data name="Послуги для дітей, батьків та всієї родини" xml:space="preserve">
+    <value>Services pour les enfants, les parents et toute la famille</value>
+  </data>
+  <data name="Послуги няні" xml:space="preserve">
+    <value>Garde d’enfants</value>
+  </data>
+  <data name="Гувернантка" xml:space="preserve">
+    <value>Gouvernante</value>
+  </data>
+  <data name="Супровід дітей" xml:space="preserve">
+    <value>Accompagnement d’enfants</value>
+  </data>
+  <data name="Догляд за немовлятами" xml:space="preserve">
+    <value>Soins aux nourrissons</value>
+  </data>
+  <data name="Догляд за літніми" xml:space="preserve">
+    <value>Aide aux personnes âgées</value>
+  </data>
+  <data name="Особливий догляд" xml:space="preserve">
+    <value>Soins spécialisés</value>
+  </data>
+  <data name="Домашній догляд" xml:space="preserve">
+    <value>Soins à domicile</value>
+  </data>
+  <data name="Персональний догляд" xml:space="preserve">
+    <value>Soins personnels</value>
+  </data>
+  <data name="Інші послуги та нестандартні завдання" xml:space="preserve">
+    <value>Autres services et tâches inhabituelles</value>
+  </data>
+  <data name="Апостиль та легалізація" xml:space="preserve">
+    <value>Apostille et légalisation</value>
+  </data>
+  <data name="Набір та обробка тексту" xml:space="preserve">
+    <value>Saisie et traitement de texte</value>
+  </data>
+  <data name="Робота в інтернеті" xml:space="preserve">
+    <value>Travail sur Internet</value>
+  </data>
+  <data name="Фріланс-послуги" xml:space="preserve">
+    <value>Services freelance</value>
+  </data>
+  <data name="Пошук інформації" xml:space="preserve">
+    <value>Recherche d’informations</value>
+  </data>
+  <data name="Допомога з документами" xml:space="preserve">
+    <value>Aide administrative</value>
+  </data>
+  <data name="Разові завдання" xml:space="preserve">
+    <value>Tâches ponctuelles</value>
+  </data>
+  <data name="Нестандартні доручення" xml:space="preserve">
+    <value>Missions inhabituelles</value>
+  </data>
+  <data name="Дизайн та творчість" xml:space="preserve">
+    <value>Design et création</value>
+  </data>
+  <data name="Авто і транспорт" xml:space="preserve">
+    <value>Auto et transport</value>
+  </data>
+  <data name="IT та технології" xml:space="preserve">
+    <value>IT et technologies</value>
+  </data>
+  <data name="Освіта та репетиторство" xml:space="preserve">
+    <value>Éducation et soutien scolaire</value>
+  </data>
+  <data name="Здоров'я та спорт" xml:space="preserve">
+    <value>Santé et sport</value>
+  </data>
+  <data name="Тварини" xml:space="preserve">
+    <value>Animaux</value>
+  </data>
+  <data name="Малярні роботи" xml:space="preserve">
+    <value>Travaux de peinture</value>
+  </data>
+  <data name="Збірка меблів" xml:space="preserve">
+    <value>Montage de meubles</value>
+  </data>
+  <data name="{0} виконавець" xml:space="preserve">
+    <value>{0} prestataire</value>
+  </data>
+  <data name="Оберіть дію" xml:space="preserve">
+    <value>Choisissez une action</value>
+  </data>
+  <data name="Замовити послугу" xml:space="preserve">
+    <value>Commander un service</value>
+  </data>
+  <data name="Почати заробляти" xml:space="preserve">
+    <value>Commencer à gagner</value>
+  </data>
+  <data name="Закрити" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="Мої адреси" xml:space="preserve">
+    <value>Mes adresses</value>
+  </data>
+  <data name="Додайте адреси, щоб швидко оформлювати замовлення локальних послуг" xml:space="preserve">
+    <value>Ajoutez des adresses pour commander rapidement des services locaux</value>
+  </data>
+  <data name="Додати адресу" xml:space="preserve">
+    <value>Ajouter une adresse</value>
+  </data>
+  <data name="Назва" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Дім" xml:space="preserve">
+    <value>Domicile</value>
+  </data>
+  <data name="Тип" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Вулиця, будинок, квартира" xml:space="preserve">
+    <value>Rue, numéro, appartement</value>
+  </data>
+  <data name="вул. Левадна, 37, кв. 15" xml:space="preserve">
+    <value>12 rue Principale, app. 15</value>
+  </data>
+  <data name="м. Київ" xml:space="preserve">
+    <value>Kyiv</value>
+  </data>
+  <data name="Область" xml:space="preserve">
+    <value>Région</value>
+  </data>
+  <data name="Київська обл." xml:space="preserve">
+    <value>Oblast de Kyiv</value>
+  </data>
+  <data name="Індекс" xml:space="preserve">
+    <value>Code postal</value>
+  </data>
+  <data name="Підказка для виконавця" xml:space="preserve">
+    <value>Indication pour le prestataire</value>
+  </data>
+  <data name="Домофон 15К, поверх 5" xml:space="preserve">
+    <value>Interphone 15K, 5e étage</value>
+  </data>
+  <data name="Зробити основною адресою" xml:space="preserve">
+    <value>Définir comme adresse principale</value>
+  </data>
+  <data name="Зберегти" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Скасувати" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Збережених адрес ще немає. Натисніть «Додати адресу»." xml:space="preserve">
+    <value>Aucune adresse enregistrée. Cliquez sur « Ajouter une adresse ».</value>
+  </data>
+  <data name="Основна" xml:space="preserve">
+    <value>Principale</value>
+  </data>
+  <data name="Використовувати" xml:space="preserve">
+    <value>Utiliser</value>
+  </data>
+  <data name="Редагувати адресу {0}" xml:space="preserve">
+    <value>Modifier l’adresse {0}</value>
+  </data>
+  <data name="Видалити адресу {0}" xml:space="preserve">
+    <value>Supprimer l’adresse {0}</value>
+  </data>
+  <data name="Якщо у вас виникли питання щодо адреси або доставки послуг, зверніться до підтримки" xml:space="preserve">
+    <value>Pour toute question sur une adresse ou la réalisation des services, contactez l’assistance</value>
+  </data>
+  <data name="Редагувати адресу" xml:space="preserve">
+    <value>Modifier l’adresse</value>
+  </data>
+  <data name="Нова адреса" xml:space="preserve">
+    <value>Nouvelle adresse</value>
+  </data>
+  <data name="Опишіть, що вам потрібно, та отримуйте відгуки від перевірених виконавців" xml:space="preserve">
+    <value>Décrivez ce dont vous avez besoin et recevez des propositions de prestataires vérifiés</value>
+  </data>
+  <data name="Опишіть послугу, яку ви шукаєте" xml:space="preserve">
+    <value>Décrivez le service que vous recherchez</value>
+  </data>
+  <data name="Назва замовлення *" xml:space="preserve">
+    <value>Titre de la commande *</value>
+  </data>
+  <data name="Наприклад: Дизайн логотипу для кав’ярні" xml:space="preserve">
+    <value>Par exemple : création de logo pour un café</value>
+  </data>
+  <data name="Категорія *" xml:space="preserve">
+    <value>Catégorie *</value>
+  </data>
+  <data name="Опис завдання *" xml:space="preserve">
+    <value>Description de la tâche *</value>
+  </data>
+  <data name="Опишіть ваше завдання, цілі, побажання, обсяг роботи, тощо." xml:space="preserve">
+    <value>Décrivez votre tâche, vos objectifs, vos souhaits, le volume de travail, etc.</value>
+  </data>
+  <data name="Додайте файли (не більше 10)" xml:space="preserve">
+    <value>Ajouter des fichiers (10 maximum)</value>
+  </data>
+  <data name="Перетягніть файли сюди, або виберіть з комп’ютера." xml:space="preserve">
+    <value>Glissez les fichiers ici ou choisissez-les sur votre ordinateur.</value>
+  </data>
+  <data name="Підтримуються: JPG, PNG, PDF, DOC, ZIP. Максимальний розмір 10 Мб" xml:space="preserve">
+    <value>Formats acceptés : JPG, PNG, PDF, DOC, ZIP. Taille maximale 10 Mo</value>
+  </data>
+  <data name="Завантаження файлів зʼявиться в наступній версії." xml:space="preserve">
+    <value>L’envoi de fichiers arrivera dans la prochaine version.</value>
+  </data>
+  <data name="Деталі замовлення" xml:space="preserve">
+    <value>Détails de la commande</value>
+  </data>
+  <data name="Бюджет" xml:space="preserve">
+    <value>Budget</value>
+  </data>
+  <data name="Тип бюджету" xml:space="preserve">
+    <value>Type de budget</value>
+  </data>
+  <data name="від" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="до" xml:space="preserve">
+    <value>à</value>
+  </data>
+  <data name="грн." xml:space="preserve">
+    <value>UAH</value>
+  </data>
+  <data name="Термін виконання" xml:space="preserve">
+    <value>Délai de réalisation</value>
+  </data>
+  <data name="Додаткова інформація" xml:space="preserve">
+    <value>Informations complémentaires</value>
+  </data>
+  <data name="Місце виконання" xml:space="preserve">
+    <value>Lieu de réalisation</value>
+  </data>
+  <data name="Онлайн" xml:space="preserve">
+    <value>En ligne</value>
+  </data>
+  <data name="Потрібна зустріч" xml:space="preserve">
+    <value>Rencontre nécessaire</value>
+  </data>
+  <data name="Тип замовлення" xml:space="preserve">
+    <value>Type de commande</value>
+  </data>
+  <data name="Одноразове" xml:space="preserve">
+    <value>Ponctuelle</value>
+  </data>
+  <data name="Постійне співробітництво" xml:space="preserve">
+    <value>Collaboration régulière</value>
+  </data>
+  <data name="Кількість виконавців" xml:space="preserve">
+    <value>Nombre de prestataires</value>
+  </data>
+  <data name="Рівень досвіду виконавців" xml:space="preserve">
+    <value>Niveau d’expérience des prestataires</value>
+  </data>
+  <data name="Адреса (для зустрічі)" xml:space="preserve">
+    <value>Adresse (pour la rencontre)</value>
+  </data>
+  <data name="Не потрібна" xml:space="preserve">
+    <value>Pas nécessaire</value>
+  </data>
+  <data name="Контактна інформація" xml:space="preserve">
+    <value>Coordonnées</value>
+  </data>
+  <data name="Виконавці не бачать ваші контакти, поки не відгукнуться на замовлення" xml:space="preserve">
+    <value>Les prestataires ne voient pas vos coordonnées tant qu’ils n’ont pas répondu à la commande</value>
+  </data>
+  <data name="Показувати номер телефону виконавцям, як відгукнуться." xml:space="preserve">
+    <value>Montrer mon numéro de téléphone aux prestataires dès qu’ils répondent.</value>
+  </data>
+  <data name="Опублікувати замовлення" xml:space="preserve">
+    <value>Publier la commande</value>
+  </data>
+  <data name="Аналітика" xml:space="preserve">
+    <value>Statistiques</value>
+  </data>
+  <data name="Період" xml:space="preserve">
+    <value>Période</value>
+  </data>
+  <data name="Показати" xml:space="preserve">
+    <value>Afficher</value>
+  </data>
+  <data name="Огляд ваших результатів та активності" xml:space="preserve">
+    <value>Aperçu de vos résultats et de votre activité</value>
+  </data>
+  <data name="Перегляди портфоліо" xml:space="preserve">
+    <value>Vues du portfolio</value>
+  </data>
+  <data name="{0} до попереднього періоду" xml:space="preserve">
+    <value>{0} par rapport à la période précédente</value>
+  </data>
+  <data name="Відгуки профілю" xml:space="preserve">
+    <value>Avis sur le profil</value>
+  </data>
+  <data name="Отримано замовлень" xml:space="preserve">
+    <value>Commandes reçues</value>
+  </data>
+  <data name="Конверсія в замовлення" xml:space="preserve">
+    <value>Conversion en commandes</value>
+  </data>
+  <data name="Перегляди та замовлення" xml:space="preserve">
+    <value>Vues et commandes</value>
+  </data>
+  <data name="За день" xml:space="preserve">
+    <value>Par jour</value>
+  </data>
+  <data name="Даних за цей період ще немає." xml:space="preserve">
+    <value>Pas encore de données pour cette période.</value>
+  </data>
+  <data name="Графік переглядів портфоліо та замовлень за обраний період" xml:space="preserve">
+    <value>Graphique des vues du portfolio et des commandes sur la période choisie</value>
+  </data>
+  <data name="Джерела переглядів" xml:space="preserve">
+    <value>Sources des vues</value>
+  </data>
+  <data name="Частки джерел переглядів" xml:space="preserve">
+    <value>Parts des sources de vues</value>
+  </data>
+  <data name="Популярні послуги" xml:space="preserve">
+    <value>Services populaires</value>
+  </data>
+  <data name="За кількістю замовлень" xml:space="preserve">
+    <value>Par nombre de commandes</value>
+  </data>
+  <data name="Замовлень за цей період не було." xml:space="preserve">
+    <value>Aucune commande sur cette période.</value>
+  </data>
+  <data name="Динаміка показників" xml:space="preserve">
+    <value>Évolution des indicateurs</value>
+  </data>
+  <data name="Поточний період" xml:space="preserve">
+    <value>Période actuelle</value>
+  </data>
+  <data name="Попередній період" xml:space="preserve">
+    <value>Période précédente</value>
+  </data>
+  <data name="Зміна" xml:space="preserve">
+    <value>Variation</value>
+  </data>
+  <data name="Календар" xml:space="preserve">
+    <value>Calendrier</value>
+  </data>
+  <data name="Керуйте своїм розкладом та зустрічами." xml:space="preserve">
+    <value>Gérez votre emploi du temps et vos rendez-vous.</value>
+  </data>
+  <data name="Пошук подій" xml:space="preserve">
+    <value>Rechercher des événements</value>
+  </data>
+  <data name="Попередній тиждень" xml:space="preserve">
+    <value>Semaine précédente</value>
+  </data>
+  <data name="Наступний тиждень" xml:space="preserve">
+    <value>Semaine suivante</value>
+  </data>
+  <data name="Сьогодні" xml:space="preserve">
+    <value>Aujourd’hui</value>
+  </data>
+  <data name="Додати подію" xml:space="preserve">
+    <value>Ajouter un événement</value>
+  </data>
+  <data name="Нова подія" xml:space="preserve">
+    <value>Nouvel événement</value>
+  </data>
+  <data name="Консультація" xml:space="preserve">
+    <value>Consultation</value>
+  </data>
+  <data name="Дата" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Початок, година" xml:space="preserve">
+    <value>Début, heure</value>
+  </data>
+  <data name="Тривалість, год" xml:space="preserve">
+    <value>Durée, h</value>
+  </data>
+  <data name="З ким" xml:space="preserve">
+    <value>Avec qui</value>
+  </data>
+  <data name="Марія Л." xml:space="preserve">
+    <value>Maria L.</value>
+  </data>
+  <data name="Додати" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Усі події" xml:space="preserve">
+    <value>Tous les événements</value>
+  </data>
+  <data name="Найближчі події" xml:space="preserve">
+    <value>Événements à venir</value>
+  </data>
+  <data name="Переглянути всі" xml:space="preserve">
+    <value>Tout voir</value>
+  </data>
+  <data name="На цьому тижні подій більше немає." xml:space="preserve">
+    <value>Plus d’événements cette semaine.</value>
+  </data>
+  <data name="Порада" xml:space="preserve">
+    <value>Conseil</value>
+  </data>
+  <data name="Синхронізуйте календар з Google календарем, щоб не пропустити важливі події." xml:space="preserve">
+    <value>Synchronisez le calendrier avec Google Agenda pour ne manquer aucun événement important.</value>
+  </data>
+  <data name="Синхронізація зʼявиться пізніше" xml:space="preserve">
+    <value>La synchronisation arrivera plus tard</value>
+  </data>
+  <data name="Підключити календар" xml:space="preserve">
+    <value>Connecter un calendrier</value>
+  </data>
+  <data name="Фінанси" xml:space="preserve">
+    <value>Finances</value>
+  </data>
+  <data name="Керуйте своїми доходами та виплатами" xml:space="preserve">
+    <value>Gérez vos revenus et vos versements</value>
+  </data>
+  <data name="Загальний дохід" xml:space="preserve">
+    <value>Revenu total</value>
+  </data>
+  <data name="Доступно до виплати" xml:space="preserve">
+    <value>Disponible au versement</value>
+  </data>
+  <data name="Сума виплати" xml:space="preserve">
+    <value>Montant du versement</value>
+  </data>
+  <data name="Куди вивести" xml:space="preserve">
+    <value>Verser sur</value>
+  </data>
+  <data name="Замовити" xml:space="preserve">
+    <value>Demander</value>
+  </data>
+  <data name="Вивести кошти" xml:space="preserve">
+    <value>Retirer des fonds</value>
+  </data>
+  <data name="В очікуванні" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="{0} в роботі" xml:space="preserve">
+    <value>{0} en cours</value>
+  </data>
+  <data name="Виплачено" xml:space="preserve">
+    <value>Versé</value>
+  </data>
+  <data name="всього виплачено" xml:space="preserve">
+    <value>total versé</value>
+  </data>
+  <data name="Дохід" xml:space="preserve">
+    <value>Revenu</value>
+  </data>
+  <data name="Нарахувань за цей період ще не було." xml:space="preserve">
+    <value>Aucun crédit sur cette période pour l’instant.</value>
+  </data>
+  <data name="Останні транзакції" xml:space="preserve">
+    <value>Dernières transactions</value>
+  </data>
+  <data name="Рухів коштів за цей період не було." xml:space="preserve">
+    <value>Aucun mouvement d’argent sur cette période.</value>
+  </data>
+  <data name="Опис" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Сума" xml:space="preserve">
+    <value>Montant</value>
+  </data>
+  <data name="Статус" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="Способи виведення коштів" xml:space="preserve">
+    <value>Moyens de retrait</value>
+  </data>
+  <data name="Способів виведення ще немає — додайте картку або гаманець." xml:space="preserve">
+    <value>Aucun moyen de retrait — ajoutez une carte ou un portefeuille.</value>
+  </data>
+  <data name="Змінити" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Додати спосіб виведення" xml:space="preserve">
+    <value>Ajouter un moyen de retrait</value>
+  </data>
+  <data name="Спосіб виведення" xml:space="preserve">
+    <value>Moyen de retrait</value>
+  </data>
+  <data name="Банківська картка" xml:space="preserve">
+    <value>Carte bancaire</value>
+  </data>
+  <data name="Рахунок IBAN" xml:space="preserve">
+    <value>Compte IBAN</value>
+  </data>
+  <data name="Реквізити" xml:space="preserve">
+    <value>Coordonnées</value>
+  </data>
+  <data name="Підпис" xml:space="preserve">
+    <value>Libellé</value>
+  </data>
+  <data name="основна карта" xml:space="preserve">
+    <value>carte principale</value>
+  </data>
+  <data name="Прибрати цей спосіб" xml:space="preserve">
+    <value>Supprimer ce moyen</value>
+  </data>
+  <data name="Інформація" xml:space="preserve">
+    <value>Informations</value>
+  </data>
+  <data name="Комісія платформи" xml:space="preserve">
+    <value>Commission de la plateforme</value>
+  </data>
+  <data name="Мінімальна сума для виведення" xml:space="preserve">
+    <value>Montant minimal de retrait</value>
+  </data>
+  <data name="Термін зарахування" xml:space="preserve">
+    <value>Délai de crédit</value>
+  </data>
+  <data name="1-3 дні робочих" xml:space="preserve">
+    <value>1 à 3 jours ouvrés</value>
+  </data>
+  <data name="Детальніше про фінанси" xml:space="preserve">
+    <value>En savoir plus sur les finances</value>
+  </data>
+  <data name="Виплата" xml:space="preserve">
+    <value>Versement</value>
+  </data>
+  <data name="Вітаємо, {0}" xml:space="preserve">
+    <value>Bienvenue, {0}</value>
+  </data>
+  <data name="Профіль заповнено на {0}%" xml:space="preserve">
+    <value>Profil complété à {0} %</value>
+  </data>
+  <data name="Заповнити профіль" xml:space="preserve">
+    <value>Compléter le profil</value>
+  </data>
+  <data name="Нові замовлення" xml:space="preserve">
+    <value>Nouvelles commandes</value>
+  </data>
+  <data name="Активні замовлення" xml:space="preserve">
+    <value>Commandes actives</value>
+  </data>
+  <data name="Завершені замовлення" xml:space="preserve">
+    <value>Commandes terminées</value>
+  </data>
+  <data name="Зароблено" xml:space="preserve">
+    <value>Gagné</value>
+  </data>
+  <data name="Детальніше" xml:space="preserve">
+    <value>En savoir plus</value>
+  </data>
+  <data name="Мої замовлення:" xml:space="preserve">
+    <value>Mes commandes :</value>
+  </data>
+  <data name="У цій вкладці поки немає замовлень." xml:space="preserve">
+    <value>Aucune commande dans cet onglet pour l’instant.</value>
+  </data>
+  <data name="Показати більше" xml:space="preserve">
+    <value>Afficher plus</value>
+  </data>
+  <data name="Мої послуги" xml:space="preserve">
+    <value>Mes services</value>
+  </data>
+  <data name="Послуг ще немає." xml:space="preserve">
+    <value>Aucun service pour l’instant.</value>
+  </data>
+  <data name="Портфоліо" xml:space="preserve">
+    <value>Portfolio</value>
+  </data>
+  <data name="Переглянути портфоліо" xml:space="preserve">
+    <value>Voir le portfolio</value>
+  </data>
+  <data name="Статистика за місяць" xml:space="preserve">
+    <value>Statistiques du mois</value>
+  </data>
+  <data name="Детальна аналітика" xml:space="preserve">
+    <value>Statistiques détaillées</value>
+  </data>
+  <data name="Усі" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Непрочитані" xml:space="preserve">
+    <value>Non lus</value>
+  </data>
+  <data name="Архів" xml:space="preserve">
+    <value>Archives</value>
+  </data>
+  <data name="Спілкуйтеся з клієнтами та керуйте листуванням" xml:space="preserve">
+    <value>Échangez avec vos clients et gérez vos conversations</value>
+  </data>
+  <data name="Пошук замовлень" xml:space="preserve">
+    <value>Rechercher des commandes</value>
+  </data>
+  <data name="Фільтр листувань" xml:space="preserve">
+    <value>Filtre des conversations</value>
+  </data>
+  <data name="Листувань немає." xml:space="preserve">
+    <value>Aucune conversation.</value>
+  </data>
+  <data name="Оберіть розмову зліва." xml:space="preserve">
+    <value>Choisissez une conversation à gauche.</value>
+  </data>
+  <data name="Замовник" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Замовлення:" xml:space="preserve">
+    <value>Commande :</value>
+  </data>
+  <data name="Переглянути замовлення" xml:space="preserve">
+    <value>Voir la commande</value>
+  </data>
+  <data name="Повідомлень ще немає — напишіть першим." xml:space="preserve">
+    <value>Pas encore de messages — écrivez le premier.</value>
+  </data>
+  <data name="Вкладення зʼявляться пізніше" xml:space="preserve">
+    <value>Les pièces jointes arriveront plus tard</value>
+  </data>
+  <data name="Додати файл" xml:space="preserve">
+    <value>Joindre un fichier</value>
+  </data>
+  <data name="Напишіть повідомлення" xml:space="preserve">
+    <value>Écrivez un message</value>
+  </data>
+  <data name="Текст повідомлення" xml:space="preserve">
+    <value>Texte du message</value>
+  </data>
+  <data name="Надіслати" xml:space="preserve">
+    <value>Envoyer</value>
+  </data>
+  <data name="Фільтри" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="Пошук за назвою замовлення, клієнтом" xml:space="preserve">
+    <value>Recherche par titre de commande ou client</value>
+  </data>
+  <data name="Замовлень за цим фільтром немає." xml:space="preserve">
+    <value>Aucune commande pour ce filtre.</value>
+  </data>
+  <data name="Відповідайте швидко на нові замовлення — це підвищує ваш рейтинг та шанси отримати роботу." xml:space="preserve">
+    <value>Répondez vite aux nouvelles commandes — cela améliore votre note et vos chances d’obtenir du travail.</value>
+  </data>
+  <data name="Показуйте свої найкращі роботи та залучайте нових клієнтів." xml:space="preserve">
+    <value>Montrez vos meilleurs travaux et attirez de nouveaux clients.</value>
+  </data>
+  <data name="Додати роботу" xml:space="preserve">
+    <value>Ajouter un travail</value>
+  </data>
+  <data name="Усі роботи" xml:space="preserve">
+    <value>Tous les travaux</value>
+  </data>
+  <data name="Нова робота" xml:space="preserve">
+    <value>Nouveau travail</value>
+  </data>
+  <data name="Назва роботи" xml:space="preserve">
+    <value>Titre du travail</value>
+  </data>
+  <data name="Логотип для кав'ярні" xml:space="preserve">
+    <value>Logo pour un café</value>
+  </data>
+  <data name="Розділ" xml:space="preserve">
+    <value>Rubrique</value>
+  </data>
+  <data name="Ім'я файлу знімка" xml:space="preserve">
+    <value>Nom du fichier image</value>
+  </data>
+  <data name="Посилання на роботу" xml:space="preserve">
+    <value>Lien vers le travail</value>
+  </data>
+  <data name="Робіт поки немає. Натисніть «Додати роботу»." xml:space="preserve">
+    <value>Aucun travail pour l’instant. Cliquez sur « Ajouter un travail ».</value>
+  </data>
+  <data name="Прибрати роботу {0}" xml:space="preserve">
+    <value>Retirer le travail {0}</value>
+  </data>
+  <data name="Сильне портфоліо — отримує більше замовлень" xml:space="preserve">
+    <value>Un bon portfolio attire plus de commandes</value>
+  </data>
+  <data name="Додавайте якісні приклади робіт і регулярно оновлюйте портфоліо." xml:space="preserve">
+    <value>Ajoutez des exemples de qualité et mettez régulièrement à jour votre portfolio.</value>
+  </data>
+  <data name="Відгуки клієнтів про вашу роботу та послуги" xml:space="preserve">
+    <value>Avis des clients sur votre travail et vos services</value>
+  </data>
+  <data name="Запросити відгук" xml:space="preserve">
+    <value>Demander un avis</value>
+  </data>
+  <data name="Усього відгуків" xml:space="preserve">
+    <value>Total des avis</value>
+  </data>
+  <data name="за весь час" xml:space="preserve">
+    <value>depuis le début</value>
+  </data>
+  <data name="Середній рейтинг" xml:space="preserve">
+    <value>Note moyenne</value>
+  </data>
+  <data name="на основі {0}" xml:space="preserve">
+    <value>sur la base de {0}</value>
+  </data>
+  <data name="Відгуки з фото" xml:space="preserve">
+    <value>Avis avec photos</value>
+  </data>
+  <data name="{0}% від усіх" xml:space="preserve">
+    <value>{0} % du total</value>
+  </data>
+  <data name="немає" xml:space="preserve">
+    <value>aucun</value>
+  </data>
+  <data name="Рекомендації" xml:space="preserve">
+    <value>Recommandations</value>
+  </data>
+  <data name="клієнти рекомендують" xml:space="preserve">
+    <value>des clients recommandent</value>
+  </data>
+  <data name="Порядок" xml:space="preserve">
+    <value>Ordre</value>
+  </data>
+  <data name="Усі завершені замовлення вже оцінені." xml:space="preserve">
+    <value>Toutes les commandes terminées ont déjà été notées.</value>
+  </data>
+  <data name="{0} з 5" xml:space="preserve">
+    <value>{0} sur 5</value>
+  </data>
+  <data name="Замовлення {0}" xml:space="preserve">
+    <value>Commande {0}</value>
+  </data>
+  <data name="Дії з відгуком" xml:space="preserve">
+    <value>Actions sur l’avis</value>
+  </data>
+  <data name="Більше відгуків — більше довіри" xml:space="preserve">
+    <value>Plus d’avis — plus de confiance</value>
+  </data>
+  <data name="Запросіть клієнтів залишити відгуки після завершення замовлення." xml:space="preserve">
+    <value>Invitez vos clients à laisser un avis après la commande.</value>
+  </data>
+  <data name="Ви ще не писали відгуків." xml:space="preserve">
+    <value>Vous n’avez encore écrit aucun avis.</value>
+  </data>
+  <data name="Відгуків поки немає." xml:space="preserve">
+    <value>Aucun avis pour l’instant.</value>
+  </data>
+  <data name="Керуйте своїми послугами, цінами та доступністю" xml:space="preserve">
+    <value>Gérez vos services, vos prix et votre disponibilité</value>
+  </data>
+  <data name="Додати послугу" xml:space="preserve">
+    <value>Ajouter un service</value>
+  </data>
+  <data name="Активні послуги" xml:space="preserve">
+    <value>Services actifs</value>
+  </data>
+  <data name="опубліковано" xml:space="preserve">
+    <value>publiés</value>
+  </data>
+  <data name="На паузі" xml:space="preserve">
+    <value>En pause</value>
+  </data>
+  <data name="тимчасово недоступні" xml:space="preserve">
+    <value>temporairement indisponibles</value>
+  </data>
+  <data name="Чернетки" xml:space="preserve">
+    <value>Brouillons</value>
+  </data>
+  <data name="не опубліковані" xml:space="preserve">
+    <value>non publiés</value>
+  </data>
+  <data name="Всього замовлень" xml:space="preserve">
+    <value>Total des commandes</value>
+  </data>
+  <data name="отримано через послуги" xml:space="preserve">
+    <value>reçues via les services</value>
+  </data>
+  <data name="Пошук за назвою послуги" xml:space="preserve">
+    <value>Recherche par nom de service</value>
+  </data>
+  <data name="Пошук послуг" xml:space="preserve">
+    <value>Rechercher des services</value>
+  </data>
+  <data name="Категорія послуг" xml:space="preserve">
+    <value>Catégorie de services</value>
+  </data>
+  <data name="Дизайн логотипа" xml:space="preserve">
+    <value>Création de logo</value>
+  </data>
+  <data name="Категорія" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="Оберіть напрям" xml:space="preserve">
+    <value>Choisissez un domaine</value>
+  </data>
+  <data name="Ціна від, грн" xml:space="preserve">
+    <value>Prix à partir de, UAH</value>
+  </data>
+  <data name="Що входить у послугу, скільки правок, у які строки" xml:space="preserve">
+    <value>Ce que comprend le service, combien de retouches, quels délais</value>
+  </data>
+  <data name="Опублікувати одразу" xml:space="preserve">
+    <value>Publier immédiatement</value>
+  </data>
+  <data name="Послуг за цим фільтром немає. Натисніть «Додати послугу»." xml:space="preserve">
+    <value>Aucun service pour ce filtre. Cliquez sur « Ajouter un service ».</value>
+  </data>
+  <data name="створено {0}" xml:space="preserve">
+    <value>créé le {0}</value>
+  </data>
+  <data name="Замовлень: {0}" xml:space="preserve">
+    <value>Commandes : {0}</value>
+  </data>
+  <data name="Увімкнути або призупинити послугу {0}" xml:space="preserve">
+    <value>Activer ou mettre en pause le service {0}</value>
+  </data>
+  <data name="Редагувати" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Видалити" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Як зробити послуги популярнішими?" xml:space="preserve">
+    <value>Comment rendre vos services plus populaires ?</value>
+  </data>
+  <data name="Додайте якісні фото, детальний опис і відповідайте на запити швидко." xml:space="preserve">
+    <value>Ajoutez de belles photos, une description détaillée et répondez vite aux demandes.</value>
+  </data>
+  <data name="Переглянути поради" xml:space="preserve">
+    <value>Voir les conseils</value>
+  </data>
+  <data name="Редагувати послугу" xml:space="preserve">
+    <value>Modifier le service</value>
+  </data>
+  <data name="Нова послуга" xml:space="preserve">
+    <value>Nouveau service</value>
+  </data>
+  <data name="Керуйте своїм профілем, сповіщеннями та безпекою." xml:space="preserve">
+    <value>Gérez votre profil, vos notifications et votre sécurité.</value>
+  </data>
+  <data name="Фото профілю" xml:space="preserve">
+    <value>Photo de profil</value>
+  </data>
+  <data name="Змінити фото" xml:space="preserve">
+    <value>Changer la photo</value>
+  </data>
+  <data name="рекомендований розмір" xml:space="preserve">
+    <value>taille recommandée</value>
+  </data>
+  <data name="(максимально 2 Мб)" xml:space="preserve">
+    <value>(2 Mo maximum)</value>
+  </data>
+  <data name="Імʼя" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="Псевдонім (відображається публічно)" xml:space="preserve">
+    <value>Pseudonyme (affiché publiquement)</value>
+  </data>
+  <data name="Професія" xml:space="preserve">
+    <value>Métier</value>
+  </data>
+  <data name="Графічний дизайнер" xml:space="preserve">
+    <value>Graphiste</value>
+  </data>
+  <data name="Кілька речень про те, що ви робите найкраще" xml:space="preserve">
+    <value>Quelques phrases sur ce que vous faites de mieux</value>
+  </data>
+  <data name="Номер телефону" xml:space="preserve">
+    <value>Numéro de téléphone</value>
+  </data>
+  <data name="Київ, Україна" xml:space="preserve">
+    <value>Kyiv, Ukraine</value>
+  </data>
+  <data name="Двоетапна перевірка" xml:space="preserve">
+    <value>Vérification en deux étapes</value>
+  </data>
+  <data name="Додатковий рівень захисту вашого акаунту" xml:space="preserve">
+    <value>Une protection supplémentaire pour votre compte</value>
+  </data>
+  <data name="Двоетапна перевірка зʼявиться разом із кодами входу" xml:space="preserve">
+    <value>La vérification en deux étapes arrivera avec les codes de connexion</value>
+  </data>
+  <data name="Сповіщення" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Підключені акаунти" xml:space="preserve">
+    <value>Comptes associés</value>
+  </data>
+  <data name="Вхід через соцмережі зʼявиться пізніше" xml:space="preserve">
+    <value>La connexion via les réseaux sociaux arrivera plus tard</value>
+  </data>
+  <data name="Підключити" xml:space="preserve">
+    <value>Connecter</value>
+  </data>
+  <data name="Мова та регіон" xml:space="preserve">
+    <value>Langue et région</value>
+  </data>
+  <data name="Мова інтерфейсу" xml:space="preserve">
+    <value>Langue de l’interface</value>
+  </data>
+  <data name="Часовий пояс" xml:space="preserve">
+    <value>Fuseau horaire</value>
+  </data>
+  <data name="Формат дати" xml:space="preserve">
+    <value>Format de date</value>
+  </data>
+  <data name="Формат часу" xml:space="preserve">
+    <value>Format de l’heure</value>
+  </data>
+  <data name="Вигляд" xml:space="preserve">
+    <value>Apparence</value>
+  </data>
+  <data name="Тема інтерфейсу" xml:space="preserve">
+    <value>Thème de l’interface</value>
+  </data>
+  <data name="Світла" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="Темна" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="Зберегти зміни" xml:space="preserve">
+    <value>Enregistrer les modifications</value>
+  </data>
+  <data name="Вийти з усіх пристроїв" xml:space="preserve">
+    <value>Se déconnecter de tous les appareils</value>
+  </data>
+  <data name="Ви вилогуєтесь з усіх пристроїв, окрім поточного" xml:space="preserve">
+    <value>Vous serez déconnecté de tous les appareils sauf celui-ci</value>
+  </data>
+  <data name="Видалити акаунт" xml:space="preserve">
+    <value>Supprimer le compte</value>
+  </data>
+  <data name="Безповоротне видалення акаунту та всіх даних" xml:space="preserve">
+    <value>Suppression définitive du compte et de toutes les données</value>
+  </data>
+  <data name="Підключено" xml:space="preserve">
+    <value>Connecté</value>
+  </data>
+  <data name="Не підключено" xml:space="preserve">
+    <value>Non connecté</value>
+  </data>
+  <data name="Розділ у роботі" xml:space="preserve">
+    <value>Section en cours de développement</value>
+  </data>
+  <data name="Поки що цифри є на головній" xml:space="preserve">
+    <value>Pour l’instant, les chiffres sont sur la page d’accueil</value>
+  </data>
+  <data name="Картка «Статистика за місяць» показує перегляди, замовлення й заробіток." xml:space="preserve">
+    <value>La carte « Statistiques du mois » montre les vues, les commandes et les revenus.</value>
+  </data>
+  <data name="На головну кабінету" xml:space="preserve">
+    <value>Vers l’accueil de l’espace</value>
+  </data>
+  <data name="Ми тут, щоб допомогти вам 24/7." xml:space="preserve">
+    <value>Nous sommes là pour vous aider 24 h/24, 7 j/7.</value>
+  </data>
+  <data name="Пошук за запитанням (наприклад, “повернення коштів”)" xml:space="preserve">
+    <value>Recherche par question (par ex. « remboursement »)</value>
+  </data>
+  <data name="Пошук за запитанням" xml:space="preserve">
+    <value>Recherche par question</value>
+  </data>
+  <data name="Написати в підтримку" xml:space="preserve">
+    <value>Écrire à l’assistance</value>
+  </data>
+  <data name="За запитом «{0}» нічого не знайшли — напишіть нам нижче." xml:space="preserve">
+    <value>Rien trouvé pour « {0} » — écrivez-nous ci-dessous.</value>
+  </data>
+  <data name="Популярні теми" xml:space="preserve">
+    <value>Sujets populaires</value>
+  </data>
+  <data name="Звернення до підтримки" xml:space="preserve">
+    <value>Demande d’assistance</value>
+  </data>
+  <data name="Не знайшли відповіді, напишіть нам і ми допоможемо" xml:space="preserve">
+    <value>Vous n’avez pas trouvé de réponse ? Écrivez-nous, nous vous aiderons</value>
+  </data>
+  <data name="Тема звернення" xml:space="preserve">
+    <value>Objet de la demande</value>
+  </data>
+  <data name="Оберіть тему" xml:space="preserve">
+    <value>Choisissez un objet</value>
+  </data>
+  <data name="Оберіть категорію" xml:space="preserve">
+    <value>Choisissez une catégorie</value>
+  </data>
+  <data name="Опис проблеми" xml:space="preserve">
+    <value>Description du problème</value>
+  </data>
+  <data name="Детально опишіть вашу проблему" xml:space="preserve">
+    <value>Décrivez votre problème en détail</value>
+  </data>
+  <data name="Додати файли (не більше 5)" xml:space="preserve">
+    <value>Ajouter des fichiers (5 maximum)</value>
+  </data>
+  <data name="Перетягніть файли сюди, або виберіть з комп'ютера" xml:space="preserve">
+    <value>Glissez les fichiers ici ou choisissez-les sur votre ordinateur</value>
+  </data>
+  <data name="підтримуються JPG, PNG, PDF. Максимальний розмір 10Мб" xml:space="preserve">
+    <value>JPG, PNG, PDF acceptés. Taille maximale 10 Mo</value>
+  </data>
+  <data name="Надіслати звернення" xml:space="preserve">
+    <value>Envoyer la demande</value>
+  </data>
+  <data name="Ваші звернення" xml:space="preserve">
+    <value>Vos demandes</value>
+  </data>
+  <data name="Корисні ресурси" xml:space="preserve">
+    <value>Ressources utiles</value>
+  </data>
+  <data name="Час відповіді" xml:space="preserve">
+    <value>Délai de réponse</value>
+  </data>
+  <data name="Середній час відповіді" xml:space="preserve">
+    <value>Délai moyen de réponse</value>
+  </data>
+  <data name="до 6 годин" xml:space="preserve">
+    <value>jusqu’à 6 heures</value>
+  </data>
+  <data name="Ми відповідаємо щодня з 8.00 до 21.00 (за київським часом)" xml:space="preserve">
+    <value>Nous répondons tous les jours de 8 h à 21 h (heure de Kyiv)</value>
+  </data>
+  <data name="Інші способи зв'язку" xml:space="preserve">
+    <value>Autres moyens de nous contacter</value>
+  </data>
+  <data name="В обробці" xml:space="preserve">
+    <value>En traitement</value>
+  </data>
+  <data name="Відповіли" xml:space="preserve">
+    <value>Répondu</value>
+  </data>
+  <data name="Розділи кабінету" xml:space="preserve">
+    <value>Sections de l’espace</value>
+  </data>
+  <data name="Стати замовником" xml:space="preserve">
+    <value>Devenir client</value>
+  </data>
+  <data name="Профіль переглянуто {0} за тиждень" xml:space="preserve">
+    <value>Profil consulté {0} cette semaine</value>
+  </data>
+  <data name="Замовник:" xml:space="preserve">
+    <value>Client :</value>
+  </data>
+  <data name="Прийняти" xml:space="preserve">
+    <value>Accepter</value>
+  </data>
+  <data name="Відхилити" xml:space="preserve">
+    <value>Refuser</value>
+  </data>
+  <data name="Відкрити чат" xml:space="preserve">
+    <value>Ouvrir le chat</value>
+  </data>
+  <data name="Фіксована ціна" xml:space="preserve">
+    <value>Prix fixe</value>
+  </data>
+  <data name="Обране" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="Тут зберігаються ваші улюблені виконавці та послуги." xml:space="preserve">
+    <value>Vos prestataires et services préférés sont enregistrés ici.</value>
+  </data>
+  <data name="Пошук в обраному" xml:space="preserve">
+    <value>Rechercher dans les favoris</value>
+  </data>
+  <data name="Виконавці" xml:space="preserve">
+    <value>Prestataires</value>
+  </data>
+  <data name="Послуги" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="В обраному поки нікого немає. Відкрийте профіль виконавця й натисніть «У обране»." xml:space="preserve">
+    <value>Aucun favori pour l’instant. Ouvrez le profil d’un prestataire et cliquez sur « Ajouter aux favoris ».</value>
+  </data>
+  <data name="Переглянути профіль" xml:space="preserve">
+    <value>Voir le profil</value>
+  </data>
+  <data name="Написати" xml:space="preserve">
+    <value>Écrire</value>
+  </data>
+  <data name="Переглянути все" xml:space="preserve">
+    <value>Tout voir</value>
+  </data>
+  <data name="Збережених послуг поки немає." xml:space="preserve">
+    <value>Aucun service enregistré pour l’instant.</value>
+  </data>
+  <data name="Переглянути каталог послуг" xml:space="preserve">
+    <value>Parcourir le catalogue des services</value>
+  </data>
+  <data name="Вітаємо, {0}!" xml:space="preserve">
+    <value>Bienvenue, {0} !</value>
+  </data>
+  <data name="Тут ви можете керувати своїми замовленнями та переглядати важливу інформацію" xml:space="preserve">
+    <value>Ici, vous pouvez gérer vos commandes et consulter les informations importantes</value>
+  </data>
+  <data name="Очікують відгуку" xml:space="preserve">
+    <value>En attente de propositions</value>
+  </data>
+  <data name="Витрачено коштів" xml:space="preserve">
+    <value>Dépenses</value>
+  </data>
+  <data name="Рекомендоване для вас" xml:space="preserve">
+    <value>Recommandé pour vous</value>
+  </data>
+  <data name="Листування ще немає." xml:space="preserve">
+    <value>Aucune conversation pour l’instant.</value>
+  </data>
+  <data name="Переглянути всі повідомлення" xml:space="preserve">
+    <value>Voir tous les messages</value>
+  </data>
+  <data name="Виконавець замовлення" xml:space="preserve">
+    <value>Prestataire de la commande</value>
+  </data>
+  <data name="Поділитися" xml:space="preserve">
+    <value>Partager</value>
+  </data>
+  <data name="Ще" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="Опис замовлення" xml:space="preserve">
+    <value>Description de la commande</value>
+  </data>
+  <data name="Деталі" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Активність замовлення" xml:space="preserve">
+    <value>Activité de la commande</value>
+  </data>
+  <data name="Відгуки виконавців ({0})" xml:space="preserve">
+    <value>Propositions des prestataires ({0})</value>
+  </data>
+  <data name="Виконавці ще не відгукнулися. Щойно хтось запропонує ціну, пропозиція зʼявиться тут." xml:space="preserve">
+    <value>Aucun prestataire n’a encore répondu. Dès que quelqu’un proposera un prix, l’offre apparaîtra ici.</value>
+  </data>
+  <data name="термін не вказано" xml:space="preserve">
+    <value>délai non précisé</value>
+  </data>
+  <data name="Якщо у вас виникли питання або проблеми із замовленням, зверніться до нашої підтримки." xml:space="preserve">
+    <value>Si vous avez des questions ou des problèmes avec la commande, contactez notre assistance.</value>
+  </data>
+  <data name="Правила безпеки" xml:space="preserve">
+    <value>Règles de sécurité</value>
+  </data>
+  <data name="Підтверджено" xml:space="preserve">
+    <value>Confirmée</value>
+  </data>
+  <data name="Відхилено" xml:space="preserve">
+    <value>Refusée</value>
+  </data>
+  <data name="Усі типи" xml:space="preserve">
+    <value>Tous les types</value>
+  </data>
+  <data name="Оплати" xml:space="preserve">
+    <value>Paiements</value>
+  </data>
+  <data name="Повернення" xml:space="preserve">
+    <value>Remboursements</value>
+  </data>
+  <data name="Платежі та рахунки" xml:space="preserve">
+    <value>Paiements et factures</value>
+  </data>
+  <data name="Вся інформація про ваші платежі, транзакції та рахунки" xml:space="preserve">
+    <value>Toutes les informations sur vos paiements, transactions et factures</value>
+  </data>
+  <data name="Баланс гаманця" xml:space="preserve">
+    <value>Solde du portefeuille</value>
+  </data>
+  <data name="Поповнення зʼявиться разом із платіжним шлюзом" xml:space="preserve">
+    <value>Le rechargement arrivera avec la passerelle de paiement</value>
+  </data>
+  <data name="Поповнити" xml:space="preserve">
+    <value>Recharger</value>
+  </data>
+  <data name="Усього витрачено" xml:space="preserve">
+    <value>Total dépensé</value>
+  </data>
+  <data name="Всього транзакцій" xml:space="preserve">
+    <value>Total des transactions</value>
+  </data>
+  <data name="Транзакції" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="Рахунки" xml:space="preserve">
+    <value>Factures</value>
+  </data>
+  <data name="Тип транзакції" xml:space="preserve">
+    <value>Type de transaction</value>
+  </data>
+  <data name="Пошук замовлень за назвою, ID…" xml:space="preserve">
+    <value>Rechercher des commandes par titre, ID…</value>
+  </data>
+  <data name="Пошук транзакцій" xml:space="preserve">
+    <value>Rechercher des transactions</value>
+  </data>
+  <data name="Рахунки-фактури зʼявляться, коли платформа почне їх виставляти. Усі платежі поки показано на вкладці «Транзакції»." xml:space="preserve">
+    <value>Les factures apparaîtront quand la plateforme commencera à les émettre. Tous les paiements sont pour l’instant dans l’onglet « Transactions ».</value>
+  </data>
+  <data name="Транзакцій за цим фільтром немає." xml:space="preserve">
+    <value>Aucune transaction pour ce filtre.</value>
+  </data>
+  <data name="Відкрити замовлення {0}" xml:space="preserve">
+    <value>Ouvrir la commande {0}</value>
+  </data>
+  <data name="Питання щодо платежів" xml:space="preserve">
+    <value>Questions sur les paiements</value>
+  </data>
+  <data name="Наші фахівці завжди готові допомогти вам 24/7" xml:space="preserve">
+    <value>Nos spécialistes sont toujours prêts à vous aider 24 h/24</value>
+  </data>
+  <data name="Очікують вашого відгуку" xml:space="preserve">
+    <value>En attente de votre avis</value>
+  </data>
+  <data name="Ваші відгуки" xml:space="preserve">
+    <value>Vos avis</value>
+  </data>
+  <data name="Ви ще не залишали відгуків." xml:space="preserve">
+    <value>Vous n’avez encore laissé aucun avis.</value>
+  </data>
+  <data name="Керуйте своїм акаунтом, сповіщеннями та безпекою." xml:space="preserve">
+    <value>Gérez votre compte, vos notifications et votre sécurité.</value>
+  </data>
+  <data name="Ім'я" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="JPG, PNG (максимально 2 Мб)" xml:space="preserve">
+    <value>JPG, PNG (2 Mo maximum)</value>
+  </data>
+  <data name="Електронна пошта" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Отримувати сповіщення на email" xml:space="preserve">
+    <value>Recevoir les notifications par e-mail</value>
+  </data>
+  <data name="Push-сповіщення" xml:space="preserve">
+    <value>Notifications push</value>
+  </data>
+  <data name="Отримувати сповіщення в додатку" xml:space="preserve">
+    <value>Recevoir les notifications dans l’application</value>
+  </data>
+  <data name="SMS-сповіщення" xml:space="preserve">
+    <value>Notifications SMS</value>
+  </data>
+  <data name="Отримувати важливі сповіщення на SMS" xml:space="preserve">
+    <value>Recevoir les notifications importantes par SMS</value>
+  </data>
+  <data name="Маркетингові розсилки" xml:space="preserve">
+    <value>E-mails marketing</value>
+  </data>
+  <data name="Отримувати новини та акції" xml:space="preserve">
+    <value>Recevoir les actualités et promotions</value>
+  </data>
+  <data name="Конфіденційність" xml:space="preserve">
+    <value>Confidentialité</value>
+  </data>
+  <data name="Хто може бачити мій профіль" xml:space="preserve">
+    <value>Qui peut voir mon profil</value>
+  </data>
+  <data name="Виконавець може бачити ваш основний профіль" xml:space="preserve">
+    <value>Un prestataire peut voir votre profil principal</value>
+  </data>
+  <data name="Активність та статус" xml:space="preserve">
+    <value>Activité et statut</value>
+  </data>
+  <data name="Показувати статус онлайн виконавцям" xml:space="preserve">
+    <value>Montrer mon statut en ligne aux prestataires</value>
+  </data>
+  <data name="Історія замовлень" xml:space="preserve">
+    <value>Historique des commandes</value>
+  </data>
+  <data name="Дозволити виконавцям переглядати історію моїх замовлень" xml:space="preserve">
+    <value>Autoriser les prestataires à consulter l’historique de mes commandes</value>
+  </data>
+  <data name="Платежі" xml:space="preserve">
+    <value>Paiements</value>
+  </data>
+  <data name="Основний спосіб оплати" xml:space="preserve">
+    <value>Moyen de paiement principal</value>
+  </data>
+  <data name="Карта, з якої списуються кошти за замовлення" xml:space="preserve">
+    <value>La carte débitée pour les commandes</value>
+  </data>
+  <data name="Карту не додано" xml:space="preserve">
+    <value>Aucune carte ajoutée</value>
+  </data>
+  <data name="Прив'язка карти зʼявиться пізніше" xml:space="preserve">
+    <value>L’association d’une carte arrivera plus tard</value>
+  </data>
+  <data name="Валюта рахунків" xml:space="preserve">
+    <value>Devise de facturation</value>
+  </data>
+  <data name="У цій валюті показуються суми та рахунки" xml:space="preserve">
+    <value>Les montants et les factures sont affichés dans cette devise</value>
+  </data>
+  <data name="Зʼявиться разом зі списком активних сесій" xml:space="preserve">
+    <value>Arrivera avec la liste des sessions actives</value>
+  </data>
+  <data name="Ми тут, щоб допомогти вам у будь-який час" xml:space="preserve">
+    <value>Nous sommes là pour vous aider à tout moment</value>
+  </data>
+  <data name="За цим запитом нічого не знайшлося. Напишіть нам — відповімо особисто." xml:space="preserve">
+    <value>Rien trouvé pour cette recherche. Écrivez-nous — nous répondrons personnellement.</value>
+  </data>
+  <data name="Завантажити фото" xml:space="preserve">
+    <value>Envoyer une photo</value>
+  </data>
+  <data name="У вашому акаунті ще немає замовлень, тому екран показує демонстраційні дані. Щойно ви" xml:space="preserve">
+    <value>Votre compte n’a pas encore de commandes, l’écran affiche donc des données de démonstration. Dès que vous</value>
+  </data>
+  <data name="створите замовлення" xml:space="preserve">
+    <value>créerez une commande</value>
+  </data>
+  <data name=", тут зʼявиться ваша історія." xml:space="preserve">
+    <value>, votre historique apparaîtra ici.</value>
+  </data>
+  <data name="Кабінет виконавця — Вибір" xml:space="preserve">
+    <value>Espace prestataire — Vybir</value>
+  </data>
+  <data name="Замовлення — Вибір" xml:space="preserve">
+    <value>Commandes — Vybir</value>
+  </data>
+  <data name="Замовлення взято в роботу." xml:space="preserve">
+    <value>La commande est maintenant en cours.</value>
+  </data>
+  <data name="Замовлення відхилено й повернулося в пошук." xml:space="preserve">
+    <value>La commande a été refusée et est revenue dans la recherche.</value>
+  </data>
+  <data name="Не вдалося змінити замовлення: можливо, його вже забрали." xml:space="preserve">
+    <value>Impossible de modifier la commande : quelqu’un l’a peut-être déjà prise.</value>
+  </data>
+  <data name="Мої послуги — Вибір" xml:space="preserve">
+    <value>Mes services — Vybir</value>
+  </data>
+  <data name="Послугу оновлено." xml:space="preserve">
+    <value>Service mis à jour.</value>
+  </data>
+  <data name="Послугу додано." xml:space="preserve">
+    <value>Service ajouté.</value>
+  </data>
+  <data name="Стан послуги змінено." xml:space="preserve">
+    <value>Statut du service modifié.</value>
+  </data>
+  <data name="Послугу видалено." xml:space="preserve">
+    <value>Service supprimé.</value>
+  </data>
+  <data name="Календар — Вибір" xml:space="preserve">
+    <value>Calendrier — Vybir</value>
+  </data>
+  <data name="Вкажіть дату у форматі РРРР-ММ-ДД" xml:space="preserve">
+    <value>Indiquez la date au format AAAA-MM-JJ</value>
+  </data>
+  <data name="Подію додано в календар." xml:space="preserve">
+    <value>Événement ajouté au calendrier.</value>
+  </data>
+  <data name="Портфоліо — Вибір" xml:space="preserve">
+    <value>Portfolio — Vybir</value>
+  </data>
+  <data name="Роботу додано. Покладіть знімок у {0}." xml:space="preserve">
+    <value>Travail ajouté. Placez l’image dans {0}.</value>
+  </data>
+  <data name="Роботу прибрано з портфоліо." xml:space="preserve">
+    <value>Travail retiré du portfolio.</value>
+  </data>
+  <data name="Повідомлення — Вибір" xml:space="preserve">
+    <value>Messages — Vybir</value>
+  </data>
+  <data name="Відгуки — Вибір" xml:space="preserve">
+    <value>Avis — Vybir</value>
+  </data>
+  <data name="Аналітика — Вибір" xml:space="preserve">
+    <value>Statistiques — Vybir</value>
+  </data>
+  <data name="Фінанси — Вибір" xml:space="preserve">
+    <value>Finances — Vybir</value>
+  </data>
+  <data name="Заявку на {0} прийнято. Гроші йдуть 1–3 робочі дні." xml:space="preserve">
+    <value>Votre demande de {0} a été acceptée. L’argent arrive sous 1 à 3 jours ouvrés.</value>
+  </data>
+  <data name="Не вдалося замовити виплату: перевірте суму й спосіб виведення." xml:space="preserve">
+    <value>Impossible de demander le versement : vérifiez le montant et le moyen de retrait.</value>
+  </data>
+  <data name="Спосіб виведення оновлено." xml:space="preserve">
+    <value>Moyen de retrait mis à jour.</value>
+  </data>
+  <data name="Спосіб виведення додано." xml:space="preserve">
+    <value>Moyen de retrait ajouté.</value>
+  </data>
+  <data name="Спосіб виведення прибрано." xml:space="preserve">
+    <value>Moyen de retrait supprimé.</value>
+  </data>
+  <data name="Такого способу виведення вже немає." xml:space="preserve">
+    <value>Ce moyen de retrait n’existe plus.</value>
+  </data>
+  <data name="Підтримка — Вибір" xml:space="preserve">
+    <value>Assistance — Vybir</value>
+  </data>
+  <data name="Звернення надіслано. Відповідь прийде на пошту протягом 6 годин." xml:space="preserve">
+    <value>Demande envoyée. La réponse arrivera par e-mail sous 6 heures.</value>
+  </data>
+  <data name="Налаштування — Вибір" xml:space="preserve">
+    <value>Paramètres — Vybir</value>
+  </data>
+  <data name="Зміни збережено." xml:space="preserve">
+    <value>Modifications enregistrées.</value>
+  </data>
+  <data name="Інші пристрої вийшли з акаунта." xml:space="preserve">
+    <value>Les autres appareils ont été déconnectés.</value>
+  </data>
+  <data name="Не вдалося змінити роль. Спробуйте пізніше." xml:space="preserve">
+    <value>Impossible de changer de rôle. Réessayez plus tard.</value>
+  </data>
+  <data name="Готово! Тепер ви також виконавець: заповніть профіль і додайте свої послуги." xml:space="preserve">
+    <value>C’est fait ! Vous êtes maintenant aussi prestataire : complétez votre profil et ajoutez vos services.</value>
+  </data>
+  <data name="Готово! Тепер ви також замовник: можете створювати замовлення." xml:space="preserve">
+    <value>C’est fait ! Vous êtes maintenant aussi client : vous pouvez créer des commandes.</value>
+  </data>
+  <data name="Не вдалося зберегти фото. Спробуйте ще раз." xml:space="preserve">
+    <value>Impossible d’enregistrer la photo. Réessayez.</value>
+  </data>
+  <data name="Фото профілю оновлено." xml:space="preserve">
+    <value>Photo de profil mise à jour.</value>
+  </data>
+  <data name="Особистий кабінет — Вибір" xml:space="preserve">
+    <value>Mon espace — Vybir</value>
+  </data>
+  <data name="Мої замовлення — Вибір" xml:space="preserve">
+    <value>Mes commandes — Vybir</value>
+  </data>
+  <data name="до {0}" xml:space="preserve">
+    <value>jusqu’au {0}</value>
+  </data>
+  <data name="Відгуків виконавців" xml:space="preserve">
+    <value>Propositions des prestataires</value>
+  </data>
+  <data name="Створити замовлення — Вибір" xml:space="preserve">
+    <value>Créer une commande — Vybir</value>
+  </data>
+  <data name="Оберіть категорію зі списку" xml:space="preserve">
+    <value>Choisissez une catégorie dans la liste</value>
+  </data>
+  <data name="Верхня межа не може бути меншою за нижню" xml:space="preserve">
+    <value>La limite supérieure ne peut pas être inférieure à la limite inférieure</value>
+  </data>
+  <data name="Оберіть адресу, куди має приїхати виконавець" xml:space="preserve">
+    <value>Choisissez l’adresse où le prestataire doit se rendre</value>
+  </data>
+  <data name="Замовлення опубліковано. Виконавці побачать його в каталозі." xml:space="preserve">
+    <value>Commande publiée. Les prestataires la verront dans le catalogue.</value>
+  </data>
+  <data name="Виконавця підтверджено." xml:space="preserve">
+    <value>Prestataire confirmé.</value>
+  </data>
+  <data name="Відгук відхилено." xml:space="preserve">
+    <value>Proposition refusée.</value>
+  </data>
+  <data name="Не вдалося змінити відгук." xml:space="preserve">
+    <value>Impossible de modifier la proposition.</value>
+  </data>
+  <data name="Повідомлення не надіслано: порожній текст або чуже замовлення." xml:space="preserve">
+    <value>Message non envoyé : texte vide ou commande d’un autre utilisateur.</value>
+  </data>
+  <data name="Обране — Вибір" xml:space="preserve">
+    <value>Favoris — Vybir</value>
+  </data>
+  <data name="Мої адреси — Вибір" xml:space="preserve">
+    <value>Mes adresses — Vybir</value>
+  </data>
+  <data name="Адресу оновлено." xml:space="preserve">
+    <value>Adresse mise à jour.</value>
+  </data>
+  <data name="Адресу додано." xml:space="preserve">
+    <value>Adresse ajoutée.</value>
+  </data>
+  <data name="Адресу видалено." xml:space="preserve">
+    <value>Adresse supprimée.</value>
+  </data>
+  <data name="Платежі та рахунки — Вибір" xml:space="preserve">
+    <value>Paiements et factures — Vybir</value>
+  </data>
+  <data name="{0} о {1}" xml:space="preserve">
+    <value>{0} à {1}</value>
+  </data>
+  <data name="Вчора" xml:space="preserve">
+    <value>Hier</value>
+  </data>
+  <data name="{0} тому" xml:space="preserve">
+    <value>il y a {0}</value>
+  </data>
+  <data name="{0} грн." xml:space="preserve">
+    <value>{0} UAH</value>
+  </data>
+  <data name="{0} грн" xml:space="preserve">
+    <value>{0} UAH</value>
+  </data>
+  <data name="Договірна" xml:space="preserve">
+    <value>À négocier</value>
+  </data>
+  <data name="від {0}" xml:space="preserve">
+    <value>à partir de {0}</value>
+  </data>
+  <data name="Очікує виконавця" xml:space="preserve">
+    <value>En attente d’un prestataire</value>
+  </data>
+  <data name="В процесі" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="Виконано" xml:space="preserve">
+    <value>Réalisée</value>
+  </data>
+  <data name="Скасовано" xml:space="preserve">
+    <value>Annulée</value>
+  </data>
+  <data name="Успішно" xml:space="preserve">
+    <value>Réussi</value>
+  </data>
+  <data name="Повернено" xml:space="preserve">
+    <value>Remboursé</value>
+  </data>
+  <data name="Не вдалося" xml:space="preserve">
+    <value>Échec</value>
+  </data>
+  <data name="Оплата замовлення" xml:space="preserve">
+    <value>Paiement de la commande</value>
+  </data>
+  <data name="Pay Pal" xml:space="preserve">
+    <value>PayPal</value>
+  </data>
+  <data name="Нове" xml:space="preserve">
+    <value>Nouvelle</value>
+  </data>
+  <data name="На перевірці" xml:space="preserve">
+    <value>En vérification</value>
+  </data>
+  <data name="В роботі" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="Завершене" xml:space="preserve">
+    <value>Terminée</value>
+  </data>
+  <data name="Скасоване" xml:space="preserve">
+    <value>Annulée</value>
+  </data>
+  <data name="Активна" xml:space="preserve">
+    <value>Actif</value>
+  </data>
+  <data name="Чернетка" xml:space="preserve">
+    <value>Brouillon</value>
+  </data>
+  <data name="Зайнятий" xml:space="preserve">
+    <value>Occupé</value>
+  </data>
+  <data name="Відійшов" xml:space="preserve">
+    <value>Absent</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>En ligne</value>
+  </data>
+  <data name="Усі замовлення" xml:space="preserve">
+    <value>Toutes les commandes</value>
+  </data>
+  <data name="Активні" xml:space="preserve">
+    <value>Actives</value>
+  </data>
+  <data name="Завершені" xml:space="preserve">
+    <value>Terminées</value>
+  </data>
+  <data name="Скасовані" xml:space="preserve">
+    <value>Annulées</value>
+  </data>
+  <data name="Оплата та комісії" xml:space="preserve">
+    <value>Paiement et commissions</value>
+  </data>
+  <data name="Безпека акаунту" xml:space="preserve">
+    <value>Sécurité du compte</value>
+  </data>
+  <data name="Спірні ситуації" xml:space="preserve">
+    <value>Litiges</value>
+  </data>
+  <data name="Робота з виконавцями" xml:space="preserve">
+    <value>Travailler avec les prestataires</value>
+  </data>
+  <data name="Додайте адресу" xml:space="preserve">
+    <value>Ajoutez une adresse</value>
+  </data>
+  <data name="Вкажіть точну адресу та деталі для зручності виконавця." xml:space="preserve">
+    <value>Indiquez l’adresse exacte et les détails pour faciliter la tâche du prestataire.</value>
+  </data>
+  <data name="Оберіть при замовленні" xml:space="preserve">
+    <value>Choisissez-la à la commande</value>
+  </data>
+  <data name="Вибирайте потрібну адресу під час створення замовлення" xml:space="preserve">
+    <value>Sélectionnez l’adresse voulue en créant une commande</value>
+  </data>
+  <data name="Швидко та безпечно" xml:space="preserve">
+    <value>Rapide et sûr</value>
+  </data>
+  <data name="Ваші адреси зберігаються та захищені" xml:space="preserve">
+    <value>Vos adresses sont enregistrées et protégées</value>
+  </data>
+  <data name="Офіс" xml:space="preserve">
+    <value>Bureau</value>
+  </data>
+  <data name="Дача" xml:space="preserve">
+    <value>Maison de campagne</value>
+  </data>
+  <data name="Тільки зареєстровані користувачі" xml:space="preserve">
+    <value>Uniquement les utilisateurs inscrits</value>
+  </data>
+  <data name="Усі відвідувачі сайту" xml:space="preserve">
+    <value>Tous les visiteurs du site</value>
+  </data>
+  <data name="Ніхто, крім виконавців моїх замовлень" xml:space="preserve">
+    <value>Personne, sauf les prestataires de mes commandes</value>
+  </data>
+  <data name="GMT+03:00 Київ" xml:space="preserve">
+    <value>GMT+03:00 Kyiv</value>
+  </data>
+  <data name="GMT+02:00 Варшава" xml:space="preserve">
+    <value>GMT+02:00 Varsovie</value>
+  </data>
+  <data name="GMT+01:00 Лондон" xml:space="preserve">
+    <value>GMT+01:00 Londres</value>
+  </data>
+  <data name="GMT+02:00 Берлін" xml:space="preserve">
+    <value>GMT+02:00 Berlin</value>
+  </data>
+  <data name="ДД.ММ.РРРР" xml:space="preserve">
+    <value>JJ.MM.AAAA</value>
+  </data>
+  <data name="РРРР-ММ-ДД" xml:space="preserve">
+    <value>AAAA-MM-JJ</value>
+  </data>
+  <data name="ММ/ДД/РРРР" xml:space="preserve">
+    <value>MM/JJ/AAAA</value>
+  </data>
+  <data name="24-годинний (13:30)" xml:space="preserve">
+    <value>24 heures (13:30)</value>
+  </data>
+  <data name="12-годинний (1:30 PM)" xml:space="preserve">
+    <value>12 heures (1:30 PM)</value>
+  </data>
+  <data name="Українська гривня (UAH, ₴)" xml:space="preserve">
+    <value>Hryvnia ukrainienne (UAH, ₴)</value>
+  </data>
+  <data name="Долар США (USD, $)" xml:space="preserve">
+    <value>Dollar américain (USD, $)</value>
+  </data>
+  <data name="Євро (EUR, €)" xml:space="preserve">
+    <value>Euro (EUR, €)</value>
+  </data>
+  <data name="Фіксована сума" xml:space="preserve">
+    <value>Montant fixe</value>
+  </data>
+  <data name="Діапазон" xml:space="preserve">
+    <value>Fourchette</value>
+  </data>
+  <data name="Погодинно" xml:space="preserve">
+    <value>À l’heure</value>
+  </data>
+  <data name="Якнайшвидше" xml:space="preserve">
+    <value>Au plus vite</value>
+  </data>
+  <data name="До 3 днів" xml:space="preserve">
+    <value>Sous 3 jours</value>
+  </data>
+  <data name="До тижня" xml:space="preserve">
+    <value>Sous une semaine</value>
+  </data>
+  <data name="До місяця" xml:space="preserve">
+    <value>Sous un mois</value>
+  </data>
+  <data name="Терміни не горять" xml:space="preserve">
+    <value>Pas pressé</value>
+  </data>
+  <data name="Один виконавець" xml:space="preserve">
+    <value>Un prestataire</value>
+  </data>
+  <data name="Два виконавці" xml:space="preserve">
+    <value>Deux prestataires</value>
+  </data>
+  <data name="Три і більше" xml:space="preserve">
+    <value>Trois ou plus</value>
+  </data>
+  <data name="Будь-який" xml:space="preserve">
+    <value>Indifférent</value>
+  </data>
+  <data name="Від 1 року" xml:space="preserve">
+    <value>1 an et plus</value>
+  </data>
+  <data name="Від 3 років" xml:space="preserve">
+    <value>3 ans et plus</value>
+  </data>
+  <data name="Понад 5 років" xml:space="preserve">
+    <value>Plus de 5 ans</value>
+  </data>
+  <data name="Нові" xml:space="preserve">
+    <value>Nouvelles</value>
+  </data>
+  <data name="Заплановані" xml:space="preserve">
+    <value>Planifiées</value>
+  </data>
+  <data name="Отримані" xml:space="preserve">
+    <value>Reçus</value>
+  </data>
+  <data name="Надані" xml:space="preserve">
+    <value>Donnés</value>
+  </data>
+  <data name="Потрібно оцінити" xml:space="preserve">
+    <value>À noter</value>
+  </data>
+  <data name="Найновіші" xml:space="preserve">
+    <value>Les plus récents</value>
+  </data>
+  <data name="Найдавніші" xml:space="preserve">
+    <value>Les plus anciens</value>
+  </data>
+  <data name="Спочатку високі оцінки" xml:space="preserve">
+    <value>Meilleures notes d’abord</value>
+  </data>
+  <data name="Спочатку низькі оцінки" xml:space="preserve">
+    <value>Moins bonnes notes d’abord</value>
+  </data>
+  <data name="Зустрічі" xml:space="preserve">
+    <value>Rendez-vous</value>
+  </data>
+  <data name="Зустріч" xml:space="preserve">
+    <value>Rendez-vous</value>
+  </data>
+  <data name="Дедлайни" xml:space="preserve">
+    <value>Échéances</value>
+  </data>
+  <data name="Дедлайн" xml:space="preserve">
+    <value>Échéance</value>
+  </data>
+  <data name="Особисті справи" xml:space="preserve">
+    <value>Affaires personnelles</value>
+  </data>
+  <data name="Особисте" xml:space="preserve">
+    <value>Personnel</value>
+  </data>
+  <data name="Недоступний" xml:space="preserve">
+    <value>Indisponible</value>
+  </data>
+  <data name="Логотипи" xml:space="preserve">
+    <value>Logos</value>
+  </data>
+  <data name="Ілюстрації" xml:space="preserve">
+    <value>Illustrations</value>
+  </data>
+  <data name="Web-дизайн" xml:space="preserve">
+    <value>Design web</value>
+  </data>
+  <data name="Реклама" xml:space="preserve">
+    <value>Publicité</value>
+  </data>
+  <data name="Соцмережі" xml:space="preserve">
+    <value>Réseaux sociaux</value>
+  </data>
+  <data name="Презентації" xml:space="preserve">
+    <value>Présentations</value>
+  </data>
+  <data name="Останні 7 днів" xml:space="preserve">
+    <value>7 derniers jours</value>
+  </data>
+  <data name="Останні 14 днів" xml:space="preserve">
+    <value>14 derniers jours</value>
+  </data>
+  <data name="Останні 30 днів" xml:space="preserve">
+    <value>30 derniers jours</value>
+  </data>
+  <data name="Як почати працювати на платформі" xml:space="preserve">
+    <value>Comment commencer sur la plateforme</value>
+  </data>
+  <data name="Замовлення та оплата" xml:space="preserve">
+    <value>Commandes et paiement</value>
+  </data>
+  <data name="Відповіді на питання про замовлення" xml:space="preserve">
+    <value>Réponses aux questions sur les commandes</value>
+  </data>
+  <data name="Послуги та профіль" xml:space="preserve">
+    <value>Services et profil</value>
+  </data>
+  <data name="Як створити та просувати послуги" xml:space="preserve">
+    <value>Comment créer et promouvoir des services</value>
+  </data>
+  <data name="Виплата та фінанси" xml:space="preserve">
+    <value>Versements et finances</value>
+  </data>
+  <data name="Інформація про виплати та комісії" xml:space="preserve">
+    <value>Informations sur les versements et commissions</value>
+  </data>
+  <data name="Обліковий запис" xml:space="preserve">
+    <value>Compte</value>
+  </data>
+  <data name="Налаштування та безпека профілю" xml:space="preserve">
+    <value>Paramètres et sécurité du profil</value>
+  </data>
+  <data name="Правила та політики" xml:space="preserve">
+    <value>Règles et politiques</value>
+  </data>
+  <data name="Правила платформи та угоди" xml:space="preserve">
+    <value>Règles de la plateforme et accords</value>
+  </data>
+  <data name="Питання" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Проблема" xml:space="preserve">
+    <value>Problème</value>
+  </data>
+  <data name="Пропозиція" xml:space="preserve">
+    <value>Suggestion</value>
+  </data>
+  <data name="Скарга" xml:space="preserve">
+    <value>Réclamation</value>
+  </data>
+  <data name="База знань" xml:space="preserve">
+    <value>Base de connaissances</value>
+  </data>
+  <data name="Інструкції та відповіді на часті питання" xml:space="preserve">
+    <value>Instructions et réponses aux questions fréquentes</value>
+  </data>
+  <data name="Відеоуроки" xml:space="preserve">
+    <value>Tutoriels vidéo</value>
+  </data>
+  <data name="Навчальні відео та гайди" xml:space="preserve">
+    <value>Vidéos de formation et guides</value>
+  </data>
+  <data name="Спільнота виконавців" xml:space="preserve">
+    <value>Communauté des prestataires</value>
+  </data>
+  <data name="Обговорюйте та обмінюйтеся досвідом" xml:space="preserve">
+    <value>Discutez et partagez votre expérience</value>
+  </data>
+  <data name="отримуйте сповіщення про нові замовлення" xml:space="preserve">
+    <value>soyez notifié des nouvelles commandes</value>
+  </data>
+  <data name="отримуйте сповіщення про нові повідомлення" xml:space="preserve">
+    <value>soyez notifié des nouveaux messages</value>
+  </data>
+  <data name="Відгуки та оцінки" xml:space="preserve">
+    <value>Avis et notes</value>
+  </data>
+  <data name="отримуйте сповіщення про нові відгуки та оцінки" xml:space="preserve">
+    <value>soyez notifié des nouveaux avis et notes</value>
+  </data>
+  <data name="Нагадування" xml:space="preserve">
+    <value>Rappels</value>
+  </data>
+  <data name="нагадування про події та дедлайни" xml:space="preserve">
+    <value>rappels d’événements et d’échéances</value>
+  </data>
+  <data name="отримуйте новини та пропозиції від Вибір" xml:space="preserve">
+    <value>recevez les actualités et offres de Vybir</value>
+  </data>
+  <data name="Назвіть адресу — наприклад, «Дім»" xml:space="preserve">
+    <value>Nommez l’adresse — par ex. « Domicile »</value>
+  </data>
+  <data name="Вкажіть вулицю та будинок" xml:space="preserve">
+    <value>Indiquez la rue et le numéro</value>
+  </data>
+  <data name="Вкажіть населений пункт" xml:space="preserve">
+    <value>Indiquez la localité</value>
+  </data>
+  <data name="Основна адреса" xml:space="preserve">
+    <value>Adresse principale</value>
+  </data>
+  <data name="Вкажіть імʼя" xml:space="preserve">
+    <value>Indiquez le prénom</value>
+  </data>
+  <data name="Вкажіть прізвище" xml:space="preserve">
+    <value>Indiquez le nom</value>
+  </data>
+  <data name="Схоже, в адресі помилка" xml:space="preserve">
+    <value>L’adresse semble contenir une erreur</value>
+  </data>
+  <data name="Схоже, у номері помилка" xml:space="preserve">
+    <value>Le numéro semble contenir une erreur</value>
+  </data>
+  <data name="Назвіть замовлення" xml:space="preserve">
+    <value>Donnez un titre à la commande</value>
+  </data>
+  <data name="Назва має бути від 5 до 120 символів" xml:space="preserve">
+    <value>Le titre doit comporter de 5 à 120 caractères</value>
+  </data>
+  <data name="Назва замовлення" xml:space="preserve">
+    <value>Titre de la commande</value>
+  </data>
+  <data name="Опишіть завдання" xml:space="preserve">
+    <value>Décrivez la tâche</value>
+  </data>
+  <data name="Опис має бути від 20 до 2000 символів" xml:space="preserve">
+    <value>La description doit comporter de 20 à 2000 caractères</value>
+  </data>
+  <data name="Опис завдання" xml:space="preserve">
+    <value>Description de la tâche</value>
+  </data>
+  <data name="Сума має бути від 0 до 1 000 000" xml:space="preserve">
+    <value>Le montant doit être compris entre 0 et 1 000 000</value>
+  </data>
+  <data name="Адреса" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="Назвіть послугу" xml:space="preserve">
+    <value>Nommez le service</value>
+  </data>
+  <data name="Назва має бути від 3 до 120 символів" xml:space="preserve">
+    <value>Le titre doit comporter de 3 à 120 caractères</value>
+  </data>
+  <data name="Оберіть напрям каталогу" xml:space="preserve">
+    <value>Choisissez un domaine du catalogue</value>
+  </data>
+  <data name="Ціна має бути від 0 до 1 000 000" xml:space="preserve">
+    <value>Le prix doit être compris entre 0 et 1 000 000</value>
+  </data>
+  <data name="Ціна від" xml:space="preserve">
+    <value>Prix à partir de</value>
+  </data>
+  <data name="Назвіть подію" xml:space="preserve">
+    <value>Nommez l’événement</value>
+  </data>
+  <data name="Вкажіть дату" xml:space="preserve">
+    <value>Indiquez la date</value>
+  </data>
+  <data name="Година має бути від 0 до 23" xml:space="preserve">
+    <value>L’heure doit être comprise entre 0 et 23</value>
+  </data>
+  <data name="Початок" xml:space="preserve">
+    <value>Début</value>
+  </data>
+  <data name="Тривалість має бути від 1 до 12 годин" xml:space="preserve">
+    <value>La durée doit être de 1 à 12 heures</value>
+  </data>
+  <data name="Нотатка" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Назвіть роботу" xml:space="preserve">
+    <value>Nommez le travail</value>
+  </data>
+  <data name="Назва має бути від 2 до 120 символів" xml:space="preserve">
+    <value>Le titre doit comporter de 2 à 120 caractères</value>
+  </data>
+  <data name="Оберіть розділ" xml:space="preserve">
+    <value>Choisissez une rubrique</value>
+  </data>
+  <data name="Схоже, в посиланні помилка" xml:space="preserve">
+    <value>Le lien semble contenir une erreur</value>
+  </data>
+  <data name="Оберіть спосіб" xml:space="preserve">
+    <value>Choisissez un moyen</value>
+  </data>
+  <data name="Вкажіть номер картки або пошту гаманця" xml:space="preserve">
+    <value>Indiquez le numéro de carte ou l’e-mail du portefeuille</value>
+  </data>
+  <data name="Від 4 до 120 символів" xml:space="preserve">
+    <value>De 4 à 120 caractères</value>
+  </data>
+  <data name="Вкажіть суму" xml:space="preserve">
+    <value>Indiquez le montant</value>
+  </data>
+  <data name="Опишіть, що сталося" xml:space="preserve">
+    <value>Décrivez ce qui s’est passé</value>
+  </data>
+  <data name="Опис має бути від 10 до 4000 символів" xml:space="preserve">
+    <value>La description doit comporter de 10 à 4000 caractères</value>
+  </data>
+  <data name="До 500 символів" xml:space="preserve">
+    <value>Jusqu’à 500 caractères</value>
+  </data>
+  <data name="Схоже, в пошті помилка" xml:space="preserve">
+    <value>L’e-mail semble contenir une erreur</value>
+  </data>
+  <data name="Схоже, в номері помилка" xml:space="preserve">
+    <value>Le numéro semble contenir une erreur</value>
+  </data>
+  <data name="{0} непрочитане" xml:space="preserve">
+    <value>{0} non lu</value>
+  </data>
+  <data name="{0} непрочитані" xml:space="preserve">
+    <value>{0} non lus</value>
+  </data>
+  <data name="{0} непрочитаних" xml:space="preserve">
+    <value>{0} non lus</value>
+  </data>
+  <data name="{0} день" xml:space="preserve">
+    <value>{0} jour</value>
+  </data>
+  <data name="{0} дні" xml:space="preserve">
+    <value>{0} jours</value>
+  </data>
+  <data name="{0} днів" xml:space="preserve">
+    <value>{0} jours</value>
+  </data>
+  <data name="{0} платіж" xml:space="preserve">
+    <value>{0} paiement</value>
+  </data>
+  <data name="{0} платежі" xml:space="preserve">
+    <value>{0} paiements</value>
+  </data>
+  <data name="{0} платежів" xml:space="preserve">
+    <value>{0} paiements</value>
+  </data>
+  <data name="{0} замовлення" xml:space="preserve">
+    <value>{0} commande</value>
+  </data>
+  <data name="{0} замовлення (2–4)" xml:space="preserve">
+    <value>{0} commandes</value>
+  </data>
+  <data name="{0} замовлень" xml:space="preserve">
+    <value>{0} commandes</value>
+  </data>
+  <data name="{0} раз" xml:space="preserve">
+    <value>{0} fois</value>
+  </data>
+  <data name="{0} рази" xml:space="preserve">
+    <value>{0} fois</value>
+  </data>
+  <data name="{0} разів" xml:space="preserve">
+    <value>{0} fois</value>
+  </data>
+  <data name="{0} місяць" xml:space="preserve">
+    <value>{0} mois</value>
+  </data>
+  <data name="{0} місяці" xml:space="preserve">
+    <value>{0} mois</value>
+  </data>
+  <data name="{0} місяців" xml:space="preserve">
+    <value>{0} mois</value>
+  </data>
+  <data name="Замовлення опубліковано" xml:space="preserve">
+    <value>Commande publiée</value>
+  </data>
+  <data name="Новий відгук від {0}" xml:space="preserve">
+    <value>Nouvelle proposition de {0}</value>
+  </data>
+  <data name="Виконавець розпочав роботу" xml:space="preserve">
+    <value>Le prestataire a commencé le travail</value>
+  </data>
+  <data name="Замовлення виконано" xml:space="preserve">
+    <value>Commande réalisée</value>
+  </data>
+  <data name="Замовлення скасовано" xml:space="preserve">
+    <value>Commande annulée</value>
+  </data>
+  <data name="Пошук на платформі" xml:space="preserve">
+    <value>Recherche sur la plateforme</value>
+  </data>
+  <data name="Категорії" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="Прямі переходи" xml:space="preserve">
+    <value>Accès directs</value>
+  </data>
+  <data name="Інші" xml:space="preserve">
+    <value>Autres</value>
+  </data>
+  <data name="Перегляди профілю" xml:space="preserve">
+    <value>Vues du profil</value>
+  </data>
+  <data name="Середній чек" xml:space="preserve">
+    <value>Panier moyen</value>
+  </data>
+  <data name="Доступно" xml:space="preserve">
+    <value>Disponible</value>
+  </data>
+  <data name="Виведення коштів на {0}" xml:space="preserve">
+    <value>Retrait vers {0}</value>
+  </data>
+  <data name="картку" xml:space="preserve">
+    <value>la carte</value>
+  </data>
+  <data name="{0} рік" xml:space="preserve">
+    <value>{0} an</value>
+  </data>
+  <data name="{0} роки" xml:space="preserve">
+    <value>{0} ans</value>
+  </data>
+  <data name="{0} років" xml:space="preserve">
+    <value>{0} ans</value>
+  </data>
+</root>

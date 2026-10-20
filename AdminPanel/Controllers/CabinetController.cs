@@ -1,3 +1,4 @@
+using AdminPanel.Localization;
 using AdminPanel.Models;
 using BLL.Public;
 using DAL.Context;
@@ -90,7 +91,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetHomeViewModel
         {
             Active = "home",
-            Title = "Особистий кабінет — Вибір",
+            Title = Tr.T("Особистий кабінет — Вибір"),
             IsDemo = owner.IsDemo,
             FirstName = me.FirstName,
             Tab = Tab(tab, CabinetContent.HomeTabs, "active")
@@ -133,7 +134,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetOrdersViewModel
         {
             Active = "orders",
-            Title = "Мої замовлення — Вибір",
+            Title = Tr.T("Мої замовлення — Вибір"),
             IsDemo = owner.IsDemo,
             Tab = Tab(tab, CabinetContent.OrderTabs, "all"),
             Query = Clean(q),
@@ -167,27 +168,27 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetOrderViewModel
         {
             Active = "orders",
-            Title = details.Order.Title + " — Вибір",
+            Title = details.Order.Title + " — " + Tr.T("Вибір"),
             IsDemo = owner.IsDemo,
             Details = details,
             Unread = await BadgeAsync(me.Id, cancellationToken)
         };
 
-        model.Facts.Add(("Категорія", details.Order.Category));
-        model.Facts.Add(("Бюджет", CabinetFormat.Money(details.Order.Price)));
+        model.Facts.Add((Tr.T("Категорія"), Tr.T(details.Order.Category)));
+        model.Facts.Add((Tr.T("Бюджет"), CabinetFormat.Money(details.Order.Price)));
 
         if (details.Order.ExecutionAt.HasValue)
         {
-            model.Facts.Add(("Термін виконання", "до " + CabinetFormat.LongDate(details.Order.ExecutionAt.Value)));
+            model.Facts.Add((Tr.T("Термін виконання"), Tr.F("до {0}", CabinetFormat.LongDate(details.Order.ExecutionAt.Value))));
         }
 
         if (!string.IsNullOrWhiteSpace(details.Address))
         {
-            model.Facts.Add(("Місце виконання", details.Address));
+            model.Facts.Add((Tr.T("Місце виконання"), Tr.T(details.Address)));
         }
 
-        model.Facts.Add(("Статус", CabinetContent.StatusTitle(details.Order.Status, details.Order.ExecutorId != null)));
-        model.Facts.Add(("Відгуків виконавців", details.Bids.Count.ToString()));
+        model.Facts.Add((Tr.T("Статус"), CabinetContent.StatusTitle(details.Order.Status, details.Order.ExecutorId != null)));
+        model.Facts.Add((Tr.T("Відгуків виконавців"), details.Bids.Count.ToString()));
 
         return View(model);
     }
@@ -205,7 +206,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetCreateOrderViewModel
         {
             Active = "orders",
-            Title = "Створити замовлення — Вибір",
+            Title = Tr.T("Створити замовлення — Вибір"),
             PriceFrom = 1000,
             PriceTo = 5000,
             AddressId = addressId,
@@ -225,7 +226,7 @@ public sealed partial class CabinetController : Controller
         var me = await MeAsync();
 
         model.Active = "orders";
-        model.Title = "Створити замовлення — Вибір";
+        model.Title = Tr.T("Створити замовлення — Вибір");
         model.Unread = await BadgeAsync(me.Id, cancellationToken);
 
         var category = await _db.Categories
@@ -233,12 +234,12 @@ public sealed partial class CabinetController : Controller
 
         if (category == null)
         {
-            ModelState.AddModelError(nameof(model.CategoryId), "Оберіть категорію зі списку");
+            ModelState.AddModelError(nameof(model.CategoryId), Tr.T("Оберіть категорію зі списку"));
         }
 
         if (model.Budget == "range" && model.PriceTo < model.PriceFrom)
         {
-            ModelState.AddModelError(nameof(model.PriceTo), "Верхня межа не може бути меншою за нижню");
+            ModelState.AddModelError(nameof(model.PriceTo), Tr.T("Верхня межа не може бути меншою за нижню"));
         }
 
         var address = model.AddressId.HasValue
@@ -248,7 +249,7 @@ public sealed partial class CabinetController : Controller
 
         if (model.Place == "onsite" && address == null)
         {
-            ModelState.AddModelError(nameof(model.AddressId), "Оберіть адресу, куди має приїхати виконавець");
+            ModelState.AddModelError(nameof(model.AddressId), Tr.T("Оберіть адресу, куди має приїхати виконавець"));
         }
 
         if (!ModelState.IsValid)
@@ -271,7 +272,7 @@ public sealed partial class CabinetController : Controller
 
         await _cabinet.CreateOrderAsync(me.Id, order, cancellationToken);
 
-        TempData["Cabinet.Flash"] = "Замовлення опубліковано. Виконавці побачать його в каталозі.";
+        TempData["Cabinet.Flash"] = Tr.T("Замовлення опубліковано. Виконавці побачать його в каталозі.");
         return RedirectToAction(nameof(Order), new { id = order.Id });
     }
 
@@ -283,8 +284,8 @@ public sealed partial class CabinetController : Controller
         var done = await _cabinet.AnswerBidAsync(me.Id, id, accept, cancellationToken);
 
         TempData["Cabinet.Flash"] = done
-            ? accept ? "Виконавця підтверджено." : "Відгук відхилено."
-            : "Не вдалося змінити відгук.";
+            ? accept ? Tr.T("Виконавця підтверджено.") : Tr.T("Відгук відхилено.")
+            : Tr.T("Не вдалося змінити відгук.");
 
         return RedirectToAction(nameof(Order), new { id = orderId });
     }
@@ -307,7 +308,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetMessagesViewModel
         {
             Active = "messages",
-            Title = "Повідомлення — Вибір",
+            Title = Tr.T("Повідомлення — Вибір"),
             IsDemo = owner.IsDemo,
             Filter = filter is "unread" or "archive" ? filter : "all",
             Query = Clean(q)
@@ -359,7 +360,7 @@ public sealed partial class CabinetController : Controller
 
         if (!sent)
         {
-            TempData["Cabinet.Flash"] = "Повідомлення не надіслано: порожній текст або чуже замовлення.";
+            TempData["Cabinet.Flash"] = Tr.T("Повідомлення не надіслано: порожній текст або чуже замовлення.");
         }
 
         return RedirectToAction(nameof(Messages), new { orderId });
@@ -383,7 +384,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetFavoritesViewModel
         {
             Active = "favorites",
-            Title = "Обране — Вибір",
+            Title = Tr.T("Обране — Вибір"),
             IsDemo = owner.IsDemo,
             Query = Clean(q),
             Group = Clean(group),
@@ -426,7 +427,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetAddressesViewModel
         {
             Active = "addresses",
-            Title = "Мої адреси — Вибір",
+            Title = Tr.T("Мої адреси — Вибір"),
             Addresses = await _cabinet.GetAddressesAsync(me.Id, cancellationToken),
             Unread = await BadgeAsync(me.Id, cancellationToken)
         };
@@ -459,7 +460,7 @@ public sealed partial class CabinetController : Controller
             var model = new CabinetAddressesViewModel
             {
                 Active = "addresses",
-                Title = "Мої адреси — Вибір",
+                Title = Tr.T("Мої адреси — Вибір"),
                 Addresses = await _cabinet.GetAddressesAsync(me.Id, cancellationToken),
                 Form = form,
                 Unread = await BadgeAsync(me.Id, cancellationToken)
@@ -507,7 +508,7 @@ public sealed partial class CabinetController : Controller
 
         await _db.SaveChangesAsync(cancellationToken);
 
-        TempData["Cabinet.Flash"] = form.Id > 0 ? "Адресу оновлено." : "Адресу додано.";
+        TempData["Cabinet.Flash"] = form.Id > 0 ? Tr.T("Адресу оновлено.") : Tr.T("Адресу додано.");
         return RedirectToAction(nameof(Addresses));
     }
 
@@ -524,7 +525,7 @@ public sealed partial class CabinetController : Controller
         {
             _db.UserAddresses.Remove(address);
             await _db.SaveChangesAsync(cancellationToken);
-            TempData["Cabinet.Flash"] = "Адресу видалено.";
+            TempData["Cabinet.Flash"] = Tr.T("Адресу видалено.");
         }
 
         return RedirectToAction(nameof(Addresses));
@@ -565,7 +566,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetPaymentsViewModel
         {
             Active = "payments",
-            Title = "Платежі та рахунки — Вибір",
+            Title = Tr.T("Платежі та рахунки — Вибір"),
             IsDemo = owner.IsDemo,
             Type = type is "payment" or "refund" ? type : "all",
             Query = Clean(q),
@@ -606,7 +607,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetReviewsViewModel
         {
             Active = "reviews",
-            Title = "Відгуки — Вибір",
+            Title = Tr.T("Відгуки — Вибір"),
             IsDemo = owner.IsDemo,
             Reviews = await _cabinet.GetReviewsAsync(owner.Id, cancellationToken),
             Unread = await BadgeAsync(me.Id, cancellationToken)
@@ -645,7 +646,7 @@ public sealed partial class CabinetController : Controller
         var model = new CabinetSupportViewModel
         {
             Active = "support",
-            Title = "Підтримка — Вибір",
+            Title = Tr.T("Підтримка — Вибір"),
             Query = Clean(q),
             Unread = await BadgeAsync(me.Id, cancellationToken)
         };
@@ -685,7 +686,7 @@ public sealed partial class CabinetController : Controller
         var me = await MeAsync();
 
         model.Active = "settings";
-        model.Title = "Налаштування — Вибір";
+        model.Title = Tr.T("Налаштування — Вибір");
         model.Avatar = me.AvatarUrl;
         model.Unread = await BadgeAsync(me.Id, cancellationToken);
 
@@ -711,6 +712,9 @@ public sealed partial class CabinetController : Controller
 
         me.Currency = Pick(CabinetContent.Currencies, model.Currency, "UAH");
         me.Language = Pick(CabinetContent.Languages, model.Language, "uk");
+
+        // «Мова інтерфейсу» в налаштуваннях і перемикач унизу сайту — одне й те саме.
+        PublicCulture.Remember(Response, me.Language);
         me.TimeZoneName = Pick(CabinetContent.TimeZones, model.TimeZoneName, "Europe/Kyiv");
         me.DateFormat = Pick(CabinetContent.DateFormats, model.DateFormat, "dd.MM.yyyy");
         me.TimeFormat = Pick(CabinetContent.TimeFormats, model.TimeFormat, "24");
@@ -730,7 +734,7 @@ public sealed partial class CabinetController : Controller
             return View(model);
         }
 
-        TempData["Cabinet.Flash"] = "Зміни збережено.";
+        TempData["Cabinet.Flash"] = Tr.T("Зміни збережено.");
         return RedirectToAction(nameof(Settings));
     }
 
@@ -770,14 +774,14 @@ public sealed partial class CabinetController : Controller
             .ToListAsync(cancellationToken);
 
         model.Categories = rows
-            .Select(r => new Choice(r.Id.ToString(), $"{r.Parent} › {r.Name}"))
+            .Select(r => new Choice(r.Id.ToString(), $"{Tr.T(r.Parent)} › {Tr.T(r.Name)}"))
             .ToList();
     }
 
     private CabinetSettingsViewModel ToSettings(ApplicationUser user) => new()
     {
         Active = "settings",
-        Title = "Налаштування — Вибір",
+        Title = Tr.T("Налаштування — Вибір"),
         FirstName = user.FirstName,
         LastName = user.LastName,
         Email = user.Email ?? string.Empty,
@@ -793,7 +797,8 @@ public sealed partial class CabinetController : Controller
         ShareOrderHistory = user.ShareOrderHistory,
         PaymentCard = user.PaymentCard ?? string.Empty,
         Currency = user.Currency ?? "UAH",
-        Language = user.Language ?? "uk",
+        // Показуємо мову, якою сайт зараз відкритий (її могли змінити й унизу сторінки).
+        Language = PublicCulture.Current.Code,
         TimeZoneName = user.TimeZoneName ?? "Europe/Kyiv",
         DateFormat = user.DateFormat ?? "dd.MM.yyyy",
         TimeFormat = user.TimeFormat ?? "24",

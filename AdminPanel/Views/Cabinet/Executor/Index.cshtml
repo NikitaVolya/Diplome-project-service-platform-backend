@@ -13,10 +13,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <span>Особистий кабінет</span>
+                <span>@T("Особистий кабінет")</span>
             </nav>
         </div>
 
@@ -31,7 +31,7 @@
                         <img class="exec-profile__face" src="@Model.Avatar" alt="" />
 
                         <div>
-                            <h1>Вітаємо, @Model.FullName <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
+                            <h1>@F("Вітаємо, {0}", Model.FullName) <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
                             <p class="exec-profile__role">@Model.Headline</p>
 
                             <div class="exec-profile__facts">
@@ -48,50 +48,50 @@
                         </div>
 
                         <div class="exec-fill">
-                            <span>Профіль заповнено на @s.Completeness%</span>
+                            <span>@F("Профіль заповнено на {0}%", s.Completeness)</span>
                             <span class="exec-fill__bar"><i style="width:@(s.Completeness)%"></i></span>
-                            <a asp-controller="Cabinet" asp-action="Settings">Заповнити профіль</a>
+                            <a asp-controller="Cabinet" asp-action="Settings">@T("Заповнити профіль")</a>
                         </div>
                     </div>
 
                     <div class="exec-stats">
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Нові замовлення</span>
+                            <span class="exec-stat__name">@T("Нові замовлення")</span>
                             <span class="exec-stat__value">@s.Counters.Fresh</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="fresh">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Активні замовлення</span>
+                            <span class="exec-stat__name">@T("Активні замовлення")</span>
                             <span class="exec-stat__value">@s.Counters.Active</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="work">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Завершені замовлення</span>
+                            <span class="exec-stat__name">@T("Завершені замовлення")</span>
                             <span class="exec-stat__value">@s.Counters.Completed</span>
                             <a class="exec-stat__more" asp-action="Orders" asp-route-tab="completed">
-                                Переглянути <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Зароблено</span>
+                            <span class="exec-stat__name">@T("Зароблено")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(s.Counters.Earned)</span>
                             <a class="exec-stat__more" asp-action="Finance">
-                                Детальніше <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                @T("Детальніше") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
                         </article>
                     </div>
 
                     <div class="exec-bar">
                         <div class="exec-bar__row">
-                            <h2>Мої замовлення:</h2>
-                            <a class="cab-all" asp-action="Orders">Переглянути всі <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            <h2>@T("Мої замовлення:")</h2>
+                            <a class="cab-all" asp-action="Orders">@T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                         </div>
 
                         <div class="exec-tabs">
@@ -115,7 +115,7 @@
 
                     @if (s.Orders.Count == 0)
                     {
-                        <p class="cab-empty">У цій вкладці поки немає замовлень.</p>
+                        <p class="cab-empty">@T("У цій вкладці поки немає замовлень.")</p>
                     }
 
                     @foreach (var order in s.Orders)
@@ -125,16 +125,16 @@
 
                     @if (s.Orders.Count > 0)
                     {
-                        <a class="exec-more" asp-action="Orders">Показати більше <i class="bi bi-chevron-down" aria-hidden="true"></i></a>
+                        <a class="exec-more" asp-action="Orders">@T("Показати більше") <i class="bi bi-chevron-down" aria-hidden="true"></i></a>
                     }
 
                     <div class="exec-trio">
                         <section class="exec-card">
-                            <h2>Мої послуги</h2>
+                            <h2>@T("Мої послуги")</h2>
 
                             @if (s.Services.Count == 0)
                             {
-                                <p class="cab-empty">Послуг ще немає.</p>
+                                <p class="cab-empty">@T("Послуг ще немає.")</p>
                             }
 
                             @foreach (var service in s.Services)
@@ -148,11 +148,11 @@
                                 </a>
                             }
 
-                            <a class="v-btn v-btn--soft" asp-action="Services">Переглянути всі послуги</a>
+                            <a class="v-btn v-btn--soft" asp-action="Services">@T("Переглянути всі послуги")</a>
                         </section>
 
                         <section class="exec-card">
-                            <h2>Портфоліо</h2>
+                            <h2>@T("Портфоліо")</h2>
 
                             <div class="exec-thumbs">
                                 @foreach (var work in s.Works.Take(4))
@@ -170,17 +170,17 @@
                                 }
                             </div>
 
-                            <a class="v-btn v-btn--soft" asp-action="Portfolio">Переглянути портфоліо</a>
+                            <a class="v-btn v-btn--soft" asp-action="Portfolio">@T("Переглянути портфоліо")</a>
                         </section>
 
                         <section class="exec-card">
-                            <h2>Статистика за місяць</h2>
+                            <h2>@T("Статистика за місяць")</h2>
 
-                            <div class="exec-figure"><span>Перегляди портфоліо</span><b>@s.Month.Views</b></div>
-                            <div class="exec-figure"><span>Отримано замовлень</span><b>@s.Month.Orders</b></div>
-                            <div class="exec-figure"><span>Зароблено</span><b>@CabinetFormat.Money(s.Month.Earned)</b></div>
+                            <div class="exec-figure"><span>@T("Перегляди портфоліо")</span><b>@s.Month.Views</b></div>
+                            <div class="exec-figure"><span>@T("Отримано замовлень")</span><b>@s.Month.Orders</b></div>
+                            <div class="exec-figure"><span>@T("Зароблено")</span><b>@CabinetFormat.Money(s.Month.Earned)</b></div>
 
-                            <a class="v-btn v-btn--soft" asp-action="Analytics">Детальна аналітика</a>
+                            <a class="v-btn v-btn--soft" asp-action="Analytics">@T("Детальна аналітика")</a>
                         </section>
                     </div>
                 </section>

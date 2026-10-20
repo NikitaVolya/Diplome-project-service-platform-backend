@@ -3,7 +3,7 @@
 }
 
 <aside class="cab-side">
-    <nav class="cab-menu" aria-label="Розділи кабінету">
+    <nav class="cab-menu" aria-label="@T("Розділи кабінету")">
         @foreach (var item in CabinetContent.Menu)
         {
             var current = item.Key == Model.Active;
@@ -21,20 +21,12 @@
         }
     </nav>
 
-    @if (CabinetRole.CanSwitch(User))
-    {
-        <form method="post" asp-controller="Cabinet" asp-action="Switch">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="to" value="executor" />
-            <button class="cab-become" type="submit">
-                <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати виконавцем
-            </button>
-        </form>
-    }
-    else
-    {
-        <a class="cab-become" asp-controller="Auth" asp-action="Register">
-            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Стати виконавцем
-        </a>
-    }
+    @* Якщо ролі виконавця ще немає, Switch додасть її цьому ж акаунту. *@
+    <form method="post" asp-controller="Cabinet" asp-action="Switch">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="to" value="executor" />
+        <button class="cab-become" type="submit">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> @T("Стати виконавцем")
+        </button>
+    </form>
 </aside>

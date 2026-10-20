@@ -1,7 +1,7 @@
 @model VerifyCodeViewModel
 @{
     Layout = "_LandingLayout";
-    ViewData["Title"] = "Підтвердження пошти — Вибір";
+    ViewData["Title"] = T("Підтвердження пошти — Вибір");
     ViewData["CodeAction"] = "Confirm";
     ViewData["CodePurpose"] = "Registration";
 }
@@ -10,17 +10,17 @@
 
 <main class="auth">
     <div class="v-container auth__inner">
-        <a class="auth-back" asp-action="Register"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+        <a class="auth-back" asp-action="Register"><span aria-hidden="true">&lsaquo;</span> @T("Назад")</a>
 
-        <h1 class="auth__title">Реєстрація</h1>
+        <h1 class="auth__title">@T("Реєстрація")</h1>
 
         <partial name="_AuthSteps" model="1" />
 
         <div class="auth-card">
             <span class="auth-card__icon" aria-hidden="true"><partial name="_AuthFaceIcon" /></span>
 
-            <h2>Перевірте код</h2>
-            <p class="auth-card__lead">Ми надіслали код підтвердження на @Model.Email</p>
+            <h2>@T("Перевірте код")</h2>
+            <p class="auth-card__lead">@F("Ми надіслали код підтвердження на {0}", Model.Email)</p>
 
             <partial name="_AuthCodeForm" model="Model" />
         </div>

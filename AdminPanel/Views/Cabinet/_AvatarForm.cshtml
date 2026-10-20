@@ -1,0 +1,8 @@
+@* Форма завантаження фото профілю. Поле вибору файлу стоїть у картці «Фото профілю»
+   і привʼязане сюди атрибутом form="avatar-form". Щойно файл обрано, public.js
+   перевіряє розмір, показує прев'ю й надсилає форму; без JavaScript — кнопка нижче. *@
+<form id="avatar-form" method="post" enctype="multipart/form-data"
+      asp-controller="Cabinet" asp-action="Photo" data-avatar-form>
+    @Html.AntiForgeryToken()
+    <noscript><button class="v-btn v-btn--soft" type="submit">@T("Завантажити фото")</button></noscript>
+</form>

@@ -23,13 +23,13 @@
 <main class="cab">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
 
-            <div class="cab-head"><h1>Обране</h1></div>
+            <div class="cab-head"><h1>@T("Обране")</h1></div>
         </div>
 
         <div class="cab-body">
@@ -40,23 +40,23 @@
 
                 <section class="cab-panel">
                     <form class="cab-rowhead" method="get" asp-action="Favorites">
-                        <p class="cab-panel__lead" style="margin:0">Тут зберігаються ваші улюблені виконавці та послуги.</p>
+                        <p class="cab-panel__lead" style="margin:0">@T("Тут зберігаються ваші улюблені виконавці та послуги.")</p>
 
                         <input type="hidden" name="tab" value="@Model.Tab" />
                         <input type="hidden" name="group" value="@Model.Group" />
 
                         <label class="cab-find" style="width:366px">
                             <i class="bi bi-search" aria-hidden="true"></i>
-                            <input type="search" name="q" value="@Model.Query" placeholder="Пошук в обраному"
-                                   aria-label="Пошук в обраному" />
+                            <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук в обраному")"
+                                   aria-label="@T("Пошук в обраному")" />
                         </label>
                     </form>
 
                     <div class="cab-tabs">
                         <a asp-action="Favorites" asp-route-tab="executors" asp-route-q="@Model.Query"
-                           class="@(Model.Tab == "executors" ? "is-current" : null)">Виконавці</a>
+                           class="@(Model.Tab == "executors" ? "is-current" : null)">@T("Виконавці")</a>
                         <a asp-action="Favorites" asp-route-tab="services" asp-route-q="@Model.Query"
-                           class="@(Model.Tab == "services" ? "is-current" : null)">Послуги</a>
+                           class="@(Model.Tab == "services" ? "is-current" : null)">@T("Послуги")</a>
                     </div>
 
                     @if (Model.Tab == "executors")
@@ -71,7 +71,7 @@
                                    asp-route-group="@(Model.Group == group.Name ? null : group.Name)"
                                    asp-route-q="@Model.Query">
                                     <i class="bi @icon" aria-hidden="true"></i>
-                                    <span class="cab-chip__name">@group.Name</span>
+                                    <span class="cab-chip__name">@T(group.Name)</span>
                                     <span class="cab-chip__count">@group.Count</span>
                                 </a>
                             }
@@ -79,16 +79,16 @@
 
                         @if (Model.Data.Items.Count == 0)
                         {
-                            <p class="cab-empty">В обраному поки нікого немає. Відкрийте профіль виконавця й натисніть «У обране».</p>
+                            <p class="cab-empty">@T("В обраному поки нікого немає. Відкрийте профіль виконавця й натисніть «У обране».")</p>
                         }
 
                         @foreach (var bucket in Model.Data.Items.GroupBy(i => i.Group))
                         {
                             <div class="cab-group">
-                                <h3>@bucket.Key</h3>
+                                <h3>@T(bucket.Key)</h3>
                                 <span>@PublicText.Executors(bucket.Count())</span>
                                 <a class="cab-all" asp-action="Favorites" asp-route-tab="executors" asp-route-group="@bucket.Key">
-                                    Переглянути всі <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                    @T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                                 </a>
                             </div>
 
@@ -101,7 +101,7 @@
                                         <div class="cab-exec__top">
                                             <div>
                                                 <h4 class="cab-exec__name">@executor.Name</h4>
-                                                <p class="cab-exec__role">@executor.Role</p>
+                                                <p class="cab-exec__role">@T(executor.Role)</p>
                                             </div>
                                             <span class="cab-exec__rate">
                                                 <i class="bi bi-star" aria-hidden="true"></i>
@@ -118,8 +118,8 @@
                                     </div>
 
                                     <div class="cab-exec__act">
-                                        <a class="cab-btn-wide" asp-controller="Catalog" asp-action="Index">Переглянути профіль</a>
-                                        <a class="cab-btn-slim" asp-action="Messages">Написати</a>
+                                        <a class="cab-btn-wide" asp-controller="Catalog" asp-action="Index">@T("Переглянути профіль")</a>
+                                        <a class="cab-btn-slim" asp-action="Messages">@T("Написати")</a>
                                     </div>
 
                                     <span class="cab-exec__fav" aria-hidden="true"><i class="bi bi-heart"></i></span>
@@ -127,13 +127,13 @@
                             }
                         }
 
-                        <a class="cab-box__more" asp-action="Favorites" asp-route-tab="executors">Переглянути все</a>
+                        <a class="cab-box__more" asp-action="Favorites" asp-route-tab="executors">@T("Переглянути все")</a>
                     }
                     else
                     {
                         @if (Model.Services.Count == 0)
                         {
-                            <p class="cab-empty">Збережених послуг поки немає.</p>
+                            <p class="cab-empty">@T("Збережених послуг поки немає.")</p>
                         }
 
                         <div class="cab-chips">
@@ -146,7 +146,7 @@
                             }
                         </div>
 
-                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">Переглянути каталог послуг</a>
+                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">@T("Переглянути каталог послуг")</a>
                     }
                 </section>
             </div>

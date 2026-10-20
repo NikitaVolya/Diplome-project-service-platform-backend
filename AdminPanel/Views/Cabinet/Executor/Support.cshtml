@@ -12,10 +12,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -24,23 +24,23 @@
 
             <div class="cab-main">
                 <div class="exec-head">
-                    <h1>Підтримка</h1>
+                    <h1>@T("Підтримка")</h1>
                 </div>
 
                 <partial name="Executor/_ExecNotices" />
 
                 <section class="exec-help">
-                    <p class="exec-help__lead">Ми тут, щоб допомогти вам 24/7.</p>
-                    <h2>Як ми можемо допомогти?</h2>
+                    <p class="exec-help__lead">@T("Ми тут, щоб допомогти вам 24/7.")</p>
+                    <h2>@T("Як ми можемо допомогти?")</h2>
 
                     <form class="exec-help__find" method="get" asp-action="Support">
                         <label class="cab-find">
                             <i class="bi bi-search" aria-hidden="true"></i>
                             <input type="search" name="q" value="@Model.Query"
-                                   placeholder="Пошук за запитанням (наприклад, &ldquo;повернення коштів&rdquo;)"
-                                   aria-label="Пошук за запитанням" />
+                                   placeholder="@T("Пошук за запитанням (наприклад, “повернення коштів”)")"
+                                   aria-label="@T("Пошук за запитанням")" />
                         </label>
-                        <a class="v-btn v-btn--primary" href="#ticket">Написати в підтримку</a>
+                        <a class="v-btn v-btn--primary" href="#ticket">@T("Написати в підтримку")</a>
                     </form>
 
                     @if (Model.Query.Length > 0)
@@ -48,7 +48,7 @@
                         <div class="exec-help__found">
                             @if (Model.Faq.Count == 0)
                             {
-                                <p class="cab-empty">За запитом «@Model.Query» нічого не знайшли — напишіть нам нижче.</p>
+                                <p class="cab-empty">@F("За запитом «{0}» нічого не знайшли — напишіть нам нижче.", Model.Query)</p>
                             }
 
                             @foreach (var item in Model.Faq)
@@ -61,7 +61,7 @@
                         </div>
                     }
 
-                    <p class="exec-help__sub">Популярні теми</p>
+                    <p class="exec-help__sub">@T("Популярні теми")</p>
 
                     <div class="exec-topics">
                         @foreach (var topic in ExecutorContent.SupportTopics)
@@ -79,17 +79,17 @@
 
                 <div class="exec-ask exec-help exec-help--flat" id="ticket">
                     <section class="exec-ask__form">
-                        <h2>Звернення до підтримки</h2>
-                        <p>Не знайшли відповіді, напишіть нам і ми допоможемо</p>
+                        <h2>@T("Звернення до підтримки")</h2>
+                        <p>@T("Не знайшли відповіді, напишіть нам і ми допоможемо")</p>
 
                         <form method="post" asp-action="SendTicket">
                             @Html.AntiForgeryToken()
                             <div asp-validation-summary="ModelOnly" class="cab-errors"></div>
 
                             <label>
-                                <span>Тема звернення</span>
+                                <span>@T("Тема звернення")</span>
                                 <select asp-for="Form.Topic">
-                                    <option value="">Оберіть тему</option>
+                                    <option value="">@T("Оберіть тему")</option>
                                     @foreach (var topic in ExecutorContent.SupportTopics)
                                     {
                                         <option value="@topic.Title">@topic.Title</option>
@@ -99,9 +99,9 @@
                             </label>
 
                             <label>
-                                <span>Категорія</span>
+                                <span>@T("Категорія")</span>
                                 <select asp-for="Form.Category">
-                                    <option value="">Оберіть категорію</option>
+                                    <option value="">@T("Оберіть категорію")</option>
                                     @foreach (var kind in ExecutorContent.TicketKinds)
                                     {
                                         <option value="@kind.Key">@kind.Title</option>
@@ -111,30 +111,30 @@
                             </label>
 
                             <label>
-                                <span>Опис проблеми</span>
+                                <span>@T("Опис проблеми")</span>
                                 <textarea asp-for="Form.Message" rows="6"
-                                          placeholder="Детально опишіть вашу проблему"></textarea>
+                                          placeholder="@T("Детально опишіть вашу проблему")"></textarea>
                                 <span asp-validation-for="Form.Message" class="cab-error"></span>
                             </label>
 
                             @* Сховища файлів ще немає — поле намальоване, але вимкнене,
                                щоб не обіцяти те, чого платформа поки не вміє. *@
-                            <span class="exec-ask__label">Додати файли (не більше 5)</span>
+                            <span class="exec-ask__label">@T("Додати файли (не більше 5)")</span>
                             <div class="exec-drop" aria-disabled="true">
                                 <i class="bi bi-paperclip" aria-hidden="true"></i>
                                 <span>
-                                    <b>Перетягніть файли сюди, або виберіть з комп'ютера</b>
-                                    <span>підтримуються JPG, PNG, PDF. Максимальний розмір 10Мб</span>
+                                    <b>@T("Перетягніть файли сюди, або виберіть з комп'ютера")</b>
+                                    <span>@T("підтримуються JPG, PNG, PDF. Максимальний розмір 10Мб")</span>
                                 </span>
                             </div>
 
-                            <button class="v-btn v-btn--primary exec-ask__send" type="submit">Надіслати звернення</button>
+                            <button class="v-btn v-btn--primary exec-ask__send" type="submit">@T("Надіслати звернення")</button>
                         </form>
 
                         @if (Model.Tickets.Count > 0)
                         {
                             <div class="exec-ask__past">
-                                <h3>Ваші звернення</h3>
+                                <h3>@T("Ваші звернення")</h3>
 
                                 @foreach (var ticket in Model.Tickets)
                                 {
@@ -144,7 +144,7 @@
                                             <span>@ticket.Category · @CabinetFormat.LongDate(ticket.CreatedAt)</span>
                                         </span>
                                         <span class="exec-state exec-state--@(ticket.Status == TicketStatus.New ? "pending" : "paid")">
-                                            @(ticket.Status == TicketStatus.New ? "В обробці" : "Відповіли")
+                                            @T(ticket.Status == TicketStatus.New ? "В обробці" : "Відповіли")
                                         </span>
                                     </div>
                                 }
@@ -154,7 +154,7 @@
 
                     <aside class="exec-aside">
                         <article class="exec-aside__card">
-                            <h3>Корисні ресурси</h3>
+                            <h3>@T("Корисні ресурси")</h3>
 
                             @foreach (var link in ExecutorContent.SupportLinks)
                             {
@@ -169,13 +169,13 @@
                         </article>
 
                         <article class="exec-aside__card">
-                            <h3>Час відповіді</h3>
-                            <p>Середній час відповіді<br /><b>до 6 годин</b></p>
-                            <p>Ми відповідаємо щодня з 8.00 до 21.00 (за київським часом)</p>
+                            <h3>@T("Час відповіді")</h3>
+                            <p>@T("Середній час відповіді")<br /><b>@T("до 6 годин")</b></p>
+                            <p>@T("Ми відповідаємо щодня з 8.00 до 21.00 (за київським часом)")</p>
                         </article>
 
                         <article class="exec-aside__card">
-                            <h3>Інші способи зв'язку</h3>
+                            <h3>@T("Інші способи зв'язку")</h3>
 
                             @foreach (var contact in ExecutorContent.SupportContacts)
                             {

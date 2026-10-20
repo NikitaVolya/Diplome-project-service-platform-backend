@@ -12,10 +12,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -30,7 +30,7 @@
 
                     <div class="exec-soon">
                         <i class="bi bi-hourglass-split" aria-hidden="true"></i>
-                        <h2>Розділ у роботі</h2>
+                        <h2>@T("Розділ у роботі")</h2>
                         <p>@Model.Lead</p>
 
                         <ul>
@@ -44,10 +44,10 @@
                     <div class="exec-tip">
                         <i class="bi bi-graph-up" aria-hidden="true"></i>
                         <div>
-                            <b>Поки що цифри є на головній</b>
-                            <p>Картка «Статистика за місяць» показує перегляди, замовлення й заробіток.</p>
+                            <b>@T("Поки що цифри є на головній")</b>
+                            <p>@T("Картка «Статистика за місяць» показує перегляди, замовлення й заробіток.")</p>
                         </div>
-                        <a class="v-btn v-btn--soft" asp-action="Index">На головну кабінету</a>
+                        <a class="v-btn v-btn--soft" asp-action="Index">@T("На головну кабінету")</a>
                     </div>
                 </section>
             </div>

@@ -11,7 +11,15 @@
 @if (Model.IsDemo)
 {
     <p class="cab-notice" role="status">
-        У вашому акаунті ще немає замовлень, тому екран показує демонстраційні дані.
-        Щойно ви <a asp-controller="Cabinet" asp-action="Create">створите замовлення</a>, тут зʼявиться ваша історія.
+        @T("У вашому акаунті ще немає замовлень, тому екран показує демонстраційні дані. Щойно ви") <a asp-controller="Cabinet" asp-action="Create">@T("створите замовлення")</a>@T(", тут зʼявиться ваша історія.")
     </p>
+}
+
+@{
+    var error = TempData["Cabinet.Error"] as string;
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p class="cab-flash cab-flash--error" role="alert">@error</p>
 }

@@ -2,7 +2,7 @@
 }
 
 <section class="page-faq">
-    <h2 class="page-faq__title">Поширені запитання</h2>
+    <h2 class="page-faq__title">@T("Поширені запитання")</h2>
 
     <div class="page-faq__grid">
         <div class="page-faq__list">
@@ -10,26 +10,26 @@
             {
                 <details class="page-faq__item">
                     <summary>
-                        <span>@item.Question</span>
+                        <span>@T(item.Question)</span>
                         <i class="bi bi-chevron-down" aria-hidden="true"></i>
                     </summary>
-                    <p>@item.Answer</p>
+                    <p>@T(item.Answer)</p>
                 </details>
             }
 
-            <a class="v-btn v-btn--soft page-faq__all" asp-controller="Pages" asp-action="Help">Переглянути всі запитання</a>
+            <a class="v-btn v-btn--soft page-faq__all" asp-controller="Pages" asp-action="Help">@T("Переглянути всі запитання")</a>
         </div>
 
         <aside class="page-support">
-            <h3>Не знайшли відповіді?</h3>
-            <p>Наша команда підтримки завжди готова допомогти.</p>
+            <h3>@T("Не знайшли відповіді?")</h3>
+            <p>@T("Наша команда підтримки завжди готова допомогти.")</p>
 
-            <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">Зв’язатися з підтримкою</a>
+            <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">@T("Зв’язатися з підтримкою")</a>
 
             <ul class="page-support__contacts">
                 <li>
                     <i class="bi bi-chat-dots" aria-hidden="true"></i>
-                    <span><b>Online - chat</b>@PageContent.SupportHours</span>
+                    <span><b>@T("Online - chat")</b>@T(PageContent.SupportHours)</span>
                 </li>
                 <li>
                     <i class="bi bi-envelope" aria-hidden="true"></i>
@@ -37,7 +37,7 @@
                 </li>
                 <li>
                     <i class="bi bi-telephone" aria-hidden="true"></i>
-                    <span><b>Телефон</b>@PageContent.SupportPhone</span>
+                    <span><b>@T("Телефон")</b>@PageContent.SupportPhone</span>
                 </li>
             </ul>
         </aside>

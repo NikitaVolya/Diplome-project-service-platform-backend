@@ -1,5 +1,7 @@
+using AdminPanel.Localization;
 using AdminPanel.Models;
 using BLL.Public;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +36,9 @@ public sealed partial class CabinetController
         var model = new ExecHomeViewModel
         {
             Active = "home",
-            Title = "Кабінет виконавця — Вибір",
+            Title = Tr.T("Кабінет виконавця — Вибір"),
             FullName = $"{me.FirstName} {me.LastName}".Trim(),
-            Headline = me.Headline ?? "Виконавець",
+            Headline = me.Headline ?? Tr.T("Виконавець"),
             City = me.City ?? string.Empty,
             Avatar = string.IsNullOrEmpty(me.AvatarUrl)
                 ? CabinetArtwork.Portrait($"{me.FirstName} {me.LastName}", me.Id)
@@ -78,7 +80,7 @@ public sealed partial class CabinetController
         var model = new ExecOrdersViewModel
         {
             Active = "orders",
-            Title = "Замовлення — Вибір",
+            Title = Tr.T("Замовлення — Вибір"),
             Tab = Tab(tab, ExecutorContent.OrderTabs, "all"),
             Query = Clean(q)
         };
@@ -104,9 +106,9 @@ public sealed partial class CabinetController
 
         TempData["Cabinet.Flash"] = done
             ? accept
-                ? "Замовлення взято в роботу."
-                : "Замовлення відхилено й повернулося в пошук."
-            : "Не вдалося змінити замовлення: можливо, його вже забрали.";
+                ? Tr.T("Замовлення взято в роботу.")
+                : Tr.T("Замовлення відхилено й повернулося в пошук.")
+            : Tr.T("Не вдалося змінити замовлення: можливо, його вже забрали.");
 
         return RedirectToAction(nameof(Orders), new { tab });
     }
@@ -129,7 +131,7 @@ public sealed partial class CabinetController
         var model = new ExecServicesViewModel
         {
             Active = "services",
-            Title = "Мої послуги — Вибір",
+            Title = Tr.T("Мої послуги — Вибір"),
             Query = Clean(q),
             CategoryId = categoryId
         };
@@ -179,7 +181,7 @@ public sealed partial class CabinetController
             var model = new ExecServicesViewModel
             {
                 Active = "services",
-                Title = "Мої послуги — Вибір",
+                Title = Tr.T("Мої послуги — Вибір"),
                 Form = form
             };
 
@@ -220,7 +222,7 @@ public sealed partial class CabinetController
 
         await _exec.SaveServiceAsync(me.Id, service, cancellationToken);
 
-        TempData["Cabinet.Flash"] = form.Id > 0 ? "Послугу оновлено." : "Послугу додано.";
+        TempData["Cabinet.Flash"] = form.Id > 0 ? Tr.T("Послугу оновлено.") : Tr.T("Послугу додано.");
         return RedirectToAction(nameof(Services));
     }
 
@@ -233,7 +235,7 @@ public sealed partial class CabinetController
 
         if (done)
         {
-            TempData["Cabinet.Flash"] = "Стан послуги змінено.";
+            TempData["Cabinet.Flash"] = Tr.T("Стан послуги змінено.");
         }
 
         return RedirectToAction(nameof(Services));
@@ -247,7 +249,7 @@ public sealed partial class CabinetController
 
         if (await _exec.DeleteServiceAsync(me.Id, id, cancellationToken))
         {
-            TempData["Cabinet.Flash"] = "Послугу видалено.";
+            TempData["Cabinet.Flash"] = Tr.T("Послугу видалено.");
         }
 
         return RedirectToAction(nameof(Services));
@@ -271,7 +273,7 @@ public sealed partial class CabinetController
         var model = new ExecCalendarViewModel
         {
             Active = "calendar",
-            Title = "Календар — Вибір",
+            Title = Tr.T("Календар — Вибір"),
             Query = Clean(q)
         };
 
@@ -298,7 +300,7 @@ public sealed partial class CabinetController
 
         if (!DateTime.TryParse(form.Date, out var date))
         {
-            ModelState.AddModelError(nameof(form.Date), "Вкажіть дату у форматі РРРР-ММ-ДД");
+            ModelState.AddModelError(nameof(form.Date), Tr.T("Вкажіть дату у форматі РРРР-ММ-ДД"));
         }
 
         if (!ModelState.IsValid)
@@ -306,7 +308,7 @@ public sealed partial class CabinetController
             var model = new ExecCalendarViewModel
             {
                 Active = "calendar",
-                Title = "Календар — Вибір",
+                Title = Tr.T("Календар — Вибір"),
                 Form = form
             };
 
@@ -332,7 +334,7 @@ public sealed partial class CabinetController
             Note = Empty(form.Note)
         }, cancellationToken);
 
-        TempData["Cabinet.Flash"] = "Подію додано в календар.";
+        TempData["Cabinet.Flash"] = Tr.T("Подію додано в календар.");
         return RedirectToAction(nameof(Calendar), new { week = start.ToString("yyyy-MM-dd") });
     }
 
@@ -353,7 +355,7 @@ public sealed partial class CabinetController
         var model = new ExecPortfolioViewModel
         {
             Active = "portfolio",
-            Title = "Портфоліо — Вибір",
+            Title = Tr.T("Портфоліо — Вибір"),
             Group = Clean(group)
         };
 
@@ -381,7 +383,7 @@ public sealed partial class CabinetController
             var model = new ExecPortfolioViewModel
             {
                 Active = "portfolio",
-                Title = "Портфоліо — Вибір",
+                Title = Tr.T("Портфоліо — Вибір"),
                 Form = form
             };
 
@@ -402,7 +404,7 @@ public sealed partial class CabinetController
         }, cancellationToken);
 
         TempData["Cabinet.Flash"] =
-            $"Роботу додано. Покладіть знімок у {ExecutorArtwork.Expected(ExecutorArtwork.PortfolioFolder, form.Image ?? form.Title)}.";
+            Tr.F("Роботу додано. Покладіть знімок у {0}.", ExecutorArtwork.Expected(ExecutorArtwork.PortfolioFolder, form.Image ?? form.Title));
 
         return RedirectToAction(nameof(Portfolio));
     }
@@ -415,7 +417,7 @@ public sealed partial class CabinetController
 
         if (await _exec.DeleteWorkAsync(me.Id, id, cancellationToken))
         {
-            TempData["Cabinet.Flash"] = "Роботу прибрано з портфоліо.";
+            TempData["Cabinet.Flash"] = Tr.T("Роботу прибрано з портфоліо.");
         }
 
         return RedirectToAction(nameof(Portfolio));
@@ -433,7 +435,7 @@ public sealed partial class CabinetController
         var model = new ExecMessagesViewModel
         {
             Active = "messages",
-            Title = "Повідомлення — Вибір",
+            Title = Tr.T("Повідомлення — Вибір"),
             Filter = filter is "unread" or "archive" ? filter : "all",
             Query = Clean(q)
         };
@@ -488,7 +490,7 @@ public sealed partial class CabinetController
         var model = new ExecReviewsViewModel
         {
             Active = "reviews",
-            Title = "Відгуки — Вибір",
+            Title = Tr.T("Відгуки — Вибір"),
             Tab = Tab(tab, ExecutorContent.ReviewTabs, "received"),
             Sort = Tab(sort, ExecutorContent.ReviewSorts, "new")
         };
@@ -527,7 +529,7 @@ public sealed partial class CabinetController
         var model = new ExecAnalyticsViewModel
         {
             Active = "analytics",
-            Title = "Аналітика — Вибір",
+            Title = Tr.T("Аналітика — Вибір"),
             Days = Period(days)
         };
 
@@ -555,7 +557,7 @@ public sealed partial class CabinetController
         var model = new ExecFinanceViewModel
         {
             Active = "finance",
-            Title = "Фінанси — Вибір",
+            Title = Tr.T("Фінанси — Вибір"),
             Days = Period(days),
             Open = open is "method" or "pay" ? open : null
         };
@@ -595,8 +597,8 @@ public sealed partial class CabinetController
         var done = await _insights.WithdrawAsync(me.Id, form.Amount, form.MethodId, cancellationToken);
 
         TempData["Cabinet.Flash"] = done
-            ? $"Заявку на {CabinetFormat.Money(form.Amount)} прийнято. Гроші йдуть 1–3 робочі дні."
-            : "Не вдалося замовити виплату: перевірте суму й спосіб виведення.";
+            ? Tr.F("Заявку на {0} прийнято. Гроші йдуть 1–3 робочі дні.", CabinetFormat.Money(form.Amount))
+            : Tr.T("Не вдалося замовити виплату: перевірте суму й спосіб виведення.");
 
         return RedirectToAction(nameof(Finance));
     }
@@ -617,7 +619,7 @@ public sealed partial class CabinetController
             var model = new ExecFinanceViewModel
             {
                 Active = "finance",
-                Title = "Фінанси — Вибір",
+                Title = Tr.T("Фінанси — Вибір"),
                 Days = 30,
                 Open = "method",
                 Form = form
@@ -633,8 +635,8 @@ public sealed partial class CabinetController
         await _insights.SaveMethodAsync(me.Id, form.Id, kind, form.Label, form.Note, cancellationToken);
 
         TempData["Cabinet.Flash"] = form.Id > 0
-            ? "Спосіб виведення оновлено."
-            : "Спосіб виведення додано.";
+            ? Tr.T("Спосіб виведення оновлено.")
+            : Tr.T("Спосіб виведення додано.");
 
         return RedirectToAction(nameof(Finance));
     }
@@ -651,8 +653,8 @@ public sealed partial class CabinetController
         var me = await MeAsync();
 
         TempData["Cabinet.Flash"] = await _insights.DeleteMethodAsync(me.Id, id, cancellationToken)
-            ? "Спосіб виведення прибрано."
-            : "Такого способу виведення вже немає.";
+            ? Tr.T("Спосіб виведення прибрано.")
+            : Tr.T("Такого способу виведення вже немає.");
 
         return RedirectToAction(nameof(Finance));
     }
@@ -669,7 +671,7 @@ public sealed partial class CabinetController
         var model = new ExecSupportViewModel
         {
             Active = "support",
-            Title = "Підтримка — Вибір",
+            Title = Tr.T("Підтримка — Вибір"),
             Query = Clean(query),
             Form = form ?? new ExecTicketForm()
         };
@@ -707,7 +709,7 @@ public sealed partial class CabinetController
 
         await _insights.AddTicketAsync(me.Id, form.Topic, form.Category, form.Message, cancellationToken);
 
-        TempData["Cabinet.Flash"] = "Звернення надіслано. Відповідь прийде на пошту протягом 6 годин.";
+        TempData["Cabinet.Flash"] = Tr.T("Звернення надіслано. Відповідь прийде на пошту протягом 6 годин.");
 
         return RedirectToAction(nameof(Support));
     }
@@ -739,7 +741,7 @@ public sealed partial class CabinetController
         var me = await MeAsync();
 
         model.Active = "settings";
-        model.Title = "Налаштування — Вибір";
+        model.Title = Tr.T("Налаштування — Вибір");
         model.Avatar = me.AvatarUrl ?? CabinetArtwork.Portrait(me.FirstName, me.Id);
         model.MailConfirmed = me.EmailConfirmed;
 
@@ -766,6 +768,9 @@ public sealed partial class CabinetController
         me.NotifyMarketing = model.NotifyMarketing;
 
         me.Language = Pick(CabinetContent.Languages, model.Language, "uk");
+
+        // «Мова інтерфейсу» в налаштуваннях і перемикач унизу сайту — одне й те саме.
+        PublicCulture.Remember(Response, me.Language);
         me.TimeZoneName = Pick(CabinetContent.TimeZones, model.TimeZoneName, "Europe/Kyiv");
         me.DateFormat = Pick(CabinetContent.DateFormats, model.DateFormat, "dd.MM.yyyy");
         me.TimeFormat = Pick(CabinetContent.TimeFormats, model.TimeFormat, "24");
@@ -787,7 +792,7 @@ public sealed partial class CabinetController
             return View("Executor/Settings", model);
         }
 
-        TempData["Cabinet.Flash"] = "Зміни збережено.";
+        TempData["Cabinet.Flash"] = Tr.T("Зміни збережено.");
 
         return RedirectToAction(nameof(Settings));
     }
@@ -805,7 +810,7 @@ public sealed partial class CabinetController
         // …тому поточному пристрою одразу видаємо нову — як і обіцяє підпис на макеті.
         await _signIn.RefreshSignInAsync(me);
 
-        TempData["Cabinet.Flash"] = "Інші пристрої вийшли з акаунта.";
+        TempData["Cabinet.Flash"] = Tr.T("Інші пристрої вийшли з акаунта.");
 
         return RedirectToAction(nameof(Settings));
     }
@@ -816,24 +821,40 @@ public sealed partial class CabinetController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Switch(string? to)
+    public async Task<IActionResult> Switch(string? to)
     {
         var side = to == "executor" ? CabinetSide.Executor : CabinetSide.Customer;
 
-        // Перемкнутися можна лише на ту роль, яка в людини справді є.
-        if (side == CabinetSide.Executor && !CabinetRole.CanExecute(User))
-        {
-            return RedirectToAction("Register", "Auth");
-        }
+        var hasRole = side == CabinetSide.Executor ? CabinetRole.CanExecute(User) : CabinetRole.CanOrder(User);
 
-        if (side == CabinetSide.Customer && !CabinetRole.CanOrder(User))
+        // «Стати виконавцем» / «Стати замовником»: якщо такої ролі в акаунті ще немає,
+        // додаємо її тому ж акаунту — заводити другу реєстрацію з іншою поштою не треба.
+        if (!hasRole)
         {
-            return RedirectToAction("Register", "Auth");
+            var me = await MeAsync();
+            var role = side == CabinetSide.Executor ? AppRoles.Executor : AppRoles.Customer;
+
+            var added = await _users.AddToRoleAsync(me, role);
+
+            if (!added.Succeeded)
+            {
+                _logger.LogWarning("Не вдалося додати роль {Role} користувачу {UserId}: {Errors}",
+                    role, me.Id, string.Join("; ", added.Errors.Select(e => e.Description)));
+                TempData["Cabinet.Error"] = Tr.T("Не вдалося змінити роль. Спробуйте пізніше.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Ролі зберігаються в cookie входу — без оновлення сайт ще не знав би про нову.
+            await _signIn.RefreshSignInAsync(me);
+
+            TempData["Cabinet.Flash"] = side == CabinetSide.Executor
+                ? Tr.T("Готово! Тепер ви також виконавець: заповніть профіль і додайте свої послуги.")
+                : Tr.T("Готово! Тепер ви також замовник: можете створювати замовлення.");
         }
 
         CabinetRole.Remember(HttpContext, side);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(side == CabinetSide.Executor && !hasRole ? nameof(Settings) : nameof(Index));
     }
 
     // ───────────────────────────────────────────────────────────────────────
@@ -855,7 +876,7 @@ public sealed partial class CabinetController
         var rows = await _exec.GetLeafCategoriesAsync(cancellationToken);
 
         model.Categories = rows
-            .Select(r => new Choice(r.Id.ToString(), $"{r.Parent} › {r.Name}"))
+            .Select(r => new Choice(r.Id.ToString(), $"{Tr.T(r.Parent)} › {Tr.T(r.Name)}"))
             .ToList();
     }
 
@@ -887,7 +908,7 @@ public sealed partial class CabinetController
     private ExecSettingsViewModel ToExecSettings(ApplicationUser user) => new()
     {
         Active = "settings",
-        Title = "Налаштування — Вибір",
+        Title = Tr.T("Налаштування — Вибір"),
         Avatar = user.AvatarUrl ?? CabinetArtwork.Portrait(user.FirstName, user.Id),
         FirstName = user.FirstName,
         LastName = user.LastName,
@@ -903,7 +924,8 @@ public sealed partial class CabinetController
         NotifyReviews = user.NotifyReviews,
         NotifyReminders = user.NotifyReminders,
         NotifyMarketing = user.NotifyMarketing,
-        Language = user.Language ?? "uk",
+        // Показуємо мову, якою сайт зараз відкритий (її могли змінити й унизу сторінки).
+        Language = PublicCulture.Current.Code,
         TimeZoneName = user.TimeZoneName ?? "Europe/Kyiv",
         DateFormat = user.DateFormat ?? "dd.MM.yyyy",
         TimeFormat = user.TimeFormat ?? "24",

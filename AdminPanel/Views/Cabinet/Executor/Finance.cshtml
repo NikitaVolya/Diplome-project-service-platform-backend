@@ -21,10 +21,10 @@
 <main class="cab cab--exec">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
         </div>
 
@@ -36,36 +36,36 @@
                     <partial name="Executor/_ExecNotices" />
 
                     <div class="exec-head exec-head__row">
-                        <h1>Фінанси</h1>
+                        <h1>@T("Фінанси")</h1>
 
                         <div class="exec-period">
                             <form method="get" asp-action="Finance">
                                 <label class="cab-select">
-                                    <select name="days" onchange="this.form.submit()" aria-label="Період">
+                                    <select name="days" onchange="this.form.submit()" aria-label="@T("Період")">
                                         @foreach (var (days, title) in ExecutorContent.Periods)
                                         {
-                                            <option value="@days" selected="@(days == Model.Days)">@title</option>
+                                            <option value="@days" selected="@(days == Model.Days)">@T(title)</option>
                                         }
                                     </select>
                                 </label>
-                                <noscript><button class="v-btn v-btn--soft" type="submit">Показати</button></noscript>
+                                <noscript><button class="v-btn v-btn--soft" type="submit">@T("Показати")</button></noscript>
                             </form>
                         </div>
                     </div>
 
-                    <p class="exec-panel__lead">Керуйте своїми доходами та виплатами</p>
+                    <p class="exec-panel__lead">@T("Керуйте своїми доходами та виплатами")</p>
 
                     <div class="exec-stats">
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Загальний дохід</span>
+                            <span class="exec-stat__name">@T("Загальний дохід")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(data.Income)</span>
                             <span class="exec-stat__note">
-                                @CabinetFormat.Delta(data.IncomeChange) до попереднього періоду
+                                @F("{0} до попереднього періоду", CabinetFormat.Delta(data.IncomeChange))
                             </span>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Доступно до виплати</span>
+                            <span class="exec-stat__name">@T("Доступно до виплати")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(data.Available)</span>
 
                             @if (Model.Open == "pay")
@@ -74,11 +74,11 @@
                                     @Html.AntiForgeryToken()
                                     <input type="number" name="Amount" min="@Model.Minimum" step="50"
                                            max="@data.Available" value="@((int)data.Available)"
-                                           aria-label="Сума виплати" />
+                                           aria-label="@T("Сума виплати")" />
 
                                     @if (data.Methods.Count > 1)
                                     {
-                                        <select name="MethodId" aria-label="Куди вивести">
+                                        <select name="MethodId" aria-label="@T("Куди вивести")">
                                             @foreach (var method in data.Methods)
                                             {
                                                 <option value="@method.Id">@method.Label</option>
@@ -86,40 +86,40 @@
                                         </select>
                                     }
 
-                                    <button class="v-btn v-btn--primary" type="submit">Замовити</button>
+                                    <button class="v-btn v-btn--primary" type="submit">@T("Замовити")</button>
                                 </form>
                             }
                             else
                             {
                                 <a class="v-btn v-btn--primary exec-stat__act"
                                    asp-action="Finance" asp-route-days="@Model.Days" asp-route-open="pay">
-                                    Вивести кошти
+                                    @T("Вивести кошти")
                                 </a>
                             }
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">В очікуванні</span>
+                            <span class="exec-stat__name">@T("В очікуванні")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(data.Pending)</span>
-                            <span class="exec-stat__note">@PublicText.Count(data.PendingOrders, "замовлення", "замовлення", "замовлень") в роботі</span>
+                            <span class="exec-stat__note">@F("{0} в роботі", PublicText.Count(data.PendingOrders, "замовлення", "замовлення", "замовлень"))</span>
                         </article>
 
                         <article class="exec-stat">
-                            <span class="exec-stat__name">Виплачено</span>
+                            <span class="exec-stat__name">@T("Виплачено")</span>
                             <span class="exec-stat__value">@CabinetFormat.Money(data.Paid)</span>
-                            <span class="exec-stat__note">всього виплачено</span>
+                            <span class="exec-stat__note">@T("всього виплачено")</span>
                         </article>
                     </div>
 
                     <div class="exec-chart">
                         <div class="exec-chart__head">
-                            <h2>Дохід</h2>
-                            <span class="cab-select cab-select--ghost">За день</span>
+                            <h2>@T("Дохід")</h2>
+                            <span class="cab-select cab-select--ghost">@T("За день")</span>
                         </div>
 
                         @if (data.Bars.Count == 0)
                         {
-                            <p class="cab-empty">Нарахувань за цей період ще не було.</p>
+                            <p class="cab-empty">@T("Нарахувань за цей період ще не було.")</p>
                         }
                         else
                         {
@@ -156,51 +156,51 @@
                 </section>
 
                 <section class="exec-sheet">
-                    <h2>Останні транзакції</h2>
+                    <h2>@T("Останні транзакції")</h2>
 
                     @if (data.Transactions.Count == 0)
                     {
-                        <p class="cab-empty">Рухів коштів за цей період не було.</p>
+                        <p class="cab-empty">@T("Рухів коштів за цей період не було.")</p>
                     }
                     else
                     {
                         <div class="exec-txns">
                             <div class="exec-txns__head">
-                                <span>Дата</span>
-                                <span>Опис</span>
-                                <span>Тип</span>
-                                <span>Сума</span>
-                                <span>Статус</span>
+                                <span>@T("Дата")</span>
+                                <span>@T("Опис")</span>
+                                <span>@T("Тип")</span>
+                                <span>@T("Сума")</span>
+                                <span>@T("Статус")</span>
                             </div>
 
                             @foreach (var txn in data.Transactions)
                             {
                                 <div class="exec-txn">
                                     <span>@CabinetFormat.Digits(txn.Date)</span>
-                                    <span class="exec-txn__name">@txn.Title</span>
-                                    <span>@(txn.Income ? "Дохід" : "Виплата")</span>
+                                    <span class="exec-txn__name">@(txn.TitleArg == null ? txn.Title : F(txn.Title, T(txn.TitleArg)))</span>
+                                    <span>@T(txn.Income ? "Дохід" : "Виплата")</span>
                                     <span class="exec-txn__sum @(txn.Income ? "is-plus" : "is-minus")">
                                         @CabinetFormat.Signed(txn.Amount, txn.Income)
                                     </span>
-                                    <span class="exec-state exec-state--@txn.StateKey">@txn.State</span>
+                                    <span class="exec-state exec-state--@txn.StateKey">@T(txn.State)</span>
                                 </div>
                             }
                         </div>
                     }
 
                     <a class="exec-more exec-more--right" asp-action="Orders">
-                        Переглянути всі <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                        @T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i>
                     </a>
                 </section>
 
                 <section class="exec-panel exec-panel--next">
                     <div class="exec-pair">
                         <article class="exec-box">
-                            <h2>Способи виведення коштів</h2>
+                            <h2>@T("Способи виведення коштів")</h2>
 
                             @if (data.Methods.Count == 0)
                             {
-                                <p class="cab-empty">Способів виведення ще немає — додайте картку або гаманець.</p>
+                                <p class="cab-empty">@T("Способів виведення ще немає — додайте картку або гаманець.")</p>
                             }
 
                             @foreach (var method in data.Methods)
@@ -214,7 +214,7 @@
 
                                     <a class="v-btn v-btn--soft" asp-action="Finance"
                                        asp-route-days="@Model.Days" asp-route-open="method" asp-route-id="@method.Id">
-                                        Змінити
+                                        @T("Змінити")
                                     </a>
                                 </div>
                             }
@@ -223,7 +223,7 @@
                             {
                                 <a class="v-btn v-btn--primary exec-box__act"
                                    asp-action="Finance" asp-route-days="@Model.Days" asp-route-open="method">
-                                    Додати спосіб виведення
+                                    @T("Додати спосіб виведення")
                                 </a>
                             }
                             else
@@ -235,28 +235,28 @@
                                     <input type="hidden" name="Form.Id" value="@Model.Form.Id" />
 
                                     <label>
-                                        <span>Спосіб виведення</span>
+                                        <span>@T("Спосіб виведення")</span>
                                         <select asp-for="Form!.Kind">
-                                            <option value="Card">Банківська картка</option>
+                                            <option value="Card">@T("Банківська картка")</option>
                                             <option value="PayPal">Pay Pal</option>
-                                            <option value="Iban">Рахунок IBAN</option>
+                                            <option value="Iban">@T("Рахунок IBAN")</option>
                                         </select>
                                     </label>
 
                                     <label>
-                                        <span>Реквізити</span>
+                                        <span>@T("Реквізити")</span>
                                         <input asp-for="Form!.Label" placeholder="Visa ****** 4242" />
                                         <span asp-validation-for="Form!.Label" class="cab-error"></span>
                                     </label>
 
                                     <label>
-                                        <span>Підпис</span>
-                                        <input asp-for="Form!.Note" placeholder="основна карта" />
+                                        <span>@T("Підпис")</span>
+                                        <input asp-for="Form!.Note" placeholder="@T("основна карта")" />
                                     </label>
 
                                     <div class="exec-form__act">
-                                        <button class="v-btn v-btn--primary" type="submit">Зберегти</button>
-                                        <a class="v-btn v-btn--soft" asp-action="Finance" asp-route-days="@Model.Days">Скасувати</a>
+                                        <button class="v-btn v-btn--primary" type="submit">@T("Зберегти")</button>
+                                        <a class="v-btn v-btn--soft" asp-action="Finance" asp-route-days="@Model.Days">@T("Скасувати")</a>
                                     </div>
                                 </form>
 
@@ -266,7 +266,7 @@
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="id" value="@Model.Form.Id" />
                                         <button type="submit">
-                                            <i class="bi bi-trash3" aria-hidden="true"></i> Прибрати цей спосіб
+                                            <i class="bi bi-trash3" aria-hidden="true"></i> @T("Прибрати цей спосіб")
                                         </button>
                                     </form>
                                 }
@@ -276,16 +276,16 @@
                         <article class="exec-box">
                             @* У макеті тут стоїть підпис «За кількістю замовлень» — він із сусідньої
                                картки й до комісій не стосується, тому не повторюємо його. *@
-                            <h2>Інформація</h2>
+                            <h2>@T("Інформація")</h2>
 
                             <ul class="exec-rank">
-                                <li><span>Комісія платформи</span><b>@CabinetFormat.Percent((double)Model.Commission)</b></li>
-                                <li><span>Мінімальна сума для виведення</span><b>@CabinetFormat.Money(Model.Minimum)</b></li>
-                                <li><span>Термін зарахування</span><b>1-3 дні робочих</b></li>
+                                <li><span>@T("Комісія платформи")</span><b>@CabinetFormat.Percent((double)Model.Commission)</b></li>
+                                <li><span>@T("Мінімальна сума для виведення")</span><b>@CabinetFormat.Money(Model.Minimum)</b></li>
+                                <li><span>@T("Термін зарахування")</span><b>@T("1-3 дні робочих")</b></li>
                             </ul>
 
                             <a class="v-btn v-btn--primary exec-box__act" asp-controller="Pages" asp-action="Help">
-                                Детальніше про фінанси
+                                @T("Детальніше про фінанси")
                             </a>
                         </article>
                     </div>

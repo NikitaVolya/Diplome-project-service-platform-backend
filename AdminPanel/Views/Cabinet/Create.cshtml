@@ -9,13 +9,13 @@
 <main class="cab">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
 
-            <div class="cab-head"><h1>Створити замовлення</h1></div>
+            <div class="cab-head"><h1>@T("Створити замовлення")</h1></div>
         </div>
 
         <div class="cab-body">
@@ -25,7 +25,7 @@
                 <partial name="_CabinetNotices" model="Model" />
 
                 <section class="cab-panel cab-panel--lilac cab-panel--wide">
-                    <p class="cab-panel__lead">Опишіть, що вам потрібно, та отримуйте відгуки від перевірених виконавців</p>
+                    <p class="cab-panel__lead">@T("Опишіть, що вам потрібно, та отримуйте відгуки від перевірених виконавців")</p>
 
                     <form method="post" asp-action="Create">
                         @Html.AntiForgeryToken()
@@ -36,22 +36,22 @@
                             <div class="cab-step__head">
                                 <span class="cab-step__no">1</span>
                                 <span>
-                                    <b>Що вам потрібно?</b>
-                                    <span>Опишіть послугу, яку ви шукаєте</span>
+                                    <b>@T("Що вам потрібно?")</b>
+                                    <span>@T("Опишіть послугу, яку ви шукаєте")</span>
                                 </span>
                             </div>
 
                             <div class="cab-grid">
                                 <div class="cab-field">
-                                    <label asp-for="OrderTitle">Назва замовлення *</label>
+                                    <label asp-for="OrderTitle">@T("Назва замовлення *")</label>
                                     <input asp-for="OrderTitle" type="text"
-                                           placeholder="Наприклад: Дизайн логотипу для кав’ярні" required />
+                                           placeholder="@T("Наприклад: Дизайн логотипу для кав’ярні")" required />
                                 </div>
 
                                 <div class="cab-field">
-                                    <label asp-for="CategoryId">Категорія *</label>
+                                    <label asp-for="CategoryId">@T("Категорія *")</label>
                                     <select asp-for="CategoryId" required>
-                                        <option value="0">Оберіть категорію послуг</option>
+                                        <option value="0">@T("Оберіть категорію послуг")</option>
                                         @foreach (var category in Model.Categories)
                                         {
                                             <option value="@category.Key" selected="@(Model.CategoryId.ToString() == category.Key)">@category.Title</option>
@@ -60,19 +60,19 @@
                                 </div>
 
                                 <div class="cab-field cab-field--wide">
-                                    <label asp-for="Description">Опис завдання *</label>
+                                    <label asp-for="Description">@T("Опис завдання *")</label>
                                     <textarea asp-for="Description" maxlength="2000" rows="7"
-                                              placeholder="Опишіть ваше завдання, цілі, побажання, обсяг роботи, тощо." required></textarea>
+                                              placeholder="@T("Опишіть ваше завдання, цілі, побажання, обсяг роботи, тощо.")" required></textarea>
                                 </div>
 
                                 <div class="cab-field cab-field--wide">
-                                    <label>Додайте файли (не більше 10)</label>
+                                    <label>@T("Додайте файли (не більше 10)")</label>
                                     <div class="cab-drop">
                                         <i class="bi bi-paperclip" aria-hidden="true"></i>
                                         <span>
-                                            Перетягніть файли сюди, або виберіть з комп’ютера.<br />
-                                            Підтримуються: JPG, PNG, PDF, DOC, ZIP. Максимальний розмір 10 Мб
-                                            <br /><b>Завантаження файлів зʼявиться в наступній версії.</b>
+                                            @T("Перетягніть файли сюди, або виберіть з комп’ютера.")<br />
+                                            @T("Підтримуються: JPG, PNG, PDF, DOC, ZIP. Максимальний розмір 10 Мб")
+                                            <br /><b>@T("Завантаження файлів зʼявиться в наступній версії.")</b>
                                         </span>
                                     </div>
                                 </div>
@@ -82,29 +82,29 @@
                         <section class="cab-step">
                             <div class="cab-step__head">
                                 <span class="cab-step__no">2</span>
-                                <span><b>Деталі замовлення</b></span>
+                                <span><b>@T("Деталі замовлення")</b></span>
                             </div>
 
                             <div class="cab-grid">
                                 <div class="cab-field">
-                                    <label>Бюджет</label>
+                                    <label>@T("Бюджет")</label>
                                     <div class="cab-money">
-                                        <select asp-for="Budget" aria-label="Тип бюджету">
+                                        <select asp-for="Budget" aria-label="@T("Тип бюджету")">
                                             @foreach (var budget in CabinetContent.Budgets)
                                             {
                                                 <option value="@budget.Key" selected="@(Model.Budget == budget.Key)">@budget.Title</option>
                                             }
                                         </select>
-                                        <span>від</span>
+                                        <span>@T("від")</span>
                                         <input asp-for="PriceFrom" type="number" min="0" max="1000000" step="50" />
-                                        <span>до</span>
+                                        <span>@T("до")</span>
                                         <input asp-for="PriceTo" type="number" min="0" max="1000000" step="50" />
-                                        <span>грн.</span>
+                                        <span>@T("грн.")</span>
                                     </div>
                                 </div>
 
                                 <div class="cab-field">
-                                    <label asp-for="Deadline">Термін виконання</label>
+                                    <label asp-for="Deadline">@T("Термін виконання")</label>
                                     <select asp-for="Deadline">
                                         @foreach (var deadline in CabinetContent.Deadlines)
                                         {
@@ -118,40 +118,40 @@
                         <section class="cab-step">
                             <div class="cab-step__head">
                                 <span class="cab-step__no">3</span>
-                                <span><b>Додаткова інформація</b></span>
+                                <span><b>@T("Додаткова інформація")</b></span>
                             </div>
 
                             <div class="cab-grid">
                                 <div class="cab-field">
-                                    <label>Місце виконання</label>
+                                    <label>@T("Місце виконання")</label>
                                     <div class="cab-radios">
                                         <label class="cab-radio">
                                             <input type="radio" name="Place" value="online" checked="@(Model.Place == "online")" />
-                                            <span>Онлайн</span>
+                                            <span>@T("Онлайн")</span>
                                         </label>
                                         <label class="cab-radio">
                                             <input type="radio" name="Place" value="onsite" checked="@(Model.Place == "onsite")" />
-                                            <span>Потрібна зустріч</span>
+                                            <span>@T("Потрібна зустріч")</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="cab-field">
-                                    <label>Тип замовлення</label>
+                                    <label>@T("Тип замовлення")</label>
                                     <div class="cab-radios">
                                         <label class="cab-radio">
                                             <input type="radio" name="Kind" value="once" checked="@(Model.Kind == "once")" />
-                                            <span>Одноразове</span>
+                                            <span>@T("Одноразове")</span>
                                         </label>
                                         <label class="cab-radio">
                                             <input type="radio" name="Kind" value="ongoing" checked="@(Model.Kind == "ongoing")" />
-                                            <span>Постійне співробітництво</span>
+                                            <span>@T("Постійне співробітництво")</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="cab-field">
-                                    <label asp-for="Executors">Кількість виконавців</label>
+                                    <label asp-for="Executors">@T("Кількість виконавців")</label>
                                     <select asp-for="Executors">
                                         @foreach (var count in CabinetContent.ExecutorCounts)
                                         {
@@ -161,7 +161,7 @@
                                 </div>
 
                                 <div class="cab-field">
-                                    <label asp-for="Level">Рівень досвіду виконавців</label>
+                                    <label asp-for="Level">@T("Рівень досвіду виконавців")</label>
                                     <select asp-for="Level">
                                         @foreach (var level in CabinetContent.ExperienceLevels)
                                         {
@@ -171,9 +171,9 @@
                                 </div>
 
                                 <div class="cab-field">
-                                    <label asp-for="AddressId">Адреса (для зустрічі)</label>
+                                    <label asp-for="AddressId">@T("Адреса (для зустрічі)")</label>
                                     <select asp-for="AddressId">
-                                        <option value="">Не потрібна</option>
+                                        <option value="">@T("Не потрібна")</option>
                                         @foreach (var address in Model.Addresses)
                                         {
                                             <option value="@address.Id" selected="@(Model.AddressId == address.Id)">
@@ -189,20 +189,20 @@
                             <div class="cab-step__head">
                                 <span class="cab-step__no">4</span>
                                 <span>
-                                    <b>Контактна інформація</b>
-                                    <span>Виконавці не бачать ваші контакти, поки не відгукнуться на замовлення</span>
+                                    <b>@T("Контактна інформація")</b>
+                                    <span>@T("Виконавці не бачать ваші контакти, поки не відгукнуться на замовлення")</span>
                                 </span>
                             </div>
 
                             <label class="cab-check">
                                 <input asp-for="SharePhone" type="checkbox" />
-                                <span>Показувати номер телефону виконавцям, як відгукнуться.</span>
+                                <span>@T("Показувати номер телефону виконавцям, як відгукнуться.")</span>
                             </label>
                         </section>
 
                         <div class="cab-create__act">
-                            <a class="v-btn v-btn--ghost" asp-action="Orders">Скасувати</a>
-                            <button class="v-btn v-btn--soft" type="submit">Опублікувати замовлення</button>
+                            <a class="v-btn v-btn--ghost" asp-action="Orders">@T("Скасувати")</a>
+                            <button class="v-btn v-btn--soft" type="submit">@T("Опублікувати замовлення")</button>
                         </div>
                     </form>
                 </section>

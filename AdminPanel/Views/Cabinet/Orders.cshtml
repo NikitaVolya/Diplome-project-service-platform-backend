@@ -21,13 +21,13 @@
 <main class="cab">
     <div class="v-container">
         <div class="cab-top">
-            <nav class="cab-crumbs" aria-label="Навігація">
-                <a asp-controller="Landing" asp-action="Index">Головна</a>
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
                 <span aria-hidden="true">&rsaquo;</span>
-                <a asp-action="Index">Особистий кабінет</a>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
             </nav>
 
-            <div class="cab-head"><h1>Мої замовлення</h1></div>
+            <div class="cab-head"><h1>@T("Мої замовлення")</h1></div>
         </div>
 
         <div class="cab-body">
@@ -38,8 +38,8 @@
 
                 <section class="cab-panel">
                     <div class="cab-rowhead">
-                        <h2>Мої замовлення:</h2>
-                        <a class="cab-all" asp-action="Create">Створити замовлення <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        <h2>@T("Мої замовлення:")</h2>
+                        <a class="cab-all" asp-action="Create">@T("Створити замовлення") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                     </div>
 
                     <div class="cab-tabs">
@@ -55,18 +55,18 @@
 
                         <label class="cab-find">
                             <i class="bi bi-search" aria-hidden="true"></i>
-                            <input type="search" name="q" value="@Model.Query" placeholder="Пошук замовлень"
-                                   aria-label="Пошук замовлень" />
+                            <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук замовлень")"
+                                   aria-label="@T("Пошук замовлень")" />
                         </label>
 
                         <button class="v-btn v-btn--ghost" type="submit">
-                            <i class="bi bi-funnel" aria-hidden="true"></i> Фільтри
+                            <i class="bi bi-funnel" aria-hidden="true"></i> @T("Фільтри")
                         </button>
                     </form>
 
                     @if (Model.Orders.Items.Count == 0)
                     {
-                        <p class="cab-empty">Замовлень за цим фільтром немає.</p>
+                        <p class="cab-empty">@T("Замовлень за цим фільтром немає.")</p>
                     }
 
                     <div class="cab-orders">

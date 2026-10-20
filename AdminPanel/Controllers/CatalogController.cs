@@ -1,3 +1,4 @@
+using AdminPanel.Localization;
 using AdminPanel.Models;
 using BLL.Public;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +48,7 @@ public sealed class CatalogController(ServiceDirectory directory, IPublicCatalog
             : data.Categories.FirstOrDefault(c => c.ParentId == null);
         if (categoryId.HasValue && model.Selected == null) return NotFound();
         model.Items = data.Categories.Where(c => model.IsGlobalSearch || (c.ParentId == model.Selected?.Id && c.ParentId != null))
-            .Where(c => model.Query.Length == 0 || c.Name.Contains(model.Query, StringComparison.OrdinalIgnoreCase)).ToList();
+            .Where(c => model.Query.Length == 0 || MatchesQuery(c.Name, model.Query)).ToList();
         if (!model.IsDemo && model.Selected is { ParentId: not null })
         {
             RecentViews.Remember(HttpContext, model.Selected.Id);
@@ -63,6 +64,12 @@ public sealed class CatalogController(ServiceDirectory directory, IPublicCatalog
         }
         return View(model);
     }
+
+    // Шукаємо і за українською назвою з бази, і за перекладом на мову сайту:
+    // англомовний відвідувач напише «Cleaning», а не «Прибирання».
+    private static bool MatchesQuery(string name, string query) =>
+        name.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || Tr.T(name).Contains(query, StringComparison.OrdinalIgnoreCase);
 
     private static string CleanQuery(string? value)
     {

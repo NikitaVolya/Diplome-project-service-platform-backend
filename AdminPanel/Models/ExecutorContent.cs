@@ -1,3 +1,4 @@
+using AdminPanel.Localization;
 using Domain.Models;
 
 namespace AdminPanel.Models;
@@ -183,9 +184,9 @@ public static class ExecutorContent
     /// <summary>Підпис способу виведення коштів.</summary>
     public static string PayoutTitle(PayoutKind kind) => kind switch
     {
-        PayoutKind.PayPal => "Pay Pal",
-        PayoutKind.Iban => "Рахунок IBAN",
-        _ => "Банківська картка"
+        PayoutKind.PayPal => Tr.T("Pay Pal"),
+        PayoutKind.Iban => Tr.T("Рахунок IBAN"),
+        _ => Tr.T("Банківська картка")
     };
 
     public static string PayoutIcon(PayoutKind kind) => kind switch
@@ -198,24 +199,24 @@ public static class ExecutorContent
     /// <summary>Підпис стану замовлення на картці виконавця.</summary>
     public static string OrderState(OrderStatus status, bool onReview) => status switch
     {
-        OrderStatus.Pending => "Нове",
-        OrderStatus.InProgress => onReview ? "На перевірці" : "В роботі",
-        OrderStatus.Completed => "Завершене",
-        _ => "Скасоване"
+        OrderStatus.Pending => Tr.T("Нове"),
+        OrderStatus.InProgress => onReview ? Tr.T("На перевірці") : Tr.T("В роботі"),
+        OrderStatus.Completed => Tr.T("Завершене"),
+        _ => Tr.T("Скасоване")
     };
 
     public static string ServiceTitle(ServiceState state) => state switch
     {
-        ServiceState.Active => "Активна",
-        ServiceState.Paused => "На паузі",
-        _ => "Чернетка"
+        ServiceState.Active => Tr.T("Активна"),
+        ServiceState.Paused => Tr.T("На паузі"),
+        _ => Tr.T("Чернетка")
     };
 
     /// <summary>Підпис присутності у віджеті під меню.</summary>
     public static string PresenceTitle(string? presence) => presence switch
     {
-        "busy" => "Зайнятий",
-        "away" => "Відійшов",
-        _ => "Online"
+        "busy" => Tr.T("Зайнятий"),
+        "away" => Tr.T("Відійшов"),
+        _ => Tr.T("Online")
     };
 }

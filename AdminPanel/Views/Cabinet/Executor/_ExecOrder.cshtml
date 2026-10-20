@@ -12,14 +12,14 @@
 
     <div class="exec-order__body">
         <h3 class="exec-order__name">@Model.Title</h3>
-        <p class="exec-order__who">Замовник: @Model.CustomerName</p>
+        <p class="exec-order__who">@T("Замовник:") @Model.CustomerName</p>
 
         <div class="exec-order__meta">
             @if (Model.ExecutionAt.HasValue)
             {
                 <span>
                     <i class="bi bi-alarm" aria-hidden="true"></i>
-                    @(fresh ? "Пропозиція до " : "Дедлайн ")@CabinetFormat.DateTimeShort(Model.ExecutionAt.Value)
+                    @F(fresh ? "Пропозиція до {0}" : "Дедлайн {0}", CabinetFormat.DateTimeShort(Model.ExecutionAt.Value))
                 </span>
             }
 
@@ -35,7 +35,7 @@
 
     <div class="exec-order__price">
         <b>@CabinetFormat.Money(Model.Price)</b>
-        <span>@(fresh ? "Бюджет" : "Фіксована ціна")</span>
+        <span>@T(fresh ? "Бюджет" : "Фіксована ціна")</span>
     </div>
 
     <div class="exec-order__act">
@@ -44,23 +44,23 @@
             <form method="post" asp-controller="Cabinet" asp-action="AnswerOrder">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="id" value="@Model.Id" />
-                <button class="exec-btn-yes" type="submit" name="accept" value="true">Прийняти</button>
+                <button class="exec-btn-yes" type="submit" name="accept" value="true">@T("Прийняти")</button>
             </form>
 
             <form method="post" asp-controller="Cabinet" asp-action="AnswerOrder">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="id" value="@Model.Id" />
-                <button class="exec-btn-no" type="submit" name="accept" value="false">Відхилити</button>
+                <button class="exec-btn-no" type="submit" name="accept" value="false">@T("Відхилити")</button>
             </form>
         }
         else
         {
-            <a class="exec-btn-yes" asp-controller="Cabinet" asp-action="Orders">Переглянути</a>
+            <a class="exec-btn-yes" asp-controller="Cabinet" asp-action="Orders">@T("Переглянути")</a>
 
             @if (Model.Status != OrderStatus.Cancelled)
             {
                 <a class="exec-btn-no" asp-controller="Cabinet" asp-action="Messages" asp-route-orderId="@Model.Id">
-                    Відкрити чат
+                    @T("Відкрити чат")
                 </a>
             }
         }
