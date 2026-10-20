@@ -2,7 +2,6 @@
 @{
     var action = ViewData["CodeAction"] as string ?? "VerifyCode";
     var purpose = ViewData["CodePurpose"] as string ?? "PasswordReset";
-    var stub = TempData.Peek("Auth.StubCode") as string;
 }
 
 <form method="post" asp-action="@action" novalidate>
@@ -35,10 +34,3 @@
 <form method="post" asp-action="Resend" id="auth-resend-form">
     <input type="hidden" name="purpose" value="@purpose" />
 </form>
-
-@if (stub != null)
-{
-    <p class="auth-stub">
-        Лист нікуди не пішов — пошта ще не підключена. Код для перевірки: <b>@stub</b>
-    </p>
-}

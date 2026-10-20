@@ -1,6 +1,7 @@
 using AdminPanel.Models;
 using BLL.Admin.Interfaces;
 using BLL.Public;
+using BLL.Services.Interfaces;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Models;
@@ -20,9 +21,9 @@ public sealed class AuthController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IPublicCatalogService _catalog;
     private readonly IVerificationCodes _codes;
-    private readonly IVerificationCodeSender _sender;
     private readonly IAuditLogService _audit;
     private readonly ILogger<AuthController> _logger;
+    private readonly IEmailService _emailService;
 
     public AuthController(
         SignInManager<ApplicationUser> signInManager,
@@ -31,15 +32,16 @@ public sealed class AuthController : Controller
         IVerificationCodes codes,
         IVerificationCodeSender sender,
         IAuditLogService audit,
-        ILogger<AuthController> logger)
+        ILogger<AuthController> logger,
+        IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _catalog = catalog;
         _codes = codes;
-        _sender = sender;
         _audit = audit;
         _logger = logger;
+        _emailService = emailService;
     }
 
     [HttpGet]
@@ -497,15 +499,11 @@ public sealed class AuthController : Controller
 
         if (!ticket.TooSoon)
         {
-            await _sender.SendAsync(email, purpose, ticket.Code, HttpContext.RequestAborted);
+            await _emailService.SendCodeAsync(email, ticket.Code);
         }
 
         TempData["Auth.ResendAfter"] = (int)Math.Ceiling(ticket.ResendAfter.TotalSeconds);
-
-        if (_sender.IsStub)
-        {
-            TempData["Auth.StubCode"] = ticket.Code;
-        }
+        TempData["Auth.StubCode"] = ticket.Code;
     }
 
     private VerifyCodeViewModel CodeModel(string email)
