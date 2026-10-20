@@ -2,7 +2,10 @@ using AdminPanel.Models;
 using AdminPanel.Services;
 using BLL.Admin.Interfaces;
 using BLL.Admin.Services;
+using BLL.Options;
 using BLL.Public;
+using BLL.Services;
+using BLL.Services.Interfaces;
 using DAL.Context;
 using DAL.Seed;
 using Domain.Common;
@@ -81,6 +84,7 @@ namespace AdminPanel.Extensions
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             services.AddScoped<INavigationBadgeService, NavigationBadgeService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<IPublicCatalogService, PublicCatalogService>();
             services.AddScoped<ServiceDirectory>();

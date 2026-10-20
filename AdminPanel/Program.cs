@@ -1,5 +1,6 @@
 using AdminPanel.Extensions;
 using AdminPanel.Hubs;
+using BLL.Options;
 using DAL.Context;
 using DAL.Seed;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,9 @@ namespace AdminPanel
 
             builder.Services.Configure<SeedOptions>(
                 builder.Configuration.GetSection(SeedOptions.SectionName));
+
+            builder.Services.Configure<EmailOptions>(
+                builder.Configuration.GetSection("Email"));
 
             builder.Services.AddAdminIdentity();
             builder.Services.AddAdminAuthorization();
