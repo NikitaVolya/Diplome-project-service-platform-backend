@@ -1,0 +1,207 @@
+@model CabinetAddressesViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var kindIcons = new Dictionary<AddressKind, string>
+    {
+        [AddressKind.Home] = "bi-house",
+        [AddressKind.Office] = "bi-briefcase",
+        [AddressKind.Country] = "bi-tree"
+    };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+
+            <div class="cab-head"><h1>@T("Мої адреси")</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--lilac">
+                    <div class="cab-rowhead">
+                        <p class="cab-panel__lead" style="margin:0">
+                            @T("Додайте адреси, щоб швидко оформлювати замовлення локальних послуг")
+                        </p>
+                        <a class="cab-btn-wide" style="width:236px" asp-action="Addresses" asp-route-add="true">
+                            <i class="bi bi-geo-alt" aria-hidden="true"></i>&nbsp; @T("Додати адресу")
+                        </a>
+                    </div>
+
+                    @if (Model.Form != null)
+                    {
+                        <form class="cab-form" method="post" asp-action="SaveAddress">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="Id" value="@Model.Form.Id" />
+
+                            <h3>@T(Model.Form.Id > 0 ? "Редагувати адресу" : "Нова адреса")</h3>
+
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <ul class="cab-errors">
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            }
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label for="addr-title">@T("Назва")</label>
+                                    <input id="addr-title" type="text" name="Title" value="@Model.Form.Title"
+                                           maxlength="60" placeholder="@T("Дім")" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="addr-kind">@T("Тип")</label>
+                                    <select id="addr-kind" name="Kind">
+                                        @foreach (var kind in CabinetContent.AddressKinds)
+                                        {
+                                            <option value="@kind.Key" selected="@(Model.Form.Kind == kind.Key)">@kind.Title</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label for="addr-line">@T("Вулиця, будинок, квартира")</label>
+                                    <input id="addr-line" type="text" name="Line" value="@Model.Form.Line"
+                                           maxlength="200" placeholder="@T("вул. Левадна, 37, кв. 15")" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="addr-city">@T("Місто")</label>
+                                    <input id="addr-city" type="text" name="City" value="@Model.Form.City"
+                                           maxlength="100" placeholder="@T("м. Київ")" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="addr-region">@T("Область")</label>
+                                    <input id="addr-region" type="text" name="Region" value="@Model.Form.Region"
+                                           maxlength="100" placeholder="@T("Київська обл.")" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="addr-zip">@T("Індекс")</label>
+                                    <input id="addr-zip" type="text" name="PostalCode" value="@Model.Form.PostalCode"
+                                           maxlength="10" placeholder="01001" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="addr-note">@T("Підказка для виконавця")</label>
+                                    <input id="addr-note" type="text" name="Note" value="@Model.Form.Note"
+                                           maxlength="200" placeholder="@T("Домофон 15К, поверх 5")" />
+                                </div>
+
+                                <div class="cab-field cab-field--wide">
+                                    <label class="cab-check">
+                                        <input type="checkbox" name="IsPrimary" value="true" checked="@Model.Form.IsPrimary" />
+                                        <span>@T("Зробити основною адресою")</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="cab-form__act">
+                                <button class="v-btn v-btn--primary" type="submit">@T("Зберегти")</button>
+                                <a class="v-btn v-btn--ghost" asp-action="Addresses">@T("Скасувати")</a>
+                            </div>
+                        </form>
+                    }
+
+                    @if (Model.Addresses.Count == 0 && Model.Form == null)
+                    {
+                        <p class="cab-empty">@T("Збережених адрес ще немає. Натисніть «Додати адресу».")</p>
+                    }
+
+                    @foreach (var address in Model.Addresses)
+                    {
+                        <article class="cab-addr">
+                            @if (address.IsPrimary)
+                            {
+                                <span class="cab-addr__tag">@T("Основна")</span>
+                            }
+
+                            <span class="cab-addr__icon">
+                                <i class="bi @kindIcons[address.Kind]" aria-hidden="true"></i>
+                            </span>
+
+                            <div class="cab-addr__body">
+                                <b>@address.Title</b>
+                                <p>
+                                    @address.Line<br />
+                                    @address.City@(string.IsNullOrEmpty(address.Region) ? "" : ", " + address.Region)@(string.IsNullOrEmpty(address.PostalCode) ? "" : ", " + address.PostalCode), @address.Country
+                                </p>
+
+                                @if (!string.IsNullOrEmpty(address.Note))
+                                {
+                                    <p class="cab-addr__note">
+                                        <i class="bi bi-geo-alt" aria-hidden="true"></i> @address.Note
+                                    </p>
+                                }
+                            </div>
+
+                            <div class="cab-addr__act">
+                                <form method="post" asp-action="UseAddress">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@address.Id" />
+                                    <button class="cab-addr__use" type="submit">@T("Використовувати")</button>
+                                </form>
+
+                                <div class="cab-addr__tools">
+                                    <a class="cab-icon-btn" asp-action="Addresses" asp-route-edit="@address.Id"
+                                       aria-label="@F("Редагувати адресу {0}", address.Title)">
+                                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                                    </a>
+
+                                    <form method="post" asp-action="DeleteAddress">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@address.Id" />
+                                        <button class="cab-icon-btn" type="submit"
+                                                aria-label="@F("Видалити адресу {0}", address.Title)">
+                                            <i class="bi bi-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    }
+
+                    <div class="cab-how">
+                        <h2>@T("Як це працює?")</h2>
+
+                        @foreach (var step in CabinetContent.AddressSteps)
+                        {
+                            <div>
+                                <i class="bi @step.Icon" aria-hidden="true"></i>
+                                <b>@step.Title</b>
+                                <span>@step.Text</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="cab-help">
+                        <i class="bi bi-headset" aria-hidden="true"></i>
+                        <div>
+                            <b>@T("Потрібна допомога?")</b>
+                            <p>@T("Якщо у вас виникли питання щодо адреси або доставки послуг, зверніться до підтримки")</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-action="Support">@T("Зв’язатися з підтримкою")</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

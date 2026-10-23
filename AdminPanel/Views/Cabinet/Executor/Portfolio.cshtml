@@ -1,0 +1,156 @@
+@model ExecPortfolioViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Portfolio.Page,
+        Pages = Model.Portfolio.Pages,
+        Action = "Portfolio",
+        Route = new Dictionary<string, string?> { ["group"] = Model.Group.Length > 0 ? Model.Group : null }
+    };
+
+    // Фільтр показує розділи, у яких уже є роботи, плюс заготовки з макета.
+    var chips = ExecutorContent.PortfolioGroups
+        .Union(Model.Portfolio.Groups, StringComparer.OrdinalIgnoreCase)
+        .ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head exec-head__row">
+                        <div>
+                            <h1>@T("Портфоліо")</h1>
+                            <p>@T("Показуйте свої найкращі роботи та залучайте нових клієнтів.")</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-action="Portfolio" asp-route-add="true">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i> @T("Додати роботу")
+                        </a>
+                    </div>
+
+                    <div class="exec-chips">
+                        <a class="exec-chip @(Model.Group.Length == 0 ? "is-current" : null)" asp-action="Portfolio">@T("Усі роботи")</a>
+
+                        @foreach (var group in chips)
+                        {
+                            <a class="exec-chip @(string.Equals(Model.Group, group, StringComparison.OrdinalIgnoreCase) ? "is-current" : null)"
+                               asp-action="Portfolio" asp-route-group="@group">@T(group)</a>
+                        }
+                    </div>
+
+                    @if (Model.Form != null)
+                    {
+                        <form class="cab-form" method="post" asp-action="AddWork">
+                            @Html.AntiForgeryToken()
+                            <h3>@T("Нова робота")</h3>
+
+                            <div asp-validation-summary="All" class="cab-errors"></div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label for="w-title">@T("Назва роботи")</label>
+                                    <input id="w-title" type="text" name="Title" value="@Model.Form.Title"
+                                           maxlength="120" placeholder="@T("Логотип для кав'ярні")" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="w-group">@T("Розділ")</label>
+                                    <select id="w-group" name="Group">
+                                        @foreach (var group in chips)
+                                        {
+                                            <option value="@group" selected="@(Model.Form.Group == group)">@T(group)</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="w-image">@T("Ім'я файлу знімка")</label>
+                                    <input id="w-image" type="text" name="Image" value="@Model.Form.Image"
+                                           maxlength="120" placeholder="lohotyp-kaviarnia" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="w-link">@T("Посилання на роботу")</label>
+                                    <input id="w-link" type="url" name="Link" value="@Model.Form.Link"
+                                           maxlength="300" placeholder="https://" />
+                                </div>
+                            </div>
+
+                            <div class="cab-form__act">
+                                <button class="v-btn v-btn--primary" type="submit">@T("Додати")</button>
+                                <a class="v-btn v-btn--ghost" asp-action="Portfolio">@T("Скасувати")</a>
+                            </div>
+                        </form>
+                    }
+
+                    @if (Model.Portfolio.Items.Count == 0)
+                    {
+                        <p class="cab-empty">@T("Робіт поки немає. Натисніть «Додати роботу».")</p>
+                    }
+
+                    @foreach (var bucket in Model.Portfolio.Items.GroupBy(w => w.Group))
+                    {
+                        <h2 class="exec-group">@T(bucket.Key)</h2>
+
+                        <div class="exec-works">
+                            @foreach (var work in bucket)
+                            {
+                                <article class="exec-work">
+                                    @if (!string.IsNullOrEmpty(work.Image))
+                                    {
+                                        <img src="@work.Image" alt="@work.Title" loading="lazy" />
+                                    }
+                                    else
+                                    {
+                                        <span>@work.Title</span>
+                                    }
+
+                                    <form method="post" asp-action="DeleteWork">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@work.Id" />
+                                        <button class="exec-work__drop" type="submit"
+                                                aria-label="@F("Прибрати роботу {0}", work.Title)">
+                                            <i class="bi bi-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                </article>
+                            }
+                        </div>
+                    }
+
+                    <partial name="_CabinetPager" model="pager" />
+
+                    <div class="exec-tip">
+                        <i class="bi bi-journal-album" aria-hidden="true"></i>
+                        <div>
+                            <b>@T("Сильне портфоліо — отримує більше замовлень")</b>
+                            <p>@T("Додавайте якісні приклади робіт і регулярно оновлюйте портфоліо.")</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-controller="Pages" asp-action="Help">@T("Дізнатися більше")</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

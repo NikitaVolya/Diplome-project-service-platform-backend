@@ -1,0 +1,32 @@
+@model CabinetPageModel
+@{
+}
+
+<aside class="cab-side">
+    <nav class="cab-menu" aria-label="@T("Розділи кабінету")">
+        @foreach (var item in CabinetContent.Menu)
+        {
+            var current = item.Key == Model.Active;
+
+            <a asp-controller="Cabinet" asp-action="@item.Action"
+               class="@(current ? "is-current" : null)"
+               aria-current="@(current ? "page" : null)">
+                <i class="bi @item.Icon" aria-hidden="true"></i>
+                <span>@item.Title</span>
+                @if (item.Key == "messages" && Model.Unread > 0)
+                {
+                    <span class="cab-menu__badge">@Model.Unread</span>
+                }
+            </a>
+        }
+    </nav>
+
+    @* Якщо ролі виконавця ще немає, Switch додасть її цьому ж акаунту. *@
+    <form method="post" asp-controller="Cabinet" asp-action="Switch">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="to" value="executor" />
+        <button class="cab-become" type="submit">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> @T("Стати виконавцем")
+        </button>
+    </form>
+</aside>

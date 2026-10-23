@@ -1,0 +1,190 @@
+@model ExecHomeViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+    var s = Model.Summary;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <span>@T("Особистий кабінет")</span>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-profile">
+                        <img class="exec-profile__face" src="@Model.Avatar" alt="" />
+
+                        <div>
+                            <h1>@F("Вітаємо, {0}", Model.FullName) <i class="bi bi-hand-index-thumb" aria-hidden="true"></i></h1>
+                            <p class="exec-profile__role">@Model.Headline</p>
+
+                            <div class="exec-profile__facts">
+                                <span>
+                                    <i class="bi bi-star" aria-hidden="true"></i>
+                                    @CabinetFormat.Rating(Model.Rating) (@PublicText.Reviews(Model.Reviews))
+                                </span>
+
+                                @if (!string.IsNullOrWhiteSpace(Model.City))
+                                {
+                                    <span><i class="bi bi-geo-alt" aria-hidden="true"></i> @Model.City</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="exec-fill">
+                            <span>@F("Профіль заповнено на {0}%", s.Completeness)</span>
+                            <span class="exec-fill__bar"><i style="width:@(s.Completeness)%"></i></span>
+                            <a asp-controller="Cabinet" asp-action="Settings">@T("Заповнити профіль")</a>
+                        </div>
+                    </div>
+
+                    <div class="exec-stats">
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Нові замовлення")</span>
+                            <span class="exec-stat__value">@s.Counters.Fresh</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="fresh">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Активні замовлення")</span>
+                            <span class="exec-stat__value">@s.Counters.Active</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="work">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Завершені замовлення")</span>
+                            <span class="exec-stat__value">@s.Counters.Completed</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="completed">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Зароблено")</span>
+                            <span class="exec-stat__value">@CabinetFormat.Money(s.Counters.Earned)</span>
+                            <a class="exec-stat__more" asp-action="Finance">
+                                @T("Детальніше") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+                    </div>
+
+                    <div class="exec-bar">
+                        <div class="exec-bar__row">
+                            <h2>@T("Мої замовлення:")</h2>
+                            <a class="cab-all" asp-action="Orders">@T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+
+                        <div class="exec-tabs">
+                            @foreach (var tab in ExecutorContent.HomeTabs)
+                            {
+                                <a asp-action="Index" asp-route-tab="@tab.Key"
+                                   class="@(Model.Tab == tab.Key ? "is-current" : null)">
+                                    @tab.Title
+                                    @if (tab.Key == "fresh" && s.Counters.Fresh > 0)
+                                    {
+                                        <b>@s.Counters.Fresh</b>
+                                    }
+                                    else if (tab.Key == "work" && s.Counters.Active > 0)
+                                    {
+                                        <b>@s.Counters.Active</b>
+                                    }
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    @if (s.Orders.Count == 0)
+                    {
+                        <p class="cab-empty">@T("У цій вкладці поки немає замовлень.")</p>
+                    }
+
+                    @foreach (var order in s.Orders)
+                    {
+                        <partial name="Executor/_ExecOrder" model="order" />
+                    }
+
+                    @if (s.Orders.Count > 0)
+                    {
+                        <a class="exec-more" asp-action="Orders">@T("Показати більше") <i class="bi bi-chevron-down" aria-hidden="true"></i></a>
+                    }
+
+                    <div class="exec-trio">
+                        <section class="exec-card">
+                            <h2>@T("Мої послуги")</h2>
+
+                            @if (s.Services.Count == 0)
+                            {
+                                <p class="cab-empty">@T("Послуг ще немає.")</p>
+                            }
+
+                            @foreach (var service in s.Services)
+                            {
+                                <a class="exec-mini" asp-action="Services">
+                                    <i class="bi bi-gear-wide-connected" aria-hidden="true"></i>
+                                    <span>
+                                        <b>@service.Title</b>
+                                        <span>@CabinetFormat.From(service.FromPrice)</span>
+                                    </span>
+                                </a>
+                            }
+
+                            <a class="v-btn v-btn--soft" asp-action="Services">@T("Переглянути всі послуги")</a>
+                        </section>
+
+                        <section class="exec-card">
+                            <h2>@T("Портфоліо")</h2>
+
+                            <div class="exec-thumbs">
+                                @foreach (var work in s.Works.Take(4))
+                                {
+                                    <span class="exec-thumb">
+                                        @if (!string.IsNullOrEmpty(work.Image))
+                                        {
+                                            <img src="@work.Image" alt="@work.Title" loading="lazy" />
+                                        }
+                                        else
+                                        {
+                                            @work.Title
+                                        }
+                                    </span>
+                                }
+                            </div>
+
+                            <a class="v-btn v-btn--soft" asp-action="Portfolio">@T("Переглянути портфоліо")</a>
+                        </section>
+
+                        <section class="exec-card">
+                            <h2>@T("Статистика за місяць")</h2>
+
+                            <div class="exec-figure"><span>@T("Перегляди портфоліо")</span><b>@s.Month.Views</b></div>
+                            <div class="exec-figure"><span>@T("Отримано замовлень")</span><b>@s.Month.Orders</b></div>
+                            <div class="exec-figure"><span>@T("Зароблено")</span><b>@CabinetFormat.Money(s.Month.Earned)</b></div>
+
+                            <a class="v-btn v-btn--soft" asp-action="Analytics">@T("Детальна аналітика")</a>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

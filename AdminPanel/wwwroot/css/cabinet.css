@@ -1,0 +1,1682 @@
+/* Особистий кабінет замовника.
+   Розміри взяті з макета 1920: смуга контенту 1540, бічне меню 240, панель 1296.
+   Усе, що нижче, спирається на змінні з landing.css — кольори кнопок і шрифт спільні. */
+
+.cab {
+    --cab-side: 240px;
+    --cab-gap: 4px;
+    --cab-radius: 15px;
+
+    --cab-mint: #E3FDFF;
+    --cab-mint-soft: #E6FFFF;
+    --cab-mint-deep: #DFF9FB;
+    --cab-lilac: #F2EFFF;
+    --cab-blue: #D9ECFF;
+    --cab-blue-deep: #D8EEFF;
+    --cab-tile: #CBD6FF;
+    --cab-edge: #9E8BFF;
+    --cab-cyan: #00F0FF;
+    --cab-face: #EFF9FF;
+
+    padding: 0 0 70px;
+}
+
+.cab a { color: inherit; text-decoration: none; }
+
+/* ── Каркас ─────────────────────────────────────────────────────────────── */
+
+.cab-top {
+    display: grid;
+    grid-template-columns: var(--cab-side) var(--cab-gap) minmax(0, 1fr);
+    align-items: start;
+    padding-top: 22px;
+}
+
+.cab-crumbs {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #6B7280;
+    padding: 0 0 18px 2px;
+}
+
+.cab-crumbs a:hover { color: var(--v-purple); }
+
+.cab-head {
+    grid-column: 3;
+    padding: 0 0 20px 18px;
+}
+
+.cab-head h1 {
+    margin: 0;
+    font-size: 44px;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -.5px;
+}
+
+.cab-head p {
+    margin: 12px 0 0;
+    font-size: 16px;
+    color: #4B5563;
+}
+
+.cab-head__hi {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+.cab-head__hi i { font-size: 30px; color: #1F2937; }
+
+.cab-body {
+    display: grid;
+    grid-template-columns: var(--cab-side) minmax(0, 1fr);
+    gap: var(--cab-gap);
+    align-items: start;
+}
+
+/* ── Бічне меню ─────────────────────────────────────────────────────────── */
+
+.cab-side { position: sticky; top: 16px; }
+
+.cab-menu {
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #FBFBF9;
+    overflow: hidden;
+}
+
+.cab-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 47px;
+    padding: 0 16px;
+    font-size: 16px;
+    border-bottom: 1px solid #E6E3F5;
+}
+
+.cab-menu a:last-child { border-bottom: 0; }
+.cab-menu a:hover { background: #F2EFFF; }
+
+.cab-menu a.is-current {
+    background: #EDE9FF;
+    font-weight: 600;
+    color: var(--v-purple);
+}
+
+.cab-menu i { font-size: 18px; color: #1F2937; }
+.cab-menu a.is-current i { color: var(--v-purple); }
+
+.cab-menu__badge {
+    margin-left: auto;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--cab-edge);
+    color: #fff;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 7px;
+}
+
+.cab-become {
+    margin-top: 48px;
+    width: 100%;
+    height: 46px;
+    border-radius: var(--cab-radius);
+    background: var(--cab-edge);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    border: 0;
+}
+
+.cab-become:hover { filter: brightness(1.06); color: #fff; }
+
+/* ── Панелі ─────────────────────────────────────────────────────────────── */
+
+.cab-panel {
+    border-radius: var(--cab-radius);
+    background: var(--cab-mint-soft);
+    /* 18px з боків — рівно стільки, щоб картка всередині вийшла 1259, як у макеті. */
+    padding: 24px 18px 28px;
+}
+
+/* Смуга показників у макеті має власні, вужчі поля. */
+.cab-panel--mint { background: var(--cab-mint-deep); padding-inline: 14px; }
+.cab-panel--lilac { background: var(--cab-lilac); }
+.cab-panel--pay { background: linear-gradient(180deg, #F2EFFF 0%, var(--cab-blue-deep) 100%); padding-inline: 20px; }
+.cab-panel--help { padding-inline: 24px; }
+.cab-panel--wide { padding: 24px 54px 36px; }
+.cab-panel + .cab-panel { margin-top: 24px; }
+
+.cab-panel__lead {
+    margin: 0 0 18px;
+    font-size: 16px;
+    color: #374151;
+}
+
+.cab-panel__title {
+    margin: 0 0 14px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.cab-notice {
+    margin: 0 0 16px;
+    padding: 10px 16px;
+    border-radius: var(--cab-radius);
+    background: #FFF3D6;
+    border: 1px solid #F3D27A;
+    font-size: 14px;
+}
+
+.cab-flash {
+    margin: 0 0 16px;
+    padding: 10px 16px;
+    border-radius: var(--cab-radius);
+    background: #DFF7EC;
+    border: 1px solid #8ED9BA;
+    font-size: 15px;
+}
+
+.cab-empty {
+    margin: 26px 0;
+    text-align: center;
+    color: #6B7280;
+    font-size: 16px;
+}
+
+/* ── Плитки показників ──────────────────────────────────────────────────── */
+
+.cab-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 21px;
+    padding: 6px 0 10px;
+}
+
+.cab-stat {
+    min-height: 133px;
+    border-radius: var(--cab-radius);
+    background: var(--cab-tile);
+    border: 1px solid var(--cab-cyan);
+    padding: 14px 18px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.cab-stat--pay { background: rgba(0, 240, 255, .11); }
+
+.cab-stat__name {
+    font-size: 16px;
+    color: #1F2937;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cab-stat__value {
+    margin-top: 8px;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.cab-stat__more {
+    margin-top: auto;
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.cab-stat__more:hover { color: var(--v-purple); }
+
+.cab-stat__btn {
+    margin-top: 10px;
+    height: 36px;
+    min-width: 110px;
+    border-radius: var(--cab-radius);
+    background: var(--v-purple);
+    color: #fff;
+    border: 0;
+    font-size: 15px;
+}
+
+.cab-stat__btn:hover { background: var(--v-purple-dark); color: #fff; }
+
+/* ── Вкладки ────────────────────────────────────────────────────────────── */
+
+.cab-tabs {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    padding: 4px 4px 18px;
+    font-size: 16px;
+}
+
+.cab-tabs a { color: #1F2937; padding-bottom: 2px; }
+.cab-tabs a:hover { color: var(--v-purple); }
+
+.cab-tabs a.is-current {
+    border-bottom: 1px solid #1F2937;
+    font-weight: 500;
+}
+
+.cab-rowhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 4px 6px;
+}
+
+.cab-rowhead h2 { margin: 0; font-size: 22px; font-weight: 700; }
+
+.cab-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.cab-all:hover { color: var(--v-purple); }
+
+/* ── Поля пошуку ────────────────────────────────────────────────────────── */
+
+.cab-find {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 39px;
+    padding: 0 16px;
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .35);
+    border: 1px solid var(--v-purple);
+}
+
+.cab-find--plain { background: #fff; border-color: var(--cab-cyan); }
+.cab-find i { font-size: 16px; color: #1F2937; }
+
+.cab-find input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font: inherit;
+    font-size: 15px;
+    width: 100%;
+    color: #1F2937;
+}
+
+.cab-find input::placeholder { color: #4B5563; }
+
+.cab-filters {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 4px 16px;
+}
+
+.cab-filters--right { justify-content: flex-end; }
+
+/* ── Картка замовлення ──────────────────────────────────────────────────── */
+
+.cab-orders { display: block; }
+
+.cab-order {
+    display: grid;
+    grid-template-columns: 241px 311px 190px 290px 160px 32px;
+    align-items: center;
+    min-height: 176px;
+    padding: 16px;
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: var(--cab-blue);
+}
+
+.cab-order + .cab-order { margin-top: -1px; }
+.cab-order:hover { background: #D2E7FF; }
+
+.cab-order__img {
+    width: 241px;
+    height: 144px;
+    border-radius: var(--cab-radius);
+    overflow: hidden;
+    background: #CFD8DC;
+}
+
+.cab-order__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.cab-order__body { padding-left: 25px; }
+
+.cab-order__name {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.cab-order__cat {
+    margin: 14px 0 0;
+    font-size: 15px;
+    color: #374151;
+}
+
+.cab-order__when {
+    margin: 8px 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-order__who { padding-left: 77px; }
+.cab-order__who span { display: block; font-size: 15px; color: #374151; }
+
+.cab-order__exec {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.cab-order__exec img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cab-order__price { font-size: 16px; }
+
+.cab-order__go {
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    background: var(--cab-edge);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cab-order__go:hover { background: var(--v-purple); color: #fff; }
+
+/* Плашка статусу */
+
+.cab-state {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    height: 39px;
+    border-radius: var(--cab-radius);
+    font-size: 16px;
+    color: #1F2937;
+}
+
+.cab-state--ok { background: rgba(0, 221, 165, .36); }
+.cab-state--work { background: rgba(255, 141, 40, .41); }
+.cab-state--wait { background: #BBBBBD; }
+.cab-state--done { background: rgba(158, 139, 255, .5); }
+.cab-state--off { background: rgba(255, 0, 161, .2); }
+
+/* ── Два блоки під списком на головній ──────────────────────────────────── */
+
+.cab-duo {
+    display: grid;
+    grid-template-columns: 345px minmax(0, 1fr);
+    gap: 66px;
+    margin-top: 26px;
+}
+
+.cab-box {
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    padding: 22px 24px 26px;
+}
+
+.cab-box--mint { background: #EEFEFF; }
+.cab-box h2 { margin: 0 0 18px; font-size: 22px; font-weight: 700; }
+
+.cab-box__more {
+    display: block;
+    margin-top: 18px;
+    text-align: center;
+    font-size: 15px;
+    text-decoration: underline;
+}
+
+.cab-box__more:hover { color: var(--v-purple); }
+
+.cab-offer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .25);
+    margin-bottom: 16px;
+}
+
+.cab-offer:hover { background: rgba(158, 139, 255, .4); }
+.cab-offer img { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; }
+.cab-offer b { font-size: 15px; font-weight: 500; }
+.cab-offer span { display: block; font-size: 13px; color: #4B5563; }
+
+.cab-note {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    min-height: 72px;
+    padding: 0 16px;
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .25);
+    margin-bottom: 9px;
+}
+
+.cab-note:hover { background: rgba(158, 139, 255, .4); }
+.cab-note img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.cab-note b { font-size: 15px; font-weight: 500; }
+.cab-note p { margin: 4px 0 0; font-size: 14px; color: #374151; }
+.cab-note__time { font-size: 13px; color: #4B5563; text-align: right; }
+
+.cab-note__dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--v-purple);
+    margin: 6px 0 0 auto;
+}
+
+/* ── Сторінка «Обране» ──────────────────────────────────────────────────── */
+
+.cab-chips {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 21px;
+    padding: 4px 0 24px;
+    /* У макеті стрічка напрямів дотягується до правого краю смуги контенту,
+       тобто виходить за внутрішнє поле панелі — звідси відʼємний відступ. */
+    margin-right: -18px;
+}
+
+.cab-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 47px;
+    padding: 0 12px;
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    font-size: 15px;
+}
+
+.cab-chip:hover { border-color: var(--v-purple); }
+.cab-chip.is-current { background: #EDE9FF; font-weight: 500; }
+.cab-chip i { font-size: 18px; }
+.cab-chip__name { flex: 1; line-height: 1.15; }
+
+.cab-chip__count {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    background: rgba(158, 139, 255, .35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.cab-group {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 4px 10px;
+}
+
+.cab-group h3 { margin: 0; font-size: 22px; font-weight: 700; }
+.cab-group span { font-size: 14px; color: #4B5563; }
+.cab-group .cab-all { margin-left: auto; }
+
+.cab-exec {
+    display: grid;
+    grid-template-columns: 158px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0;
+    min-height: 151px;
+    padding: 12px 20px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .11);
+    margin-bottom: 11px;
+    position: relative;
+}
+
+.cab-exec__face {
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #E5E7EB;
+}
+
+.cab-exec__name { margin: 0; font-size: 18px; font-weight: 700; }
+.cab-exec__role { margin: 4px 0 0; font-size: 15px; color: #374151; }
+
+.cab-exec__rate {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    margin: 0 0 0 36px;
+}
+
+.cab-exec__rate i { color: #1F2937; font-size: 18px; }
+
+.cab-exec__top { display: flex; align-items: center; }
+
+.cab-exec__skills {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.cab-skill {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 18px;
+    border-radius: 17px;
+    background: rgba(0, 240, 255, .18);
+    font-size: 15px;
+}
+
+.cab-exec__act { display: flex; gap: 16px; }
+
+.cab-exec__fav {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 22px;
+    color: #1F2937;
+    background: none;
+    border: 0;
+}
+
+.cab-btn-wide,
+.cab-btn-slim {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 39px;
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .35);
+    font-size: 15px;
+    border: 0;
+    color: #1F2937;
+}
+
+.cab-btn-wide { width: 235px; }
+.cab-btn-slim { width: 152px; }
+.cab-btn-wide:hover,
+.cab-btn-slim:hover { background: rgba(158, 139, 255, .6); color: #1F2937; }
+
+/* ── Сторінка «Мої адреси» ──────────────────────────────────────────────── */
+
+.cab-addr {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 120px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0;
+    min-height: 175px;
+    padding: 20px 24px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: rgba(0, 240, 255, .11);
+    margin-bottom: 1px;
+}
+
+/* «Основна» в макеті стоїть над плиткою, не займаючи окремого рядка. */
+.cab-addr__tag {
+    position: absolute;
+    top: 18px;
+    left: 73px;
+    font-size: 15px;
+    color: #374151;
+}
+
+.cab-addr__icon {
+    grid-column: 2;
+    width: 120px;
+    height: 119px;
+    border-radius: var(--cab-radius);
+    background: rgba(158, 139, 255, .35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #1F2937;
+}
+
+.cab-addr__body { grid-column: 3; padding-left: 30px; }
+.cab-addr__body b { font-size: 17px; }
+.cab-addr__body p { margin: 8px 0 0; font-size: 15px; color: #374151; }
+
+.cab-addr__note {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.cab-addr__act {
+    grid-column: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 22px;
+    height: 100%;
+}
+
+.cab-addr__use {
+    width: 185px;
+    height: 40px;
+    border-radius: var(--cab-radius);
+    background: var(--cab-edge);
+    color: #fff;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.cab-addr__use:hover { background: var(--v-purple); color: #fff; }
+.cab-addr__tools { display: flex; gap: 33px; margin-top: auto; }
+
+.cab-icon-btn {
+    width: 31px;
+    height: 32px;
+    border-radius: 5px;
+    background: rgba(123, 97, 255, .5);
+    color: #fff;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.cab-icon-btn:hover { background: var(--v-purple); color: #fff; }
+
+.cab-how {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 42px;
+    text-align: center;
+}
+
+.cab-how h2 {
+    grid-column: 1 / -1;
+    margin: 0 0 28px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.cab-how > div { padding: 0 34px; }
+.cab-how > div + div { border-left: 1px solid #C9C3E8; }
+.cab-how i { font-size: 34px; }
+.cab-how b { display: block; margin: 16px 0 10px; font-size: 17px; }
+.cab-how span { font-size: 15px; color: #374151; }
+
+.cab-help {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    max-width: 750px;
+    margin: 40px auto 0;
+    padding: 18px 22px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #E7F6FF;
+}
+
+.cab-help i { font-size: 34px; }
+.cab-help b { font-size: 17px; }
+.cab-help p { margin: 4px 0 0; font-size: 15px; color: #374151; }
+
+/* Форма адреси */
+
+.cab-form {
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    padding: 22px 24px 26px;
+    margin-bottom: 20px;
+}
+
+.cab-form h3 { margin: 0 0 18px; font-size: 20px; font-weight: 700; }
+
+.cab-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 26px;
+}
+
+.cab-field label {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 7px;
+    color: #374151;
+}
+
+.cab-field input[type=text],
+.cab-field input[type=email],
+.cab-field input[type=tel],
+.cab-field input[type=number],
+.cab-field select,
+.cab-field textarea {
+    width: 100%;
+    min-height: 39px;
+    border-radius: var(--cab-radius);
+    border: 1px solid var(--cab-edge);
+    background: #fff;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-field textarea { resize: vertical; min-height: 120px; }
+.cab-field--wide { grid-column: 1 / -1; }
+
+.cab-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.cab-check input { width: 20px; height: 20px; accent-color: var(--v-purple); }
+
+.cab-form__act {
+    display: flex;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.cab-errors {
+    margin: 0 0 16px;
+    padding: 12px 16px;
+    border-radius: var(--cab-radius);
+    background: #FDE8EF;
+    border: 1px solid #F3A9C2;
+    font-size: 14px;
+    list-style: none;
+}
+
+.cab-errors li + li { margin-top: 6px; }
+
+/* ASP.NET малює блок зведених помилок навіть коли їх немає — ховаємо порожній. */
+.cab-errors.validation-summary-valid,
+.cab-errors:empty { display: none; }
+
+/* ── Сторінка «Повідомлення» ────────────────────────────────────────────── */
+
+.cab-chat {
+    display: grid;
+    grid-template-columns: 515px minmax(0, 1fr);
+    gap: 2px;
+    align-items: stretch;
+}
+
+.cab-chat__list {
+    background: var(--cab-mint-soft);
+    border-radius: var(--cab-radius) 0 0 var(--cab-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.cab-chat__find { background: #EFEBFF; padding: 20px 22px 14px; }
+.cab-chat__find .cab-find { width: 366px; }
+
+.cab-chat__tabs {
+    display: flex;
+    gap: 36px;
+    padding: 14px 22px 16px;
+    background: #EFEBFF;
+    font-size: 16px;
+}
+
+.cab-chat__tabs a.is-current { border-bottom: 1px solid #1F2937; }
+
+.cab-chat__title { margin: 22px 22px 16px; font-size: 22px; font-weight: 700; }
+.cab-chat__rows { padding: 0 22px 22px; overflow-y: auto; max-height: 820px; }
+
+.cab-thread {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: var(--cab-radius);
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+.cab-thread:hover { background: #F4F1FF; }
+.cab-thread.is-current { background: #EDE9FF; }
+.cab-thread img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.cab-thread b { font-size: 15px; font-weight: 500; }
+.cab-thread p { margin: 4px 0 0; font-size: 14px; color: #374151; }
+.cab-thread__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    text-align: right;
+    font-size: 13px;
+    color: #4B5563;
+}
+
+.cab-thread__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 12px;
+    background: var(--cab-edge);
+    color: #fff;
+    font-size: 13px;
+}
+
+.cab-chat__room {
+    border-radius: 0 var(--cab-radius) var(--cab-radius) 0;
+    background: #DFD9FF;
+    display: flex;
+    flex-direction: column;
+    min-height: 700px;
+}
+
+.cab-chat__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 28px;
+    background: #C1B4FF;
+    border-radius: 0 var(--cab-radius) 0 0;
+}
+
+.cab-chat__head img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+.cab-chat__head b { display: block; font-size: 17px; }
+.cab-chat__head span { font-size: 14px; color: #262338; }
+.cab-chat__head i { margin-left: auto; font-size: 22px; }
+
+.cab-chat__order {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 28px;
+    background: var(--cab-mint-soft);
+}
+
+.cab-chat__order div { font-size: 15px; }
+.cab-chat__order .v-btn { margin-left: auto; }
+
+.cab-chat__flow {
+    flex: 1;
+    padding: 22px 28px;
+    overflow-y: auto;
+    max-height: 520px;
+}
+
+.cab-chat__day {
+    text-align: center;
+    font-size: 14px;
+    color: #37304F;
+    margin: 10px 0 18px;
+}
+
+.cab-msg { margin-bottom: 18px; max-width: 62%; }
+
+.cab-msg__who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.cab-msg__who img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.cab-msg__who span { color: #37304F; font-size: 14px; }
+
+.cab-msg__text {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 15px;
+    line-height: 1.45;
+    margin-left: 56px;
+}
+
+.cab-msg--mine { margin-left: auto; text-align: right; }
+.cab-msg--mine .cab-msg__who { justify-content: flex-end; }
+.cab-msg--mine .cab-msg__text { margin: 0; text-align: left; }
+
+.cab-chat__send {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 28px 24px;
+    background: var(--cab-mint-soft);
+    border-radius: 0 0 var(--cab-radius) 0;
+}
+
+.cab-chat__clip {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    background: rgba(158, 139, 255, .35);
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.cab-chat__box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    padding: 0 20px;
+    border-radius: var(--cab-radius);
+    background: rgba(123, 97, 255, .5);
+}
+
+.cab-chat__box input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font: inherit;
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-chat__box input::placeholder { color: #3A3550; }
+
+.cab-chat__box button {
+    border: 0;
+    background: none;
+    font-size: 20px;
+    color: #1F2937;
+}
+
+/* ── Сторінка «Платежі» ─────────────────────────────────────────────────── */
+
+.cab-tx {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) 230px 170px 181px 40px;
+    align-items: center;
+    min-height: 92px;
+    padding: 14px 22px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    margin-bottom: 1px;
+}
+
+.cab-tx__date { font-size: 15px; line-height: 1.5; }
+.cab-tx__name b { display: block; font-size: 16px; }
+.cab-tx__name span { font-size: 14px; color: #374151; }
+
+.cab-tx__kind {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.cab-tx__kind i {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #C9F6FF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.cab-tx__sum { font-size: 16px; }
+.cab-tx__sum.is-in { color: #0E7A5F; }
+
+.cab-pay {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 181px;
+    height: 40px;
+    border-radius: var(--cab-radius);
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-pay--ok { background: rgba(158, 139, 255, .5); }
+.cab-pay--wait { background: rgba(255, 141, 40, .41); }
+.cab-pay--back { background: rgba(255, 0, 161, .2); }
+.cab-pay--fail { background: #BBBBBD; }
+
+.cab-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 26px 0 10px;
+}
+
+.cab-pager a,
+.cab-pager span {
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    background: rgba(158, 139, 255, .5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-pager span.cab-pager__gap { background: none; }
+.cab-pager a:hover { background: var(--cab-edge); color: #fff; }
+.cab-pager a.is-current { background: var(--v-purple); color: #fff; }
+.cab-pager a.is-off { opacity: .45; pointer-events: none; }
+
+/* ── Сторінка «Підтримка» ───────────────────────────────────────────────── */
+
+.cab-support__find {
+    width: 888px;
+    max-width: 100%;
+    height: 38px;
+    margin-bottom: 26px;
+}
+
+.cab-topics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 373px));
+    justify-content: start;
+    gap: 25px 23px;
+    padding-bottom: 34px;
+}
+
+.cab-topic {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 47px;
+    padding: 0 18px;
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    font-size: 16px;
+}
+
+.cab-topic:hover { border-color: var(--v-purple); color: var(--v-purple); }
+
+.cab-faq {
+    display: grid;
+    grid-template-columns: 890px minmax(0, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+.cab-faq__item {
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    margin-bottom: 9px;
+    overflow: hidden;
+}
+
+.cab-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 45px;
+    padding: 0 20px;
+    font-size: 16px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.cab-faq__item summary::-webkit-details-marker { display: none; }
+.cab-faq__item[open] summary i { transform: rotate(180deg); }
+.cab-faq__item p { margin: 0; padding: 4px 20px 18px; font-size: 15px; color: #374151; line-height: 1.5; }
+
+.cab-aside {
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #E2F8FF;
+    padding: 24px 22px;
+    text-align: center;
+}
+
+.cab-aside h3 { margin: 0 0 10px; font-size: 19px; font-weight: 700; }
+.cab-aside p { margin: 0 0 18px; font-size: 15px; color: #374151; }
+
+.cab-aside__row {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: var(--cab-radius);
+    background: #D5EFFF;
+    margin-top: 12px;
+}
+
+.cab-aside__row i { font-size: 22px; }
+.cab-aside__row b { display: block; font-size: 15px; }
+.cab-aside__row span { font-size: 14px; color: #374151; }
+
+.cab-more {
+    display: block;
+    width: 259px;
+    margin: 30px auto 0;
+}
+
+/* ── Сторінка «Деталі замовлення» ───────────────────────────────────────── */
+
+.cab-detail__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 0 0 20px;
+}
+
+.cab-detail__head h2 { margin: 0; font-size: 26px; font-weight: 700; }
+
+.cab-detail__meta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 12px;
+    font-size: 15px;
+}
+
+.cab-detail__act { margin-left: auto; display: flex; gap: 14px; }
+
+.cab-detail__act a,
+.cab-detail__act button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 31px;
+    padding: 0 16px;
+    border-radius: var(--cab-radius);
+    border: 1px solid var(--cab-edge);
+    background: #fff;
+    font-size: 14px;
+    color: #1F2937;
+}
+
+.cab-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 5px;
+    background: #9FF4E4;
+    font-size: 15px;
+}
+
+.cab-detail {
+    display: grid;
+    grid-template-columns: 630px 630px;
+    gap: 20px;
+    align-items: start;
+}
+
+.cab-card {
+    border-radius: var(--cab-radius);
+    background: rgba(0, 240, 255, .11);
+    padding: 24px 24px 28px;
+}
+
+.cab-card + .cab-card { margin-top: 24px; }
+.cab-card h3 { margin: 0 0 18px; font-size: 21px; font-weight: 700; }
+.cab-card p { margin: 0 0 14px; font-size: 15px; line-height: 1.5; }
+
+.cab-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; font-size: 15px; }
+.cab-facts span:nth-child(odd) { color: #374151; }
+
+.cab-files { display: flex; gap: 30px; flex-wrap: wrap; }
+
+.cab-file {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 24px;
+    gap: 12px;
+    align-items: center;
+    width: 262px;
+    min-height: 53px;
+    padding: 0 14px;
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    font-size: 14px;
+}
+
+.cab-feed { list-style: none; margin: 0; padding: 0 0 0 22px; position: relative; }
+
+.cab-feed::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--v-purple);
+}
+
+.cab-feed li { position: relative; margin-bottom: 18px; font-size: 15px; }
+
+.cab-feed li::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 7px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--v-purple);
+}
+
+.cab-feed span { display: block; margin-top: 4px; font-size: 14px; color: #4B5563; }
+
+.cab-bid {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    min-height: 110px;
+    padding: 14px 18px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    margin-bottom: 1px;
+}
+
+.cab-bid img { width: 68px; height: 68px; border-radius: var(--cab-radius); object-fit: cover; }
+.cab-bid b { font-size: 16px; }
+.cab-bid__role { font-size: 14px; color: #374151; }
+
+.cab-bid__rate {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    margin-left: 18px;
+}
+
+.cab-bid__rate i { color: var(--v-star); }
+.cab-bid__top { display: flex; align-items: center; }
+.cab-bid__price { text-align: right; font-size: 15px; line-height: 1.6; }
+.cab-bid__act { display: flex; gap: 40px; margin-top: 10px; }
+
+.cab-bid__yes,
+.cab-bid__no {
+    width: 131px;
+    height: 32px;
+    border-radius: var(--cab-radius);
+    border: 0;
+    font-size: 14px;
+    color: #1F2937;
+}
+
+.cab-bid__yes { background: rgba(123, 97, 255, .5); }
+.cab-bid__no { background: rgba(158, 139, 255, .35); }
+.cab-bid__yes:hover { background: var(--v-purple); color: #fff; }
+
+.cab-need {
+    border-radius: var(--cab-radius);
+    background: rgba(0, 240, 255, .11);
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.cab-need h3 { margin: 0 0 12px; font-size: 21px; font-weight: 700; }
+.cab-need p { margin: 0 0 20px; font-size: 15px; }
+.cab-need__act { display: flex; gap: 20px; }
+
+/* ── Сторінка «Створити замовлення» ─────────────────────────────────────── */
+
+.cab-step {
+    border-radius: var(--cab-radius);
+    background: rgba(0, 240, 255, .11);
+    padding: 22px 25px 28px;
+    margin-bottom: 20px;
+}
+
+.cab-step__head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+
+.cab-step__no {
+    width: 32px;
+    height: 33px;
+    border-radius: 5px;
+    background: var(--cab-edge);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex: none;
+}
+
+.cab-step__head b { display: block; font-size: 17px; }
+.cab-step__head span { font-size: 15px; color: #374151; }
+
+.cab-step .cab-field input,
+.cab-step .cab-field select,
+.cab-step .cab-field textarea { background: #fff; }
+
+.cab-drop {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 96px;
+    padding: 18px 22px;
+    border: 1px solid var(--cab-edge);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    color: #6B7280;
+    font-size: 15px;
+}
+
+.cab-drop i { font-size: 24px; }
+
+.cab-radios { display: flex; gap: 60px; align-items: center; }
+
+.cab-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+}
+
+.cab-radio input { width: 20px; height: 20px; accent-color: var(--v-purple); }
+
+.cab-money {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.cab-money select,
+.cab-money .cab-field select { width: 238px; flex: none; }
+
+.cab-money input[type=number],
+.cab-money input[type=text] { width: 79px; flex: none; text-align: center; padding-inline: 8px; }
+.cab-money span { font-size: 15px; }
+
+.cab-create__act {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* ── Сторінка «Налаштування» ────────────────────────────────────────────── */
+
+.cab-set { max-width: 1043px; }
+
+.cab-set__group { margin-bottom: 34px; }
+
+.cab-set__group > h2 {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 18px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.cab-set__group > h2 i { font-size: 26px; }
+
+.cab-set__card {
+    border-radius: var(--cab-radius);
+    background: rgba(0, 240, 255, .11);
+    padding: 20px 24px;
+}
+
+.cab-set__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 0;
+}
+
+.cab-set__row + .cab-set__row { border-top: 1px solid #CFCBEC; }
+.cab-set__row b { display: block; font-size: 16px; font-weight: 500; }
+.cab-set__row span { font-size: 15px; color: #374151; }
+.cab-set__row select,
+.cab-set__row input[type=text] {
+    min-width: 350px;
+    min-height: 39px;
+    border-radius: var(--cab-radius);
+    border: 1px solid var(--cab-edge);
+    background: #fff;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 15px;
+    color: #1F2937;
+}
+
+.cab-set__pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 46px;
+    margin-bottom: 20px;
+}
+
+.cab-set__inline { display: flex; align-items: flex-end; gap: 16px; }
+.cab-set__inline .cab-field { flex: 1; }
+
+.cab-set__photo {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.cab-set__photo img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
+.cab-set__photo span { font-size: 15px; color: #374151; }
+
+.cab-set__label { font-size: 15px; color: #374151; }
+.cab-set__photo .v-btn { margin-left: auto; }
+
+.cab-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 32px;
+    flex: none;
+}
+
+.cab-switch input { opacity: 0; width: 0; height: 0; }
+
+.cab-switch span {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--cab-edge);
+    transition: background .15s ease;
+    cursor: pointer;
+}
+
+.cab-switch span::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #C9C6D4;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.cab-switch input:checked ~ span { background: #EDE9FF; }
+/* Між прапорцем і доріжкою може стояти приховане поле — сусіда беремо через ~. */
+.cab-switch input:checked ~ span::before { transform: translateX(36px); background: var(--v-purple); }
+.cab-switch input[type=hidden] { display: none; }
+.cab-switch--off span { cursor: not-allowed; opacity: .7; }
+
+.cab-theme { display: flex; gap: 0; }
+
+.cab-theme label {
+    width: 148px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    background: rgba(158, 139, 255, .35);
+}
+
+.cab-theme label:first-child { border-radius: var(--cab-radius) 0 0 var(--cab-radius); }
+.cab-theme label:last-child { border-radius: 0 var(--cab-radius) var(--cab-radius) 0; }
+.cab-theme input { display: none; }
+.cab-theme input:checked + label,
+.cab-theme label.is-current { background: #4B33C8; color: #fff; }
+
+.cab-danger {
+    height: 40px;
+    min-width: 224px;
+    border-radius: var(--cab-radius);
+    border: 0;
+    background: #FF4FA8;
+    color: #fff;
+    font-size: 15px;
+}
+
+.cab-danger:hover { background: #E63D93; color: #fff; }
+
+.cab-set__act {
+    display: flex;
+    gap: 16px;
+    padding: 6px 0 20px;
+}
+
+/* ── Відгуки ────────────────────────────────────────────────────────────── */
+
+.cab-review {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: start;
+    padding: 20px 22px;
+    border: 1px solid var(--cab-cyan);
+    border-radius: var(--cab-radius);
+    background: #fff;
+    margin-bottom: 12px;
+}
+
+.cab-review img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; }
+.cab-review b { font-size: 16px; }
+.cab-review p { margin: 10px 0 0; font-size: 15px; line-height: 1.5; }
+.cab-review__meta { text-align: right; font-size: 14px; color: #4B5563; }
+.cab-review__stars { color: var(--v-star); font-size: 16px; letter-spacing: 2px; }
+
+/* ── Вузькі екрани ──────────────────────────────────────────────────────── */
+
+@media (max-width: 1500px) {
+    .cab-top,
+    .cab-body { grid-template-columns: 1fr; }
+
+    .cab-crumbs,
+    .cab-head { grid-column: 1; padding-left: 0; }
+
+    .cab-side { position: static; margin-bottom: 20px; }
+    .cab-detail,
+    .cab-chat,
+    .cab-faq { grid-template-columns: minmax(0, 1fr); }
+    .cab-chat__list,
+    .cab-chat__room { border-radius: var(--cab-radius); }
+    .cab-duo { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .cab-order { grid-template-columns: 200px minmax(0, 1fr) 190px; row-gap: 16px; }
+    .cab-order__who,
+    .cab-order__price { padding-left: 0; }
+    .cab-chips { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cab-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cab-panel--wide { padding-inline: 20px; }
+}
+
+@media (max-width: 900px) {
+    .cab-head h1 { font-size: 32px; }
+    .cab-stats,
+    .cab-chips,
+    .cab-topics,
+    .cab-grid,
+    .cab-set__pair { grid-template-columns: minmax(0, 1fr); }
+    .cab-order { grid-template-columns: minmax(0, 1fr); }
+    .cab-order__img { width: 100%; }
+    .cab-how { grid-template-columns: minmax(0, 1fr); }
+    .cab-how > div + div { border-left: 0; border-top: 1px solid #C9C3E8; padding-top: 22px; margin-top: 22px; }
+}
+
+/* Кнопка «Змінити фото»: справжнє поле файлу сховане всередині підпису. */
+.cab-photo-pick { position: relative; cursor: pointer; }
+.cab-photo-pick input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+.cab-photo-pick:focus-within { outline: 2px solid #7B61FF; outline-offset: 2px; }
+.cab-photo-pick.is-busy { opacity: .6; pointer-events: none; }
+
+.cab-flash--error {
+    background: #FEF2F2;
+    border-color: #FCA5A5;
+    color: #991B1B;
+}

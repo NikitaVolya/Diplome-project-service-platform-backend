@@ -19,6 +19,14 @@ namespace DAL.Context
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Statistic> Statistics { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<ExecutorService> ExecutorServices { get; set; }
+        public DbSet<PortfolioWork> PortfolioWorks { get; set; }
+        public DbSet<CalendarEvent> CalendarEvents { get; set; }
+        public DbSet<ProfileVisit> ProfileVisits { get; set; }
+        public DbSet<PayoutMethod> PayoutMethods { get; set; }
+        public DbSet<Payout> Payouts { get; set; }
+        public DbSet<SupportTicket> SupportTickets { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -219,6 +227,181 @@ namespace DAL.Context
 
                 entity.HasIndex(a => a.CreatedAt);
                 entity.HasIndex(a => a.EntityName);
+            });
+
+            builder.Entity<UserAddress>(entity =>
+            {
+                entity.HasOne(a => a.User)
+                      .WithMany(u => u.Addresses)
+                      .HasForeignKey(a => a.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(a => a.Title)
+                      .IsRequired()
+                      .HasMaxLength(60);
+
+                entity.Property(a => a.Line)
+                      .IsRequired()
+                      .HasMaxLength(200);
+
+                entity.Property(a => a.City)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(a => a.Region).HasMaxLength(100);
+                entity.Property(a => a.PostalCode).HasMaxLength(10);
+                entity.Property(a => a.Country).IsRequired().HasMaxLength(60);
+                entity.Property(a => a.Note).HasMaxLength(200);
+
+                entity.Property(a => a.Kind)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                // Сторінка «Мої адреси» завжди читає список однієї людини.
+                entity.HasIndex(a => a.UserId);
+            });
+
+            builder.Entity<ExecutorService>(entity =>
+            {
+                entity.HasOne(s => s.Owner)
+                      .WithMany(u => u.Services)
+                      .HasForeignKey(s => s.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Категорії не видаляють, а ховають, тож послуга не має тягнути напрям за собою.
+                entity.HasOne(s => s.Category)
+                      .WithMany()
+                      .HasForeignKey(s => s.CategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(s => s.Title).IsRequired().HasMaxLength(120);
+                entity.Property(s => s.Description).HasMaxLength(2000);
+                entity.Property(s => s.Image).HasMaxLength(120);
+                entity.Property(s => s.FromPrice).HasPrecision(18, 2);
+
+                entity.Property(s => s.State)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                entity.HasIndex(s => s.OwnerId);
+            });
+
+            builder.Entity<PortfolioWork>(entity =>
+            {
+                entity.HasOne(w => w.Owner)
+                      .WithMany(u => u.Portfolio)
+                      .HasForeignKey(w => w.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(w => w.Title).IsRequired().HasMaxLength(120);
+                entity.Property(w => w.Group).IsRequired().HasMaxLength(60);
+                entity.Property(w => w.Image).HasMaxLength(120);
+                entity.Property(w => w.Link).HasMaxLength(300);
+
+                entity.HasIndex(w => w.OwnerId);
+            });
+
+            builder.Entity<CalendarEvent>(entity =>
+            {
+                entity.HasOne(e => e.Owner)
+                      .WithMany(u => u.Events)
+                      .HasForeignKey(e => e.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Замовлення може зникнути з кабінету раніше за подію — рве зв'язок, а не рядок.
+                entity.HasOne(e => e.Order)
+                      .WithMany()
+                      .HasForeignKey(e => e.OrderId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.Property(e => e.Title).IsRequired().HasMaxLength(120);
+                entity.Property(e => e.PartnerName).HasMaxLength(120);
+                entity.Property(e => e.Note).HasMaxLength(500);
+
+                entity.Property(e => e.Kind)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                // Сторінка календаря завжди питає тиждень однієї людини.
+                entity.HasIndex(e => new { e.OwnerId, e.StartAt });
+            });
+
+            builder.Entity<ProfileVisit>(entity =>
+            {
+                entity.HasOne(v => v.Owner)
+                      .WithMany(u => u.Visits)
+                      .HasForeignKey(v => v.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Total рахується з п'яти колонок і в базі не зберігається.
+                entity.Ignore(v => v.Total);
+
+                // За добу на людину — один рядок; аналітика бере відрізок дат однієї людини.
+                entity.HasIndex(v => new { v.OwnerId, v.Day }).IsUnique();
+            });
+
+            builder.Entity<PayoutMethod>(entity =>
+            {
+                entity.HasOne(m => m.Owner)
+                      .WithMany(u => u.PayoutMethods)
+                      .HasForeignKey(m => m.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(m => m.Label).IsRequired().HasMaxLength(120);
+                entity.Property(m => m.Note).HasMaxLength(120);
+
+                entity.Property(m => m.Kind)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                entity.HasIndex(m => m.OwnerId);
+            });
+
+            builder.Entity<Payout>(entity =>
+            {
+                entity.HasOne(p => p.Owner)
+                      .WithMany(u => u.Payouts)
+                      .HasForeignKey(p => p.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Спосіб можна прибрати — заявка в історії лишається з текстовим підписом.
+                //
+                // SET NULL тут ставити не можна: до Payouts вели б два шляхи видалення
+                // (AspNetUsers → Payouts каскадом і AspNetUsers → PayoutMethods → Payouts),
+                // а SQL Server такого не створює — «may cause cycles or multiple cascade paths».
+                // Тому зв'язок рве застосунок: ExecutorInsightsService.DeleteMethodAsync
+                // спершу обнуляє MethodId у заявках, і лише тоді прибирає спосіб.
+                entity.HasOne(p => p.Method)
+                      .WithMany(m => m.Payouts)
+                      .HasForeignKey(p => p.MethodId)
+                      .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(p => p.Amount).HasPrecision(18, 2);
+                entity.Property(p => p.MethodLabel).HasMaxLength(120);
+
+                entity.Property(p => p.Status)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                entity.HasIndex(p => new { p.OwnerId, p.CreatedAt });
+            });
+
+            builder.Entity<SupportTicket>(entity =>
+            {
+                entity.HasOne(t => t.Owner)
+                      .WithMany(u => u.Tickets)
+                      .HasForeignKey(t => t.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(t => t.Topic).IsRequired().HasMaxLength(120);
+                entity.Property(t => t.Category).IsRequired().HasMaxLength(60);
+                entity.Property(t => t.Message).IsRequired().HasMaxLength(4000);
+
+                entity.Property(t => t.Status)
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+
+                entity.HasIndex(t => new { t.OwnerId, t.CreatedAt });
             });
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

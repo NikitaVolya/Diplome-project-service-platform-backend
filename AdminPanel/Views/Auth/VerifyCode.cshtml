@@ -1,7 +1,7 @@
 @model VerifyCodeViewModel
 @{
     Layout = "_LandingLayout";
-    ViewData["Title"] = "Відновлення пароля — Вибір";
+    ViewData["Title"] = T("Відновлення пароля — Вибір");
     ViewData["CodeAction"] = "VerifyCode";
     ViewData["CodePurpose"] = "PasswordReset";
 }
@@ -10,19 +10,19 @@
 
 <main class="auth">
     <div class="v-container auth__inner">
-        <a class="auth-back" asp-action="ForgotPassword"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+        <a class="auth-back" asp-action="ForgotPassword"><span aria-hidden="true">&lsaquo;</span> @T("Назад")</a>
 
         <div class="auth-split">
             <div class="auth-split__aside">
                 <span class="auth-split__icon" aria-hidden="true"><partial name="_AuthFaceIcon" /></span>
-                <h2>Забули пароль?</h2>
-                <p class="auth-step-name">Крок 2</p>
-                <p>Перевірте код<br />Ми надіслали код підтвердження на ваш e-mail</p>
+                <h2>@T("Забули пароль?")</h2>
+                <p class="auth-step-name">@T("Крок 2")</p>
+                <p>@T("Перевірте код")<br />@T("Ми надіслали код підтвердження на ваш e-mail")</p>
             </div>
 
             <div class="auth-split__form">
-                <h1>Відновлення пароля</h1>
-                <p>Ми допоможемо вам отримати доступ до вашого акаунта!</p>
+                <h1>@T("Відновлення пароля")</h1>
+                <p>@T("Ми допоможемо вам отримати доступ до вашого акаунта!")</p>
 
                 <partial name="_AuthCodeForm" model="Model" />
             </div>

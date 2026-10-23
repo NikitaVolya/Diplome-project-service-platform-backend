@@ -1,0 +1,253 @@
+@model ExecAnalyticsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var data = Model.Data;
+
+    // Графік малюємо самі, без сторонніх бібліотек: лінія з точок — рівно те,
+    // що намальовано в макеті, а зайва залежність у дипломній роботі ні до чого.
+    const int boxWidth = 1160;
+    const int boxHeight = 226;
+    const int padLeft = 44;
+    const int padRight = 10;
+    const int padTop = 12;
+    const int padBottom = 30;
+
+    var plotWidth = boxWidth - padLeft - padRight;
+    var plotHeight = boxHeight - padTop - padBottom;
+
+    var points = data.Days;
+    var last = Math.Max(1, points.Count - 1);
+    var ceiling = Math.Max(1, data.Ceiling);
+
+    double X(int index) => padLeft + (double)index * plotWidth / last;
+    double Y(int value) => padTop + plotHeight * (1 - Math.Min(1d, (double)value / ceiling));
+
+    string Line(Func<ExecDay, int> pick) =>
+        string.Join(' ', points.Select((d, i) => $"{X(i).ToString("0.#", Culture)},{Y(pick(d)).ToString("0.#", Culture)}"));
+
+    // Кільце джерел: кожен сегмент — шматок обводу кола завдовжки у свою частку.
+    const double radius = 56;
+    var ring = 2 * Math.PI * radius;
+    var offset = 0d;
+}
+
+@functions {
+    private static readonly System.Globalization.CultureInfo Culture =
+        System.Globalization.CultureInfo.InvariantCulture;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head exec-head__row">
+                        <h1>@T("Аналітика")</h1>
+
+                        <div class="exec-period">
+                            <span class="exec-period__dates">
+                                @CabinetFormat.Digits(data.From) &ndash; @CabinetFormat.Digits(data.To)
+                                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                            </span>
+
+                            <form method="get" asp-action="Analytics">
+                                <label class="cab-select">
+                                    <select name="days" onchange="this.form.submit()" aria-label="@T("Період")">
+                                        @foreach (var (days, title) in ExecutorContent.Periods)
+                                        {
+                                            <option value="@days" selected="@(days == Model.Days)">@T(title)</option>
+                                        }
+                                    </select>
+                                </label>
+                                <noscript><button class="v-btn v-btn--soft" type="submit">@T("Показати")</button></noscript>
+                            </form>
+                        </div>
+                    </div>
+
+                    <p class="exec-panel__lead">@T("Огляд ваших результатів та активності")</p>
+
+                    <div class="exec-stats">
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Перегляди портфоліо")</span>
+                            <span class="exec-stat__value">@data.Views</span>
+                            <span class="exec-stat__note">@F("{0} до попереднього періоду", CabinetFormat.Delta(data.ViewsChange))</span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Відгуки профілю")</span>
+                            <span class="exec-stat__value">@data.Reviews</span>
+                            <span class="exec-stat__note">@F("{0} до попереднього періоду", CabinetFormat.Delta(data.ReviewsChange))</span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Отримано замовлень")</span>
+                            <span class="exec-stat__value">@data.Orders</span>
+                            <span class="exec-stat__note">@F("{0} до попереднього періоду", CabinetFormat.Delta(data.OrdersChange))</span>
+                        </article>
+
+                        <article class="exec-stat">
+                            <span class="exec-stat__name">@T("Конверсія в замовлення")</span>
+                            <span class="exec-stat__value">@CabinetFormat.Percent(data.Conversion)</span>
+                            <span class="exec-stat__note">@F("{0} до попереднього періоду", CabinetFormat.Delta(data.ConversionChange))</span>
+                        </article>
+                    </div>
+
+                    <div class="exec-chart">
+                        <div class="exec-chart__head">
+                            <h2>@T("Перегляди та замовлення")</h2>
+                            <span class="cab-select cab-select--ghost">@T("За день")</span>
+                        </div>
+
+                        <p class="exec-chart__keys">
+                            <span><i class="exec-dot exec-dot--views" aria-hidden="true"></i> &ndash;@T("перегляди портфоліо")</span>
+                            <span><i class="exec-dot exec-dot--orders" aria-hidden="true"></i> &ndash;@T("замовлення")</span>
+                        </p>
+
+                        @if (points.Count < 2)
+                        {
+                            <p class="cab-empty">@T("Даних за цей період ще немає.")</p>
+                        }
+                        else
+                        {
+                            <svg class="exec-chart__plot" viewBox="0 0 @boxWidth @boxHeight" role="img"
+                                 aria-label="@T("Графік переглядів портфоліо та замовлень за обраний період")">
+                                @foreach (var step in ExecutorContent.ChartSteps)
+                                {
+                                    var value = ceiling * step / 100;
+                                    var y = Y(value).ToString("0.#", Culture);
+
+                                    <line class="exec-chart__grid" x1="@padLeft" x2="@(boxWidth - padRight)" y1="@y" y2="@y" />
+                                    @* Razor вважає <text> своїм службовим тегом, тому підпис осі віддаємо рядком. *@
+                                    @Html.Raw($"<text class=\"exec-chart__tick\" x=\"{padLeft - 12}\" y=\"{y}\" text-anchor=\"end\" dy=\"4\">{value}</text>")
+                                }
+
+                                <polyline class="exec-chart__line exec-chart__line--orders" points="@Line(d => d.Orders)" />
+                                <polyline class="exec-chart__line exec-chart__line--views" points="@Line(d => d.Views)" />
+
+                                @for (var i = 0; i < points.Count; i++)
+                                {
+                                    <circle class="exec-chart__node exec-chart__node--orders"
+                                            cx="@(X(i).ToString("0.#", Culture))" cy="@(Y(points[i].Orders).ToString("0.#", Culture))" r="4" />
+                                    <circle class="exec-chart__node exec-chart__node--views"
+                                            cx="@(X(i).ToString("0.#", Culture))" cy="@(Y(points[i].Views).ToString("0.#", Culture))" r="4" />
+                                }
+
+                                @for (var i = 0; i < points.Count; i += 5)
+                                {
+                                    @Html.Raw($"<text class=\"exec-chart__day\" x=\"{X(i).ToString("0.#", Culture)}\" y=\"{boxHeight - 8}\" text-anchor=\"middle\">{CabinetFormat.DayMonth(points[i].Day)}</text>")
+                                }
+                            </svg>
+                        }
+                    </div>
+                </section>
+
+                <section class="exec-panel exec-panel--next">
+                    <div class="exec-pair">
+                        <article class="exec-box">
+                            <h2>@T("Джерела переглядів")</h2>
+
+                            <div class="exec-sources">
+                                <div class="exec-donut">
+                                    <svg viewBox="0 0 160 160" role="img" aria-label="@T("Частки джерел переглядів")">
+                                        <circle class="exec-donut__base" cx="80" cy="80" r="@radius" />
+                                        @foreach (var source in data.Sources)
+                                        {
+                                            var dash = ring * source.Share / 100;
+                                            var gap = ring - dash;
+                                            var start = -offset;
+                                            offset += dash;
+
+                                            <circle cx="80" cy="80" r="@radius"
+                                                    stroke="@ExecutorContent.SourceColor(source.Key)"
+                                                    stroke-dasharray="@(dash.ToString("0.##", Culture)) @(gap.ToString("0.##", Culture))"
+                                                    stroke-dashoffset="@(start.ToString("0.##", Culture))"
+                                                    fill="none" stroke-width="26" transform="rotate(-90 80 80)" />
+                                        }
+                                    </svg>
+                                </div>
+
+                                <ul class="exec-legend">
+                                    @foreach (var source in data.Sources)
+                                    {
+                                        <li>
+                                            <i class="exec-dot" style="background:@ExecutorContent.SourceColor(source.Key)" aria-hidden="true"></i>
+                                            <span>@T(source.Title)</span>
+                                            <b>@CabinetFormat.Percent(source.Share)</b>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="exec-box">
+                            <div class="exec-box__head">
+                                <h2>@T("Популярні послуги")</h2>
+                                <span>@T("За кількістю замовлень")</span>
+                            </div>
+
+                            @if (data.Popular.Count == 0)
+                            {
+                                <p class="cab-empty">@T("Замовлень за цей період не було.")</p>
+                            }
+
+                            <ul class="exec-rank">
+                                @foreach (var service in data.Popular)
+                                {
+                                    <li>
+                                        <span>@service.Title</span>
+                                        <b>@service.Orders</b>
+                                    </li>
+                                }
+                            </ul>
+                        </article>
+                    </div>
+
+                    <article class="exec-box exec-box--wide">
+                        <div class="exec-box__head">
+                            <h2>@T("Динаміка показників")</h2>
+                            <span class="exec-metrics__head">
+                                <span>@T("Поточний період")</span>
+                                <span>@T("Попередній період")</span>
+                                <span>@T("Зміна")</span>
+                            </span>
+                        </div>
+
+                        <ul class="exec-metrics">
+                            @foreach (var metric in data.Metrics)
+                            {
+                                <li>
+                                    <span>@T(metric.Title)</span>
+                                    <span>@CabinetFormat.Units(metric.Now)</span>
+                                    <span>@CabinetFormat.Units(metric.Was)</span>
+                                    <span class="exec-metrics__delta">
+                                        @metric.Change
+                                        <i class="bi @(metric.Direction < 0 ? "bi-arrow-down" : "bi-arrow-up")" aria-hidden="true"></i>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,9 +1,13 @@
 using AdminPanel.Extensions;
 using AdminPanel.Hubs;
+using AdminPanel.Localization;
 using BLL.Options;
 using DAL.Context;
 using DAL.Seed;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.WebEncoders;
 
 namespace AdminPanel
 {
@@ -29,7 +33,19 @@ namespace AdminPanel
             builder.Services.AddAdminAuthorization();
             builder.Services.AddAdminServices();
 
-            builder.Services.AddControllersWithViews();
+            // Переклад публічної частини: Resources/SharedResource.{мова}.resx.
+            // Повідомлення валідації ([Required(ErrorMessage = ...)]) беруться з того самого файлу.
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            // Переклади виводяться через @T(...), і без цього Razor кодував би кожну літеру
+            // кирилиці, діакритики тощо як &#x...; — сторінка та сама, але HTML нечитабельний.
+            builder.Services.Configure<WebEncoderOptions>(options =>
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
+
+            builder.Services.AddControllersWithViews()
+                .AddDataAnnotationsLocalization(options =>
+                    options.DataAnnotationLocalizerProvider = (_, factory) =>
+                        factory.Create(typeof(SharedResource)));
             builder.Services.AddSignalR();
 
             // Add Google authentication for users to log in with their Google accounts.
@@ -61,6 +77,9 @@ namespace AdminPanel
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Мова з перемикача внизу сторінки (cookie); без вибору — українська.
+            app.UsePublicCulture();
 
             app.UseRouting();
 

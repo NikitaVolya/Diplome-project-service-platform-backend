@@ -1,0 +1,114 @@
+@model CabinetSupportViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+
+            <div class="cab-head"><h1>@T("Підтримка")</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel cab-panel--lilac cab-panel--help">
+                    <p class="cab-panel__lead">@T("Ми тут, щоб допомогти вам у будь-який час")</p>
+                    <h2 class="cab-panel__title" style="font-size:28px">@T("Як ми можемо допомогти?")</h2>
+
+                    <form method="get" asp-action="Support">
+                        <label class="cab-find cab-find--plain cab-support__find">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query"
+                                   placeholder="@T("Пошук за запитанням (наприклад, “повернення коштів”)")"
+                                   aria-label="@T("Пошук за запитанням")" />
+                        </label>
+                    </form>
+
+                    <p class="cab-panel__lead">@T("Популярні теми")</p>
+
+                    <div class="cab-topics">
+                        @foreach (var topic in CabinetContent.SupportTopics)
+                        {
+                            <a class="cab-topic" href="#@topic.Anchor">
+                                @topic.Title
+                                <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                            </a>
+                        }
+                    </div>
+
+                    <h2 class="cab-panel__title" style="font-size:28px">@T("Поширені запитання")</h2>
+
+                    <div class="cab-faq">
+                        <div>
+                            @if (Model.Faq.Count == 0)
+                            {
+                                <p class="cab-empty">@T("За цим запитом нічого не знайшлося. Напишіть нам — відповімо особисто.")</p>
+                            }
+
+                            @for (var i = 0; i < Model.Faq.Count; i++)
+                            {
+                                var item = Model.Faq[i];
+
+                                <details class="cab-faq__item" id="faq-@i">
+                                    <summary>
+                                        <span>@item.Question</span>
+                                        <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                                    </summary>
+                                    <p>@item.Answer</p>
+                                </details>
+                            }
+
+                            <a class="v-btn v-btn--soft cab-more" asp-controller="Pages" asp-action="Help">
+                                @T("Переглянути всі запитання")
+                            </a>
+                        </div>
+
+                        <aside class="cab-aside">
+                            <h3>@T("Не знайшли відповіді?")</h3>
+                            <p>@T("Наша команда підтримки завжди готова допомогти.")</p>
+
+                            <a class="v-btn v-btn--soft" href="mailto:@PageContent.SupportEmail">@T("Зв’язатися з підтримкою")</a>
+
+                            <div class="cab-aside__row">
+                                <i class="bi bi-chat-dots" aria-hidden="true"></i>
+                                <span>
+                                    <b>Online - chat</b>
+                                    <span>@PageContent.SupportHours</span>
+                                </span>
+                            </div>
+
+                            <div class="cab-aside__row">
+                                <i class="bi bi-envelope" aria-hidden="true"></i>
+                                <span>
+                                    <b>Email</b>
+                                    <span>@PageContent.SupportEmail</span>
+                                </span>
+                            </div>
+
+                            <div class="cab-aside__row">
+                                <i class="bi bi-telephone" aria-hidden="true"></i>
+                                <span>
+                                    <b>@T("Телефон")</b>
+                                    <span>@PageContent.SupportPhone</span>
+                                </span>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

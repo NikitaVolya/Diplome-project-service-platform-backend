@@ -1,0 +1,68 @@
+@model ExecOrder
+@{
+    var fresh = Model.Status == OrderStatus.Pending;
+}
+
+<article class="exec-order @(fresh ? "exec-order--edge" : null)">
+    <span class="exec-order__state">@ExecutorContent.OrderState(Model.Status, Model.OnReview)</span>
+
+    <span class="exec-order__img">
+        <img src="@Model.Image" alt="@Model.Title" loading="lazy" />
+    </span>
+
+    <div class="exec-order__body">
+        <h3 class="exec-order__name">@Model.Title</h3>
+        <p class="exec-order__who">@T("Замовник:") @Model.CustomerName</p>
+
+        <div class="exec-order__meta">
+            @if (Model.ExecutionAt.HasValue)
+            {
+                <span>
+                    <i class="bi bi-alarm" aria-hidden="true"></i>
+                    @F(fresh ? "Пропозиція до {0}" : "Дедлайн {0}", CabinetFormat.DateTimeShort(Model.ExecutionAt.Value))
+                </span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <span>
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    @Model.Address
+                </span>
+            }
+        </div>
+    </div>
+
+    <div class="exec-order__price">
+        <b>@CabinetFormat.Money(Model.Price)</b>
+        <span>@T(fresh ? "Бюджет" : "Фіксована ціна")</span>
+    </div>
+
+    <div class="exec-order__act">
+        @if (fresh)
+        {
+            <form method="post" asp-controller="Cabinet" asp-action="AnswerOrder">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="exec-btn-yes" type="submit" name="accept" value="true">@T("Прийняти")</button>
+            </form>
+
+            <form method="post" asp-controller="Cabinet" asp-action="AnswerOrder">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="exec-btn-no" type="submit" name="accept" value="false">@T("Відхилити")</button>
+            </form>
+        }
+        else
+        {
+            <a class="exec-btn-yes" asp-controller="Cabinet" asp-action="Orders">@T("Переглянути")</a>
+
+            @if (Model.Status != OrderStatus.Cancelled)
+            {
+                <a class="exec-btn-no" asp-controller="Cabinet" asp-action="Messages" asp-route-orderId="@Model.Id">
+                    @T("Відкрити чат")
+                </a>
+            }
+        }
+    </div>
+</article>

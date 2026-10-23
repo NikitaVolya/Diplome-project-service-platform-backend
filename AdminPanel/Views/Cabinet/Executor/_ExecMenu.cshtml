@@ -1,0 +1,45 @@
+@model ExecutorPageModel
+@{
+}
+
+<aside class="cab-side">
+    <nav class="cab-menu" aria-label="@T("Розділи кабінету")">
+        @foreach (var item in ExecutorContent.Menu)
+        {
+            var current = item.Key == Model.Active;
+
+            <a asp-controller="Cabinet" asp-action="@item.Action"
+               class="@(current ? "is-current" : null)"
+               aria-current="@(current ? "page" : null)">
+                <i class="bi @item.Icon" aria-hidden="true"></i>
+                <span>@item.Title</span>
+
+                @if (item.Key == "orders" && Model.Fresh > 0)
+                {
+                    <span class="cab-menu__badge">@Model.Fresh</span>
+                }
+                else if (item.Key == "messages" && Model.Unread > 0)
+                {
+                    <span class="cab-menu__badge">@Model.Unread</span>
+                }
+            </a>
+        }
+    </nav>
+
+    @* Якщо ролі замовника ще немає, Switch додасть її цьому ж акаунту. *@
+    <form method="post" asp-controller="Cabinet" asp-action="Switch">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="to" value="customer" />
+        <button class="cab-become" type="submit">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> @T("Стати замовником")
+        </button>
+    </form>
+
+    <div class="exec-presence">
+        <div class="exec-presence__row">
+            <b>@Model.Presence</b>
+            <span class="exec-presence__pin" aria-hidden="true"><i class="bi bi-chevron-down"></i></span>
+        </div>
+        <p>@F("Профіль переглянуто {0} за тиждень", PublicText.Count(Model.ProfileViews, "раз", "рази", "разів"))</p>
+    </div>
+</aside>

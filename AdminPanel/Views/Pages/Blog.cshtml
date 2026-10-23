@@ -1,0 +1,71 @@
+@model BlogViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = T("Блог — Вибір");
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" /> }
+
+<main class="page">
+    <div class="v-container">
+        <nav class="page-crumbs" aria-label="@T("Навігація")">
+            <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>@T("Блог")</span>
+        </nav>
+
+        <div class="page-head">
+            <h1>@T("Блог")</h1>
+            <p>@T("Корисні поради, новини та історії для замовників і виконавців")</p>
+        </div>
+
+        <div class="blog-filters" role="group" aria-label="@T("Рубрики")">
+            @foreach (var name in PageContent.BlogCategories)
+            {
+                var isAll = name == PageContent.BlogCategories[0];
+                <a class="blog-filter @(Model.Category == name ? "is-current" : null)"
+                   asp-action="Blog" asp-route-category="@(isAll ? null : name)">@T(name)</a>
+            }
+        </div>
+
+        @if (Model.Articles.Count == 0)
+        {
+            <p class="blog-empty">@T("У цій рубриці поки немає статей.")</p>
+        }
+
+        <div class="blog-grid">
+            @foreach (var article in Model.Articles)
+            {
+                <a class="blog-card" asp-action="Article" asp-route-slug="@article.Slug">
+                    <span class="blog-card__img"><img src="@article.Image" alt="@T(article.Title)" loading="lazy" /></span>
+                    <span class="blog-card__meta">
+                        <span>@T(article.Category)</span>
+                        <span>@PageContent.FormatDate(article.Date)</span>
+                    </span>
+                    <b class="blog-card__title">@T(article.Title)</b>
+                    <span class="blog-card__text">@T(article.Excerpt)</span>
+                    <span class="blog-card__more">@T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            }
+        </div>
+
+        @if (Model.Pages > 1)
+        {
+            <nav class="blog-pager" aria-label="@T("Сторінки")">
+                <a class="blog-pager__step @(Model.Page == 1 ? "is-off" : null)"
+                   asp-action="Blog" asp-route-category="@Model.Category" asp-route-page="@(Model.Page - 1)"
+                   aria-label="@T("Попередня сторінка")">&lsaquo;</a>
+
+                @for (var i = 1; i <= Model.Pages; i++)
+                {
+                    <a class="blog-pager__num @(i == Model.Page ? "is-current" : null)"
+                       asp-action="Blog" asp-route-category="@Model.Category" asp-route-page="@i">@i</a>
+                }
+
+                <a class="blog-pager__step @(Model.Page == Model.Pages ? "is-off" : null)"
+                   asp-action="Blog" asp-route-category="@Model.Category" asp-route-page="@(Model.Page + 1)"
+                   aria-label="@T("Наступна сторінка")">&rsaquo;</a>
+            </nav>
+        }
+    </div>
+</main>

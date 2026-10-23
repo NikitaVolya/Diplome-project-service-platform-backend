@@ -1,0 +1,17 @@
+@{
+    var flash = TempData["Cabinet.Flash"] as string;
+}
+
+@if (!string.IsNullOrEmpty(flash))
+{
+    <p class="cab-flash" role="status">@flash</p>
+}
+
+@{
+    var error = TempData["Cabinet.Error"] as string;
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p class="cab-flash cab-flash--error" role="alert">@error</p>
+}

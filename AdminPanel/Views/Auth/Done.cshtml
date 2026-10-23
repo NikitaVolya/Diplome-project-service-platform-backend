@@ -1,15 +1,15 @@
 @model string
 @{
     Layout = "_LandingLayout";
-    ViewData["Title"] = "Реєстрація завершена — Вибір";
+    ViewData["Title"] = T("Реєстрація завершена — Вибір");
 
     var executor = Model == "Executor";
 
-    var lead = executor ? "Ваш бізнес акаунт створено" : "Ваш акаунт створено";
+    var lead = T(executor ? "Ваш бізнес акаунт створено" : "Ваш акаунт створено");
 
-    var next = executor
+    var next = T(executor
         ? "Заповніть профіль, додайте свої послуги та отримуйте більше замовлень."
-        : "Створюйте замовлення, знаходьте перевірених виконавців та керуйте своїми проєктами в особистому кабінеті.";
+        : "Створюйте замовлення, знаходьте перевірених виконавців та керуйте своїми проєктами в особистому кабінеті.");
 
     var features = executor
         ? new[]
@@ -32,9 +32,9 @@
 
 <main class="auth">
     <div class="v-container auth__inner">
-        <a class="auth-back" asp-controller="Landing" asp-action="Index"><span aria-hidden="true">&lsaquo;</span> Назад</a>
+        <a class="auth-back" asp-controller="Landing" asp-action="Index"><span aria-hidden="true">&lsaquo;</span> @T("Назад")</a>
 
-        <h1 class="auth__title">Реєстрація</h1>
+        <h1 class="auth__title">@T("Реєстрація")</h1>
 
         <partial name="_AuthSteps" model="3" />
 
@@ -44,7 +44,7 @@
                      stroke-linecap="round" stroke-linejoin="round"><path d="M10 25l10 10 18-22" /></svg>
             </span>
 
-            <h2>Реєстрація успішна!</h2>
+            <h2>@T("Реєстрація успішна!")</h2>
             <p class="auth-card__lead">@lead</p>
 
             <section class="auth-next">
@@ -52,12 +52,12 @@
                     <partial name="@(executor ? "_AuthCaseIcon" : "_AuthStarIcon")" />
                 </span>
                 <div>
-                    <h3>Що далі?</h3>
+                    <h3>@T("Що далі?")</h3>
                     <p>@next</p>
                 </div>
             </section>
 
-            <p class="auth-features__title">Можливості вашого кабінету:</p>
+            <p class="auth-features__title">@T("Можливості вашого кабінету:")</p>
 
             <ul class="auth-features">
                 @foreach (var (icon, title, text) in features)
@@ -65,14 +65,14 @@
                     <li>
                         <i class="bi @icon" aria-hidden="true"></i>
                         <div>
-                            <b>@title</b>
-                            <span>@text</span>
+                            <b>@T(title)</b>
+                            <span>@T(text)</span>
                         </div>
                     </li>
                 }
             </ul>
 
-            <a class="auth-submit auth-submit--link" asp-controller="Landing" asp-action="Index">Перейти в особистий кабінет</a>
+            <a class="auth-submit auth-submit--link" asp-controller="Landing" asp-action="Index">@T("Перейти в особистий кабінет")</a>
         </div>
     </div>
 </main>

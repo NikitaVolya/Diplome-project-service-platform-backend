@@ -10,7 +10,10 @@
         eye.addEventListener('click', () => {
             const shown = input.type === 'text';
             input.type = shown ? 'password' : 'text';
-            eye.setAttribute('aria-label', shown ? 'Показати пароль' : 'Приховати пароль');
+            // Підписи приходять із розмітки вже перекладеними.
+            eye.setAttribute('aria-label', shown
+                ? (eye.dataset.labelShow || 'Показати пароль')
+                : (eye.dataset.labelHide || 'Приховати пароль'));
             input.focus();
         });
     });

@@ -1,0 +1,155 @@
+@model CabinetFavoritesViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    // Напрями показуємо стрічкою по пʼять; іконку беремо з назви напряму.
+    var icons = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Дім і ремонт"] = "bi-house-gear",
+        ["Дизайн і творчість"] = "bi-palette",
+        ["Освіта і розвиток"] = "bi-mortarboard",
+        ["Прибирання"] = "bi-stars",
+        ["Фото та відео"] = "bi-camera",
+        ["Автопослуги"] = "bi-car-front",
+        ["IT та розробка"] = "bi-code-slash",
+        ["Діти та догляд"] = "bi-balloon",
+        ["Доставка"] = "bi-box-seam"
+    };
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" /> }
+
+<main class="cab">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+
+            <div class="cab-head"><h1>@T("Обране")</h1></div>
+        </div>
+
+        <div class="cab-body">
+            <partial name="_CabinetMenu" model="Model" />
+
+            <div class="cab-main">
+                <partial name="_CabinetNotices" model="Model" />
+
+                <section class="cab-panel">
+                    <form class="cab-rowhead" method="get" asp-action="Favorites">
+                        <p class="cab-panel__lead" style="margin:0">@T("Тут зберігаються ваші улюблені виконавці та послуги.")</p>
+
+                        <input type="hidden" name="tab" value="@Model.Tab" />
+                        <input type="hidden" name="group" value="@Model.Group" />
+
+                        <label class="cab-find" style="width:366px">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук в обраному")"
+                                   aria-label="@T("Пошук в обраному")" />
+                        </label>
+                    </form>
+
+                    <div class="cab-tabs">
+                        <a asp-action="Favorites" asp-route-tab="executors" asp-route-q="@Model.Query"
+                           class="@(Model.Tab == "executors" ? "is-current" : null)">@T("Виконавці")</a>
+                        <a asp-action="Favorites" asp-route-tab="services" asp-route-q="@Model.Query"
+                           class="@(Model.Tab == "services" ? "is-current" : null)">@T("Послуги")</a>
+                    </div>
+
+                    @if (Model.Tab == "executors")
+                    {
+                        <div class="cab-chips">
+                            @foreach (var group in Model.Data.Groups.Take(10))
+                            {
+                                var icon = icons.TryGetValue(group.Name, out var found) ? found : "bi-three-dots";
+
+                                <a class="cab-chip @(Model.Group == group.Name ? "is-current" : null)"
+                                   asp-action="Favorites" asp-route-tab="executors"
+                                   asp-route-group="@(Model.Group == group.Name ? null : group.Name)"
+                                   asp-route-q="@Model.Query">
+                                    <i class="bi @icon" aria-hidden="true"></i>
+                                    <span class="cab-chip__name">@T(group.Name)</span>
+                                    <span class="cab-chip__count">@group.Count</span>
+                                </a>
+                            }
+                        </div>
+
+                        @if (Model.Data.Items.Count == 0)
+                        {
+                            <p class="cab-empty">@T("В обраному поки нікого немає. Відкрийте профіль виконавця й натисніть «У обране».")</p>
+                        }
+
+                        @foreach (var bucket in Model.Data.Items.GroupBy(i => i.Group))
+                        {
+                            <div class="cab-group">
+                                <h3>@T(bucket.Key)</h3>
+                                <span>@PublicText.Executors(bucket.Count())</span>
+                                <a class="cab-all" asp-action="Favorites" asp-route-tab="executors" asp-route-group="@bucket.Key">
+                                    @T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+
+                            @foreach (var executor in bucket)
+                            {
+                                <article class="cab-exec">
+                                    <img class="cab-exec__face" src="@executor.Portrait" alt="" loading="lazy" />
+
+                                    <div>
+                                        <div class="cab-exec__top">
+                                            <div>
+                                                <h4 class="cab-exec__name">@executor.Name</h4>
+                                                <p class="cab-exec__role">@T(executor.Role)</p>
+                                            </div>
+                                            <span class="cab-exec__rate">
+                                                <i class="bi bi-star" aria-hidden="true"></i>
+                                                @CabinetFormat.Rating(executor.Rating) (@PublicText.Reviews(executor.Reviews))
+                                            </span>
+                                        </div>
+
+                                        <div class="cab-exec__skills">
+                                            @foreach (var skill in executor.Skills)
+                                            {
+                                                <span class="cab-skill">@skill</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="cab-exec__act">
+                                        <a class="cab-btn-wide" asp-controller="Catalog" asp-action="Index">@T("Переглянути профіль")</a>
+                                        <a class="cab-btn-slim" asp-action="Messages">@T("Написати")</a>
+                                    </div>
+
+                                    <span class="cab-exec__fav" aria-hidden="true"><i class="bi bi-heart"></i></span>
+                                </article>
+                            }
+                        }
+
+                        <a class="cab-box__more" asp-action="Favorites" asp-route-tab="executors">@T("Переглянути все")</a>
+                    }
+                    else
+                    {
+                        @if (Model.Services.Count == 0)
+                        {
+                            <p class="cab-empty">@T("Збережених послуг поки немає.")</p>
+                        }
+
+                        <div class="cab-chips">
+                            @foreach (var service in Model.Services)
+                            {
+                                <a class="cab-chip" asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@service.CategoryId">
+                                    <i class="bi bi-bookmark-heart" aria-hidden="true"></i>
+                                    <span class="cab-chip__name">@service.Name</span>
+                                </a>
+                            }
+                        </div>
+
+                        <a class="cab-box__more" asp-controller="Catalog" asp-action="Index">@T("Переглянути каталог послуг")</a>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

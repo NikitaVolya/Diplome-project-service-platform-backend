@@ -1,0 +1,221 @@
+@model ExecCalendarViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var monday = Model.Calendar.Monday;
+    var today = DateTime.UtcNow.Date;
+    var first = ExecutorContent.FirstHour;
+    var last = ExecutorContent.LastHour;
+
+    // Події показуємо тільки в межах сітки; те, що раніше 8:00, притискаємо до першого рядка.
+    var shown = Model.Calendar.Events
+        .Where(e => e.Day is >= 0 and <= 6 && e.Hour <= last)
+        .ToList();
+
+    string Tone(EventKind kind) => kind switch
+    {
+        EventKind.Meeting => "meeting",
+        EventKind.Deadline => "deadline",
+        EventKind.Personal => "personal",
+        _ => "busy"
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head">
+                        <h1>@T("Календар")</h1>
+                        <p>@T("Керуйте своїм розкладом та зустрічами.")</p>
+                    </div>
+
+                    <form method="get" asp-action="Calendar" style="margin-bottom:16px">
+                        <input type="hidden" name="week" value="@Model.Week" />
+                        <label class="cab-find cab-find--plain" style="width:641px;max-width:100%">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук подій")"
+                                   aria-label="@T("Пошук подій")" />
+                        </label>
+                    </form>
+
+                    <div class="exec-cal__top">
+                        <a class="exec-cal__nav" asp-action="Calendar" asp-route-week="@Model.Previous"
+                           asp-route-q="@Model.Query" aria-label="@T("Попередній тиждень")">&lsaquo;</a>
+                        <a class="exec-cal__nav" asp-action="Calendar" asp-route-week="@Model.Next"
+                           asp-route-q="@Model.Query" aria-label="@T("Наступний тиждень")">&rsaquo;</a>
+
+                        <span class="exec-cal__month">@(IsUkrainian ? ExecutorContent.Months[monday.Month - 1] : Ui.TextInfo.ToTitleCase(Ui.DateTimeFormat.GetMonthName(monday.Month))) @monday.Year</span>
+
+                        <a class="exec-cal__today" asp-action="Calendar" asp-route-q="@Model.Query">@T("Сьогодні")</a>
+
+                        <a class="exec-cal__add" asp-action="Calendar" asp-route-week="@Model.Week" asp-route-add="true">
+                            <i class="bi bi-calendar-plus" aria-hidden="true"></i> @T("Додати подію")
+                        </a>
+                    </div>
+
+                    @if (Model.Form != null)
+                    {
+                        <form class="cab-form" method="post" asp-action="AddEvent">
+                            @Html.AntiForgeryToken()
+                            <h3>@T("Нова подія")</h3>
+
+                            <div asp-validation-summary="All" class="cab-errors"></div>
+
+                            <div class="cab-grid">
+                                <div class="cab-field">
+                                    <label for="ev-title">@T("Назва")</label>
+                                    <input id="ev-title" type="text" name="Title" value="@Model.Form.Title"
+                                           maxlength="120" placeholder="@T("Консультація")" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="ev-kind">@T("Тип")</label>
+                                    <select id="ev-kind" name="Kind">
+                                        @foreach (var (kind, _, title, _) in ExecutorContent.EventKinds)
+                                        {
+                                            <option value="@kind" selected="@(Model.Form.Kind == kind.ToString())">@T(title)</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="ev-date">@T("Дата")</label>
+                                    <input id="ev-date" type="date" name="Date" value="@Model.Form.Date" required />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="ev-hour">@T("Початок, година")</label>
+                                    <input id="ev-hour" type="number" name="Hour" value="@Model.Form.Hour" min="0" max="23" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="ev-hours">@T("Тривалість, год")</label>
+                                    <input id="ev-hours" type="number" name="Hours" value="@Model.Form.Hours" min="1" max="12" />
+                                </div>
+
+                                <div class="cab-field">
+                                    <label for="ev-who">@T("З ким")</label>
+                                    <input id="ev-who" type="text" name="PartnerName" value="@Model.Form.PartnerName"
+                                           maxlength="120" placeholder="@T("Марія Л.")" />
+                                </div>
+                            </div>
+
+                            <div class="cab-form__act">
+                                <button class="v-btn v-btn--primary" type="submit">@T("Додати")</button>
+                                <a class="v-btn v-btn--ghost" asp-action="Calendar" asp-route-week="@Model.Week">@T("Скасувати")</a>
+                            </div>
+                        </form>
+                    }
+
+                    <div class="exec-cal">
+                        <div class="exec-cal__head" style="grid-column:1;grid-row:1" aria-hidden="true"></div>
+
+                        @for (var d = 0; d < 7; d++)
+                        {
+                            var day = monday.AddDays(d);
+                            var now = day.Date == today;
+
+                            <div class="exec-cal__head @(now ? "exec-cal__head--now" : null)"
+                                 style="grid-column:@(d + 2);grid-row:1">
+                                <span>@(IsUkrainian ? ExecutorContent.WeekDays[d] : Ui.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)((d + 1) % 7)))</span>
+                                <b>@day.Day</b>
+                            </div>
+                        }
+
+                        @for (var h = first; h <= last; h++)
+                        {
+                            var row = h - first + 2;
+
+                            <div class="exec-cal__hour" style="grid-column:1;grid-row:@row">@(h):00</div>
+
+                            for (var d = 0; d < 7; d++)
+                            {
+                                <div class="exec-cal__cell" style="grid-column:@(d + 2);grid-row:@row"></div>
+                            }
+                        }
+
+                        @foreach (var item in shown)
+                        {
+                            var hour = Math.Max(first, item.Hour);
+                            var span = Math.Min(item.Span, last - hour + 1);
+
+                            <div class="exec-event exec-event--@Tone(item.Kind)"
+                                 style="grid-column:@(item.Day + 2);grid-row:@(hour - first + 2) / span @Math.Max(1, span)">
+                                <b>@item.StartAt.ToString("HH:mm")</b>
+                                <b>@item.Title</b>
+                                @if (!string.IsNullOrEmpty(item.PartnerName))
+                                {
+                                    <span>@item.PartnerName</span>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="exec-legend">
+                        <span><i class="all" aria-hidden="true"></i> @T("Усі події")</span>
+                        @foreach (var (_, key, title, _) in ExecutorContent.EventKinds)
+                        {
+                            <span><i class="@key" aria-hidden="true"></i> @T(title)</span>
+                        }
+                    </div>
+
+                    <div class="cab-rowhead">
+                        <h2>@T("Найближчі події")</h2>
+                        <a class="cab-all" asp-action="Orders">@T("Переглянути всі") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+
+                    @if (Model.Calendar.Upcoming.Count == 0)
+                    {
+                        <p class="cab-empty">@T("На цьому тижні подій більше немає.")</p>
+                    }
+
+                    @foreach (var item in Model.Calendar.Upcoming)
+                    {
+                        var tone = Tone(item.Kind);
+
+                        <div class="exec-next">
+                            <span class="exec-next__dot exec-event--@tone" aria-hidden="true"></span>
+                            <span>@CabinetFormat.DateTimeShort(item.StartAt)</span>
+                            <span>@item.Title</span>
+                            <span>@item.PartnerName</span>
+                            <span class="exec-next__tag exec-next__tag--@tone">
+                                @T(ExecutorContent.EventKinds.First(k => k.Kind == item.Kind).Single)
+                            </span>
+                            <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                        </div>
+                    }
+
+                    <div class="exec-tip">
+                        <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                        <div>
+                            <b>@T("Порада")</b>
+                            <p>@T("Синхронізуйте календар з Google календарем, щоб не пропустити важливі події.")</p>
+                        </div>
+                        <button class="v-btn v-btn--soft" type="button" disabled
+                                title="@T("Синхронізація зʼявиться пізніше")">@T("Підключити календар")</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

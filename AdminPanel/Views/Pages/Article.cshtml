@@ -1,0 +1,40 @@
+@model Article
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = T(Model.Title) + " — " + T("Вибір");
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" /> }
+
+<main class="page">
+    <div class="v-container">
+        <nav class="page-crumbs" aria-label="@T("Навігація")">
+            <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <a asp-action="Blog">@T("Блог")</a>
+            <span aria-hidden="true">&rsaquo;</span>
+            <span>@T(Model.Category)</span>
+        </nav>
+
+        <article class="article">
+            <p class="article__meta">
+                <a asp-action="Blog" asp-route-category="@Model.Category">@T(Model.Category)</a>
+                <span>@PageContent.FormatDate(Model.Date)</span>
+            </p>
+
+            <h1>@T(Model.Title)</h1>
+            <p class="article__lead">@T(Model.Excerpt)</p>
+
+            <div class="article__img"><img src="@Model.Image" alt="@T(Model.Title)" /></div>
+
+            @foreach (var paragraph in Model.Body)
+            {
+                <p>@T(paragraph)</p>
+            }
+
+            <a class="v-btn v-btn--soft article__back" asp-action="Blog">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> @T("Усі статті")
+            </a>
+        </article>
+    </div>
+</main>

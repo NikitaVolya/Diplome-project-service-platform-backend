@@ -1,0 +1,175 @@
+@model ExecMessagesViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var filters = new[]
+    {
+        ("all", T("Усі"), Model.TotalThreads),
+        ("unread", T("Непрочитані"), Model.UnreadThreads),
+        ("archive", T("Архів"), 0)
+    };
+
+    DateTime? lastDay = null;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head">
+                        <h1>@T("Повідомлення")</h1>
+                        <p>@T("Спілкуйтеся з клієнтами та керуйте листуванням")</p>
+                    </div>
+
+                    <div class="cab-chat">
+                        <section class="cab-chat__list">
+                            <form class="cab-chat__find" method="get" asp-action="Messages">
+                                <input type="hidden" name="filter" value="@Model.Filter" />
+                                <label class="cab-find">
+                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                    <input type="search" name="q" value="@Model.Query" placeholder="@T("Пошук замовлень")"
+                                           aria-label="@T("Пошук замовлень")" />
+                                </label>
+                            </form>
+
+                            <nav class="cab-chat__tabs" aria-label="@T("Фільтр листувань")">
+                                @foreach (var (key, title, count) in filters)
+                                {
+                                    <a asp-action="Messages" asp-route-filter="@key" asp-route-q="@Model.Query"
+                                       class="@(Model.Filter == key ? "is-current" : null)">
+                                        @title
+                                        @if (count > 0)
+                                        {
+                                            <b>@count</b>
+                                        }
+                                    </a>
+                                }
+                            </nav>
+
+                            <div class="cab-chat__rows">
+                                @if (Model.Threads.Count == 0)
+                                {
+                                    <p class="cab-empty">@T("Листувань немає.")</p>
+                                }
+
+                                @foreach (var thread in Model.Threads)
+                                {
+                                    var current = Model.Chat?.Head.OrderId == thread.OrderId;
+
+                                    <a class="cab-thread @(current ? "is-current" : null)"
+                                       asp-action="Messages" asp-route-orderId="@thread.OrderId"
+                                       asp-route-filter="@Model.Filter" asp-route-q="@Model.Query">
+                                        <img src="@thread.PartnerPortrait" alt="" loading="lazy" />
+                                        <span>
+                                            <b>@T(thread.PartnerName)</b>
+                                            <p>@thread.Last</p>
+                                        </span>
+                                        <span class="cab-thread__meta">
+                                            @if (thread.Unread > 0)
+                                            {
+                                                <span class="cab-thread__count">@thread.Unread</span>
+                                            }
+                                            <span>@CabinetFormat.Ago(thread.LastAt)</span>
+                                        </span>
+                                    </a>
+                                }
+                            </div>
+                        </section>
+
+                        <section class="cab-chat__room">
+                            @if (Model.Chat == null)
+                            {
+                                <p class="cab-empty">@T("Оберіть розмову зліва.")</p>
+                            }
+                            else
+                            {
+                                <header class="cab-chat__head">
+                                    <img src="@Model.Chat.Head.PartnerPortrait" alt="" />
+                                    <span>
+                                        <b>@T(Model.Chat.Head.PartnerName)</b>
+                                        <span>@T("Замовник")</span>
+                                    </span>
+                                    <i class="bi bi-telephone" aria-hidden="true" style="margin-left:auto"></i>
+                                    <i class="bi bi-three-dots" aria-hidden="true" style="margin-left:16px"></i>
+                                </header>
+
+                                <div class="cab-chat__order">
+                                    <div>
+                                        @T("Замовлення:") @Model.Chat.Head.OrderTitle<br />
+                                        ID:@Model.Chat.Head.OrderId
+                                    </div>
+                                    <a class="v-btn v-btn--soft" asp-action="Orders">@T("Переглянути замовлення")</a>
+                                </div>
+
+                                <div class="cab-chat__flow">
+                                    @if (Model.Chat.Messages.Count == 0)
+                                    {
+                                        <p class="cab-empty">@T("Повідомлень ще немає — напишіть першим.")</p>
+                                    }
+
+                                    @foreach (var message in Model.Chat.Messages)
+                                    {
+                                        if (lastDay?.Date != message.SentAt.Date)
+                                        {
+                                            lastDay = message.SentAt;
+                                            <p class="cab-chat__day">@CabinetFormat.LongDate(message.SentAt)</p>
+                                        }
+
+                                        <div class="cab-msg @(message.Mine ? "cab-msg--mine" : null)">
+                                            <div class="cab-msg__who">
+                                                @if (!message.Mine)
+                                                {
+                                                    <img src="@message.Portrait" alt="" loading="lazy" />
+                                                    <b>@message.Author</b>
+                                                }
+                                                <span>@message.SentAt.ToString("HH:mm")</span>
+                                            </div>
+                                            <p class="cab-msg__text">@message.Text</p>
+                                        </div>
+                                    }
+                                </div>
+
+                                <form class="cab-chat__send" method="post" asp-action="Send">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="orderId" value="@Model.Chat.Head.OrderId" />
+
+                                    <button class="cab-chat__clip" type="button" disabled
+                                            title="@T("Вкладення зʼявляться пізніше")" aria-label="@T("Додати файл")">
+                                        <i class="bi bi-paperclip" aria-hidden="true"></i>
+                                    </button>
+
+                                    <div class="cab-chat__box">
+                                        <input type="text" name="text" maxlength="1000" placeholder="@T("Напишіть повідомлення")"
+                                               aria-label="@T("Текст повідомлення")" />
+                                        <button type="submit" aria-label="@T("Надіслати")">
+                                            <i class="bi bi-send" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            }
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

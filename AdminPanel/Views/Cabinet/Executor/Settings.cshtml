@@ -1,0 +1,307 @@
+@model ExecSettingsViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    // Значення перемикачів беремо з моделі за ключем із ExecutorContent.Notices,
+    // щоб порядок рядків задавався в одному місці — поряд із їхніми підписами.
+    bool Notice(string key) => key switch
+    {
+        "NotifyOrders" => Model.NotifyOrders,
+        "NotifyMessages" => Model.NotifyMessages,
+        "NotifyReviews" => Model.NotifyReviews,
+        "NotifyReminders" => Model.NotifyReminders,
+        _ => Model.NotifyMarketing
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main cab-main--narrow">
+                <div class="exec-head">
+                    <h1>@T("Налаштування")</h1>
+                </div>
+
+                <partial name="Executor/_ExecNotices" />
+
+                <form class="exec-set" method="post" asp-action="SaveProfile">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="cab-errors"></div>
+
+                    <section class="exec-set__card">
+                        <p class="exec-set__lead">@T("Керуйте своїм профілем, сповіщеннями та безпекою.")</p>
+
+                        <h2><i class="bi bi-person-vcard" aria-hidden="true"></i> @T("Профіль")</h2>
+
+                        <div class="exec-set__profile">
+                            <div class="exec-set__photo">
+                                <span class="exec-set__label">@T("Фото профілю")</span>
+                                <img src="@Model.Avatar" alt="" />
+                                @* Поле файлу належить окремій формі avatar-form під основною:
+                                   вкладати одну форму в іншу HTML не дозволяє. *@
+                                <label class="v-btn v-btn--primary cab-photo-pick">
+                                    @T("Змінити фото")
+                                    <input type="file" name="photo" form="avatar-form"
+                                           accept="image/jpeg,image/png,image/webp" data-avatar-input />
+                                </label>
+                                <p>@T("рекомендований розмір")<br />400*400px JPG, PNG<br />@T("(максимально 2 Мб)")</p>
+                            </div>
+
+                            <div class="exec-set__fields">
+                                <label class="exec-set__half">
+                                    <span>@T("Імʼя")</span>
+                                    <input asp-for="FirstName" />
+                                    <span asp-validation-for="FirstName" class="cab-error"></span>
+                                </label>
+
+                                <label class="exec-set__half">
+                                    <span>@T("Прізвище")</span>
+                                    <input asp-for="LastName" />
+                                    <span asp-validation-for="LastName" class="cab-error"></span>
+                                </label>
+
+                                <label>
+                                    <span>@T("Псевдонім (відображається публічно)")</span>
+                                    <input asp-for="Nickname" placeholder="ivankadesign" />
+                                    <span asp-validation-for="Nickname" class="cab-error"></span>
+                                </label>
+
+                                <label>
+                                    <span>@T("Професія")</span>
+                                    <input asp-for="Headline" placeholder="@T("Графічний дизайнер")" />
+                                    <span asp-validation-for="Headline" class="cab-error"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="exec-set__card">
+                        <div class="exec-set__row">
+                            <h2><i class="bi bi-person-lines-fill" aria-hidden="true"></i> @T("Про себе")</h2>
+                        </div>
+
+                        <label class="exec-set__about">
+                            <textarea asp-for="About" rows="3" maxlength="500"
+                                      placeholder="@T("Кілька речень про те, що ви робите найкраще")"></textarea>
+                            <span>0-500</span>
+                        </label>
+                        <span asp-validation-for="About" class="cab-error"></span>
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-telephone" aria-hidden="true"></i> @T("Контактна інформація")</h2>
+
+                    <section class="exec-set__card">
+                        <div class="exec-set__fields exec-set__fields--three">
+                            <label>
+                                <span>E-mail</span>
+                                @* Пошта — це логін, її міняють через підтвердження коду. *@
+                                <input asp-for="Email" readonly />
+                            </label>
+
+                            <label>
+                                <span>@T("Номер телефону")</span>
+                                <input asp-for="Phone" placeholder="+380671116111" />
+                                <span asp-validation-for="Phone" class="cab-error"></span>
+                            </label>
+
+                            <label>
+                                <span>@T("Місто")</span>
+                                <input asp-for="City" placeholder="@T("Київ, Україна")" />
+                                <span asp-validation-for="City" class="cab-error"></span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-shield-lock" aria-hidden="true"></i> @T("Безпека")</h2>
+
+                    <section class="exec-set__card">
+                        <div class="exec-set__line">
+                            <span>
+                                <b>@T("Пароль")</b>
+                                <span class="exec-set__dots">**************</span>
+                            </span>
+                            <a class="v-btn v-btn--primary" asp-controller="Auth" asp-action="ForgotPassword">@T("Змінити")</a>
+                        </div>
+
+                        <div class="exec-set__line">
+                            <span>
+                                <b>@T("Двоетапна перевірка")</b>
+                                <span>@T("Додатковий рівень захисту вашого акаунту")</span>
+                            </span>
+                            @* Другий крок входу ще не зроблено: якби перемикач справді вмикав двоетапну
+                                       перевірку, людина більше не змогла б увійти — коду надіслати нема куди.
+                                       Тому показуємо стан, але не даємо його змінити. *@
+                            <label class="exec-switch exec-switch--wide exec-switch--off"
+                                   title="@T("Двоетапна перевірка зʼявиться разом із кодами входу")">
+                                <input type="checkbox" disabled checked="@Model.TwoFactor" />
+                                <input type="hidden" asp-for="TwoFactor" />
+                                <span aria-hidden="true"></span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-bell" aria-hidden="true"></i> @T("Сповіщення")</h2>
+
+                    <section class="exec-set__card">
+                        @foreach (var (key, title, text) in ExecutorContent.Notices)
+                        {
+                            <div class="exec-set__line">
+                                <span>
+                                    <b>@T(title)</b>
+                                    <span>@T(text)</span>
+                                </span>
+                                <label class="exec-switch exec-switch--wide">
+                                    <input type="checkbox" name="@key" value="true" checked="@Notice(key)" />
+                                    <input type="hidden" name="@key" value="false" />
+                                    <span aria-hidden="true"></span>
+                                </label>
+                            </div>
+                        }
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-link-45deg" aria-hidden="true"></i> @T("Підключені акаунти")</h2>
+
+                    <section class="exec-set__card">
+                        <div class="exec-accounts">
+                            @foreach (var (key, title, icon) in ExecutorContent.Accounts)
+                            {
+                                // Платформа знає лише про підтверджену пошту — її й показуємо
+                                // підключеною. Вхід через соцмережі ще не зроблено.
+                                var linked = key == "google" && Model.MailConfirmed;
+
+                                <div class="exec-account @(linked ? "is-on" : null)">
+                                    <i class="bi @icon" aria-hidden="true"></i>
+                                    <span>
+                                        <b>@title</b>
+                                        <span>@T(linked ? "Підключено" : "Не підключено")</span>
+                                    </span>
+                                    @if (!linked)
+                                    {
+                                        <button type="button" disabled title="@T("Вхід через соцмережі зʼявиться пізніше")">@T("Підключити")</button>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-globe2" aria-hidden="true"></i> @T("Мова та регіон")</h2>
+
+                    <section class="exec-set__card">
+                        <div class="exec-set__line">
+                            <b>@T("Мова інтерфейсу")</b>
+                            <label class="cab-select">
+                                <select asp-for="Language">
+                                    @foreach (var option in CabinetContent.Languages)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.Language == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="exec-set__line">
+                            <b>@T("Часовий пояс")</b>
+                            <label class="cab-select">
+                                <select asp-for="TimeZoneName">
+                                    @foreach (var option in CabinetContent.TimeZones)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.TimeZoneName == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="exec-set__line">
+                            <b>@T("Формат дати")</b>
+                            <label class="cab-select">
+                                <select asp-for="DateFormat">
+                                    @foreach (var option in CabinetContent.DateFormats)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.DateFormat == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="exec-set__line">
+                            <b>@T("Формат часу")</b>
+                            <label class="cab-select">
+                                <select asp-for="TimeFormat">
+                                    @foreach (var option in CabinetContent.TimeFormats)
+                                    {
+                                        <option value="@option.Key" selected="@(Model.TimeFormat == option.Key)">@option.Title</option>
+                                    }
+                                </select>
+                            </label>
+                        </div>
+                    </section>
+
+                    <h2 class="exec-set__title"><i class="bi bi-palette" aria-hidden="true"></i> @T("Вигляд")</h2>
+
+                    <section class="exec-set__card">
+                        <div class="exec-set__line">
+                            <b>@T("Тема інтерфейсу")</b>
+                            <div class="exec-theme">
+                                <label class="@(Model.Theme != "dark" ? "is-on" : null)">
+                                    <input type="radio" asp-for="Theme" value="light" />
+                                    <span>@T("Світла")</span>
+                                </label>
+                                <label class="@(Model.Theme == "dark" ? "is-on" : null)">
+                                    <input type="radio" asp-for="Theme" value="dark" />
+                                    <span>@T("Темна")</span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="exec-set__save">
+                        <button class="v-btn v-btn--primary" type="submit">@T("Зберегти зміни")</button>
+                    </div>
+                </form>
+
+                <partial name="~/Views/Cabinet/_AvatarForm.cshtml" />
+
+                <h2 class="exec-set__title"><i class="bi bi-three-dots" aria-hidden="true"></i> @T("Інше")</h2>
+
+                <section class="exec-set__card exec-set__card--last">
+                    <div class="exec-set__line">
+                        <span>
+                            <b>@T("Вийти з усіх пристроїв")</b>
+                            <span>@T("Ви вилогуєтесь з усіх пристроїв, окрім поточного")</span>
+                        </span>
+                        <form method="post" asp-action="SignOutEverywhere">
+                            @Html.AntiForgeryToken()
+                            <button class="exec-danger" type="submit">@T("Вийти з усіх пристроїв")</button>
+                        </form>
+                    </div>
+
+                    <div class="exec-set__line">
+                        <span>
+                            <b>@T("Видалити акаунт")</b>
+                            <span>@T("Безповоротне видалення акаунту та всіх даних")</span>
+                        </span>
+                        @* Видалення проходить через підтримку: на акаунті можуть висіти
+                           незавершені замовлення й гроші, і зносити його однією кнопкою не можна. *@
+                        <a class="exec-danger" asp-action="Support">@T("Видалити акаунт")</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

@@ -366,3 +366,5 @@ FodyWeavers.xsd
 */appsettings.json
 */firebase-key.json
 */appsettings.Development.json
+# Фото профілю, які користувачі завантажують у кабінеті
+AdminPanel/wwwroot/uploads/

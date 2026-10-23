@@ -1,0 +1,196 @@
+@model ExecSupportViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <div class="exec-head">
+                    <h1>@T("Підтримка")</h1>
+                </div>
+
+                <partial name="Executor/_ExecNotices" />
+
+                <section class="exec-help">
+                    <p class="exec-help__lead">@T("Ми тут, щоб допомогти вам 24/7.")</p>
+                    <h2>@T("Як ми можемо допомогти?")</h2>
+
+                    <form class="exec-help__find" method="get" asp-action="Support">
+                        <label class="cab-find">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query"
+                                   placeholder="@T("Пошук за запитанням (наприклад, “повернення коштів”)")"
+                                   aria-label="@T("Пошук за запитанням")" />
+                        </label>
+                        <a class="v-btn v-btn--primary" href="#ticket">@T("Написати в підтримку")</a>
+                    </form>
+
+                    @if (Model.Query.Length > 0)
+                    {
+                        <div class="exec-help__found">
+                            @if (Model.Faq.Count == 0)
+                            {
+                                <p class="cab-empty">@F("За запитом «{0}» нічого не знайшли — напишіть нам нижче.", Model.Query)</p>
+                            }
+
+                            @foreach (var item in Model.Faq)
+                            {
+                                <details>
+                                    <summary>@item.Question</summary>
+                                    <p>@item.Answer</p>
+                                </details>
+                            }
+                        </div>
+                    }
+
+                    <p class="exec-help__sub">@T("Популярні теми")</p>
+
+                    <div class="exec-topics">
+                        @foreach (var topic in ExecutorContent.SupportTopics)
+                        {
+                            <a class="exec-topic" asp-action="Support" asp-route-q="@topic.Title">
+                                <i class="bi @topic.Icon" aria-hidden="true"></i>
+                                <span>
+                                    <b>@topic.Title</b>
+                                    <span>@topic.Text</span>
+                                </span>
+                            </a>
+                        }
+                    </div>
+                </section>
+
+                <div class="exec-ask exec-help exec-help--flat" id="ticket">
+                    <section class="exec-ask__form">
+                        <h2>@T("Звернення до підтримки")</h2>
+                        <p>@T("Не знайшли відповіді, напишіть нам і ми допоможемо")</p>
+
+                        <form method="post" asp-action="SendTicket">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="ModelOnly" class="cab-errors"></div>
+
+                            <label>
+                                <span>@T("Тема звернення")</span>
+                                <select asp-for="Form.Topic">
+                                    <option value="">@T("Оберіть тему")</option>
+                                    @foreach (var topic in ExecutorContent.SupportTopics)
+                                    {
+                                        <option value="@topic.Title">@topic.Title</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Form.Topic" class="cab-error"></span>
+                            </label>
+
+                            <label>
+                                <span>@T("Категорія")</span>
+                                <select asp-for="Form.Category">
+                                    <option value="">@T("Оберіть категорію")</option>
+                                    @foreach (var kind in ExecutorContent.TicketKinds)
+                                    {
+                                        <option value="@kind.Key">@kind.Title</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Form.Category" class="cab-error"></span>
+                            </label>
+
+                            <label>
+                                <span>@T("Опис проблеми")</span>
+                                <textarea asp-for="Form.Message" rows="6"
+                                          placeholder="@T("Детально опишіть вашу проблему")"></textarea>
+                                <span asp-validation-for="Form.Message" class="cab-error"></span>
+                            </label>
+
+                            @* Сховища файлів ще немає — поле намальоване, але вимкнене,
+                               щоб не обіцяти те, чого платформа поки не вміє. *@
+                            <span class="exec-ask__label">@T("Додати файли (не більше 5)")</span>
+                            <div class="exec-drop" aria-disabled="true">
+                                <i class="bi bi-paperclip" aria-hidden="true"></i>
+                                <span>
+                                    <b>@T("Перетягніть файли сюди, або виберіть з комп'ютера")</b>
+                                    <span>@T("підтримуються JPG, PNG, PDF. Максимальний розмір 10Мб")</span>
+                                </span>
+                            </div>
+
+                            <button class="v-btn v-btn--primary exec-ask__send" type="submit">@T("Надіслати звернення")</button>
+                        </form>
+
+                        @if (Model.Tickets.Count > 0)
+                        {
+                            <div class="exec-ask__past">
+                                <h3>@T("Ваші звернення")</h3>
+
+                                @foreach (var ticket in Model.Tickets)
+                                {
+                                    <div class="exec-ticket">
+                                        <span>
+                                            <b>@ticket.Topic</b>
+                                            <span>@ticket.Category · @CabinetFormat.LongDate(ticket.CreatedAt)</span>
+                                        </span>
+                                        <span class="exec-state exec-state--@(ticket.Status == TicketStatus.New ? "pending" : "paid")">
+                                            @T(ticket.Status == TicketStatus.New ? "В обробці" : "Відповіли")
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </section>
+
+                    <aside class="exec-aside">
+                        <article class="exec-aside__card">
+                            <h3>@T("Корисні ресурси")</h3>
+
+                            @foreach (var link in ExecutorContent.SupportLinks)
+                            {
+                                <a class="exec-mini" asp-controller="Pages" asp-action="Help">
+                                    <i class="bi @link.Icon" aria-hidden="true"></i>
+                                    <span>
+                                        <b>@link.Title</b>
+                                        <span>@link.Text</span>
+                                    </span>
+                                </a>
+                            }
+                        </article>
+
+                        <article class="exec-aside__card">
+                            <h3>@T("Час відповіді")</h3>
+                            <p>@T("Середній час відповіді")<br /><b>@T("до 6 годин")</b></p>
+                            <p>@T("Ми відповідаємо щодня з 8.00 до 21.00 (за київським часом)")</p>
+                        </article>
+
+                        <article class="exec-aside__card">
+                            <h3>@T("Інші способи зв'язку")</h3>
+
+                            @foreach (var contact in ExecutorContent.SupportContacts)
+                            {
+                                <div class="exec-mini">
+                                    <i class="bi @contact.Icon" aria-hidden="true"></i>
+                                    <span>
+                                        <b>@contact.Title</b>
+                                        <span>@contact.Text</span>
+                                    </span>
+                                </div>
+                            }
+                        </article>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

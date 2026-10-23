@@ -1,0 +1,140 @@
+@model ExecOrdersViewModel
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = Model.Title;
+
+    var pager = new CabinetPagerModel
+    {
+        Page = Model.Orders.Page,
+        Pages = Model.Orders.Pages,
+        Action = "Orders",
+        Route = new Dictionary<string, string?>
+        {
+            ["tab"] = Model.Tab,
+            ["q"] = Model.Query.Length > 0 ? Model.Query : null
+        }
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/executor.css" asp-append-version="true" />
+}
+
+<main class="cab cab--exec">
+    <div class="v-container">
+        <div class="cab-top">
+            <nav class="cab-crumbs" aria-label="@T("Навігація")">
+                <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+                <span aria-hidden="true">&rsaquo;</span>
+                <a asp-action="Index">@T("Особистий кабінет")</a>
+            </nav>
+        </div>
+
+        <div class="cab-body">
+            <partial name="Executor/_ExecMenu" model="(ExecutorPageModel)Model" />
+
+            <div class="cab-main">
+                <section class="exec-panel">
+                    <partial name="Executor/_ExecNotices" />
+
+                    <div class="exec-head exec-head__row">
+                        <h1>@T("Замовлення")</h1>
+                        <button class="v-btn v-btn--ghost" type="submit" form="exec-orders-filter">
+                            <i class="bi bi-funnel" aria-hidden="true"></i> @T("Фільтри")
+                        </button>
+                    </div>
+
+                    <div class="exec-tabs">
+                        @foreach (var tab in ExecutorContent.OrderTabs)
+                        {
+                            <a asp-action="Orders" asp-route-tab="@tab.Key" asp-route-q="@Model.Query"
+                               class="@(Model.Tab == tab.Key ? "is-current" : null)">
+                                @tab.Title
+                                @if (tab.Key == "fresh" && Model.Counters.Fresh > 0)
+                                {
+                                    <b>@Model.Counters.Fresh</b>
+                                }
+                                else if (tab.Key == "work" && Model.Counters.Active > 0)
+                                {
+                                    <b>@Model.Counters.Active</b>
+                                }
+                            </a>
+                        }
+                    </div>
+
+                    <div class="exec-stats">
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">@T("Нові замовлення")</span>
+                            <span class="exec-stat__value">@Model.Counters.Fresh</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="fresh">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">@T("Активні замовлення")</span>
+                            <span class="exec-stat__value">@Model.Counters.Active</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="work">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">@T("Завершені замовлення")</span>
+                            <span class="exec-stat__value">@Model.Counters.Completed</span>
+                            <a class="exec-stat__more" asp-action="Orders" asp-route-tab="completed">
+                                @T("Переглянути") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+
+                        <article class="exec-stat exec-stat--soft">
+                            <span class="exec-stat__name">@T("Зароблено")</span>
+                            <span class="exec-stat__value">@CabinetFormat.Money(Model.Counters.Earned)</span>
+                            <a class="exec-stat__more" asp-action="Finance">
+                                @T("Детальніше") <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </article>
+                    </div>
+
+                    <form class="exec-filters" id="exec-orders-filter" method="get" asp-action="Orders">
+                        <input type="hidden" name="tab" value="@Model.Tab" />
+
+                        <label class="cab-find cab-find--plain">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" name="q" value="@Model.Query"
+                                   placeholder="@T("Пошук за назвою замовлення, клієнтом")" aria-label="@T("Пошук замовлень")" />
+                        </label>
+
+                        <label class="cab-find cab-find--plain" style="width:365px">
+                            <i class="bi bi-calendar3" aria-hidden="true"></i>
+                            <input type="text" value="@($"{DateTime.Now:01.MM.yyyy} - {DateTime.Now:dd.MM.yyyy}")"
+                                   readonly aria-label="@T("Період")" />
+                        </label>
+                    </form>
+
+                    @if (Model.Orders.Items.Count == 0)
+                    {
+                        <p class="cab-empty">@T("Замовлень за цим фільтром немає.")</p>
+                    }
+
+                    @foreach (var order in Model.Orders.Items)
+                    {
+                        <partial name="Executor/_ExecOrder" model="order" />
+                    }
+
+                    <partial name="_CabinetPager" model="pager" />
+
+                    <div class="exec-tip">
+                        <i class="bi bi-lightbulb" aria-hidden="true"></i>
+                        <div>
+                            <b>@T("Порада")</b>
+                            <p>@T("Відповідайте швидко на нові замовлення — це підвищує ваш рейтинг та шанси отримати роботу.")</p>
+                        </div>
+                        <a class="v-btn v-btn--soft" asp-controller="Pages" asp-action="Help">@T("Дізнатися більше")</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
