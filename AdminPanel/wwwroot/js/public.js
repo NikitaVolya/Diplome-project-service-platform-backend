@@ -85,6 +85,19 @@
         });
     });
 
+    // Перемикач «Тема інтерфейсу»: показуємо тему одразу, а зберігається вона кнопкою «Зберегти зміни».
+    const applyTheme = theme => {
+        const root = document.documentElement;
+        if (theme === 'dark') root.dataset.theme = 'dark'; else delete root.dataset.theme;
+        document.querySelector('meta[name="color-scheme"]')?.setAttribute('content', theme === 'dark' ? 'dark' : 'light');
+        document.querySelectorAll('img[data-logo-light]').forEach(img => {
+            img.src = theme === 'dark' ? img.dataset.logoDark : img.dataset.logoLight;
+        });
+    };
+    document.querySelectorAll('input[name="Theme"]').forEach(input => {
+        input.addEventListener('change', () => { if (input.checked) applyTheme(input.value); });
+    });
+
     const dialog = document.getElementById('catalog-info');
     document.querySelectorAll('[data-catalog-info]').forEach(button => {
         button.addEventListener('click', () => {

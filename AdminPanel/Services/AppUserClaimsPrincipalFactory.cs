@@ -13,6 +13,9 @@ public sealed class AppUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<A
 
     public const string AvatarClaim = "avatar";
 
+    /// <summary>Є лише тоді, коли користувач обрав темну тему кабінету.</summary>
+    public const string ThemeClaim = "theme";
+
     public AppUserClaimsPrincipalFactory(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
@@ -36,6 +39,11 @@ public sealed class AppUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<A
         if (!string.IsNullOrWhiteSpace(user.AvatarUrl))
         {
             identity.AddClaim(new Claim(AvatarClaim, user.AvatarUrl));
+        }
+
+        if (user.Theme == "dark")
+        {
+            identity.AddClaim(new Claim(ThemeClaim, "dark"));
         }
 
         return identity;

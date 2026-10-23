@@ -792,6 +792,10 @@ public sealed partial class CabinetController
             return View("Executor/Settings", model);
         }
 
+        // Тема живе в cookie входу — оновлюємо її, щоб нова тема діяла одразу.
+        await _signIn.RefreshSignInAsync(me);
+        ThemePreference.Remember(Response, me.Theme);
+
         TempData["Cabinet.Flash"] = Tr.T("Зміни збережено.");
 
         return RedirectToAction(nameof(Settings));

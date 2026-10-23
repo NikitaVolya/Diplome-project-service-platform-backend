@@ -1527,6 +1527,8 @@
 
 .cab-set__photo img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
 .cab-set__photo span { font-size: 15px; color: #374151; }
+
+.cab-set__label { font-size: 15px; color: #374151; }
 .cab-set__photo .v-btn { margin-left: auto; }
 
 .cab-switch {

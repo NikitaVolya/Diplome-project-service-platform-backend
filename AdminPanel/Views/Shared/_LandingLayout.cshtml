@@ -1,5 +1,13 @@
 ﻿<!DOCTYPE html>
-<html lang="@PublicCulture.Current.Code">
+@{
+    // Тема з профілю (або з cookie, якщо гість) діє на всьому публічному сайті й у кабінеті.
+    var inCabinetPage = string.Equals(
+        ViewContext.RouteData.Values["controller"] as string, "Cabinet", StringComparison.OrdinalIgnoreCase);
+    var darkTheme = ThemePreference.IsDark(Context);
+    var logoLight = Url.Content("~/img/logo.png");
+    var logoDark = Url.Content("~/img/logo-dark.png");
+}
+<html lang="@PublicCulture.Current.Code" data-theme="@(darkTheme ? "dark" : null)">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,6 +20,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
+    @* У кабінеті файл потрібен завжди — перемикач у налаштуваннях показує тему одразу. *@
+    @if (darkTheme || inCabinetPage)
+    {
+        <meta name="color-scheme" content="@(darkTheme ? "dark" : "light")" />
+        <link rel="stylesheet" href="~/css/theme-dark.css" asp-append-version="true" />
+    }
 </head>
 <body class="landing">
 
@@ -47,7 +61,7 @@
 <header class="v-header">
     <div class="v-container v-header__row">
         <a class="v-logo" asp-controller="Landing" asp-action="Index" aria-label="@T("Вибір — на головну")">
-            <img src="~/img/logo.png" alt="@T("Вибір")" />
+            <img src="@(darkTheme ? logoDark : logoLight)" data-logo-light="@logoLight" data-logo-dark="@logoDark" alt="@T("Вибір")" />
         </a>
 
         <a class="v-pill" asp-controller="Catalog" asp-action="Index"><i class="bi bi-grid-3x3-gap-fill"></i> @T("Каталог послуг")</a>
@@ -114,7 +128,7 @@
         <div class="v-container v-footer__grid">
             <div class="v-footer__about">
                 <a class="v-logo" asp-controller="Landing" asp-action="Index" aria-label="@T("Вибір — на головну")">
-                    <img src="~/img/logo.png" alt="@T("Вибір")" />
+                    <img src="@(darkTheme ? logoDark : logoLight)" data-logo-light="@logoLight" data-logo-dark="@logoDark" alt="@T("Вибір")" />
                 </a>
                 <p>
                     @T("Єдина платформа для пошуку перевірених виконавців та розвитку вашого бізнесу")

@@ -88,6 +88,8 @@ public sealed class AuthController : Controller
             return View(model);
         }
 
+        ThemePreference.Remember(Response, user.Theme);
+
         await _audit.WriteAsync(
             AuditAction.Login, "Account", user.Id, "Вхід на сайт",
             user.Id, user.Email ?? user.Id, HttpContext.Connection.RemoteIpAddress?.ToString());
