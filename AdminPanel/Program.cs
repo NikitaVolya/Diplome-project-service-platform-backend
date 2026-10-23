@@ -32,6 +32,15 @@ namespace AdminPanel
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
 
+            // Add Google authentication for users to log in with their Google accounts.
+            builder.Services
+                .AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+                });
+
             // HttpContextAccessor потрібен сервісам, яким треба знати поточного користувача
             // та його IP-адресу — наприклад, для запису в журнал дій.
             builder.Services.AddHttpContextAccessor();
