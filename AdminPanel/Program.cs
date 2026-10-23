@@ -1,6 +1,7 @@
 using AdminPanel.Extensions;
 using AdminPanel.Hubs;
 using AdminPanel.Localization;
+using BLL.Options;
 using DAL.Context;
 using DAL.Seed;
 using System.Text.Encodings.Web;
@@ -25,6 +26,9 @@ namespace AdminPanel
             builder.Services.Configure<SeedOptions>(
                 builder.Configuration.GetSection(SeedOptions.SectionName));
 
+            builder.Services.Configure<EmailOptions>(
+                builder.Configuration.GetSection("Email"));
+
             builder.Services.AddAdminIdentity();
             builder.Services.AddAdminAuthorization();
             builder.Services.AddAdminServices();
@@ -43,6 +47,15 @@ namespace AdminPanel
                     options.DataAnnotationLocalizerProvider = (_, factory) =>
                         factory.Create(typeof(SharedResource)));
             builder.Services.AddSignalR();
+
+            // Add Google authentication for users to log in with their Google accounts.
+            builder.Services
+                .AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+                });
 
             // HttpContextAccessor потрібен сервісам, яким треба знати поточного користувача
             // та його IP-адресу — наприклад, для запису в журнал дій.

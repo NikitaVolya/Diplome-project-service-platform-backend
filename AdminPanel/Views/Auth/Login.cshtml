@@ -51,10 +51,15 @@
             <p class="auth-or">@T("або увійдіть за допомогою")</p>
 
             <div class="auth-socials">
+                <a asp-controller="Auth"
+                   asp-action="GoogleLogin"
+                   asp-route-returnUrl="@Model.ReturnUrl"
+                   class="auth-social">
+                    <i class="bi bi-google" aria-hidden="true"></i> Google
+                </a>
                 @foreach (var (name, icon) in new[]
                 {
-                    ("Google", "google"), ("Facebook", "facebook"),
-                    ("Linkedin", "linkedin"), ("Apple", "apple")
+                    ("Facebook", "facebook"), ("Linkedin", "linkedin"), ("Apple", "apple")
                 })
                 {
                     <button class="auth-social" type="button" disabled title="@F("Вхід через {0} буде доступний пізніше", name)">

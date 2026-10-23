@@ -2,12 +2,14 @@ using AdminPanel.Localization;
 using AdminPanel.Models;
 using BLL.Admin.Interfaces;
 using BLL.Public;
+using BLL.Services.Interfaces;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AdminPanel.Controllers;
 
@@ -21,9 +23,9 @@ public sealed class AuthController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IPublicCatalogService _catalog;
     private readonly IVerificationCodes _codes;
-    private readonly IVerificationCodeSender _sender;
     private readonly IAuditLogService _audit;
     private readonly ILogger<AuthController> _logger;
+    private readonly IEmailService _emailService;
 
     public AuthController(
         SignInManager<ApplicationUser> signInManager,
@@ -32,15 +34,16 @@ public sealed class AuthController : Controller
         IVerificationCodes codes,
         IVerificationCodeSender sender,
         IAuditLogService audit,
-        ILogger<AuthController> logger)
+        ILogger<AuthController> logger,
+        IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _catalog = catalog;
         _codes = codes;
-        _sender = sender;
         _audit = audit;
         _logger = logger;
+        _emailService = emailService;
     }
 
     [HttpGet]
@@ -503,15 +506,11 @@ public sealed class AuthController : Controller
 
         if (!ticket.TooSoon)
         {
-            await _sender.SendAsync(email, purpose, ticket.Code, HttpContext.RequestAborted);
+            await _emailService.SendCodeAsync(email, ticket.Code);
         }
 
         TempData["Auth.ResendAfter"] = (int)Math.Ceiling(ticket.ResendAfter.TotalSeconds);
-
-        if (_sender.IsStub)
-        {
-            TempData["Auth.StubCode"] = ticket.Code;
-        }
+        TempData["Auth.StubCode"] = ticket.Code;
     }
 
     private VerifyCodeViewModel CodeModel(string email)
@@ -524,6 +523,318 @@ public sealed class AuthController : Controller
             ResendAfterSeconds = seconds
         };
     }
+
+
+    [HttpGet]
+    public IActionResult GoogleLogin(string? returnUrl = null)
+    {
+        var redirectUrl = Url.Action(
+            nameof(GoogleResponse),
+            "Auth",
+            new { returnUrl }
+        );
+
+        var properties = _signInManager
+            .ConfigureExternalAuthenticationProperties(
+                "Google",
+                redirectUrl
+            );
+
+        return Challenge(properties, "Google");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GoogleResponse(string? returnUrl = null)
+    {
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+
+        if (info == null || info.LoginProvider != "Google")
+        {
+            TempData["Auth.Error"] = "Помилка авторизації через Google.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var user = await _userManager.FindByLoginAsync(
+            info.LoginProvider,
+            info.ProviderKey
+        );
+
+        if (user != null)
+        {
+            if (user.IsDeleted)
+            {
+                TempData["Auth.Error"] = "Обліковий запис видалено.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: false
+            );
+
+            if (result.IsLockedOut)
+            {
+                TempData["Auth.Error"] = "Обліковий запис заблоковано.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                TempData["Auth.Error"] =
+                    "Потрібно завершити двофакторну перевірку.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (!result.Succeeded)
+            {
+                TempData["Auth.Error"] = "Не вдалося виконати вхід.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            await _audit.WriteAsync(
+                AuditAction.Login,
+                "Account",
+                user.Id,
+                "Вхід через Google",
+                user.Id,
+                user.Email ?? user.Id,
+                HttpContext.Connection.RemoteIpAddress?.ToString()
+            );
+
+            return GoogleRedirect(returnUrl);
+        }
+
+        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+        var verified = info.Principal.FindFirst("email_verified")?.Value;
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            TempData["Auth.Error"] =
+                "Google не підтвердив електронну адресу.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        user = await _userManager.FindByEmailAsync(email);
+
+        if (user != null)
+        {
+            if (user.IsDeleted || await _userManager.IsLockedOutAsync(user))
+            {
+                TempData["Auth.Error"] = "Обліковий запис недоступний.";
+                return RedirectToAction(nameof(Login));
+            }
+
+
+            var linkштпResult = await _userManager.AddLoginAsync(user, info);
+
+            if (!linkштпResult.Succeeded)
+            {
+                TempData["Auth.Error"] = "Не вдалося прив'язати Google.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: false
+            );
+
+            if (signInResult.RequiresTwoFactor)
+            {
+                TempData["Auth.Error"] = "Потрібна двофакторна перевірка.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (!signInResult.Succeeded)
+            {
+                TempData["Auth.Error"] = "Не вдалося виконати вхід.";
+                return RedirectToAction(nameof(Login));
+            }
+
+            await _audit.WriteAsync(
+                AuditAction.Login,
+                "Account",
+                user.Id,
+                "Google прив'язано автоматично. Вхід через Google",
+                user.Id,
+                user.Email ?? user.Id,
+                HttpContext.Connection.RemoteIpAddress?.ToString()
+            );
+
+            return GoogleRedirect(returnUrl);
+        }
+
+        var firstName = info.Principal
+            .FindFirstValue(ClaimTypes.GivenName) ?? "";
+
+        var lastName = info.Principal
+            .FindFirstValue(ClaimTypes.Surname) ?? "";
+
+        user = new ApplicationUser
+        {
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true,
+            FirstName = firstName,
+            LastName = lastName,
+            FullName = $"{firstName} {lastName}".Trim(),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var createResult = await _userManager.CreateAsync(user);
+
+        if (!createResult.Succeeded)
+        {
+            _logger.LogWarning(
+                "Google registration failed: {Errors}",
+                string.Join("; ", createResult.Errors.Select(e => e.Description))
+            );
+
+            TempData["Auth.Error"] = "Не вдалося створити обліковий запис.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var roleResult = await _userManager.AddToRoleAsync(
+            user,
+            AppRoles.Customer
+        );
+
+        if (!roleResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+
+            TempData["Auth.Error"] = "Не вдалося призначити роль.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var linkResult = await _userManager.AddLoginAsync(user, info);
+
+        if (!linkResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+
+            TempData["Auth.Error"] = "Не вдалося прив'язати Google.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        if (!await _signInManager.CanSignInAsync(user) ||
+            await _userManager.IsLockedOutAsync(user))
+        {
+            TempData["Auth.Error"] = "Вхід для цього акаунта недоступний.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        await _signInManager.SignInAsync(
+            user,
+            isPersistent: false,
+            authenticationMethod: "Google"
+        );
+
+        await _audit.WriteAsync(
+            AuditAction.Create,
+            "Account",
+            user.Id,
+            "Реєстрація через Google (Customer)",
+            user.Id,
+            user.Email ?? user.Id,
+            HttpContext.Connection.RemoteIpAddress?.ToString()
+        );
+
+        return GoogleRedirect(returnUrl);
+    }
+
+    private IActionResult GoogleRedirect(string? returnUrl)
+    {
+        if (!string.IsNullOrWhiteSpace(returnUrl) &&
+            Url.IsLocalUrl(returnUrl))
+        {
+            return LocalRedirect(returnUrl);
+        }
+
+        return RedirectToAction("Index", "Landing");
+    }
+
+
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult LinkGoogle()
+    {
+        var redirectUrl = Url.Action(
+            nameof(LinkGoogleResponse),
+            "Auth"
+        );
+
+        var properties = _signInManager
+            .ConfigureExternalAuthenticationProperties(
+                "Google",
+                redirectUrl,
+                _userManager.GetUserId(User)
+            );
+
+        return Challenge(properties, "Google");
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> LinkGoogleResponse()
+    {
+        var currentUser = await _userManager.GetUserAsync(User);
+
+        if (currentUser == null || currentUser.IsDeleted ||
+            await _userManager.IsLockedOutAsync(currentUser))
+        {
+            return Forbid();
+        }
+
+        var info = await _signInManager.GetExternalLoginInfoAsync(
+            currentUser.Id
+        );
+
+        if (info == null || info.LoginProvider != "Google")
+        {
+            TempData["Auth.Error"] = "Помилка прив'язки Google.";
+            return RedirectToAction("Index", "Landing");
+        }
+
+        var existingUser = await _userManager.FindByLoginAsync(
+            info.LoginProvider,
+            info.ProviderKey
+        );
+
+        if (existingUser != null)
+        {
+            TempData["Auth.Error"] =
+                "Цей Google-акаунт уже прив'язаний.";
+
+            return RedirectToAction("Index", "Landing");
+        }
+
+        var result = await _userManager.AddLoginAsync(
+            currentUser,
+            info
+        );
+
+        if (!result.Succeeded)
+        {
+            TempData["Auth.Error"] =
+                "Не вдалося прив'язати Google.";
+
+            return RedirectToAction("Index", "Landing");
+        }
+
+        await _signInManager.RefreshSignInAsync(currentUser);
+
+        TempData["Auth.Success"] =
+            "Google успішно прив'язаний до акаунта.";
+
+        return RedirectToAction("Index", "Landing");
+    }
+
 
     private string? Pending(string key) => TempData.Peek(key) as string;
 
