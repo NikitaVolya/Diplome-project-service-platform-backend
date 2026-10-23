@@ -35,10 +35,27 @@ namespace AdminPanel.Controllers
             });
         }
 
+        private static readonly HashSet<string> AdminSections = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Dashboard", "Users", "Orders", "Categories", "Moderation", "Payments", "Reviews",
+            "Roles", "Statistics", "Chat", "Complaints", "Account", "Home"
+        };
+
         [Route("Home/StatusCode")]
         public IActionResult StatusCodeHandler(int? code)
         {
             var status = code ?? 500;
+
+            // Публічний сайт показує свою сторінку «Ми працюємо над цією сторінкою»,
+            // а розділи адмінки — як і раніше, сторінку помилки панелі.
+            var original = HttpContext.Features.Get<IStatusCodeReExecuteFeature>()?.OriginalPath ?? string.Empty;
+            var firstSegment = original.Trim('/').Split('/')[0];
+
+            if (status == 404 && !AdminSections.Contains(firstSegment))
+            {
+                Response.StatusCode = 404;
+                return View("~/Views/Pages/Soon.cshtml", true);
+            }
 
             var model = status switch
             {

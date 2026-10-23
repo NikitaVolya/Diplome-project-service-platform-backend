@@ -667,6 +667,177 @@ html[data-theme="dark"] .blog-pager__num.is-current {
 html[data-theme="dark"] .article__meta {
     color: rgba(255, 255, 255, 0.87);
 }
+html[data-theme="dark"] .soon__panel {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .soon__code {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .soon__btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .soon__btn:hover {
+    background: #7877C4;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+/* ── jobs.css ── */
+html[data-theme="dark"] .jobs {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs__panel {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .jobs-crumbs {
+    color: rgba(255, 255, 255, 0.6);
+}
+html[data-theme="dark"] .jobs-crumbs [aria-current] {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-create {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.375);
+}
+html[data-theme="dark"] .jobs-create:hover {
+    background: #7877C4;
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-note {
+    background: rgba(244, 183, 37, 0.18);
+}
+html[data-theme="dark"] .jobs-note--ok {
+    background: rgba(37, 244, 149, 0.18);
+}
+html[data-theme="dark"] .jobs-note--error {
+    background: rgba(244, 37, 106, 0.18);
+}
+html[data-theme="dark"] .jobs-filters {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .jobs-filters__head a {
+    color: #A49FDA;
+}
+html[data-theme="dark"] .jobs-search,
+html[data-theme="dark"] .jobs-select {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-search {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="dark"] .jobs-select:invalid,
+html[data-theme="dark"] .jobs-select option[value=""] {
+    color: rgba(255, 255, 255, 0.6);
+}
+html[data-theme="dark"] .jobs-check input {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+}
+html[data-theme="dark"] .jobs-check input:checked {
+    background: #7E6FCC;
+}
+html[data-theme="dark"] .jobs-check input:checked::after {
+    border: solid rgba(255, 255, 255, 0.15);
+}
+html[data-theme="dark"] .jobs-budget input {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-budget input::placeholder {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-apply {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-apply:hover {
+    background: #7877C4;
+}
+html[data-theme="dark"] .jobs-sort select {
+    background: rgba(255, 255, 255, 0.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M1 3l6 8 6-8' fill='none' stroke='%231F2937' stroke-width='1.3'/%3E%3C/svg%3E") no-repeat right 18px center;
+    color: rgba(255, 255, 255, 0.87);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+html[data-theme="dark"] .jobs-view {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .job {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.45);
+}
+html[data-theme="dark"] .job__img {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="dark"] .job__chip {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .job__chip--urgent {
+    background: rgba(244, 37, 177, 0.18);
+}
+html[data-theme="dark"] .jobs-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+html[data-theme="dark"] .jobs-btn:hover {
+    background: #7877C4;
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-btn--ghost {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+html[data-theme="dark"] .jobs-btn--ghost:hover {
+    background: rgba(158, 139, 255, 0.16);
+}
+html[data-theme="dark"] .jobs-btn--done {
+    background: rgba(37, 244, 149, 0.18);
+}
+html[data-theme="dark"] .jobs-btn--done:hover {
+    background: rgba(37, 244, 149, 0.18);
+}
+html[data-theme="dark"] .job__fav button {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .job__fav button[aria-pressed="true"] {
+    color: #F08AC4;
+}
+html[data-theme="dark"] .jobs-list--grid .job__fav button {
+    background: rgba(18, 18, 18, 0.85);
+}
+html[data-theme="dark"] .jobs-empty {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .jobs-pager a,
+html[data-theme="dark"] .jobs-pager span {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-pager a:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .jobs-pager .is-current {
+    background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .jobs-dialog {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-dialog::backdrop {
+    background: rgba(31, 41, 55, 0.36);
+}
+html[data-theme="dark"] .jobs-dialog__order {
+    color: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .jobs-input {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.87);
+}
 
 /* ── cabinet.css ── */
 html[data-theme="dark"] .cab-crumbs {
@@ -1858,5 +2029,83 @@ html[data-theme="dark"] .catalog-help li::before {
 html[data-theme="dark"] .auth-card__icon {
     background: #00C0CC;
     color: #fff;
+}
+
+/* «Знайти замовлення»: стрілки списків світлі, вікно пропозиції — темна картка. */
+html[data-theme="dark"] .jobs-select,
+html[data-theme="dark"] .jobs-sort select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M1 3l6 8 6-8' fill='none' stroke='%23DEDEDE' stroke-width='1.3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 22px center;
+}
+html[data-theme="dark"] .jobs-sort select {
+    background-color: rgba(158, 139, 255, 0.25);
+    background-position: right 18px center;
+}
+html[data-theme="dark"] .jobs-select option {
+    background: #2C2C2C;
+}
+
+/* Фіолетові кнопки й мітки лишаються фіолетовими, як на інших темних макетах. */
+html[data-theme="dark"] .jobs-btn,
+html[data-theme="dark"] .jobs-apply,
+html[data-theme="dark"] .jobs-create,
+html[data-theme="dark"] .jobs-pager .is-current,
+html[data-theme="dark"] .soon__btn {
+    background: #7E6FCC;
+    color: #fff;
+}
+html[data-theme="dark"] .jobs-btn:hover,
+html[data-theme="dark"] .jobs-apply:hover,
+html[data-theme="dark"] .jobs-create:hover,
+html[data-theme="dark"] .jobs-pager a:hover,
+html[data-theme="dark"] .soon__btn:hover {
+    background: #624ECC;
+    color: #fff;
+}
+html[data-theme="dark"] .jobs-btn--ghost {
+    background: transparent;
+    border-color: rgba(158, 139, 255, 0.6);
+}
+html[data-theme="dark"] .jobs-btn--done {
+    background: rgba(37, 244, 198, 0.18);
+}
+html[data-theme="dark"] .job__chip,
+html[data-theme="dark"] .jobs-pager a,
+html[data-theme="dark"] .jobs-budget input {
+    background: rgba(158, 139, 255, 0.3);
+}
+html[data-theme="dark"] .job__chip--urgent {
+    background: rgba(229, 57, 156, 0.4);
+}
+html[data-theme="dark"] .jobs-dialog {
+    background: #2C2C2C;
+}
+html[data-theme="dark"] .jobs-budget input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Вікно «Оберіть дію»: у темній темі фон має бути суцільним, інакше крізь нього видно сторінку. */
+html[data-theme="dark"] .v-role-dialog {
+    background: #1B1B1B url('../img/landing/auth-watermark-dark.png') repeat;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+html[data-theme="dark"] .v-role-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+}
+html[data-theme="dark"] .v-role-dialog::before {
+    background: linear-gradient(90deg,
+        rgba(27, 27, 27, 0.7) 0, rgba(27, 27, 27, 0.9) 20%, #1B1B1B 51%,
+        rgba(27, 27, 27, 0.9) 80%, rgba(27, 27, 27, 0.7) 100%);
+}
+html[data-theme="dark"] .v-role-dialog__close svg {
+    stroke: rgba(255, 255, 255, 0.87);
+}
+html[data-theme="dark"] .v-role-card {
+    background: rgba(0, 192, 204, 0.16);
+}
+html[data-theme="dark"] .v-role-card:hover,
+html[data-theme="dark"] .v-role-card:focus-visible {
+    background: rgba(0, 192, 204, 0.26);
 }
 

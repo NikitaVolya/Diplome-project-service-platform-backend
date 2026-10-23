@@ -99,6 +99,9 @@ namespace AdminPanel.Extensions
             // Дані особистого кабінету замовника.
             services.AddScoped<ICabinetService, CabinetService>();
 
+            // Відкриті замовлення для сторінки «Знайти замовлення».
+            services.AddScoped<IOrderBoardService, OrderBoardService>();
+
             // Дані кабінету виконавця: власні послуги, портфоліо, календар.
             services.AddScoped<IExecutorCabinetService, ExecutorCabinetService>();
 

@@ -1,0 +1,304 @@
+@model JobsViewModel
+@using BLL.Public
+@{
+    Layout = "_LandingLayout";
+    ViewData["Title"] = T("Знайти замовлення — Вибір");
+
+    var result = Model.Result;
+    var roots = Model.Categories.Where(c => c.ParentId == null).ToList();
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var flash = TempData["Jobs.Flash"] as string;
+    var error = TempData["Jobs.Error"] as string;
+
+    // Сторінки навколо поточної: 1 … 4 5 [6] 7 8 … 20.
+    var window = Enumerable.Range(Math.Max(1, result.Page - 2), 5).Where(p => p <= result.Pages).ToList();
+}
+@section Styles { <link rel="stylesheet" href="~/css/jobs.css" asp-append-version="true" /> }
+
+<main class="jobs">
+    <div class="v-container jobs__panel">
+        <nav class="jobs-crumbs" aria-label="@T("Навігаційний шлях")">
+            <a asp-controller="Landing" asp-action="Index">@T("Головна")</a>
+            <span aria-hidden="true">&gt;</span>
+            <span aria-current="page">@T("Знайти замовлення")</span>
+        </nav>
+
+        <header class="jobs-head">
+            <div>
+                <h1>@T("Знайти замовлення")</h1>
+                <p>@T("Оберіть замовлення, яке відповідає вашим навичкам і подайте пропозицію")</p>
+            </div>
+            <a class="jobs-create" asp-controller="Cabinet" asp-action="Create">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i> @T("Створити замовлення")
+            </a>
+        </header>
+
+        @if (Model.Demo)
+        {
+            <p class="jobs-note" role="status">@T("Перегляд макета: демонстраційні дані.") <a asp-action="Index">@T("Перейти до замовлень")</a></p>
+        }
+        @if (flash != null) { <p class="jobs-note jobs-note--ok" role="status">@flash</p> }
+        @if (error != null)
+        {
+            <p class="jobs-note jobs-note--error" role="alert">
+                @error
+                @if (Model.SignedIn && !Model.CanBid)
+                {
+                    <a asp-controller="Cabinet" asp-action="Index">@T("Перейти в кабінет")</a>
+                }
+            </p>
+        }
+
+        <div class="jobs-layout">
+            <form class="jobs-filters" id="jobs-filters" method="get" asp-action="Index" aria-label="@T("Фільтри")">
+                @if (Model.Demo) { <input type="hidden" name="demo" value="true" /> }
+                @if (Model.View == "grid") { <input type="hidden" name="view" value="grid" /> }
+
+                <div class="jobs-filters__head">
+                    <h2>@T("Фільтри")</h2>
+                    <a asp-action="Index" asp-route-demo="@(Model.Demo ? "true" : null)">@T("Очистити все")</a>
+                </div>
+
+                <label class="jobs-label" for="jobs-q">@T("Пошук за ключовими словами")</label>
+                <div class="jobs-search">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <input id="jobs-q" type="search" name="q" value="@Model.Q" maxlength="100"
+                           placeholder="@T("Наприклад: ремонт, дизайн, прибирання...")" />
+                </div>
+
+                <label class="jobs-label" for="jobs-category">@T("Категорія послуги")</label>
+                <select class="jobs-select" id="jobs-category" name="category">
+                    <option value="">@T("Оберіть категорію послуг")</option>
+                    @foreach (var root in roots)
+                    {
+                        <option value="@root.Id" selected="@(Model.Category == root.Id)">@T(root.Name)</option>
+                        @foreach (var child in Model.Categories.Where(c => c.ParentId == root.Id))
+                        {
+                            <option value="@child.Id" selected="@(Model.Category == child.Id)">&nbsp;&nbsp;&nbsp;@T(child.Name)</option>
+                        }
+                    }
+                </select>
+
+                <label class="jobs-label" for="jobs-city">@T("Місце знаходження")</label>
+                <select class="jobs-select" id="jobs-city" name="city">
+                    <option value="">@T("Виберіть місто")</option>
+                    @foreach (var city in OrderBoardService.Cities.Keys.OrderBy(k => k))
+                    {
+                        <option value="@city" selected="@(Model.City == city)">@T(city)</option>
+                    }
+                </select>
+                <select class="jobs-select" name="radius" aria-label="@T("Радіус пошуку")">
+                    @foreach (var (km, title) in JobsViewModel.Radii)
+                    {
+                        <option value="@km" selected="@(Model.Radius == km)">@T(title)</option>
+                    }
+                </select>
+
+                <fieldset class="jobs-group">
+                    <legend class="jobs-label">@T("Тип замовлення")</legend>
+                    <label class="jobs-check"><input type="checkbox" name="oneTime" value="true" checked="@Model.OneTime" /> @T("Разове")</label>
+                    <label class="jobs-check"><input type="checkbox" name="regular" value="true" checked="@Model.Regular" /> @T("Регулярне")</label>
+                    <label class="jobs-check"><input type="checkbox" name="urgent" value="true" checked="@Model.Urgent" /> @T("Термінове")</label>
+                </fieldset>
+
+                <fieldset class="jobs-group">
+                    <legend class="jobs-label">@T("Бюджет")</legend>
+                    <div class="jobs-budget">
+                        <input type="number" name="from" min="0" step="1" value="@Model.From" placeholder="@T("Від")" aria-label="@T("Бюджет від")" />
+                        <input type="number" name="to" min="0" step="1" value="@Model.To" placeholder="@T("До")" aria-label="@T("Бюджет до")" />
+                    </div>
+                </fieldset>
+
+                <label class="jobs-label" for="jobs-due">@T("Дата виконання")</label>
+                <select class="jobs-select" id="jobs-due" name="due">
+                    <option value="">@T("Дата виконання")</option>
+                    @foreach (var (key, title) in JobsViewModel.Deadlines)
+                    {
+                        <option value="@key" selected="@(Model.Due == key)">@T(title)</option>
+                    }
+                </select>
+
+                <fieldset class="jobs-group">
+                    <legend class="jobs-label">@T("Формат роботи")</legend>
+                    <label class="jobs-check"><input type="radio" name="place" value="onsite" checked="@(Model.Place == "onsite")" /> @T("На місці у замовника")</label>
+                    <label class="jobs-check"><input type="radio" name="place" value="remote" checked="@(Model.Place == "remote")" /> @T("Віддалено")</label>
+                    <label class="jobs-check"><input type="radio" name="place" value="" checked="@(Model.Place == null)" /> @T("Будь-який")</label>
+                </fieldset>
+
+                <button class="jobs-apply" type="submit">@T("Застосувати фільтри")</button>
+            </form>
+
+            <section class="jobs-results" aria-label="@T("Знайдені замовлення")">
+                <div class="jobs-toolbar">
+                    <p class="jobs-found">
+                        @{ var found = JobsText.Found(result.Total); var space = found.IndexOf(' '); }
+                        @T("Знайдено") <b>@(space > 0 ? found[..space] : found)</b>@(space > 0 ? found[space..] : "")
+                    </p>
+                    <label class="jobs-sort">
+                        <span>@T("Сортувати за:")</span>
+                        <select name="sort" form="jobs-filters" data-autosubmit>
+                            @foreach (var (key, title) in JobsViewModel.Sorts)
+                            {
+                                <option value="@key" selected="@(Model.Sort == key)">@T(title)</option>
+                            }
+                        </select>
+                    </label>
+                    @{ var other = Model.View == "grid" ? "list" : "grid"; }
+                    <a class="jobs-view" asp-action="Index" asp-all-route-data="@Model.Route(page: 1, view: other)"
+                       title="@T(other == "grid" ? "Показати плиткою" : "Показати списком")"
+                       aria-label="@T(other == "grid" ? "Показати плиткою" : "Показати списком")">
+                        <i class="bi @(other == "grid" ? "bi-grid" : "bi-list-ul")" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                @if (Model.Unavailable)
+                {
+                    <div class="jobs-empty" role="status">
+                        <h2>@T("Замовлення тимчасово недоступні")</h2>
+                        <p>@T("Не вдалося завантажити список. Спробуйте ще раз пізніше.")</p>
+                        <a class="jobs-btn" asp-action="Index">@T("Спробувати ще раз")</a>
+                    </div>
+                }
+                else if (result.Items.Count == 0)
+                {
+                    <div class="jobs-empty" role="status">
+                        <h2>@T("Замовлень не знайдено")</h2>
+                        <p>@T(Model.HasFilters ? "Спробуйте змінити або скинути фільтри." : "Нові замовлення з'являться тут, щойно замовники їх опублікують.")</p>
+                        @if (Model.HasFilters) { <a class="jobs-btn" asp-action="Index" asp-route-demo="@(Model.Demo ? "true" : null)">@T("Очистити все")</a> }
+                    </div>
+                }
+                else
+                {
+                    <div class="jobs-list @(Model.View == "grid" ? "jobs-list--grid" : null)">
+                        @foreach (var item in result.Items)
+                        {
+                            <article class="job">
+                                <img class="job__img" src="@(item.Image ?? "/img/landing/service-1.jpg")" alt="" loading="lazy" />
+
+                                <div class="job__body">
+                                    <div class="job__chips">
+                                        <span class="job__chip">@T(item.Category)</span>
+                                        @if (item.IsUrgent) { <span class="job__chip job__chip--urgent">@T("Терміново")</span> }
+                                        @if (item.IsRegular) { <span class="job__chip">@T("Регулярне")</span> }
+                                    </div>
+                                    <h3 class="job__title">@item.Title</h3>
+                                    <p class="job__text">@item.Description</p>
+                                    <p class="job__meta">
+                                        <span><i class="bi bi-geo-alt" aria-hidden="true"></i> @JobsText.City(item)</span>
+                                        <span><i class="bi bi-calendar3" aria-hidden="true"></i> @JobsText.When(item)</span>
+                                    </p>
+                                </div>
+
+                                <div class="job__side">
+                                    <p class="job__price">
+                                        <b>@(item.Price > 0 ? CabinetFormat.Money(item.Price) : T("Договірна"))</b>
+                                        <span>@JobsText.PriceNote(item)</span>
+                                        <span>@JobsText.Bids(item.Bids)</span>
+                                    </p>
+
+                                    @if (item.IsMine)
+                                    {
+                                        <a class="jobs-btn jobs-btn--ghost" asp-controller="Cabinet" asp-action="Order" asp-route-id="@item.Id">@T("Ваше замовлення")</a>
+                                    }
+                                    else if (item.HasMyBid)
+                                    {
+                                        <span class="jobs-btn jobs-btn--done">@T("Пропозицію надіслано")</span>
+                                    }
+                                    else if (!Model.SignedIn)
+                                    {
+                                        <a class="jobs-btn" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@returnUrl">@T("Подати пропозицію")</a>
+                                    }
+                                    else
+                                    {
+                                        <button class="jobs-btn" type="button" data-bid="@item.Id" data-bid-title="@item.Title"
+                                                data-bid-price="@(item.Price > 0 ? ((int)item.Price).ToString() : "")">@T("Подати пропозицію")</button>
+                                    }
+                                </div>
+
+                                <form class="job__fav" method="post" asp-action="Favorite" data-favorite>
+                                    <input type="hidden" name="orderId" value="@item.Id" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button type="submit" aria-pressed="@(item.IsFavorite ? "true" : "false")"
+                                            title="@T(item.IsFavorite ? "Прибрати з обраного" : "Додати в обране")"
+                                            aria-label="@T(item.IsFavorite ? "Прибрати з обраного" : "Додати в обране")">
+                                        <i class="bi @(item.IsFavorite ? "bi-heart-fill" : "bi-heart")" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </article>
+                        }
+                    </div>
+
+                    @if (result.Pages > 1)
+                    {
+                        <nav class="jobs-pager" aria-label="@T("Сторінки")">
+                            @if (result.Page > 1)
+                            {
+                                <a asp-action="Index" asp-all-route-data="@Model.Route(page: result.Page - 1)" aria-label="@T("Попередня сторінка")"><i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+                            }
+                            @foreach (var p in window)
+                            {
+                                if (p == result.Page)
+                                {
+                                    <span class="is-current" aria-current="page">@p</span>
+                                }
+                                else
+                                {
+                                    <a asp-action="Index" asp-all-route-data="@Model.Route(page: p)">@p</a>
+                                }
+                            }
+                            @if (window.Count > 0 && window[^1] < result.Pages)
+                            {
+                                <span class="jobs-pager__gap" aria-hidden="true">…</span>
+                            }
+                            @if (result.Page < result.Pages)
+                            {
+                                <a asp-action="Index" asp-all-route-data="@Model.Route(page: result.Page + 1)" aria-label="@T("Наступна сторінка")"><i class="bi bi-chevron-right" aria-hidden="true"></i></a>
+                            }
+                        </nav>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</main>
+
+<dialog class="jobs-dialog" id="jobs-bid" aria-labelledby="jobs-bid-title">
+    @if (Model.CanBid)
+    {
+        <form method="post" asp-action="Bid">
+            <h2 id="jobs-bid-title">@T("Ваша пропозиція")</h2>
+            <p class="jobs-dialog__order" data-bid-name></p>
+            <input type="hidden" name="orderId" data-bid-id />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+            <label class="jobs-label" for="bid-price">@T("Ваша ціна, грн")</label>
+            <input class="jobs-input" id="bid-price" name="price" type="number" min="0" max="1000000" step="1" required data-bid-price />
+
+            <label class="jobs-label" for="bid-days">@T("За скільки днів виконаєте")</label>
+            <input class="jobs-input" id="bid-days" name="days" type="number" min="1" max="365" step="1" placeholder="@T("Наприклад: 3")" />
+
+            <label class="jobs-label" for="bid-comment">@T("Коментар для замовника")</label>
+            <textarea class="jobs-input" id="bid-comment" name="comment" rows="4" maxlength="1000"
+                      placeholder="@T("Коротко про ваш досвід і як ви плануєте виконати роботу")"></textarea>
+
+            <div class="jobs-dialog__actions">
+                <button class="jobs-btn jobs-btn--ghost" type="button" data-dialog-close>@T("Скасувати")</button>
+                <button class="jobs-btn" type="submit">@T("Надіслати пропозицію")</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div>
+            <h2 id="jobs-bid-title">@T("Пропозиції подають виконавці")</h2>
+            <p>@T("Щоб відгукуватися на замовлення, увімкніть профіль виконавця в особистому кабінеті.")</p>
+            <div class="jobs-dialog__actions">
+                <button class="jobs-btn jobs-btn--ghost" type="button" data-dialog-close>@T("Скасувати")</button>
+                <form method="post" asp-controller="Cabinet" asp-action="Switch">
+                    <input type="hidden" name="to" value="executor" />
+                    <button class="jobs-btn" type="submit">@T("Стати виконавцем")</button>
+                </form>
+            </div>
+        </div>
+    }
+</dialog>
