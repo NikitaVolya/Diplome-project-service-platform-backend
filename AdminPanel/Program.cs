@@ -92,6 +92,9 @@ namespace AdminPanel
 
             app.MapHub<AdminChatHub>("/hubs/admin-chat");
 
+            // Невідома адреса — сторінка 404 замість переадресації на вхід до адмінки.
+            app.MapFallbackToController("Missing", "Pages");
+
             await PrepareDatabaseAsync(app);
 
             await app.RunAsync();

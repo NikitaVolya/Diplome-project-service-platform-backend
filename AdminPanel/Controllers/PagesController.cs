@@ -17,6 +17,17 @@ public sealed class PagesController : Controller
     [Route("Help")]
     public IActionResult Help() => View();
 
+    
+    [HttpGet]
+    [Route("Soon")]
+    public IActionResult Soon() => View(false);
+
+    public IActionResult Missing()
+    {
+        // Повернення через Home/StatusCode: там вирішується, чия це сторінка — сайту чи адмінки.
+        return NotFound();
+    }
+
     [HttpGet]
     [Route("Blog")]
     public IActionResult Blog(string? category, int page = 1)

@@ -4116,4 +4116,253 @@
   <data name="{0} років" xml:space="preserve">
     <value>{0} years</value>
   </data>
+  <data name="Знайти замовлення — Вибір" xml:space="preserve">
+    <value>Find orders — Vybir</value>
+  </data>
+  <data name="Оберіть замовлення, яке відповідає вашим навичкам і подайте пропозицію" xml:space="preserve">
+    <value>Choose an order that matches your skills and submit an offer</value>
+  </data>
+  <data name="Перейти до замовлень" xml:space="preserve">
+    <value>Go to orders</value>
+  </data>
+  <data name="Перейти в кабінет" xml:space="preserve">
+    <value>Go to your account</value>
+  </data>
+  <data name="Очистити все" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="Пошук за ключовими словами" xml:space="preserve">
+    <value>Search by keywords</value>
+  </data>
+  <data name="Наприклад: ремонт, дизайн, прибирання..." xml:space="preserve">
+    <value>For example: repair, design, cleaning...</value>
+  </data>
+  <data name="Категорія послуги" xml:space="preserve">
+    <value>Service category</value>
+  </data>
+  <data name="Місце знаходження" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Радіус пошуку" xml:space="preserve">
+    <value>Search radius</value>
+  </data>
+  <data name="Разове" xml:space="preserve">
+    <value>One-time</value>
+  </data>
+  <data name="Регулярне" xml:space="preserve">
+    <value>Regular</value>
+  </data>
+  <data name="Термінове" xml:space="preserve">
+    <value>Urgent</value>
+  </data>
+  <data name="Бюджет від" xml:space="preserve">
+    <value>Budget from</value>
+  </data>
+  <data name="Бюджет до" xml:space="preserve">
+    <value>Budget to</value>
+  </data>
+  <data name="Дата виконання" xml:space="preserve">
+    <value>Completion date</value>
+  </data>
+  <data name="Формат роботи" xml:space="preserve">
+    <value>Work format</value>
+  </data>
+  <data name="На місці у замовника" xml:space="preserve">
+    <value>At the client's place</value>
+  </data>
+  <data name="Віддалено" xml:space="preserve">
+    <value>Remotely</value>
+  </data>
+  <data name="Застосувати фільтри" xml:space="preserve">
+    <value>Apply filters</value>
+  </data>
+  <data name="Знайдені замовлення" xml:space="preserve">
+    <value>Orders found</value>
+  </data>
+  <data name="Знайдено" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="Сортувати за:" xml:space="preserve">
+    <value>Sort by:</value>
+  </data>
+  <data name="Замовлення тимчасово недоступні" xml:space="preserve">
+    <value>Orders are temporarily unavailable</value>
+  </data>
+  <data name="Не вдалося завантажити список. Спробуйте ще раз пізніше." xml:space="preserve">
+    <value>Couldn't load the list. Please try again later.</value>
+  </data>
+  <data name="Замовлень не знайдено" xml:space="preserve">
+    <value>No orders found</value>
+  </data>
+  <data name="Терміново" xml:space="preserve">
+    <value>Urgent</value>
+  </data>
+  <data name="Ваше замовлення" xml:space="preserve">
+    <value>Your order</value>
+  </data>
+  <data name="Пропозицію надіслано" xml:space="preserve">
+    <value>Offer sent</value>
+  </data>
+  <data name="Подати пропозицію" xml:space="preserve">
+    <value>Submit an offer</value>
+  </data>
+  <data name="Ваша пропозиція" xml:space="preserve">
+    <value>Your offer</value>
+  </data>
+  <data name="Ваша ціна, грн" xml:space="preserve">
+    <value>Your price, UAH</value>
+  </data>
+  <data name="За скільки днів виконаєте" xml:space="preserve">
+    <value>How many days will it take</value>
+  </data>
+  <data name="Наприклад: 3" xml:space="preserve">
+    <value>For example: 3</value>
+  </data>
+  <data name="Коментар для замовника" xml:space="preserve">
+    <value>Comment for the client</value>
+  </data>
+  <data name="Коротко про ваш досвід і як ви плануєте виконати роботу" xml:space="preserve">
+    <value>Briefly about your experience and how you plan to do the job</value>
+  </data>
+  <data name="Надіслати пропозицію" xml:space="preserve">
+    <value>Send offer</value>
+  </data>
+  <data name="Пропозиції подають виконавці" xml:space="preserve">
+    <value>Offers are submitted by professionals</value>
+  </data>
+  <data name="Щоб відгукуватися на замовлення, увімкніть профіль виконавця в особистому кабінеті." xml:space="preserve">
+    <value>To respond to orders, turn on your professional profile in your account.</value>
+  </data>
+  <data name="Сторінку не знайдено — Вибір" xml:space="preserve">
+    <value>Page not found — Vybir</value>
+  </data>
+  <data name="Сторінка в розробці — Вибір" xml:space="preserve">
+    <value>Page under construction — Vybir</value>
+  </data>
+  <data name="Помилка 404" xml:space="preserve">
+    <value>Error 404</value>
+  </data>
+  <data name="Дівчина з ноутбуком біля дорожнього бар’єра — сторінка ще в розробці" xml:space="preserve">
+    <value>A girl with a laptop next to a road barrier — the page is still under construction</value>
+  </data>
+  <data name="Ми працюємо над цією сторінкою" xml:space="preserve">
+    <value>We're working on this page</value>
+  </data>
+  <data name="Цей розділ ще в процесі розробки." xml:space="preserve">
+    <value>This section is still under development.</value>
+  </data>
+  <data name="Зовсім скоро тут з’явиться щось цікаве та корисне для вас." xml:space="preserve">
+    <value>Something interesting and useful for you will appear here very soon.</value>
+  </data>
+  <data name="Повернутись на головну" xml:space="preserve">
+    <value>Back to home</value>
+  </data>
+  <data name="Подавати пропозиції можуть лише виконавці. Стати виконавцем можна в особистому кабінеті." xml:space="preserve">
+    <value>Only professionals can submit offers. You can become a professional in your account.</value>
+  </data>
+  <data name="Вкажіть свою ціну — без неї пропозицію не надіслати." xml:space="preserve">
+    <value>Enter your price — an offer can't be sent without it.</value>
+  </data>
+  <data name="Пропозицію надіслано. Замовник побачить її на сторінці замовлення." xml:space="preserve">
+    <value>Offer sent. The client will see it on the order page.</value>
+  </data>
+  <data name="Це ваше замовлення — на нього не можна подати пропозицію." xml:space="preserve">
+    <value>This is your order — you can't submit an offer to it.</value>
+  </data>
+  <data name="Ви вже подали пропозицію до цього замовлення." xml:space="preserve">
+    <value>You have already submitted an offer to this order.</value>
+  </data>
+  <data name="Перевірте ціну й термін: ціна від 0 до 1 000 000, термін від 1 до 365 днів." xml:space="preserve">
+    <value>Check the price and timing: price from 0 to 1,000,000, timing from 1 to 365 days.</value>
+  </data>
+  <data name="Замовлення вже недоступне: можливо, замовник обрав виконавця." xml:space="preserve">
+    <value>The order is no longer available: the client may have chosen a professional.</value>
+  </data>
+  <data name="м. {0}" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="Регулярно" xml:space="preserve">
+    <value>Regularly</value>
+  </data>
+  <data name="Без терміну" xml:space="preserve">
+    <value>No deadline</value>
+  </data>
+  <data name="Сьогодні або завтра" xml:space="preserve">
+    <value>Today or tomorrow</value>
+  </data>
+  <data name="Найстаріші" xml:space="preserve">
+    <value>Oldest</value>
+  </data>
+  <data name="Спочатку дорожчі" xml:space="preserve">
+    <value>Most expensive first</value>
+  </data>
+  <data name="Спочатку дешевші" xml:space="preserve">
+    <value>Cheapest first</value>
+  </data>
+  <data name="Найближчий термін" xml:space="preserve">
+    <value>Nearest deadline</value>
+  </data>
+  <data name="Найменше пропозицій" xml:space="preserve">
+    <value>Fewest offers</value>
+  </data>
+  <data name="У межах міста" xml:space="preserve">
+    <value>Within the city</value>
+  </data>
+  <data name="В радіусі 5 км" xml:space="preserve">
+    <value>Within 5 km</value>
+  </data>
+  <data name="В радіусі 10 км" xml:space="preserve">
+    <value>Within 10 km</value>
+  </data>
+  <data name="В радіусі 25 км" xml:space="preserve">
+    <value>Within 25 km</value>
+  </data>
+  <data name="В радіусі 50 км" xml:space="preserve">
+    <value>Within 50 km</value>
+  </data>
+  <data name="Протягом 3 днів" xml:space="preserve">
+    <value>Within 3 days</value>
+  </data>
+  <data name="Протягом тижня" xml:space="preserve">
+    <value>Within a week</value>
+  </data>
+  <data name="Протягом місяця" xml:space="preserve">
+    <value>Within a month</value>
+  </data>
+  <data name="Договірна ціна" xml:space="preserve">
+    <value>Negotiable price</value>
+  </data>
+  <data name="Показати плиткою" xml:space="preserve">
+    <value>Show as tiles</value>
+  </data>
+  <data name="Показати списком" xml:space="preserve">
+    <value>Show as list</value>
+  </data>
+  <data name="Спробуйте змінити або скинути фільтри." xml:space="preserve">
+    <value>Try changing or resetting the filters.</value>
+  </data>
+  <data name="Нові замовлення з'являться тут, щойно замовники їх опублікують." xml:space="preserve">
+    <value>New orders will appear here as soon as clients publish them.</value>
+  </data>
+  <data name="Прибрати з обраного" xml:space="preserve">
+    <value>Remove from favourites</value>
+  </data>
+  <data name="Додати в обране" xml:space="preserve">
+    <value>Add to favourites</value>
+  </data>
+  <data name="Бюджет замовника" xml:space="preserve">
+    <value>Client's budget</value>
+  </data>
+  <data name="{0} пропозиція" xml:space="preserve">
+    <value>{0} offer</value>
+  </data>
+  <data name="{0} пропозиції" xml:space="preserve">
+    <value>{0} offers</value>
+  </data>
+  <data name="{0} пропозицій" xml:space="preserve">
+    <value>{0} offers</value>
+  </data>
+  <data name="Херсон" xml:space="preserve">
+    <value>Kherson</value>
+  </data>
 </root>

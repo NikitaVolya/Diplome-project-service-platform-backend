@@ -93,7 +93,7 @@
                     <span class="v-duo__text">
                         @T("Створіть профіль, показуйте свої навички та знаходьте замовлення поруч із вами.")
                     </span>
-                    <button class="v-btn v-btn--soft" type="button" data-catalog-info>@T("Знайти замовлення")</button>
+                    <a class="v-btn v-btn--soft" asp-controller="Jobs" asp-action="Index">@T("Знайти замовлення")</a>
                 </div>
             </div>
         </div>
@@ -216,7 +216,7 @@
             <p>@T("Покажіть, що ви вмієте, і знайдіть своє наступне завдання.")</p>
             <div class="v-cta__buttons" style="justify-content:center">
                 <a class="v-btn v-btn--soft" asp-controller="Catalog" asp-action="Index">@T("Знайти виконавця")</a>
-                <button class="v-btn v-btn--soft" type="button" data-catalog-info>@T("Знайти замовлення")</button>
+                <a class="v-btn v-btn--soft" asp-controller="Jobs" asp-action="Index">@T("Знайти замовлення")</a>
             </div>
         </div>
     </div>

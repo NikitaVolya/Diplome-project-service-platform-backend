@@ -98,6 +98,56 @@
         input.addEventListener('change', () => { if (input.checked) applyTheme(input.value); });
     });
 
+    // «Знайти замовлення»: сортування застосовується одразу, без кнопки.
+    document.querySelectorAll('[data-autosubmit]').forEach(control => {
+        control.addEventListener('change', () => {
+            const form = control.form;
+            if (form) form.requestSubmit ? form.requestSubmit() : form.submit();
+        });
+    });
+
+    // Вікно «Подати пропозицію»: підставляємо замовлення, на яке натиснули.
+    const bidDialog = document.getElementById('jobs-bid');
+    document.querySelectorAll('[data-bid]').forEach(button => {
+        button.addEventListener('click', () => {
+            if (!bidDialog) return;
+            const id = bidDialog.querySelector('[data-bid-id]');
+            const name = bidDialog.querySelector('[data-bid-name]');
+            const price = bidDialog.querySelector('input[data-bid-price]');
+            if (id) id.value = button.dataset.bid;
+            if (name) name.textContent = button.dataset.bidTitle || '';
+            if (price) price.value = button.dataset.bidPrice || '';
+            bidDialog.showModal();
+        });
+    });
+    document.querySelectorAll('[data-dialog-close]').forEach(button => {
+        button.addEventListener('click', () => button.closest('dialog')?.close());
+    });
+
+    // Сердечко «в обране» перемикаємо без перезавантаження сторінки.
+    document.querySelectorAll('form[data-favorite]').forEach(form => {
+        form.addEventListener('submit', async event => {
+            event.preventDefault();
+            const button = form.querySelector('button');
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'X-Requested-With': 'fetch' },
+                    redirect: 'manual'
+                });
+                if (response.type === 'opaqueredirect' || response.status === 401) { form.submit(); return; }
+                if (!response.ok) return;
+                const data = await response.json();
+                button.setAttribute('aria-pressed', data.favorite ? 'true' : 'false');
+                const icon = button.querySelector('i');
+                if (icon) icon.className = 'bi ' + (data.favorite ? 'bi-heart-fill' : 'bi-heart');
+            } catch {
+                form.submit();
+            }
+        });
+    });
+
     const dialog = document.getElementById('catalog-info');
     document.querySelectorAll('[data-catalog-info]').forEach(button => {
         button.addEventListener('click', () => {

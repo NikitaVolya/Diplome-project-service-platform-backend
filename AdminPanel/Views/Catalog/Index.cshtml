@@ -123,7 +123,7 @@
                 </section>
                 <aside class="catalog-aside">
                     <section class="catalog-help"><h2>@T("Як знайти послугу?")</h2><ol><li>@T("Оберіть категорію та підкатегорію.")</li><li>@T("Уточніть деталі вашого завдання.")</li><li>@T("Порівняйте виконавців та оберіть найкращого.")</li><li>@T("Домовтеся про умови та отримайте результат.")</li></ol><a class="v-btn v-btn--soft" asp-controller="Landing" asp-action="Index" asp-fragment="how">@T("Дізнатися більше")</a></section>
-                    <section class="catalog-help"><h2>@T("Працюєте виконавцем?")</h2><p>@T("Знайдіть замовлення та розвивайте свій бізнес разом із нами.")</p><button class="v-btn v-btn--soft" type="button" data-catalog-info>@T("Стати виконавцем")</button></section>
+                    <section class="catalog-help"><h2>@T("Працюєте виконавцем?")</h2><p>@T("Знайдіть замовлення та розвивайте свій бізнес разом із нами.")</p><a class="v-btn v-btn--soft" asp-controller="Auth" asp-action="Register" asp-route-role="Executor">@T("Стати виконавцем")</a></section>
                 </aside>
             </div>
             @if (Model.Services.Count > 0)
@@ -160,7 +160,7 @@
             }
         }
     </div>
-    <section class="v-cta"><div class="v-container v-cta__inner"><div class="v-cta__img"><img src="~/img/landing/cta.jpg" alt="@T("Ідеї та рішення")" loading="lazy" /></div><div><h2>@T("Є завдання? Знайдемо рішення.")</h2><p>@T("Покажіть, що ви вмієте, і знайдіть своє наступне завдання.")</p><div class="v-cta__buttons"><a class="v-btn v-btn--soft" asp-action="Index" asp-route-demo="@Model.IsDemo">@T("Знайти виконавця")</a><button class="v-btn v-btn--soft" type="button" data-catalog-info>@T("Знайти замовлення")</button></div></div></div></section>
+    <section class="v-cta"><div class="v-container v-cta__inner"><div class="v-cta__img"><img src="~/img/landing/cta.jpg" alt="@T("Ідеї та рішення")" loading="lazy" /></div><div><h2>@T("Є завдання? Знайдемо рішення.")</h2><p>@T("Покажіть, що ви вмієте, і знайдіть своє наступне завдання.")</p><div class="v-cta__buttons"><a class="v-btn v-btn--soft" asp-action="Index" asp-route-demo="@Model.IsDemo">@T("Знайти виконавця")</a><a class="v-btn v-btn--soft" asp-controller="Jobs" asp-action="Index">@T("Знайти замовлення")</a></div></div></div></section>
 
 </main>
 @section Scripts { <script src="~/js/catalog.js" asp-append-version="true" defer></script> }

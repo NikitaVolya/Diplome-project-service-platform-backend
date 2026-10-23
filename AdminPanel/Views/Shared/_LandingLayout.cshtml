@@ -72,8 +72,8 @@
             <a class="v-nav__catalog" asp-controller="Account" asp-action="Login">@T("Увійти")</a>
             <a asp-controller="Pages" asp-action="Help">@T("Допомога")</a>
             <a asp-controller="Pages" asp-action="Blog">@T("Блог")</a>
-            <a asp-controller="Landing" asp-action="Index" asp-fragment="services">@T("Конкурси")</a>
-            <a asp-controller="Landing" asp-action="Index" asp-fragment="services">@T("Вакансії")</a>
+            <a asp-controller="Pages" asp-action="Soon">@T("Конкурси")</a>
+            <a asp-controller="Pages" asp-action="Soon">@T("Вакансії")</a>
             <a class="@(inCabinet ? "is-current" : null)" aria-current="@(inCabinet ? "page" : null)"
                asp-controller="Cabinet" asp-action="Index">@T("Профіль")</a>
         </nav>
@@ -158,18 +158,18 @@
                 <h5>@T("Для клієнтів")</h5>
                 <ul>
                     <li><a asp-controller="Landing" asp-action="Index" asp-fragment="how">@T("Як замовити послугу")</a></li>
-                    <li><a href="#">@T("Оплата та гарантії")</a></li>
-                    <li><a href="#">@T("Повернення коштів")</a></li>
-                    <li><a href="#">@T("Правила платформи")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Оплата та гарантії")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Повернення коштів")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Правила платформи")</a></li>
                 </ul>
             </div>
 
             <div>
                 <h5>@T("Для виконавців")</h5>
                 <ul>
-                    <li><a href="#">@T("Правила для виконавців")</a></li>
-                    <li><a href="#">@T("Комісії та тарифи")</a></li>
-                    <li><a href="#">@T("Поради виконавцям")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Правила для виконавців")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Комісії та тарифи")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Поради виконавцям")</a></li>
                     <li><a asp-controller="Pages" asp-action="Help">@T("Центр допомоги")</a></li>
                 </ul>
             </div>
@@ -179,8 +179,8 @@
                 <ul>
                     <li><a asp-controller="Landing" asp-action="Index" asp-fragment="why">@T("Про нас")</a></li>
                     <li><a href="#footer">@T("Контакти")</a></li>
-                    <li><a href="#">@T("Кар'єра")</a></li>
-                    <li><a href="#">@T("Партнери")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Кар'єра")</a></li>
+                    <li><a asp-controller="Pages" asp-action="Soon">@T("Партнери")</a></li>
                     <li>
                         <a class="v-footer__admin" asp-controller="Dashboard" asp-action="Index">
                             <i class="bi bi-shield-lock"></i> @T("Адмін-панель")
@@ -203,9 +203,9 @@
     <div class="v-bottom">
         <div class="v-container v-bottom__row">
             <span><i class="bi bi-c-circle"></i> @DateTime.UtcNow.Year @T("Вибір. Усі права захищені")</span>
-            <a href="#">@T("Політика конфіденційності")</a>
-            <a href="#">@T("Умови використання")</a>
-            <a href="#">@T("Політика файлів cookie")</a>
+            <a asp-controller="Pages" asp-action="Soon">@T("Політика конфіденційності")</a>
+            <a asp-controller="Pages" asp-action="Soon">@T("Умови використання")</a>
+            <a asp-controller="Pages" asp-action="Soon">@T("Політика файлів cookie")</a>
             @* Перемикач мови. Список відкривається вгору — під ним уже край сторінки. *@
             <details class="v-lang">
                 <summary aria-label="@T("Мова сайту"): @language.Title">
