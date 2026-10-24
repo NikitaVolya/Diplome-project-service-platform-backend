@@ -1,6 +1,7 @@
 using AdminPanel.Extensions;
 using AdminPanel.Hubs;
 using AdminPanel.Localization;
+using AdminPanel.Services;
 using BLL.Options;
 using DAL.Context;
 using DAL.Seed;
@@ -95,41 +96,11 @@ namespace AdminPanel
             // Невідома адреса — сторінка 404 замість переадресації на вхід до адмінки.
             app.MapFallbackToController("Missing", "Pages");
 
-            await PrepareDatabaseAsync(app);
+            // Перед тим як приймати запити: створюємо базу, якщо її немає, накочуємо нові міграції
+            // й заповнюємо довідники. Деталі й налаштування — у Services/DatabaseStartup.cs.
+            await DatabaseStartup.PrepareAsync(app);
 
             await app.RunAsync();
-        }
-
-        private static async Task PrepareDatabaseAsync(WebApplication app)
-        {
-            using var scope = app.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var logger = services.GetRequiredService<ILogger<Program>>();
-
-            try
-            {
-                var db = services.GetRequiredService<ApplicationDbContext>();
-
-                if (app.Environment.IsDevelopment()
-                    && app.Configuration.GetValue("Database:RecreateOnStart", false))
-                {
-                    logger.LogWarning("Database:RecreateOnStart is on - dropping the database");
-                    await db.Database.EnsureDeletedAsync();
-                }
-
-                if (app.Configuration.GetValue("Database:AutoMigrate", true))
-                {
-                    await db.Database.MigrateAsync();
-                    logger.LogInformation("Database is up to date");
-                }
-
-                var seeder = services.GetRequiredService<IDatabaseSeeder>();
-                await seeder.SeedAsync();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Database preparation failed");
-            }
         }
     }
 }
