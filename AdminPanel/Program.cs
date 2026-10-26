@@ -12,6 +12,7 @@ using Microsoft.Extensions.WebEncoders;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace AdminPanel
 {
@@ -20,6 +21,12 @@ namespace AdminPanel
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDataProtection()
+                .SetApplicationName("ServiceHub.AdminPanel")
+                .PersistKeysToFileSystem(
+                    new DirectoryInfo("/app/dataprotection-keys")
+            );
 
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
