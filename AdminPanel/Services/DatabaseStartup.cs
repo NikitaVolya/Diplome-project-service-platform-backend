@@ -4,7 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using DAL.Context;
 using DAL.Seed;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -74,48 +74,55 @@ public static class DatabaseStartup
         }
     }
 
-    private static async Task MigrateAsync(ApplicationDbContext db, ILogger logger, CancellationToken cancellationToken)
+    private static async Task MigrateAsync(
+        ApplicationDbContext db,
+        ILogger logger,
+        CancellationToken cancellationToken)
     {
         var all = db.Database.GetMigrations().ToList();
 
-        // Бази ще немає: створювати її й блокувати нічого — MigrateAsync створить базу сам.
-        if (!await db.Database.CanConnectAsync(cancellationToken))
-        {
-            logger.LogInformation("Базу даних не знайдено — створюємо її та застосовуємо {Count} міграцій", all.Count);
-            await TimedMigrateAsync(db, logger, all, cancellationToken);
-            return;
-        }
-
-        var pending = (await db.Database.GetPendingMigrationsAsync(cancellationToken)).ToList();
-
-        if (pending.Count == 0)
-        {
-            logger.LogInformation("База даних актуальна: застосовано {Count} міграцій, нових немає", all.Count);
-            return;
-        }
-
-        // Одне з'єднання на все: блокування належить сесії й знімається разом із нею.
         await db.Database.OpenConnectionAsync(cancellationToken);
+
+        var lockAcquired = false;
 
         try
         {
             await AcquireLockAsync(db, cancellationToken);
+            lockAcquired = true;
 
-            // Поки ми чекали на блокування, міграції міг накотити інший сервер.
-            pending = (await db.Database.GetPendingMigrationsAsync(cancellationToken)).ToList();
+            var pending = (
+                await db.Database.GetPendingMigrationsAsync(cancellationToken)
+            ).ToList();
 
             if (pending.Count == 0)
             {
-                logger.LogInformation("Міграції вже застосовано іншим екземпляром сайту");
+                logger.LogInformation(
+                    "База актуальна. Усього міграцій: {Count}",
+                    all.Count
+                );
                 return;
             }
 
-            await TimedMigrateAsync(db, logger, pending, cancellationToken);
+            await TimedMigrateAsync(
+                db,
+                logger,
+                pending,
+                cancellationToken
+            );
         }
         finally
         {
-            await ReleaseLockAsync(db);
-            await db.Database.CloseConnectionAsync();
+            try
+            {
+                if (lockAcquired)
+                {
+                    await ReleaseLockAsync(db);
+                }
+            }
+            finally
+            {
+                await db.Database.CloseConnectionAsync();
+            }
         }
     }
 
@@ -130,25 +137,33 @@ public static class DatabaseStartup
         logger.LogInformation("Міграції застосовано за {Seconds:0.0} с", timer.Elapsed.TotalSeconds);
     }
 
-    private static async Task AcquireLockAsync(ApplicationDbContext db, CancellationToken cancellationToken)
+    private static async Task AcquireLockAsync(
+        ApplicationDbContext db,
+        CancellationToken cancellationToken)
     {
         await using var command = db.Database.GetDbConnection().CreateCommand();
-        command.CommandText = "sp_getapplock";
-        command.CommandType = CommandType.StoredProcedure;
+
+        command.CommandText = "SELECT GET_LOCK(@name, @timeout)";
+        command.CommandType = CommandType.Text;
         command.CommandTimeout = LockTimeoutMs / 1000 + 30;
-        command.Parameters.Add(new SqlParameter("@Resource", LockName));
-        command.Parameters.Add(new SqlParameter("@LockMode", "Exclusive"));
-        command.Parameters.Add(new SqlParameter("@LockOwner", "Session"));
-        command.Parameters.Add(new SqlParameter("@LockTimeout", LockTimeoutMs));
-        var result = new SqlParameter("@Result", SqlDbType.Int) { Direction = ParameterDirection.ReturnValue };
-        command.Parameters.Add(result);
 
-        await command.ExecuteNonQueryAsync(cancellationToken);
+        var nameParameter = command.CreateParameter();
+        nameParameter.ParameterName = "@name";
+        nameParameter.Value = LockName;
+        command.Parameters.Add(nameParameter);
 
-        if ((int)result.Value < 0)
+        var timeoutParameter = command.CreateParameter();
+        timeoutParameter.ParameterName = "@timeout";
+        timeoutParameter.Value = LockTimeoutMs / 1000;
+        command.Parameters.Add(timeoutParameter);
+
+        var result = await command.ExecuteScalarAsync(cancellationToken);
+
+        if (result == null || result == DBNull.Value ||
+            Convert.ToInt32(result) != 1)
         {
             throw new InvalidOperationException(
-                $"Не вдалося дочекатися блокування міграцій (sp_getapplock повернув {result.Value})");
+                $"Не вдалося отримати блокування міграцій MySQL: {result}");
         }
     }
 
@@ -157,21 +172,30 @@ public static class DatabaseStartup
         try
         {
             await using var command = db.Database.GetDbConnection().CreateCommand();
-            command.CommandText = "sp_releaseapplock";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add(new SqlParameter("@Resource", LockName));
-            command.Parameters.Add(new SqlParameter("@LockOwner", "Session"));
-            await command.ExecuteNonQueryAsync();
+
+            command.CommandText = "SELECT RELEASE_LOCK(@name)";
+            command.CommandType = CommandType.Text;
+
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "@name";
+            parameter.Value = LockName;
+            command.Parameters.Add(parameter);
+
+            await command.ExecuteScalarAsync();
         }
-        catch (SqlException)
+        catch (MySqlException)
         {
-            // Блокування не було взято або сесія вже закрита — тоді воно зняте й так.
+            // Якщо з'єднання втрачено, MySQL автоматично
+            // звільнить блокування після завершення сесії.
         }
     }
 
     /// <summary>Повторює підключення, поки SQL Server ще не відповідає (рестарт сервера, мережа).</summary>
     private static async Task WithRetriesAsync(
-        Func<Task> action, int attempts, ILogger logger, CancellationToken cancellationToken)
+        Func<Task> action,
+        int attempts,
+        ILogger logger,
+        CancellationToken cancellationToken)
     {
         for (var attempt = 1; ; attempt++)
         {
@@ -180,20 +204,32 @@ public static class DatabaseStartup
                 await action();
                 return;
             }
-            catch (SqlException ex) when (attempt < attempts && IsTransient(ex))
+            catch (MySqlException ex)
+                when (attempt < attempts && IsTransient(ex))
             {
-                var delay = TimeSpan.FromSeconds(Math.Min(30, 2 * attempt));
-                logger.LogWarning("SQL Server поки недоступний ({Message}). Спроба {Attempt} з {Attempts}, повтор через {Delay} с",
-                    ex.Message, attempt, attempts, delay.TotalSeconds);
+                var delay = TimeSpan.FromSeconds(
+                    Math.Min(30, 2 * attempt)
+                );
+
+                logger.LogWarning(
+                    ex,
+                    "MySQL тимчасово недоступний. " +
+                    "Спроба {Attempt}/{Attempts}. Повтор через {Delay} с",
+                    attempt,
+                    attempts,
+                    delay.TotalSeconds
+                );
+
                 await Task.Delay(delay, cancellationToken);
             }
         }
     }
 
     /// <summary>Помилки мережі й тимчасової недоступності сервера; помилки самих міграцій не повторюємо.</summary>
-    private static bool IsTransient(SqlException ex) =>
-        ex.Number is -2 or 2 or 53 or 121 or 233 or 64 or 10053 or 10054 or 10060 or 40197 or 40501 or 40613 or 49918 or 49919 or 49920;
-
+    private static bool IsTransient(MySqlException ex)
+    {
+        return ex.IsTransient;
+    }
     /// <summary>
     /// Попереджає, якщо в коді змінили сутності, а міграцію під це не створили:
     /// тоді база після накочування не збігатиметься з моделлю, і запити падатимуть.

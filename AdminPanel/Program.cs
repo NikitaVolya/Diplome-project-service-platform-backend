@@ -9,6 +9,8 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 
 namespace AdminPanel
 {
@@ -18,6 +20,19 @@ namespace AdminPanel
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var startupLogs = new ConcurrentQueue<string>();
+
+            builder.Logging.SetMinimumLevel(LogLevel.Information);
+
+            builder.Logging.AddFilter(
+                "Microsoft.EntityFrameworkCore",
+                LogLevel.Information
+            );
+
+            builder.Logging.AddProvider(
+                new InMemoryLoggerProvider(startupLogs)
+            );
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -25,7 +40,15 @@ namespace AdminPanel
             {
                 options.UseMySql(
                     connectionString,
-                    new MySqlServerVersion(new Version(8, 4, 11))
+                    new MySqlServerVersion(new Version(8, 4, 11)),
+                    mysqlOptions =>
+                    {
+                        mysqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 5,
+                            maxRetryDelay: TimeSpan.FromSeconds(10),
+                            errorNumbersToAdd: null
+                        );
+                    }
                 );
             });
 
@@ -104,6 +127,19 @@ namespace AdminPanel
             // Перед тим як приймати запити: створюємо базу, якщо її немає, накочуємо нові міграції
             // й заповнюємо довідники. Деталі й налаштування — у Services/DatabaseStartup.cs.
             await DatabaseStartup.PrepareAsync(app);
+
+            app.MapGet("/diagnostics/startup", () =>
+            {
+                if (!app.Environment.IsDevelopment())
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Text(
+                    string.Join(Environment.NewLine, startupLogs),
+                    "text/plain; charset=utf-8"
+                );
+            }).AllowAnonymous();
 
             await app.RunAsync();
         }
