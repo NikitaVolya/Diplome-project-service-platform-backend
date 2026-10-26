@@ -10,7 +10,9 @@ using System.Text.Unicode;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
 using System.Collections.Concurrent;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace AdminPanel
 {
@@ -19,6 +21,19 @@ namespace AdminPanel
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDataProtection()
+                .SetApplicationName("ServiceHub.AdminPanel")
+                .PersistKeysToFileSystem(
+                    new DirectoryInfo("/app/dataprotection-keys")
+            );
+
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor |
+                    ForwardedHeaders.XForwardedProto;
+            });
 
             var startupLogs = new ConcurrentQueue<string>();
 
@@ -79,12 +94,26 @@ namespace AdminPanel
 
             // Add Google authentication for users to log in with their Google accounts.
             builder.Services
-                .AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-                });
+            .AddAuthentication()
+            .AddGoogle(options =>
+            {
+                options.ClientId =
+                    builder.Configuration["Authentication:Google:ClientId"]!;
+
+                options.ClientSecret =
+                    builder.Configuration["Authentication:Google:ClientSecret"]!;
+
+                options.CallbackPath = "/signin-google";
+
+                options.CorrelationCookie.SameSite = SameSiteMode.None;
+                options.CorrelationCookie.SecurePolicy =
+                    CookieSecurePolicy.Always;
+
+                options.ClaimActions.MapJsonKey(
+                    "email_verified",
+                    "email_verified"
+                );
+            });
 
             // HttpContextAccessor потрібен сервісам, яким треба знати поточного користувача
             // та його IP-адресу — наприклад, для запису в журнал дій.
@@ -104,10 +133,12 @@ namespace AdminPanel
 
             app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
 
+            app.UseForwardedHeaders();
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
-            // Мова з перемикача внизу сторінки (cookie); без вибору — українська.
             app.UsePublicCulture();
 
             app.UseRouting();
@@ -128,11 +159,31 @@ namespace AdminPanel
             // й заповнюємо довідники. Деталі й налаштування — у Services/DatabaseStartup.cs.
             await DatabaseStartup.PrepareAsync(app);
 
-            app.MapGet("/diagnostics/startup", () =>
+            app.MapGet("/diagnostics/startup", (
+                HttpContext context,
+                IConfiguration configuration) =>
             {
-                if (!app.Environment.IsDevelopment())
+                var expectedKey = configuration["Diagnostics:ApiKey"];
+
+                if (string.IsNullOrWhiteSpace(expectedKey))
                 {
                     return Results.NotFound();
+                }
+
+                var providedKey = context.Request.Headers["X-API-Key"].ToString();
+
+                if (string.IsNullOrWhiteSpace(providedKey))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var expectedBytes = System.Text.Encoding.UTF8.GetBytes(expectedKey);
+                var providedBytes = System.Text.Encoding.UTF8.GetBytes(providedKey);
+
+                if (!System.Security.Cryptography.CryptographicOperations
+                    .FixedTimeEquals(expectedBytes, providedBytes))
+                {
+                    return Results.Unauthorized();
                 }
 
                 return Results.Text(
