@@ -1,9 +1,9 @@
 ﻿using BLL.Options;
 using BLL.Services.Interfaces;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using MailKit.Net.Smtp;
-
 
 namespace BLL.Services
 {
@@ -41,45 +41,30 @@ namespace BLL.Services
             await smtp.ConnectAsync(
                 _options.Host,
                 _options.Port,
-                MailKit.Security.SecureSocketOptions.None);
+                SecureSocketOptions.StartTls);
+
+            await smtp.AuthenticateAsync(
+                _options.Username,
+                _options.Password);
 
             await smtp.SendAsync(message);
 
             await smtp.DisconnectAsync(true);
         }
+
         public async Task SendCodeAsync(string to, string code)
         {
-            var message = new MimeMessage();
-
-            message.From.Add(
-                MailboxAddress.Parse(_options.From));
-
-            message.To.Add(
-                MailboxAddress.Parse(to));
-
-            message.Subject = "Тимчасовий код";
-
-            message.Body = new TextPart("plain")
-            {
-                Text = $"""
+            await SendAsync(
+                to,
+                "Тимчасовий код",
+                $"""
                 Вітаю!
 
-                Ось тимчасовий код для вашого запиту на скидання пароля: {code}
+                Ось тимчасовий код для підтвердження вашого запиту: {code}
 
-                Якщо ви не робили запит на скидання пароля, будь ласка, ігноруйте цей лист.
+                Якщо ви не робили цей запит, просто проігноруйте лист.
                 """
-            };
-
-            using var smtp = new SmtpClient();
-
-            await smtp.ConnectAsync(
-                _options.Host,
-                _options.Port,
-                MailKit.Security.SecureSocketOptions.None);
-
-            await smtp.SendAsync(message);
-
-            await smtp.DisconnectAsync(true);
+            );
         }
     }
 }
